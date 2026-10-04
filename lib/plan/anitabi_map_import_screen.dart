@@ -18,6 +18,7 @@ import '../map/map_navigation_launcher.dart';
 import '../map/map_tile_config.dart';
 import '../widgets/snackbar_helper.dart';
 import '../data/anitabi_client.dart';
+import '../data/bangumi_api_client.dart';
 import '../data/anitabi_image_url.dart';
 import '../data/pilgrimage_repository.dart';
 import '../data/reference_image_cache_stub.dart'
@@ -559,11 +560,18 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
   }
 
   PilgrimageWork _workFromLite(AnitabiBangumiLite lite) {
+    // Anitabi's title is the Chinese name when there is one, its subtitle
+    // the Japanese name.
+    final (:title, :subtitle) = bangumiWorkTitles(
+      bangumiId: lite.bangumiId,
+      name: lite.subtitle,
+      nameCn: lite.title,
+    );
     return PilgrimageWork(
       id: 'bangumi-${lite.bangumiId}',
       bangumiId: lite.bangumiId,
-      title: lite.title,
-      subtitle: lite.subtitle,
+      title: title,
+      subtitle: subtitle,
       city: lite.city,
       source: WorkSource.bangumi,
       coverImageUrl: lite.coverImageUrl,

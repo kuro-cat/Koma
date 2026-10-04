@@ -1,9 +1,12 @@
 import 'dart:convert';
 
+import 'dart:ui';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:miriago/data/bangumi_api_client.dart';
+import 'package:miriago/l10n/l10n.dart';
 import 'package:miriago/plan/pilgrimage_models.dart';
 
 void main() {
@@ -65,6 +68,49 @@ void main() {
       );
     },
   );
+  test('English shows the Japanese title over the first Latin alias', () async {
+    final previous = l10n;
+    addTearDown(() => l10n = previous);
+    final client = BangumiApiClient(
+      httpClient: MockClient((request) async {
+        return http.Response(
+          jsonEncode({
+            'data': [
+              {
+                'id': 115908,
+                'nsfw': false,
+                'type': BangumiSubjectType.anime.code,
+                'name': '響け！ユーフォニアム',
+                'name_cn': '吹响吧！上低音号',
+                'infobox': [
+                  {
+                    'key': '别名',
+                    'value': [
+                      {'v': '吹响！悠风号'},
+                      {'v': 'Hibike! Euphonium'},
+                      {'v': 'Sound! Euphonium'},
+                    ],
+                  },
+                ],
+              },
+            ],
+          }),
+          200,
+          headers: const {'content-type': 'application/json'},
+        );
+      }),
+    );
+
+    l10n = lookupAppLocalizations(const Locale('en'));
+    final english = (await client.searchAnime('euphonium')).single;
+    expect(english.title, '響け！ユーフォニアム');
+    expect(english.subtitle, 'Hibike! Euphonium');
+
+    l10n = lookupAppLocalizations(const Locale('zh'));
+    final chinese = (await client.searchAnime('euphonium')).single;
+    expect(chinese.title, '吹响吧！上低音号');
+    expect(chinese.subtitle, '響け！ユーフォニアム');
+  });
 }
 
 BangumiApiClient _clientWithImages(Object? images) {

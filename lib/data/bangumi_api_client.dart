@@ -112,11 +112,13 @@ class BangumiApiClient {
   PilgrimageWork _workFromSubject(Map<String, Object?> subject) {
     final bangumiId = subject['id'] as int;
     final subjectType = BangumiSubjectType.fromCode(subject['type'] as int?);
-    final name = subject['name'] as String? ?? 'Bangumi #$bangumiId';
-    final nameCn = subject['name_cn'] as String? ?? '';
     final date = subject['date'] as String? ?? '';
-    final title = nameCn.isEmpty ? name : nameCn;
-    final subtitle = nameCn.isEmpty ? 'Bangumi #$bangumiId' : name;
+    final (:title, :subtitle) = bangumiWorkTitles(
+      bangumiId: bangumiId,
+      name: subject['name'] as String? ?? 'Bangumi #$bangumiId',
+      nameCn: subject['name_cn'] as String? ?? '',
+      aliases: _infoboxAliases(subject['infobox']),
+    );
     final coverImageUrl = _coverImageUrl(subject['images']);
 
     final metaParts = [
@@ -172,5 +174,51 @@ class BangumiApiException implements Exception {
   @override
   String toString() {
     return 'BangumiApiException($statusCode): $body';
+  }
+}
+
+/// Title and subtitle for a Bangumi work. In Chinese: the Chinese name over
+/// the Japanese one. Otherwise: the Japanese name over the first alias
+/// written in Latin letters (usually the English or romaji title).
+({String title, String subtitle}) bangumiWorkTitles({
+  required int bangumiId,
+  required String name,
+  required String nameCn,
+  Iterable<String> aliases = const [],
+}) {
+  final fallback = 'Bangumi #$bangumiId';
+  if (l10n.localeName.startsWith('zh')) {
+    return nameCn.isEmpty
+        ? (title: name, subtitle: fallback)
+        : (title: nameCn, subtitle: name);
+  }
+  final latinAlias = aliases
+      .map((alias) => alias.trim())
+      .where(
+        (alias) => _latinLetter.hasMatch(alias) && !_cjkOrKana.hasMatch(alias),
+      )
+      .firstOrNull;
+  return (
+    title: name.isEmpty ? nameCn : name,
+    subtitle: latinAlias ?? fallback,
+  );
+}
+
+final _latinLetter = RegExp('[A-Za-z]');
+final _cjkOrKana = RegExp(r'[\u3040-\u30ff\u3400-\u9fff\uac00-\ud7af]');
+
+/// The infobox "别名" (alias) values, which Bangumi gives either as one
+/// string or as a list of `{v: ...}` entries.
+Iterable<String> _infoboxAliases(Object? infobox) sync* {
+  if (infobox is! List) return;
+  for (final entry in infobox.whereType<Map>()) {
+    if (entry['key'] != '别名') continue;
+    final value = entry['value'];
+    if (value is String) yield value;
+    if (value is List) {
+      for (final item in value.whereType<Map>()) {
+        if (item['v'] case final String alias) yield alias;
+      }
+    }
   }
 }
