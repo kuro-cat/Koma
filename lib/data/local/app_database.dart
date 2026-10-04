@@ -91,6 +91,8 @@ class VisitRecords extends Table {
   TextColumn get photoPath => text()();
   TextColumn get originalPhotoPath => text().nullable()();
   TextColumn get gradedPhotoPath => text().nullable()();
+  TextColumn get alignedPhotoPath => text().nullable()();
+  TextColumn get alignmentJson => text().nullable()();
   TextColumn get colorGradingMode => text().nullable()();
   TextColumn get colorGradingParamsJson => text().nullable()();
   RealColumn get colorGradingIntensity => real().nullable()();
@@ -221,7 +223,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 49;
+  int get schemaVersion => 50;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -767,6 +769,10 @@ class AppDatabase extends _$AppDatabase {
           appSettingsEntries,
           appSettingsEntries.recordCompareMode,
         );
+      }
+      if (from < 50) {
+        await addColumnIfMissing(visitRecords, visitRecords.alignedPhotoPath);
+        await addColumnIfMissing(visitRecords, visitRecords.alignmentJson);
       }
     }),
   );

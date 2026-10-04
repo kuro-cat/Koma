@@ -335,6 +335,13 @@ Future<PlanExportV2Result> _buildPlanExportV2Package({
         warningType: PlanExportWarningType.gradedPhotoMissing,
         countKey: 'gradedPhotos',
       );
+      recordAssetRefs.alignedPhotoAsset = await addFileAsset(
+        sourcePath: record.alignedPhotoPath,
+        targetPath: assetNames.path('graded_photos', record.id, 'aligned.jpg'),
+        warningLabel: 'aligned photo',
+        warningType: PlanExportWarningType.gradedPhotoMissing,
+        countKey: 'gradedPhotos',
+      );
       if (recordAssetRefs.hasAny) {
         recordAssetRefsById[record.id] = recordAssetRefs;
       }
@@ -566,6 +573,8 @@ Map<String, Object?> _visitRecordJson(
     'photoPath': record.photoPath,
     'originalPhotoPath': record.originalPhotoPath,
     'gradedPhotoPath': record.gradedPhotoPath,
+    'alignedPhotoPath': record.alignedPhotoPath,
+    'alignmentJson': record.alignmentJson,
     'colorGradingMode': record.colorGradingMode,
     'colorGradingParamsJson': record.colorGradingParamsJson,
     'colorGradingIntensity': record.colorGradingIntensity,
@@ -573,6 +582,7 @@ Map<String, Object?> _visitRecordJson(
     'referenceImageUrl': record.referenceImageUrl,
     'visitPhotoAsset': assetRefs?.visitPhotoAsset,
     'gradedPhotoAsset': assetRefs?.gradedPhotoAsset,
+    'alignedPhotoAsset': assetRefs?.alignedPhotoAsset,
     'referenceMode': record.referenceMode,
     'capturedAt': record.capturedAt.toIso8601String(),
   };
@@ -653,8 +663,12 @@ class _PointAssetRefs {
 class _RecordAssetRefs {
   String? visitPhotoAsset;
   String? gradedPhotoAsset;
+  String? alignedPhotoAsset;
 
-  bool get hasAny => visitPhotoAsset != null || gradedPhotoAsset != null;
+  bool get hasAny =>
+      visitPhotoAsset != null ||
+      gradedPhotoAsset != null ||
+      alignedPhotoAsset != null;
 }
 
 String _pointsCsv(

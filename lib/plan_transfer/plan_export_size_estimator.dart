@@ -143,6 +143,10 @@ Future<PlanExportSizeEstimate> estimatePlanExportV2Size({
           !await addLocalAsset(record.gradedPhotoPath, markUnknown: false)) {
         missingGradedPhotoCount += 1;
       }
+      if (_hasPath(record.alignedPhotoPath) &&
+          !await addLocalAsset(record.alignedPhotoPath, markUnknown: false)) {
+        missingGradedPhotoCount += 1;
+      }
     }
   }
 

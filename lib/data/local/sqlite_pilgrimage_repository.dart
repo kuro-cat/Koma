@@ -347,6 +347,8 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
                 photoPath: record.photoPath,
                 originalPhotoPath: Value(record.originalPhotoPath),
                 gradedPhotoPath: Value(record.gradedPhotoPath),
+                alignedPhotoPath: Value(record.alignedPhotoPath),
+                alignmentJson: Value(record.alignmentJson),
                 colorGradingMode: Value(record.colorGradingMode),
                 colorGradingParamsJson: Value(record.colorGradingParamsJson),
                 colorGradingIntensity: Value(record.colorGradingIntensity),
@@ -1171,6 +1173,8 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
                   photoPath: record.photoPath,
                   originalPhotoPath: Value(record.originalPhotoPath),
                   gradedPhotoPath: Value(record.gradedPhotoPath),
+                  alignedPhotoPath: Value(record.alignedPhotoPath),
+                  alignmentJson: Value(record.alignmentJson),
                   colorGradingMode: Value(record.colorGradingMode),
                   colorGradingParamsJson: Value(record.colorGradingParamsJson),
                   colorGradingIntensity: Value(record.colorGradingIntensity),
@@ -1211,6 +1215,46 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
     required String colorGradingMode,
     required String colorGradingParamsJson,
     required double colorGradingIntensity,
+  }) {
+    return _writeVisitRecordPhotos(
+      planId: planId,
+      recordId: recordId,
+      changes: VisitRecordsCompanion(
+        originalPhotoPath: Value(originalPhotoPath),
+        gradedPhotoPath: Value(gradedPhotoPath),
+        colorGradingMode: Value(colorGradingMode),
+        colorGradingParamsJson: Value(colorGradingParamsJson),
+        colorGradingIntensity: Value(colorGradingIntensity),
+      ),
+    );
+  }
+
+  @override
+  Future<PilgrimageVisitRecord> updateVisitRecordAlignment({
+    required String planId,
+    required String recordId,
+    required String? alignedPhotoPath,
+    required String? alignmentJson,
+    required String? gradedPhotoPath,
+  }) {
+    return _writeVisitRecordPhotos(
+      planId: planId,
+      recordId: recordId,
+      changes: VisitRecordsCompanion(
+        alignedPhotoPath: Value(alignedPhotoPath),
+        alignmentJson: Value(alignmentJson),
+        gradedPhotoPath: Value(gradedPhotoPath),
+      ),
+    );
+  }
+
+  /// Writes edited-photo [changes] to one record. Throws
+  /// [VisitRecordNotCommittedException] only when the write provably rolled
+  /// back, so callers may delete the new files.
+  Future<PilgrimageVisitRecord> _writeVisitRecordPhotos({
+    required String planId,
+    required String recordId,
+    required VisitRecordsCompanion changes,
   }) async {
     Object? writeFailure;
     try {
@@ -1221,15 +1265,7 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
                     (table) =>
                         table.planId.equals(planId) & table.id.equals(recordId),
                   ))
-                  .write(
-                    VisitRecordsCompanion(
-                      originalPhotoPath: Value(originalPhotoPath),
-                      gradedPhotoPath: Value(gradedPhotoPath),
-                      colorGradingMode: Value(colorGradingMode),
-                      colorGradingParamsJson: Value(colorGradingParamsJson),
-                      colorGradingIntensity: Value(colorGradingIntensity),
-                    ),
-                  );
+                  .write(changes);
           if (updated == 0) {
             throw StateError('Visit record $recordId does not exist.');
           }
@@ -1241,7 +1277,7 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
       }, requireNew: true);
     } catch (error, stack) {
       // As in createVisitRecord: only an action error rethrown after a
-      // successful rollback proves the new graded photo was not stored.
+      // successful rollback proves the new photo was not stored.
       if (identical(error, writeFailure)) {
         Error.throwWithStackTrace(
           VisitRecordNotCommittedException(error),
@@ -1472,6 +1508,8 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
       photoPath: row.photoPath,
       originalPhotoPath: row.originalPhotoPath,
       gradedPhotoPath: row.gradedPhotoPath,
+      alignedPhotoPath: row.alignedPhotoPath,
+      alignmentJson: row.alignmentJson,
       colorGradingMode: row.colorGradingMode,
       colorGradingParamsJson: row.colorGradingParamsJson,
       colorGradingIntensity: row.colorGradingIntensity,
@@ -1542,6 +1580,7 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
       final photoPath = await _rebasedPathOrNull(row.photoPath);
       final originalPhotoPath = await _rebasedPathOrNull(row.originalPhotoPath);
       final gradedPhotoPath = await _rebasedPathOrNull(row.gradedPhotoPath);
+      final alignedPhotoPath = await _rebasedPathOrNull(row.alignedPhotoPath);
       final referenceImagePath = await _rebasedPathOrNull(
         row.referenceImagePath,
       );
@@ -1549,6 +1588,7 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
       if (photoPath == null &&
           originalPhotoPath == null &&
           gradedPhotoPath == null &&
+          alignedPhotoPath == null &&
           referenceImagePath == null) {
         continue;
       }
@@ -1566,6 +1606,9 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
           gradedPhotoPath: gradedPhotoPath == null
               ? const Value.absent()
               : Value(gradedPhotoPath),
+          alignedPhotoPath: alignedPhotoPath == null
+              ? const Value.absent()
+              : Value(alignedPhotoPath),
           referenceImagePath: referenceImagePath == null
               ? const Value.absent()
               : Value(referenceImagePath),
@@ -1585,6 +1628,7 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
     return hasPotentiallyRebasableAppManagedFilePath(row.photoPath) ||
         hasPotentiallyRebasableAppManagedFilePath(row.originalPhotoPath) ||
         hasPotentiallyRebasableAppManagedFilePath(row.gradedPhotoPath) ||
+        hasPotentiallyRebasableAppManagedFilePath(row.alignedPhotoPath) ||
         hasPotentiallyRebasableAppManagedFilePath(row.referenceImagePath);
   }
 

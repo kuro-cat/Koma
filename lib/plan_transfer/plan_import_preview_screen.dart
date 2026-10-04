@@ -222,6 +222,7 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
         if (referenced(record.photoPath) ||
             referenced(record.originalPhotoPath) ||
             referenced(record.gradedPhotoPath) ||
+            referenced(record.alignedPhotoPath) ||
             referenced(record.referenceImagePath)) {
           return false;
         }

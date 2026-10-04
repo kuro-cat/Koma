@@ -114,6 +114,7 @@ class PlanImportPackage {
       for (final refs in recordAssetRefsById.values) ...[
         ?refs.visitPhotoAsset,
         ?refs.gradedPhotoAsset,
+        ?refs.alignedPhotoAsset,
         ?refs.originalPhotoAsset,
         ?refs.referenceImageAsset,
       ],
@@ -183,6 +184,7 @@ class PlanImportRecordAssetRefs {
   const PlanImportRecordAssetRefs({
     this.visitPhotoAsset,
     this.gradedPhotoAsset,
+    this.alignedPhotoAsset,
     this.originalPhotoAsset,
     this.referenceImageAsset,
     this.usePointReference = false,
@@ -190,6 +192,7 @@ class PlanImportRecordAssetRefs {
 
   final String? visitPhotoAsset;
   final String? gradedPhotoAsset;
+  final String? alignedPhotoAsset;
   final String? originalPhotoAsset;
   final String? referenceImageAsset;
   final bool usePointReference;
@@ -197,6 +200,7 @@ class PlanImportRecordAssetRefs {
   bool get hasAny =>
       visitPhotoAsset != null ||
       gradedPhotoAsset != null ||
+      alignedPhotoAsset != null ||
       originalPhotoAsset != null ||
       referenceImageAsset != null ||
       usePointReference;
@@ -979,6 +983,9 @@ Map<String, PlanImportRecordAssetRefs> _recordAssetRefsById(
       gradedPhotoAsset:
           _safeAssetValue(recordJson['gradedPhotoAsset']) ??
           _safeAssetValue(recordJson['gradedPhotoPath']),
+      alignedPhotoAsset:
+          _safeAssetValue(recordJson['alignedPhotoAsset']) ??
+          _safeAssetValue(recordJson['alignedPhotoPath']),
       originalPhotoAsset:
           _safeAssetValue(recordJson['originalPhotoAsset']) ??
           _safeAssetValue(recordJson['originalPhotoPath']),
@@ -1060,6 +1067,11 @@ PilgrimageVisitRecord _recordWithRestoredAssets(
     restoredPaths,
     warnings,
   );
+  final alignedPhotoPath = _restoredPath(
+    assetRefs?.alignedPhotoAsset,
+    restoredPaths,
+    warnings,
+  );
   final originalPhotoPath = _restoredPath(
     assetRefs?.originalPhotoAsset,
     restoredPaths,
@@ -1080,6 +1092,7 @@ PilgrimageVisitRecord _recordWithRestoredAssets(
     photoPath: photoPath ?? originalPhotoPath ?? gradedPhotoPath ?? '',
     originalPhotoPath: originalPhotoPath,
     gradedPhotoPath: gradedPhotoPath,
+    alignedPhotoPath: alignedPhotoPath,
     referenceImagePath: referenceImagePath,
   );
 }

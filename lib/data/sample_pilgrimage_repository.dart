@@ -134,6 +134,8 @@ class SamplePilgrimageRepository implements PilgrimageRepository {
           photoPath: record.photoPath,
           originalPhotoPath: record.originalPhotoPath,
           gradedPhotoPath: record.gradedPhotoPath,
+          alignedPhotoPath: record.alignedPhotoPath,
+          alignmentJson: record.alignmentJson,
           colorGradingMode: record.colorGradingMode,
           colorGradingParamsJson: record.colorGradingParamsJson,
           colorGradingIntensity: record.colorGradingIntensity,
@@ -846,6 +848,30 @@ class SamplePilgrimageRepository implements PilgrimageRepository {
       colorGradingMode: colorGradingMode,
       colorGradingParamsJson: colorGradingParamsJson,
       colorGradingIntensity: colorGradingIntensity,
+    );
+    _visitRecords[index] = updated;
+    return updated;
+  }
+
+  @override
+  Future<PilgrimageVisitRecord> updateVisitRecordAlignment({
+    required String planId,
+    required String recordId,
+    required String? alignedPhotoPath,
+    required String? alignmentJson,
+    required String? gradedPhotoPath,
+  }) async {
+    final index = _visitRecords.indexWhere(
+      (record) => record.planId == planId && record.id == recordId,
+    );
+    if (index == -1) {
+      throw ArgumentError.value(recordId, 'recordId', 'Record does not exist.');
+    }
+
+    final updated = _visitRecords[index].copyWith(
+      alignedPhotoPath: alignedPhotoPath,
+      alignmentJson: alignmentJson,
+      gradedPhotoPath: gradedPhotoPath,
     );
     _visitRecords[index] = updated;
     return updated;

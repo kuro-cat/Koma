@@ -10,6 +10,7 @@ import '../plan/pilgrimage_models.dart';
 String? resolveVisitRecordDisplayPhotoPath(PilgrimageVisitRecord record) {
   return _firstDisplayableVisitRecordPath([
     record.gradedPhotoPath,
+    record.alignedPhotoPath,
     record.photoPath,
     record.originalPhotoPath,
   ]);
@@ -17,6 +18,16 @@ String? resolveVisitRecordDisplayPhotoPath(PilgrimageVisitRecord record) {
 
 String? resolveVisitRecordSourcePhotoPath(PilgrimageVisitRecord record) {
   return _firstDisplayableVisitRecordPath([
+    record.originalPhotoPath,
+    record.photoPath,
+    record.gradedPhotoPath,
+  ]);
+}
+
+/// The photo color grading works on: the aligned crop when there is one.
+String? resolveVisitRecordGradingInputPath(PilgrimageVisitRecord record) {
+  return _firstDisplayableVisitRecordPath([
+    record.alignedPhotoPath,
     record.originalPhotoPath,
     record.photoPath,
     record.gradedPhotoPath,

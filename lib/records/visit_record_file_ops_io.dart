@@ -30,6 +30,7 @@ Future<void> deleteUnreferencedVisitRecordPhotos({
       record.photoPath,
       record.originalPhotoPath,
       record.gradedPhotoPath,
+      record.alignedPhotoPath,
     ],
     protectedPaths: [record.referenceImagePath],
     ownedDirectories: const {

@@ -438,6 +438,32 @@ class PilgrimagePlanController extends ChangeNotifier {
     return updated;
   }
 
+  Future<PilgrimageVisitRecord?> updateVisitRecordAlignment({
+    required PilgrimageVisitRecord record,
+    required String? alignedPhotoPath,
+    required String? alignmentJson,
+    required String? gradedPhotoPath,
+  }) async {
+    final repository = _repository;
+    if (repository == null) {
+      return null;
+    }
+
+    final updated = await repository.updateVisitRecordAlignment(
+      planId: _plan.id,
+      recordId: record.id,
+      alignedPhotoPath: alignedPhotoPath,
+      alignmentJson: alignmentJson,
+      gradedPhotoPath: gradedPhotoPath,
+    );
+    _visitRecords = [
+      for (final candidate in _visitRecords)
+        candidate.id == updated.id ? updated : candidate,
+    ];
+    notifyListeners();
+    return updated;
+  }
+
   Future<PilgrimageVisitRecord?> clearVisitRecordColorGrading({
     required PilgrimageVisitRecord record,
   }) async {

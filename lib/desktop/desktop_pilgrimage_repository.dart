@@ -575,6 +575,26 @@ class DesktopPilgrimageRepository implements PilgrimageRepository {
   }
 
   @override
+  Future<PilgrimageVisitRecord> updateVisitRecordAlignment({
+    required String planId,
+    required String recordId,
+    required String? alignedPhotoPath,
+    required String? alignmentJson,
+    required String? gradedPhotoPath,
+  }) {
+    return _write<PilgrimageVisitRecord>(
+      (draft) => draft.updateVisitRecordAlignment(
+        planId: planId,
+        recordId: recordId,
+        alignedPhotoPath: alignedPhotoPath,
+        alignmentJson: alignmentJson,
+        gradedPhotoPath: gradedPhotoPath,
+      ),
+      (_, record) => persistence.saveRecord(encodeDesktopVisitRecord(record)),
+    );
+  }
+
+  @override
   Future<PilgrimageVisitRecord> clearVisitRecordColorGrading({
     required String planId,
     required String recordId,

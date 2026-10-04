@@ -11,6 +11,7 @@ import '../widgets/bounded_image.dart';
 import '../app_theme.dart';
 import '../plan/pilgrimage_models.dart';
 import '../plan/pilgrimage_plan_controller.dart';
+import '../records/visit_record_reference_bytes.dart';
 import '../records/visit_record_photo_stub.dart'
     if (dart.library.io) '../records/visit_record_photo_io.dart';
 import '../widgets/snackbar_helper.dart';
@@ -108,7 +109,7 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
 
   Future<void> _loadImages() async {
     try {
-      final sourcePhotoPath = resolveVisitRecordSourcePhotoPath(_record);
+      final sourcePhotoPath = resolveVisitRecordGradingInputPath(_record);
       if (sourcePhotoPath == null) {
         throw StateError('Visit record photo is unavailable');
       }
@@ -146,26 +147,12 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
     }
   }
 
-  Future<Uint8List?> _loadReferenceBytes() async {
-    for (final path in [
-      _record.referenceImagePath,
-      widget.fallbackReferenceImagePath,
-    ].whereType<String>()) {
-      try {
-        return await readBoundedImageSource(path);
-      } on ImageBudgetException {
-        rethrow;
-      } catch (_) {
-        // Missing local references may still have their original remote source.
-      }
-    }
-
-    final url = _record.referenceImageUrl ?? widget.fallbackReferenceImageUrl;
-    if (url == null || url.isEmpty) {
-      return null;
-    }
-
-    return readBoundedImageSource(url);
+  Future<Uint8List?> _loadReferenceBytes() {
+    return loadVisitRecordReferenceBytes(
+      _record,
+      fallbackReferenceImagePath: widget.fallbackReferenceImagePath,
+      fallbackReferenceImageUrl: widget.fallbackReferenceImageUrl,
+    );
   }
 
   Future<void> _runAutoMatch() async {

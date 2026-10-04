@@ -210,6 +210,16 @@ abstract interface class PilgrimageRepository {
     required double colorGradingIntensity,
   });
 
+  /// Stores (or, with nulls, removes) a record's aligned crop together with
+  /// the graded photo made from it.
+  Future<PilgrimageVisitRecord> updateVisitRecordAlignment({
+    required String planId,
+    required String recordId,
+    required String? alignedPhotoPath,
+    required String? alignmentJson,
+    required String? gradedPhotoPath,
+  });
+
   Future<PilgrimageVisitRecord> clearVisitRecordColorGrading({
     required String planId,
     required String recordId,

@@ -525,6 +525,8 @@ class PilgrimageVisitRecord {
     required this.photoPath,
     this.originalPhotoPath,
     this.gradedPhotoPath,
+    this.alignedPhotoPath,
+    this.alignmentJson,
     this.colorGradingMode,
     this.colorGradingParamsJson,
     this.colorGradingIntensity,
@@ -545,6 +547,11 @@ class PilgrimageVisitRecord {
   final String photoPath;
   final String? originalPhotoPath;
   final String? gradedPhotoPath;
+
+  /// The frame-shaped crop of the original photo, and the alignment JSON
+  /// that produced it. Color grading is applied on top of this crop.
+  final String? alignedPhotoPath;
+  final String? alignmentJson;
   final String? colorGradingMode;
   final String? colorGradingParamsJson;
   final double? colorGradingIntensity;
@@ -555,7 +562,7 @@ class PilgrimageVisitRecord {
 
   String get sourcePhotoPath => originalPhotoPath ?? photoPath;
 
-  String get displayPhotoPath => gradedPhotoPath ?? photoPath;
+  String get displayPhotoPath => gradedPhotoPath ?? alignedPhotoPath ?? photoPath;
 
   String get displayWorkTitleSnapshot => _displaySnapshot(workTitle, workId);
 
@@ -577,6 +584,8 @@ class PilgrimageVisitRecord {
     Object? pointSubtitle = _unset,
     Object? originalPhotoPath = _unset,
     Object? gradedPhotoPath = _unset,
+    Object? alignedPhotoPath = _unset,
+    Object? alignmentJson = _unset,
     Object? colorGradingMode = _unset,
     Object? colorGradingParamsJson = _unset,
     Object? colorGradingIntensity = _unset,
@@ -602,6 +611,12 @@ class PilgrimageVisitRecord {
       gradedPhotoPath: gradedPhotoPath == _unset
           ? this.gradedPhotoPath
           : gradedPhotoPath as String?,
+      alignedPhotoPath: alignedPhotoPath == _unset
+          ? this.alignedPhotoPath
+          : alignedPhotoPath as String?,
+      alignmentJson: alignmentJson == _unset
+          ? this.alignmentJson
+          : alignmentJson as String?,
       colorGradingMode: colorGradingMode == _unset
           ? this.colorGradingMode
           : colorGradingMode as String?,

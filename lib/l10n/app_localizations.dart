@@ -139,6 +139,114 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'正在加载 MiriaGo...'**
   String get appLoading;
+
+  /// No description provided for @alignPhotoTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'对齐裁剪'**
+  String get alignPhotoTitle;
+
+  /// No description provided for @alignPhotoAction.
+  ///
+  /// In zh, this message translates to:
+  /// **'对齐裁剪'**
+  String get alignPhotoAction;
+
+  /// No description provided for @alignPhotoHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'双指缩放、拖动照片，让它与参考图重合'**
+  String get alignPhotoHint;
+
+  /// No description provided for @alignPhotoFrameOpacity.
+  ///
+  /// In zh, this message translates to:
+  /// **'参考图'**
+  String get alignPhotoFrameOpacity;
+
+  /// No description provided for @alignPhotoRotation.
+  ///
+  /// In zh, this message translates to:
+  /// **'旋转'**
+  String get alignPhotoRotation;
+
+  /// No description provided for @alignPhotoDifference.
+  ///
+  /// In zh, this message translates to:
+  /// **'差值叠加'**
+  String get alignPhotoDifference;
+
+  /// No description provided for @alignPhotoDifferenceHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'重合的地方会变暗'**
+  String get alignPhotoDifferenceHint;
+
+  /// No description provided for @alignPhotoReset.
+  ///
+  /// In zh, this message translates to:
+  /// **'重新居中'**
+  String get alignPhotoReset;
+
+  /// No description provided for @alignPhotoSave.
+  ///
+  /// In zh, this message translates to:
+  /// **'保存裁剪'**
+  String get alignPhotoSave;
+
+  /// No description provided for @alignPhotoSaving.
+  ///
+  /// In zh, this message translates to:
+  /// **'保存中...'**
+  String get alignPhotoSaving;
+
+  /// No description provided for @alignPhotoSaved.
+  ///
+  /// In zh, this message translates to:
+  /// **'已保存裁剪'**
+  String get alignPhotoSaved;
+
+  /// No description provided for @alignPhotoSaveFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'保存失败，原图未更改'**
+  String get alignPhotoSaveFailed;
+
+  /// No description provided for @alignPhotoRemoveTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'移除裁剪'**
+  String get alignPhotoRemoveTitle;
+
+  /// No description provided for @alignPhotoRemoveMessage.
+  ///
+  /// In zh, this message translates to:
+  /// **'将恢复为未裁剪的原图，调色会重新应用。'**
+  String get alignPhotoRemoveMessage;
+
+  /// No description provided for @alignPhotoRemoveConfirm.
+  ///
+  /// In zh, this message translates to:
+  /// **'移除'**
+  String get alignPhotoRemoveConfirm;
+
+  /// No description provided for @alignPhotoRemoved.
+  ///
+  /// In zh, this message translates to:
+  /// **'已移除裁剪'**
+  String get alignPhotoRemoved;
+
+  /// No description provided for @alignPhotoNoPhoto.
+  ///
+  /// In zh, this message translates to:
+  /// **'巡礼照片不可用'**
+  String get alignPhotoNoPhoto;
+
+  /// No description provided for @alignPhotoNoReference.
+  ///
+  /// In zh, this message translates to:
+  /// **'这条记录没有参考图，无法对齐'**
+  String get alignPhotoNoReference;
 }
 
 class _AppLocalizationsDelegate

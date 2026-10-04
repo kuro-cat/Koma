@@ -18,17 +18,41 @@ Future<PilgrimageVisitRecord?> commitGradedPhoto({
   required String? previousGradedPath,
   required Future<PilgrimageVisitRecord?> Function() update,
   bool awaitCleanup = false,
+}) {
+  return commitEditedPhotos(
+    repository: repository,
+    newPaths: [newGradedPath],
+    previousPaths: [previousGradedPath],
+    update: update,
+    awaitCleanup: awaitCleanup,
+  );
+}
+
+/// [commitGradedPhoto] for an update that writes several edited photos (an
+/// aligned crop and its re-graded copy) at once.
+Future<PilgrimageVisitRecord?> commitEditedPhotos({
+  required PilgrimageRepository? repository,
+  required List<String> newPaths,
+  required List<String?> previousPaths,
+  required Future<PilgrimageVisitRecord?> Function() update,
+  bool awaitCleanup = false,
 }) async {
   final PilgrimageVisitRecord? updated;
   try {
     updated = await update();
   } on VisitRecordNotCommittedException {
-    final cleanup = _reclaimGradedPhoto(repository, newGradedPath);
+    final cleanup = Future.wait(
+      newPaths.map((path) => _reclaimGradedPhoto(repository, path)),
+    );
     if (awaitCleanup) await cleanup;
     rethrow;
   }
-  if (updated != null && previousGradedPath != newGradedPath) {
-    final cleanup = _reclaimGradedPhoto(repository, previousGradedPath);
+  if (updated != null) {
+    final cleanup = Future.wait(
+      previousPaths
+          .where((path) => !newPaths.contains(path))
+          .map((path) => _reclaimGradedPhoto(repository, path)),
+    );
     if (awaitCleanup) await cleanup;
   }
   return updated;

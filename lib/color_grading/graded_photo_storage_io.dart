@@ -6,6 +6,7 @@ import 'package:path_provider/path_provider.dart';
 Future<String> saveGradedPhoto({
   required Uint8List bytes,
   required String recordId,
+  String prefix = 'graded',
 }) async {
   final directory = await getApplicationDocumentsDirectory();
   final gradedDir = Directory('${directory.path}/graded_photos');
@@ -14,7 +15,7 @@ Future<String> saveGradedPhoto({
   }
 
   final timestamp = DateTime.now().millisecondsSinceEpoch;
-  final path = '${gradedDir.path}/graded_${recordId}_$timestamp.jpg';
+  final path = '${gradedDir.path}/${prefix}_${recordId}_$timestamp.jpg';
   await File(path).writeAsBytes(bytes, flush: true);
   return path;
 }

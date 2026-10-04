@@ -59,6 +59,7 @@ Iterable<String?> visitRecordFilePaths(PilgrimageVisitRecord record) => [
   record.photoPath,
   record.originalPhotoPath,
   record.gradedPhotoPath,
+  record.alignedPhotoPath,
   record.referenceImagePath,
 ];
 

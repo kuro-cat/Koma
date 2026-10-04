@@ -3140,6 +3140,28 @@ class $VisitRecordsTable extends VisitRecords
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _alignedPhotoPathMeta = const VerificationMeta(
+    'alignedPhotoPath',
+  );
+  @override
+  late final GeneratedColumn<String> alignedPhotoPath = GeneratedColumn<String>(
+    'aligned_photo_path',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _alignmentJsonMeta = const VerificationMeta(
+    'alignmentJson',
+  );
+  @override
+  late final GeneratedColumn<String> alignmentJson = GeneratedColumn<String>(
+    'alignment_json',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _colorGradingModeMeta = const VerificationMeta(
     'colorGradingMode',
   );
@@ -3231,6 +3253,8 @@ class $VisitRecordsTable extends VisitRecords
     photoPath,
     originalPhotoPath,
     gradedPhotoPath,
+    alignedPhotoPath,
+    alignmentJson,
     colorGradingMode,
     colorGradingParamsJson,
     colorGradingIntensity,
@@ -3333,6 +3357,24 @@ class $VisitRecordsTable extends VisitRecords
         gradedPhotoPath.isAcceptableOrUnknown(
           data['graded_photo_path']!,
           _gradedPhotoPathMeta,
+        ),
+      );
+    }
+    if (data.containsKey('aligned_photo_path')) {
+      context.handle(
+        _alignedPhotoPathMeta,
+        alignedPhotoPath.isAcceptableOrUnknown(
+          data['aligned_photo_path']!,
+          _alignedPhotoPathMeta,
+        ),
+      );
+    }
+    if (data.containsKey('alignment_json')) {
+      context.handle(
+        _alignmentJsonMeta,
+        alignmentJson.isAcceptableOrUnknown(
+          data['alignment_json']!,
+          _alignmentJsonMeta,
         ),
       );
     }
@@ -3453,6 +3495,14 @@ class $VisitRecordsTable extends VisitRecords
         DriftSqlType.string,
         data['${effectivePrefix}graded_photo_path'],
       ),
+      alignedPhotoPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}aligned_photo_path'],
+      ),
+      alignmentJson: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}alignment_json'],
+      ),
       colorGradingMode: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}color_grading_mode'],
@@ -3502,6 +3552,8 @@ class VisitRecord extends DataClass implements Insertable<VisitRecord> {
   final String photoPath;
   final String? originalPhotoPath;
   final String? gradedPhotoPath;
+  final String? alignedPhotoPath;
+  final String? alignmentJson;
   final String? colorGradingMode;
   final String? colorGradingParamsJson;
   final double? colorGradingIntensity;
@@ -3521,6 +3573,8 @@ class VisitRecord extends DataClass implements Insertable<VisitRecord> {
     required this.photoPath,
     this.originalPhotoPath,
     this.gradedPhotoPath,
+    this.alignedPhotoPath,
+    this.alignmentJson,
     this.colorGradingMode,
     this.colorGradingParamsJson,
     this.colorGradingIntensity,
@@ -3554,6 +3608,12 @@ class VisitRecord extends DataClass implements Insertable<VisitRecord> {
     }
     if (!nullToAbsent || gradedPhotoPath != null) {
       map['graded_photo_path'] = Variable<String>(gradedPhotoPath);
+    }
+    if (!nullToAbsent || alignedPhotoPath != null) {
+      map['aligned_photo_path'] = Variable<String>(alignedPhotoPath);
+    }
+    if (!nullToAbsent || alignmentJson != null) {
+      map['alignment_json'] = Variable<String>(alignmentJson);
     }
     if (!nullToAbsent || colorGradingMode != null) {
       map['color_grading_mode'] = Variable<String>(colorGradingMode);
@@ -3602,6 +3662,12 @@ class VisitRecord extends DataClass implements Insertable<VisitRecord> {
       gradedPhotoPath: gradedPhotoPath == null && nullToAbsent
           ? const Value.absent()
           : Value(gradedPhotoPath),
+      alignedPhotoPath: alignedPhotoPath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(alignedPhotoPath),
+      alignmentJson: alignmentJson == null && nullToAbsent
+          ? const Value.absent()
+          : Value(alignmentJson),
       colorGradingMode: colorGradingMode == null && nullToAbsent
           ? const Value.absent()
           : Value(colorGradingMode),
@@ -3641,6 +3707,8 @@ class VisitRecord extends DataClass implements Insertable<VisitRecord> {
         json['originalPhotoPath'],
       ),
       gradedPhotoPath: serializer.fromJson<String?>(json['gradedPhotoPath']),
+      alignedPhotoPath: serializer.fromJson<String?>(json['alignedPhotoPath']),
+      alignmentJson: serializer.fromJson<String?>(json['alignmentJson']),
       colorGradingMode: serializer.fromJson<String?>(json['colorGradingMode']),
       colorGradingParamsJson: serializer.fromJson<String?>(
         json['colorGradingParamsJson'],
@@ -3673,6 +3741,8 @@ class VisitRecord extends DataClass implements Insertable<VisitRecord> {
       'photoPath': serializer.toJson<String>(photoPath),
       'originalPhotoPath': serializer.toJson<String?>(originalPhotoPath),
       'gradedPhotoPath': serializer.toJson<String?>(gradedPhotoPath),
+      'alignedPhotoPath': serializer.toJson<String?>(alignedPhotoPath),
+      'alignmentJson': serializer.toJson<String?>(alignmentJson),
       'colorGradingMode': serializer.toJson<String?>(colorGradingMode),
       'colorGradingParamsJson': serializer.toJson<String?>(
         colorGradingParamsJson,
@@ -3699,6 +3769,8 @@ class VisitRecord extends DataClass implements Insertable<VisitRecord> {
     String? photoPath,
     Value<String?> originalPhotoPath = const Value.absent(),
     Value<String?> gradedPhotoPath = const Value.absent(),
+    Value<String?> alignedPhotoPath = const Value.absent(),
+    Value<String?> alignmentJson = const Value.absent(),
     Value<String?> colorGradingMode = const Value.absent(),
     Value<String?> colorGradingParamsJson = const Value.absent(),
     Value<double?> colorGradingIntensity = const Value.absent(),
@@ -3724,6 +3796,12 @@ class VisitRecord extends DataClass implements Insertable<VisitRecord> {
     gradedPhotoPath: gradedPhotoPath.present
         ? gradedPhotoPath.value
         : this.gradedPhotoPath,
+    alignedPhotoPath: alignedPhotoPath.present
+        ? alignedPhotoPath.value
+        : this.alignedPhotoPath,
+    alignmentJson: alignmentJson.present
+        ? alignmentJson.value
+        : this.alignmentJson,
     colorGradingMode: colorGradingMode.present
         ? colorGradingMode.value
         : this.colorGradingMode,
@@ -3763,6 +3841,12 @@ class VisitRecord extends DataClass implements Insertable<VisitRecord> {
       gradedPhotoPath: data.gradedPhotoPath.present
           ? data.gradedPhotoPath.value
           : this.gradedPhotoPath,
+      alignedPhotoPath: data.alignedPhotoPath.present
+          ? data.alignedPhotoPath.value
+          : this.alignedPhotoPath,
+      alignmentJson: data.alignmentJson.present
+          ? data.alignmentJson.value
+          : this.alignmentJson,
       colorGradingMode: data.colorGradingMode.present
           ? data.colorGradingMode.value
           : this.colorGradingMode,
@@ -3801,6 +3885,8 @@ class VisitRecord extends DataClass implements Insertable<VisitRecord> {
           ..write('photoPath: $photoPath, ')
           ..write('originalPhotoPath: $originalPhotoPath, ')
           ..write('gradedPhotoPath: $gradedPhotoPath, ')
+          ..write('alignedPhotoPath: $alignedPhotoPath, ')
+          ..write('alignmentJson: $alignmentJson, ')
           ..write('colorGradingMode: $colorGradingMode, ')
           ..write('colorGradingParamsJson: $colorGradingParamsJson, ')
           ..write('colorGradingIntensity: $colorGradingIntensity, ')
@@ -3825,6 +3911,8 @@ class VisitRecord extends DataClass implements Insertable<VisitRecord> {
     photoPath,
     originalPhotoPath,
     gradedPhotoPath,
+    alignedPhotoPath,
+    alignmentJson,
     colorGradingMode,
     colorGradingParamsJson,
     colorGradingIntensity,
@@ -3848,6 +3936,8 @@ class VisitRecord extends DataClass implements Insertable<VisitRecord> {
           other.photoPath == this.photoPath &&
           other.originalPhotoPath == this.originalPhotoPath &&
           other.gradedPhotoPath == this.gradedPhotoPath &&
+          other.alignedPhotoPath == this.alignedPhotoPath &&
+          other.alignmentJson == this.alignmentJson &&
           other.colorGradingMode == this.colorGradingMode &&
           other.colorGradingParamsJson == this.colorGradingParamsJson &&
           other.colorGradingIntensity == this.colorGradingIntensity &&
@@ -3869,6 +3959,8 @@ class VisitRecordsCompanion extends UpdateCompanion<VisitRecord> {
   final Value<String> photoPath;
   final Value<String?> originalPhotoPath;
   final Value<String?> gradedPhotoPath;
+  final Value<String?> alignedPhotoPath;
+  final Value<String?> alignmentJson;
   final Value<String?> colorGradingMode;
   final Value<String?> colorGradingParamsJson;
   final Value<double?> colorGradingIntensity;
@@ -3889,6 +3981,8 @@ class VisitRecordsCompanion extends UpdateCompanion<VisitRecord> {
     this.photoPath = const Value.absent(),
     this.originalPhotoPath = const Value.absent(),
     this.gradedPhotoPath = const Value.absent(),
+    this.alignedPhotoPath = const Value.absent(),
+    this.alignmentJson = const Value.absent(),
     this.colorGradingMode = const Value.absent(),
     this.colorGradingParamsJson = const Value.absent(),
     this.colorGradingIntensity = const Value.absent(),
@@ -3910,6 +4004,8 @@ class VisitRecordsCompanion extends UpdateCompanion<VisitRecord> {
     required String photoPath,
     this.originalPhotoPath = const Value.absent(),
     this.gradedPhotoPath = const Value.absent(),
+    this.alignedPhotoPath = const Value.absent(),
+    this.alignmentJson = const Value.absent(),
     this.colorGradingMode = const Value.absent(),
     this.colorGradingParamsJson = const Value.absent(),
     this.colorGradingIntensity = const Value.absent(),
@@ -3937,6 +4033,8 @@ class VisitRecordsCompanion extends UpdateCompanion<VisitRecord> {
     Expression<String>? photoPath,
     Expression<String>? originalPhotoPath,
     Expression<String>? gradedPhotoPath,
+    Expression<String>? alignedPhotoPath,
+    Expression<String>? alignmentJson,
     Expression<String>? colorGradingMode,
     Expression<String>? colorGradingParamsJson,
     Expression<double>? colorGradingIntensity,
@@ -3958,6 +4056,8 @@ class VisitRecordsCompanion extends UpdateCompanion<VisitRecord> {
       if (photoPath != null) 'photo_path': photoPath,
       if (originalPhotoPath != null) 'original_photo_path': originalPhotoPath,
       if (gradedPhotoPath != null) 'graded_photo_path': gradedPhotoPath,
+      if (alignedPhotoPath != null) 'aligned_photo_path': alignedPhotoPath,
+      if (alignmentJson != null) 'alignment_json': alignmentJson,
       if (colorGradingMode != null) 'color_grading_mode': colorGradingMode,
       if (colorGradingParamsJson != null)
         'color_grading_params_json': colorGradingParamsJson,
@@ -3984,6 +4084,8 @@ class VisitRecordsCompanion extends UpdateCompanion<VisitRecord> {
     Value<String>? photoPath,
     Value<String?>? originalPhotoPath,
     Value<String?>? gradedPhotoPath,
+    Value<String?>? alignedPhotoPath,
+    Value<String?>? alignmentJson,
     Value<String?>? colorGradingMode,
     Value<String?>? colorGradingParamsJson,
     Value<double?>? colorGradingIntensity,
@@ -4005,6 +4107,8 @@ class VisitRecordsCompanion extends UpdateCompanion<VisitRecord> {
       photoPath: photoPath ?? this.photoPath,
       originalPhotoPath: originalPhotoPath ?? this.originalPhotoPath,
       gradedPhotoPath: gradedPhotoPath ?? this.gradedPhotoPath,
+      alignedPhotoPath: alignedPhotoPath ?? this.alignedPhotoPath,
+      alignmentJson: alignmentJson ?? this.alignmentJson,
       colorGradingMode: colorGradingMode ?? this.colorGradingMode,
       colorGradingParamsJson:
           colorGradingParamsJson ?? this.colorGradingParamsJson,
@@ -4054,6 +4158,12 @@ class VisitRecordsCompanion extends UpdateCompanion<VisitRecord> {
     if (gradedPhotoPath.present) {
       map['graded_photo_path'] = Variable<String>(gradedPhotoPath.value);
     }
+    if (alignedPhotoPath.present) {
+      map['aligned_photo_path'] = Variable<String>(alignedPhotoPath.value);
+    }
+    if (alignmentJson.present) {
+      map['alignment_json'] = Variable<String>(alignmentJson.value);
+    }
     if (colorGradingMode.present) {
       map['color_grading_mode'] = Variable<String>(colorGradingMode.value);
     }
@@ -4099,6 +4209,8 @@ class VisitRecordsCompanion extends UpdateCompanion<VisitRecord> {
           ..write('photoPath: $photoPath, ')
           ..write('originalPhotoPath: $originalPhotoPath, ')
           ..write('gradedPhotoPath: $gradedPhotoPath, ')
+          ..write('alignedPhotoPath: $alignedPhotoPath, ')
+          ..write('alignmentJson: $alignmentJson, ')
           ..write('colorGradingMode: $colorGradingMode, ')
           ..write('colorGradingParamsJson: $colorGradingParamsJson, ')
           ..write('colorGradingIntensity: $colorGradingIntensity, ')
@@ -9984,6 +10096,8 @@ typedef $$VisitRecordsTableCreateCompanionBuilder =
       required String photoPath,
       Value<String?> originalPhotoPath,
       Value<String?> gradedPhotoPath,
+      Value<String?> alignedPhotoPath,
+      Value<String?> alignmentJson,
       Value<String?> colorGradingMode,
       Value<String?> colorGradingParamsJson,
       Value<double?> colorGradingIntensity,
@@ -10006,6 +10120,8 @@ typedef $$VisitRecordsTableUpdateCompanionBuilder =
       Value<String> photoPath,
       Value<String?> originalPhotoPath,
       Value<String?> gradedPhotoPath,
+      Value<String?> alignedPhotoPath,
+      Value<String?> alignmentJson,
       Value<String?> colorGradingMode,
       Value<String?> colorGradingParamsJson,
       Value<double?> colorGradingIntensity,
@@ -10077,6 +10193,16 @@ class $$VisitRecordsTableFilterComposer
 
   ColumnFilters<String> get gradedPhotoPath => $composableBuilder(
     column: $table.gradedPhotoPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get alignedPhotoPath => $composableBuilder(
+    column: $table.alignedPhotoPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get alignmentJson => $composableBuilder(
+    column: $table.alignmentJson,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -10180,6 +10306,16 @@ class $$VisitRecordsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get alignedPhotoPath => $composableBuilder(
+    column: $table.alignedPhotoPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get alignmentJson => $composableBuilder(
+    column: $table.alignmentJson,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get colorGradingMode => $composableBuilder(
     column: $table.colorGradingMode,
     builder: (column) => ColumnOrderings(column),
@@ -10266,6 +10402,16 @@ class $$VisitRecordsTableAnnotationComposer
     builder: (column) => column,
   );
 
+  GeneratedColumn<String> get alignedPhotoPath => $composableBuilder(
+    column: $table.alignedPhotoPath,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get alignmentJson => $composableBuilder(
+    column: $table.alignmentJson,
+    builder: (column) => column,
+  );
+
   GeneratedColumn<String> get colorGradingMode => $composableBuilder(
     column: $table.colorGradingMode,
     builder: (column) => column,
@@ -10344,6 +10490,8 @@ class $$VisitRecordsTableTableManager
                 Value<String> photoPath = const Value.absent(),
                 Value<String?> originalPhotoPath = const Value.absent(),
                 Value<String?> gradedPhotoPath = const Value.absent(),
+                Value<String?> alignedPhotoPath = const Value.absent(),
+                Value<String?> alignmentJson = const Value.absent(),
                 Value<String?> colorGradingMode = const Value.absent(),
                 Value<String?> colorGradingParamsJson = const Value.absent(),
                 Value<double?> colorGradingIntensity = const Value.absent(),
@@ -10364,6 +10512,8 @@ class $$VisitRecordsTableTableManager
                 photoPath: photoPath,
                 originalPhotoPath: originalPhotoPath,
                 gradedPhotoPath: gradedPhotoPath,
+                alignedPhotoPath: alignedPhotoPath,
+                alignmentJson: alignmentJson,
                 colorGradingMode: colorGradingMode,
                 colorGradingParamsJson: colorGradingParamsJson,
                 colorGradingIntensity: colorGradingIntensity,
@@ -10386,6 +10536,8 @@ class $$VisitRecordsTableTableManager
                 required String photoPath,
                 Value<String?> originalPhotoPath = const Value.absent(),
                 Value<String?> gradedPhotoPath = const Value.absent(),
+                Value<String?> alignedPhotoPath = const Value.absent(),
+                Value<String?> alignmentJson = const Value.absent(),
                 Value<String?> colorGradingMode = const Value.absent(),
                 Value<String?> colorGradingParamsJson = const Value.absent(),
                 Value<double?> colorGradingIntensity = const Value.absent(),
@@ -10406,6 +10558,8 @@ class $$VisitRecordsTableTableManager
                 photoPath: photoPath,
                 originalPhotoPath: originalPhotoPath,
                 gradedPhotoPath: gradedPhotoPath,
+                alignedPhotoPath: alignedPhotoPath,
+                alignmentJson: alignmentJson,
                 colorGradingMode: colorGradingMode,
                 colorGradingParamsJson: colorGradingParamsJson,
                 colorGradingIntensity: colorGradingIntensity,
