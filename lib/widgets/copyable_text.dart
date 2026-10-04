@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter/services.dart';
+import '../l10n/l10n.dart';
 
 OverlayEntry? _activeCopyOverlay;
 
@@ -152,7 +153,7 @@ class _CopyOverlay extends StatelessWidget {
               child: FilledButton.tonalIcon(
                 onPressed: onCopy,
                 icon: const Icon(LucideIcons.copy, size: 16),
-                label: const Text('复制'),
+                label: Text(l10n.copyableTextCopy),
                 style: FilledButton.styleFrom(
                   fixedSize: const Size(82, 42),
                   visualDensity: VisualDensity.compact,

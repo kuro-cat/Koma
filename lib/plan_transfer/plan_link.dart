@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import '../data/public_http.dart';
+import '../l10n/l10n.dart';
 import 'plan_import_package.dart';
 import 'plan_package.dart' show seichiPlanFileExtension;
 import 'plan_transfer_background.dart';
@@ -14,7 +15,7 @@ sealed class PlanLink {
   static PlanLink parse(String input) {
     var text = input.trim();
     if (text.isEmpty) {
-      throw const PlanLinkException('请输入链接');
+      throw PlanLinkException(l10n.planLinkEnterLink);
     }
     if (!text.contains('://')) {
       text = 'https://$text';
@@ -23,13 +24,13 @@ sealed class PlanLink {
     try {
       uri = Uri.parse(text);
     } on FormatException {
-      throw const PlanLinkException('无法识别这个链接');
+      throw PlanLinkException(l10n.planLinkUnrecognized);
     }
     if (uri.scheme != 'https') {
-      throw const PlanLinkException('只支持 https:// 开头的链接');
+      throw PlanLinkException(l10n.planLinkHttpsOnly);
     }
     if (uri.host.isEmpty || uri.userInfo.isNotEmpty) {
-      throw const PlanLinkException('无法识别这个链接');
+      throw PlanLinkException(l10n.planLinkUnrecognized);
     }
     if (!isPublicWebUri(uri)) {
       throw planLinkNotPublic;
@@ -124,7 +125,9 @@ class GitHubReleaseLink extends PlanLink {
     ],
   );
 
-  String get label => tag == null ? '$owner/$repo 最新发布' : '$owner/$repo $tag';
+  String get label => tag == null
+      ? l10n.planLinkLatestRelease('$owner/$repo')
+      : '$owner/$repo $tag';
 }
 
 /// A downloadable file of a GitHub release.
@@ -150,10 +153,10 @@ class GitHubReleaseAsset {
   try {
     json = jsonDecode(body);
   } on FormatException {
-    throw const PlanLinkException('GitHub 返回的发布信息无法读取');
+    throw PlanLinkException(l10n.planLinkReleaseUnreadable);
   }
   if (json is! Map) {
-    throw const PlanLinkException('GitHub 返回的发布信息无法读取');
+    throw PlanLinkException(l10n.planLinkReleaseUnreadable);
   }
   final name = json['name'];
   final tag = json['tag_name'];
@@ -256,25 +259,27 @@ abstract class PlanLinkService {
 }
 
 /// A download larger than [maxPlanLinkDownloadBytes].
-const planLinkTooLarge = PlanLinkException('文件超过 128 MB 上限，无法导入');
+PlanLinkException get planLinkTooLarge =>
+    PlanLinkException(l10n.planLinkTooLarge);
 
-const planLinkNotPublic = PlanLinkException('不支持本机或局域网地址');
+PlanLinkException get planLinkNotPublic =>
+    PlanLinkException(l10n.planLinkNotPublic);
 
 /// The largest download accepted, same as a picked plan file.
 int get maxPlanLinkDownloadBytes => const PlanImportLimits().maxCompressedBytes;
 
 PlanLinkException planLinkHttpError(int statusCode) => PlanLinkException(
   statusCode == 404
-      ? '链接指向的文件不存在（HTTP 404）'
+      ? l10n.planLinkFileNotFound
       : statusCode == 403 || statusCode == 429
-      ? '服务器拒绝了下载（HTTP $statusCode），请稍后再试'
-      : '下载失败（HTTP $statusCode）',
+      ? l10n.planLinkServerRefused('$statusCode')
+      : l10n.planLinkDownloadFailedStatus('$statusCode'),
 );
 
 PlanLinkException gitHubReleaseError(int statusCode) => PlanLinkException(
   statusCode == 404
-      ? '没有找到这个发布：仓库可能是私有的、还没有发布版本，或只有预发布版本（请粘贴具体发布页链接）'
+      ? l10n.planLinkReleaseNotFound
       : statusCode == 403 || statusCode == 429
-      ? 'GitHub 请求过于频繁，请稍后再试'
-      : 'GitHub 发布信息读取失败（HTTP $statusCode）',
+      ? l10n.planLinkGitHubRateLimited
+      : l10n.planLinkReleaseFetchFailed('$statusCode'),
 );

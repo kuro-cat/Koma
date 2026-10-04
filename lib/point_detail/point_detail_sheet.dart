@@ -22,6 +22,7 @@ import '../widgets/split_navigation_button.dart';
 import '../plan/reference_image_status.dart';
 import '../widgets/reference_thumbnail_stub.dart'
     if (dart.library.io) '../widgets/reference_thumbnail_io.dart';
+import '../l10n/l10n.dart';
 
 enum PointDetailActionScope { visit, manage, assign }
 
@@ -150,7 +151,7 @@ class PointDetailSheet extends StatelessWidget {
 
     messenger.showStatusSnack(
       kind: AppStatusBannerKind.running,
-      title: '正在替换参考图...',
+      title: l10n.pointDetailReplacingReference,
       icon: LucideIcons.arrowLeftRight,
     );
     // Every exit below replaces the running banner so it can never stick.
@@ -161,17 +162,26 @@ class PointDetailSheet extends StatelessWidget {
         pointId: point.id,
       );
     } catch (_) {
-      showStatus(AppStatusBannerKind.error, '参考图替换失败，请稍后重试。');
+      showStatus(
+        AppStatusBannerKind.error,
+        l10n.pointDetailReplaceReferenceFailed,
+      );
       return;
     }
     if (stored == null) {
-      showStatus(AppStatusBannerKind.error, '参考图替换失败，请稍后重试。');
+      showStatus(
+        AppStatusBannerKind.error,
+        l10n.pointDetailReplaceReferenceFailed,
+      );
       return;
     }
     if (!context.mounted) {
       // The sheet closed before anything was committed: drop the copy.
       await deleteStoredUserReferenceImage(stored);
-      showStatus(AppStatusBannerKind.warning, '参考图替换已取消');
+      showStatus(
+        AppStatusBannerKind.warning,
+        l10n.pointDetailReplaceReferenceCanceled,
+      );
       return;
     }
 
@@ -180,11 +190,14 @@ class PointDetailSheet extends StatelessWidget {
     } catch (_) {
       // The save may have committed before the error surfaced (e.g. while
       // re-reading the plan), so the stored image is kept, never deleted.
-      showStatus(AppStatusBannerKind.error, '参考图替换失败，请稍后重试。');
+      showStatus(
+        AppStatusBannerKind.error,
+        l10n.pointDetailReplaceReferenceFailed,
+      );
       return;
     }
 
-    showStatus(AppStatusBannerKind.success, '已替换参考图');
+    showStatus(AppStatusBannerKind.success, l10n.pointDetailReferenceReplaced);
     if (context.mounted) {
       navigator.pop();
     }
@@ -203,7 +216,7 @@ class PointDetailSheet extends StatelessWidget {
     if (!opened && context.mounted) {
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.error,
-        title: '无法打开${navigationApp.label}。',
+        title: l10n.pointDetailOpenNavigationFailed(navigationApp.label),
       );
     }
   }
@@ -241,11 +254,14 @@ class PointDetailSheet extends StatelessWidget {
     final pickerGroups = sortGroupsByPlanOrder(groups);
     final selectedGroupId = await showPlanGroupSelectionSheet(
       context: context,
-      title: '移动到片区',
-      subtitle: '选择一个片区作为当前点位所属片区',
+      title: l10n.pointDetailMoveToArea,
+      subtitle: l10n.pointDetailMoveToAreaHint,
       selectedOptionId: point.groupId ?? ungroupedOptionId,
       options: [
-        const PlanGroupSelectionOption(id: ungroupedOptionId, title: '未分入片区'),
+        PlanGroupSelectionOption(
+          id: ungroupedOptionId,
+          title: l10n.pointDetailNotInArea,
+        ),
         for (final group in pickerGroups)
           PlanGroupSelectionOption(id: group.id, title: group.name),
       ],
@@ -329,7 +345,7 @@ class PointDetailSheet extends StatelessWidget {
                           const SizedBox(height: 8),
                           CopyableText(
                             text: point.name,
-                            copyLabel: '点位名称',
+                            copyLabel: l10n.pointDetailCopySpotName,
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -357,22 +373,22 @@ class PointDetailSheet extends StatelessWidget {
                 const SizedBox(height: 16),
                 _InfoRow(
                   icon: LucideIcons.clapperboard,
-                  label: '作品',
+                  label: l10n.pointDetailWorkLabel,
                   value: '${point.work.title} / ${point.work.subtitle}',
                 ),
                 const SizedBox(height: 8),
                 _InfoRow(
                   icon: LucideIcons.film,
-                  label: '场景',
+                  label: l10n.pointDetailSceneLabel,
                   value: point.displayEpisodeLabel,
                 ),
                 const SizedBox(height: 8),
                 _InfoRow(
                   icon: LucideIcons.mapPin,
-                  label: '坐标',
+                  label: l10n.pointDetailCoordinatesLabel,
                   value: point.hasCoordinate
                       ? '${point.position.latitude.toStringAsFixed(5)}, ${point.position.longitude.toStringAsFixed(5)}'
-                      : '待补充',
+                      : l10n.pointDetailCoordinatesMissing,
                 ),
                 const SizedBox(height: 8),
                 _GroupInfoRow(
@@ -385,13 +401,13 @@ class PointDetailSheet extends StatelessWidget {
                 const SizedBox(height: 8),
                 _InfoRow(
                   icon: LucideIcons.image,
-                  label: '参考',
+                  label: l10n.pointDetailReferenceLabel,
                   value: point.referenceLabel,
                 ),
                 const SizedBox(height: 8),
                 _InfoRow(
                   icon: LucideIcons.fileCode,
-                  label: '来源',
+                  label: l10n.pointDetailSourceLabel,
                   value: _sourceText,
                 ),
                 if (point.sourceId != null) ...[
@@ -406,7 +422,7 @@ class PointDetailSheet extends StatelessWidget {
                   const SizedBox(height: 8),
                   _InfoRow(
                     icon: LucideIcons.link,
-                    label: '链接',
+                    label: l10n.pointDetailLinkLabel,
                     value: point.sourceUrl!,
                   ),
                 ],
@@ -414,7 +430,7 @@ class PointDetailSheet extends StatelessWidget {
                   const SizedBox(height: 8),
                   _InfoRow(
                     icon: LucideIcons.stickyNote,
-                    label: '备注',
+                    label: l10n.pointDetailNoteLabel,
                     value: point.note!,
                   ),
                 ],
@@ -477,24 +493,24 @@ class PointDetailSheet extends StatelessWidget {
   String get _sourceText {
     return switch (point.source) {
       PointSource.anitabi => 'Anitabi / ${point.referenceLabel}',
-      PointSource.manual => '手动录入 / ${point.referenceLabel}',
+      PointSource.manual => l10n.pointDetailManualSource(point.referenceLabel),
     };
   }
 
   _PointStatusAction get _statusAction {
     return switch (status) {
       VisitStatus.completed => _PointStatusAction(
-        label: '撤回打卡',
+        label: l10n.pointDetailUndoCheckIn,
         icon: LucideIcons.undo2,
         onTap: onComplete!,
       ),
       VisitStatus.current => _PointStatusAction(
-        label: '标记完成',
+        label: l10n.pointDetailMarkDone,
         icon: LucideIcons.circleCheckBig,
         onTap: onComplete!,
       ),
       VisitStatus.pending => _PointStatusAction(
-        label: '标记完成',
+        label: l10n.pointDetailMarkDone,
         icon: LucideIcons.circleCheckBig,
         onTap: onComplete!,
       ),
@@ -504,14 +520,14 @@ class PointDetailSheet extends StatelessWidget {
   String get _groupName {
     final groupId = point.groupId;
     if (groupId == null) {
-      return '未分入片区';
+      return l10n.pointDetailNotInArea;
     }
     return groups
         .firstWhere(
           (group) => group.id == groupId,
           orElse: () => PilgrimagePlanGroup(
             id: groupId,
-            name: '未知片区',
+            name: l10n.pointDetailUnknownArea,
             orderIndex: 0,
             createdAt: DateTime.fromMillisecondsSinceEpoch(0),
           ),
@@ -522,12 +538,12 @@ class PointDetailSheet extends StatelessWidget {
   String get _groupAnchorLabel {
     final groupId = point.groupId;
     if (groupId == null) {
-      return '未设置关键点';
+      return l10n.pointDetailNoAnchor;
     }
     final group = groups.where((group) => group.id == groupId).firstOrNull;
     final anchorName = group?.anchorName;
     if (anchorName == null || anchorName.trim().isEmpty) {
-      return '未设置关键点';
+      return l10n.pointDetailNoAnchor;
     }
     return anchorName;
   }
@@ -567,9 +583,9 @@ class _DeletePointButtonState extends State<_DeletePointButton> {
     try {
       final confirmed = await showConfirmActionDialog(
         context,
-        title: '删除点位',
-        message: '将从计划中删除“${point.name}”。已有巡礼记录及照片将保留。',
-        confirmLabel: '删除点位',
+        title: l10n.pointDetailDeleteSpot,
+        message: l10n.pointDetailDeleteSpotMessage(point.name),
+        confirmLabel: l10n.pointDetailDeleteSpot,
         destructive: true,
         emphasizedValues: [point.name],
       );
@@ -594,7 +610,7 @@ class _DeletePointButtonState extends State<_DeletePointButton> {
       }
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.error,
-        title: '删除点位失败，请稍后重试。',
+        title: l10n.pointDetailDeleteSpotFailed,
       );
     } finally {
       if (mounted) {
@@ -605,7 +621,9 @@ class _DeletePointButtonState extends State<_DeletePointButton> {
 
   @override
   Widget build(BuildContext context) {
-    final label = _busy ? '正在删除点位' : (_deleted ? '点位已删除' : '删除点位');
+    final label = _busy
+        ? l10n.pointDetailDeletingSpot
+        : (_deleted ? l10n.pointDetailSpotDeleted : l10n.pointDetailDeleteSpot);
     return Tooltip(
       message: label,
       child: Semantics(
@@ -662,7 +680,9 @@ class _PointDetailActions extends StatelessWidget {
     );
     final primaryActions = <Widget>[
       SplitNavigationButton(
-        inAppLabel: canNavigate ? '导航' : '坐标待补充',
+        inAppLabel: canNavigate
+            ? l10n.pointDetailNavigate
+            : l10n.pointDetailNoCoordinates,
         onOpenInAppNavigation: onOpenInAppNavigation,
         onOpenExternalNavigation: onOpenExternalNavigation,
         height: actionHeight,
@@ -674,11 +694,11 @@ class _PointDetailActions extends StatelessWidget {
         OutlinedButton(
           onPressed: onOpenCamera,
           style: actionStyle,
-          child: const ResponsiveButtonContent(
+          child: ResponsiveButtonContent(
             icon: LucideIcons.camera,
-            label: '拍摄参考',
-            shortLabel: '拍摄',
-            semanticLabel: '拍摄参考',
+            label: l10n.pointDetailShootReference,
+            shortLabel: l10n.pointDetailShootShort,
+            semanticLabel: l10n.pointDetailShootReference,
           ),
         ),
       ],
@@ -689,11 +709,11 @@ class _PointDetailActions extends StatelessWidget {
         OutlinedButton(
           onPressed: status == VisitStatus.current ? null : onSetCurrent,
           style: actionStyle,
-          child: const ResponsiveButtonContent(
+          child: ResponsiveButtonContent(
             icon: LucideIcons.flag,
-            label: '设为当前',
-            shortLabel: '当前',
-            semanticLabel: '设为当前目标',
+            label: l10n.pointDetailSetCurrent,
+            shortLabel: l10n.pointDetailSetCurrentShort,
+            semanticLabel: l10n.pointDetailSetCurrentTarget,
           ),
         ),
       if (scope != PointDetailActionScope.assign && statusAction != null) ...[
@@ -728,7 +748,7 @@ class _PointDetailActions extends StatelessWidget {
               onPressed: onEditPoint,
               style: actionStyle,
               icon: const Icon(LucideIcons.edit, size: 18),
-              label: const Text('编辑点位'),
+              label: Text(l10n.pointDetailEditSpot),
             ),
           ),
         ],
@@ -820,7 +840,7 @@ class _ReferenceColumn extends StatelessWidget {
                   letterSpacing: 0,
                 ),
               ),
-              child: const Text('替换'),
+              child: Text(l10n.pointDetailReplace),
             ),
           ),
         ],
@@ -850,7 +870,7 @@ class _GroupInfoRow extends StatelessWidget {
         SizedBox(
           width: 42,
           child: Text(
-            '片区',
+            l10n.pointDetailArea,
             style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 13,
@@ -866,7 +886,7 @@ class _GroupInfoRow extends StatelessWidget {
             children: [
               CopyableText(
                 text: groupName,
-                copyLabel: '片区',
+                copyLabel: l10n.pointDetailArea,
                 style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 13,
@@ -876,7 +896,7 @@ class _GroupInfoRow extends StatelessWidget {
               const SizedBox(height: 2),
               CopyableText(
                 text: anchorLabel,
-                copyLabel: '片区关键点',
+                copyLabel: l10n.pointDetailAreaAnchor,
                 style: TextStyle(
                   color: AppColors.textSecondary,
                   fontSize: 12,
@@ -900,7 +920,7 @@ class _GroupInfoRow extends StatelessWidget {
                   letterSpacing: 0,
                 ),
               ),
-              child: const Text('更改'),
+              child: Text(l10n.pointDetailChange),
             ),
           ),
         ],
@@ -917,9 +937,9 @@ class _StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = switch (status) {
-      VisitStatus.current => '当前目标',
-      VisitStatus.completed => '已完成',
-      VisitStatus.pending => '待访问',
+      VisitStatus.current => l10n.pointDetailStatusCurrent,
+      VisitStatus.completed => l10n.pointDetailStatusCompleted,
+      VisitStatus.pending => l10n.pointDetailStatusPending,
     };
 
     final color = switch (status) {
@@ -1017,7 +1037,7 @@ class _PointRecordsPreview extends StatelessWidget {
             Icon(LucideIcons.folders, color: AppColors.textSecondary, size: 18),
             const SizedBox(width: 6),
             Text(
-              '本点记录 ${records.length}',
+              l10n.pointDetailRecordsCount(records.length),
               style: const TextStyle(
                 fontSize: 15,
                 fontWeight: FontWeight.w800,
@@ -1029,7 +1049,7 @@ class _PointRecordsPreview extends StatelessWidget {
               TextButton.icon(
                 onPressed: onOpenRecords,
                 icon: const Icon(LucideIcons.chevronRight, size: 18),
-                label: const Text('全部'),
+                label: Text(l10n.pointDetailAll),
               ),
           ],
         ),

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../l10n/l10n.dart';
 import '../data/anitabi_image_fetcher.dart';
 import '../data/bounded_image_decoder.dart';
 import '../data/bounded_image_file_stub.dart'
@@ -26,15 +27,15 @@ Future<Uint8List> readBoundedImageSource(
       source: source,
       maxBytes: maxBytes,
     );
-    if (bytes == null) throw StateError('图片暂不可用');
+    if (bytes == null) throw StateError(l10n.boundedImageUnavailable);
     return bytes is Uint8List ? bytes : Uint8List.fromList(bytes);
   }
   if (path.startsWith('data:')) {
     final comma = path.indexOf(',');
     if (comma < 0 || !path.substring(0, comma).endsWith(';base64')) {
-      throw const ImageBudgetException(
+      throw ImageBudgetException(
         ImageBudgetFailure.unsupported,
-        '无法读取图片来源',
+        l10n.boundedImageBadSource,
       );
     }
     checkImageEncodedLength(
@@ -154,16 +155,16 @@ class BoundedImage extends StatelessWidget {
         : LayoutBuilder(
             builder: (context, constraints) => Center(
               child: constraints.maxHeight < 64 || constraints.maxWidth < 100
-                  ? const Tooltip(
-                      message: '图片加载中',
-                      child: Icon(Icons.hourglass_empty),
+                  ? Tooltip(
+                      message: l10n.boundedImageLoading,
+                      child: const Icon(Icons.hourglass_empty),
                     )
-                  : const Column(
+                  : Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.hourglass_empty),
-                        SizedBox(height: 12),
-                        Text('图片加载中'),
+                        const Icon(Icons.hourglass_empty),
+                        const SizedBox(height: 12),
+                        Text(l10n.boundedImageLoading),
                       ],
                     ),
             ),
@@ -187,7 +188,7 @@ class BoundedImageError extends StatelessWidget {
     builder: (context, constraints) {
       final message = error is ImageBudgetException
           ? (error as ImageBudgetException).message
-          : '图片暂不可用';
+          : l10n.boundedImageUnavailable;
       if (constraints.maxWidth < 160 || constraints.maxHeight < 90) {
         return Tooltip(
           message: message,

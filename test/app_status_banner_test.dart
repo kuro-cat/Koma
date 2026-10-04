@@ -62,6 +62,12 @@ void main() {
     expect(statusBannerSentence('保存计划顺序失败，已恢复原来的顺序。'), '保存计划顺序失败，已恢复原来的顺序');
     expect(statusBannerSentence('数据包已导出'), '数据包已导出');
     expect(statusBannerSentence('失败。请稍后重试。'), '失败。请稍后重试。');
+    expect(
+      statusBannerSentence('Coordinates filled in.'),
+      'Coordinates filled in',
+    );
+    expect(statusBannerSentence('Exporting...'), 'Exporting...');
+    expect(statusBannerSentence('Failed. Try again.'), 'Failed. Try again.');
   });
 
   testWidgets('single-sentence snack hides the trailing period', (
@@ -81,23 +87,6 @@ void main() {
 
     expect(find.text('已添加「声之形」'), findsOneWidget);
     expect(find.text('已添加「声之形」。'), findsNothing);
-  });
-
-  test('running titles infer distinct action icons', () {
-    expect(statusBannerRunningIcon('正在导出...'), LucideIcons.share2);
-    expect(statusBannerRunningIcon('已取消导出'), LucideIcons.circleX);
-    expect(statusBannerRunningIcon('正在缓存参考图...'), LucideIcons.refreshCw);
-    expect(statusBannerRunningIcon('正在保存记录，请稍候。'), LucideIcons.save);
-    expect(statusBannerRunningIcon('正在替换参考图...'), LucideIcons.arrowLeftRight);
-    expect(statusBannerRunningIcon('正在读取参考图比例，请稍后拍摄。'), LucideIcons.ratio);
-    expect(
-      statusBannerRunningIcon('正在清除缓存并重新加载 Anitabi 点位...'),
-      LucideIcons.brushCleaning,
-    );
-    expect(statusBannerRunningIcon('正在导入 12 个点位...'), LucideIcons.mapPinPlus);
-    expect(statusBannerRunningIcon('正在缓存缩略图 8/12，成功 7'), LucideIcons.images);
-    expect(statusBannerRunningIcon('已取消保存'), LucideIcons.circleX);
-    expect(statusBannerRunningIcon('正在处理...'), LucideIcons.hourglass);
   });
 
   testWidgets('unknown running banner uses an hourglass instead of download', (

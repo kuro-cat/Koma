@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:latlong2/latlong.dart';
 
 import 'map_colors.dart';
+import '../l10n/l10n.dart';
 
 typedef NavigationHeadingStreamFactory =
     Stream<double?> Function(LatLng position);
@@ -123,10 +124,10 @@ class NavigationLocationPuck extends StatelessWidget {
         final color = stale ? Colors.grey : MapColors.accent;
         return Semantics(
           label: stale
-              ? '上次定位，等待更新'
+              ? l10n.navigationHeadingStale
               : turns == null
-              ? '当前位置，朝向不可用'
-              : '当前位置，手机朝向',
+              ? l10n.navigationHeadingNoHeading
+              : l10n.navigationHeadingWithHeading,
           child: Stack(
             alignment: Alignment.center,
             children: [

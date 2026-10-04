@@ -1,13 +1,14 @@
 import 'dart:typed_data';
 import 'bounded_image_decoder.dart';
+import '../l10n/l10n.dart';
 
 String resolveBoundedImagePath(String path) => path;
 Future<Uint8List> readBoundedImageFile(
   String path, {
   int maxBytes = maxImageEncodedBytes,
 }) async {
-  throw const ImageBudgetException(
+  throw ImageBudgetException(
     ImageBudgetFailure.unsupported,
-    '此平台无法读取此本地图片；原件未更改',
+    l10n.boundedImageFileStubUnsupported,
   );
 }

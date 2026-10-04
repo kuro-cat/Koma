@@ -3,6 +3,8 @@ import 'dart:async';
 import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 
+import '../l10n/l10n.dart';
+
 enum CurrentLocationFailure { serviceDisabled, permissionDenied, timeout }
 
 class CurrentLocationException implements Exception {
@@ -126,8 +128,10 @@ class _ResumeObserver with WidgetsBindingObserver {
 
 String currentLocationFailureMessage(CurrentLocationException error) {
   return switch (error.failure) {
-    CurrentLocationFailure.serviceDisabled => '定位服务未开启。',
-    CurrentLocationFailure.permissionDenied => '需要定位权限来显示当前位置。',
-    CurrentLocationFailure.timeout => '定位超时，请稍后重试。',
+    CurrentLocationFailure.serviceDisabled =>
+      l10n.currentLocationResolverServiceDisabled,
+    CurrentLocationFailure.permissionDenied =>
+      l10n.currentLocationResolverPermissionDenied,
+    CurrentLocationFailure.timeout => l10n.currentLocationResolverTimeout,
   };
 }

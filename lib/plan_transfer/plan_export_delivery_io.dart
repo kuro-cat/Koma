@@ -7,6 +7,7 @@ import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart' as share_plus;
 
+import '../l10n/l10n.dart';
 import 'plan_export_delivery_result.dart';
 
 Future<PreparedPlanExportDestination?> preparePlanExportDestinationImpl({
@@ -87,7 +88,7 @@ Future<file_selector.FileSaveLocation?> _getSaveLocation({
       ),
     ],
     suggestedName: fileName,
-    confirmButtonText: '保存',
+    confirmButtonText: l10n.commonSave,
   );
 }
 

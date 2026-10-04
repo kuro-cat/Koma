@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'dart:isolate';
 
+import 'package:flutter/widgets.dart' show Locale;
+
+import '../l10n/l10n.dart';
+
 // Mirrors Isolate.run, but keeps the Isolate handle so a cancelled import or
 // export can be killed instead of burning CPU until it finishes.
 Future<R> runPlanTransferTaskOnPlatform<R>(
@@ -52,7 +56,7 @@ Future<R> runPlanTransferTaskOnPlatform<R>(
 
   Isolate.spawn<_PlanTransferMessage<R>>(
     _runPlanTransferTask,
-    _PlanTransferMessage<R>(task, port.sendPort),
+    _PlanTransferMessage<R>(task, port.sendPort, l10n.localeName),
     onError: port.sendPort,
     onExit: port.sendPort,
     errorsAreFatal: true,
@@ -72,13 +76,17 @@ Future<R> runPlanTransferTaskOnPlatform<R>(
 }
 
 class _PlanTransferMessage<R> {
-  const _PlanTransferMessage(this.task, this.resultPort);
+  const _PlanTransferMessage(this.task, this.resultPort, this.localeName);
 
   final FutureOr<R> Function() task;
   final SendPort resultPort;
+  final String localeName;
 }
 
 Future<void> _runPlanTransferTask<R>(_PlanTransferMessage<R> message) async {
+  // Globals start over in a new isolate; messages built here (import limits,
+  // default names) must use the app's language, not l10n's initial Chinese.
+  l10n = lookupAppLocalizations(Locale(message.localeName));
   final R result;
   try {
     result = await message.task();

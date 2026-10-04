@@ -24,5 +24,3320 @@
   "alignPhotoRemoveConfirm": "移除",
   "alignPhotoRemoved": "已移除裁剪",
   "alignPhotoNoPhoto": "巡礼照片不可用",
-  "alignPhotoNoReference": "这条记录没有参考图，无法对齐"
+  "alignPhotoNoReference": "这条记录没有参考图，无法对齐",
+  "settingsResetMessage": "{target}将恢复为默认值。",
+  "@settingsResetMessage": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsAnitabiRestoreMessage": "将把{target}恢复为官方默认值。",
+  "@settingsAnitabiRestoreMessage": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsDesktopLauncherAvailable": "桌面启动器 可用 / {platform} / {mode}",
+  "@settingsDesktopLauncherAvailable": {
+    "placeholders": {
+      "platform": {
+        "type": "String"
+      },
+      "mode": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsReferenceImageScale": "参考图显示 {percent}%",
+  "@settingsReferenceImageScale": {
+    "placeholders": {
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsCameraZoomRange": "相机缩放 {min}x - {max}x",
+  "@settingsCameraZoomRange": {
+    "placeholders": {
+      "min": {
+        "type": "String"
+      },
+      "max": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsRemoteConfigApplied": "已应用远程配置 v{version}",
+  "@settingsRemoteConfigApplied": {
+    "placeholders": {
+      "version": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsRemoteLastCheck": "{applied} · 上次检查 {time}",
+  "@settingsRemoteLastCheck": {
+    "placeholders": {
+      "applied": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsRemoteLastCheckResult": "{applied} · 上次检查 {time}，{result}",
+  "@settingsRemoteLastCheckResult": {
+    "placeholders": {
+      "applied": {
+        "type": "String"
+      },
+      "time": {
+        "type": "String"
+      },
+      "result": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsMapSource": "地图源 {name}",
+  "@settingsMapSource": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsOpenFreeMapStyle": "OpenFreeMap 样式 {name}",
+  "@settingsOpenFreeMapStyle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsXyzUrlHelper": "URL 需要包含 {z}、{x}、{y}。",
+  "@settingsXyzUrlHelper": {
+    "placeholders": {
+      "z": {
+        "type": "String"
+      },
+      "x": {
+        "type": "String"
+      },
+      "y": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsAnitabiImageSource": "Anitabi 图片源 {name}",
+  "@settingsAnitabiImageSource": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCountValue": "{count} 个",
+  "@settingsCountValue": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsNavigationApp": "导航地图 {name}",
+  "@settingsNavigationApp": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsZoomLevel": "{level} 级",
+  "@settingsZoomLevel": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsThumbnailThresholdSubtitle": "视图内点位不超过 {count} 个时显示缩略图；超过时仅显示圆点。",
+  "@settingsThumbnailThresholdSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsSelectedPlans": "已选择 {selected} / {total} 个计划",
+  "@settingsSelectedPlans": {
+    "placeholders": {
+      "selected": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsPlanSummary": "{area} / {count} 个点位",
+  "@settingsPlanSummary": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsCleaningProgress": "正在清理 {completed} / {total}",
+  "@settingsCleaningProgress": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsClearReferenceCacheMessage": "将删除 {count} 个下载缓存，约 {size}。本地上传图片和计划包导入图片不会被删除。",
+  "@settingsClearReferenceCacheMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCacheCleared": "已清理 {count} 个缓存文件",
+  "@settingsCacheCleared": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsFreedSpace": "释放 {size}",
+  "@settingsFreedSpace": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsCacheClearFailedFiles": "{count} 个文件清理失败",
+  "@settingsCacheClearFailedFiles": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsHueSaturationValue": "色相 {hue} 度，饱和度 {saturation}%",
+  "@settingsHueSaturationValue": {
+    "placeholders": {
+      "hue": {
+        "type": "int"
+      },
+      "saturation": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsProbeSucceeded": "成功 · {ms}ms",
+  "@settingsProbeSucceeded": {
+    "placeholders": {
+      "ms": {
+        "type": "int"
+      }
+    }
+  },
+  "settingsImageSourceAutoDescription": "优先使用 {official}；失败后尝试 {mirror}。",
+  "@settingsImageSourceAutoDescription": {
+    "placeholders": {
+      "official": {
+        "type": "String"
+      },
+      "mirror": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsImageSourceFixedDescription": "固定使用 {url}。",
+  "@settingsImageSourceFixedDescription": {
+    "placeholders": {
+      "url": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsTitle": "设置",
+  "settingsResetTitle": "恢复初始设置",
+  "settingsAppearanceTitle": "外观设置",
+  "settingsAppearanceSubtitle": "主题色、深浅色、缩放、显示等",
+  "settingsThemeColor": "主题色",
+  "settingsThemeMode": "主题模式",
+  "settingsCameraTitle": "拍摄设置",
+  "settingsCameraSubtitle": "照片比例、参考图比例、备份等",
+  "settingsCaptureAspectRatio": "拍摄图片比例",
+  "settingsCameraZoom": "相机缩放",
+  "settingsPhotoBackup": "照片备份",
+  "settingsSavePhotoToGallery": "保存巡礼照片到相册",
+  "settingsComparisonTitle": "对比图设置",
+  "settingsComparisonSubtitle": "导出样式、自动保存到相册",
+  "settingsAutoSaveComparison": "自动保存对比图",
+  "settingsAutoSaveComparisonSubtitle": "保存记录时保存到相册",
+  "settingsDataSourceTitle": "数据源设置",
+  "settingsDataSourceSubtitle": "地图源、图片源等",
+  "settingsMapDisplayTitle": "地图显示",
+  "settingsMapDisplaySubtitle": "点位、片区、聚合与缩略图",
+  "settingsClearCacheTitle": "清除缓存",
+  "settingsFullReferenceCache": "完整参考图缓存",
+  "settingsDesktopTitle": "桌面端",
+  "settingsDesktopSubtitle": "启动器、数据目录等",
+  "settingsAboutTitle": "关于 MiriaGo",
+  "settingsAboutSubtitle": "版本信息、开源许可等",
+  "settingsResetTarget": "所有外观、拍摄和地图设置",
+  "settingsReset": "恢复",
+  "settingsResetNotice": "恢复后仍可重新调整各项设置",
+  "settingsResetDone": "已恢复初始设置",
+  "settingsDesktopLauncherChecking": "桌面启动器 检查中",
+  "settingsDesktopLauncherUnavailable": "桌面启动器 不可用",
+  "settingsDesktopSystemDataDir": "系统数据目录",
+  "settingsDesktopPortableDir": "便携目录",
+  "settingsDesktopAppDataDir": "应用数据目录",
+  "settingsUrlLabel": "URL 地址",
+  "settingsThemeModeSubtitle": "影响应用整体浅色或深色显示",
+  "settingsLight": "浅色",
+  "settingsDark": "深色",
+  "settingsFollowSystem": "跟随系统",
+  "settingsThemeColorSubtitle": "影响应用整体配色",
+  "settingsPageScale": "页面缩放",
+  "settingsPageScaleSubtitle": "调整界面整体大小（不影响参考图）",
+  "settingsFontSmall": "小",
+  "settingsFontStandard": "标准",
+  "settingsFontLarge": "大",
+  "settingsFontExtraLarge": "特大",
+  "settingsPersonalization": "个性化功能配置",
+  "settingsShowAreaProgress": "显示片区进度条",
+  "settingsShowAreaProgressSubtitle": "在片区选择弹窗中显示未完成片区的进度背景；完成后仅显示对勾。",
+  "settingsDismissPlanActions": "点击空白收回计划操作",
+  "settingsDismissPlanActionsSubtitle": "展开计划操作后，点击面板外的空白区域自动收回",
+  "settingsCaptureAspectRatioHint": "自动会优先跟随参考图比例；选择固定比例后会按该比例拍摄。",
+  "settingsFallbackAspectRatio": "无参考图时比例",
+  "settingsFallbackAspectRatioHint": "拍摄图片比例为自动、且没有参考图可对齐时使用。",
+  "settingsPhotoLocation": "照片定位信息",
+  "settingsPhotoBackupSubtitle": "保存记录时同时备份一张巡礼照片。",
+  "settingsPhotoLocationAskDescription": "第一次按下快门时选择。定位仅写入照片，不使用点位坐标。",
+  "settingsPhotoLocationDisabledDescription": "不申请照片定位权限，也不向照片写入 GPS 信息。",
+  "settingsPhotoLocationRecentDescription": "拍摄时优先使用设备最近的有效定位；没有可用定位时尝试获取一次。",
+  "settingsPhotoLocationConfirmDescription": "拍摄后在确认记录页面获取新定位，完成或失败后再允许保存。",
+  "settingsPhotoLocationBadgeAsk": "询问",
+  "settingsPhotoLocationBadgeOff": "关闭",
+  "settingsPhotoLocationBadgeRecent": "最近",
+  "settingsRecommended": "推荐",
+  "settingsPhotoLocationConfirmLabel": "确认记录时获取定位",
+  "settingsAnitabiUrlHelper": "仅支持公开可访问的 HTTPS 基础地址，不要填写接口路径参数。",
+  "settingsSaveFailed": "设置保存失败",
+  "settingsTryAgainLater": "请稍后重试",
+  "settingsRestoreDefaultAddresses": "恢复默认地址",
+  "settingsAnitabiRestoreTarget": "全部 Anitabi 服务地址",
+  "settingsRestoreDefault": "恢复默认",
+  "settingsAnitabiRestoreNotice": "当前自定义地址不会被保留",
+  "settingsAnitabiSite": "主站地址",
+  "settingsAnitabiStaticData": "静态地图数据",
+  "settingsAnitabiApi": "数据 API",
+  "settingsAnitabiOfficialImage": "官方图片服务",
+  "settingsAnitabiMirrorImage": "备用图片服务",
+  "settingsAnitabiServices": "Anitabi 服务地址",
+  "settingsServiceAddresses": "服务地址",
+  "settingsTestingConnections": "正在测试连接",
+  "settingsTestAllConnections": "测试全部连接",
+  "settingsAddressAutoUpdate": "地址自动更新",
+  "settingsAddressAutoUpdateDescription": "连接 Anitabi 失败时，从 MiriaGo 仓库读取最新服务地址，验证可用后再替换。自定义的地址不会被改动。",
+  "settingsChecking": "正在检查",
+  "settingsCheckNow": "立即检查更新",
+  "settingsRemoteConfigNotApplied": "尚未应用远程配置",
+  "settingsRoutingConnectionOk": "路径规划服务连接正常",
+  "settingsRoutingConnectionFailed": "路径规划服务连接失败",
+  "settingsCustomXyzUrlNotSet": "未设置自定义 XYZ URL",
+  "settingsCustomXyzUrl": "自定义 XYZ URL",
+  "settingsInvalidUrl": "URL 格式无效",
+  "settingsMapLibreStyleUrlNotSet": "未设置 MapLibre style URL",
+  "settingsMapLibreStyleUrlHelper": "URL 需要指向可公开读取的 style JSON。",
+  "settingsAnitabiServicesHint": "服务域名变化时可单独调整，不会改写计划中的标准图片链接。",
+  "settingsConcurrentImageLoads": "图片同时请求数",
+  "settingsConcurrentImageLoadsSubtitle": "缩略图和完整参考图均按此数量并发请求。数值越大速度可能越快，但网络和内存占用也更高。",
+  "settingsWalkingRoutes": "步行路径规划",
+  "settingsValhallaAddress": "Valhalla 服务地址",
+  "settingsValhallaHelper": "用于应用内步行路线规划。公开服务没有可用性保证。",
+  "settingsTestConnection": "测试连接",
+  "settingsTest": "测试",
+  "settingsTestValhallaConnection": "测试 Valhalla 连接",
+  "settingsRestoreDefaultValhalla": "恢复默认 Valhalla 地址",
+  "settingsValhallaPrivacy": "仅发送路线坐标，不会上传计划、作品或照片信息。",
+  "settingsBaseMapBrightness": "底图明暗",
+  "settingsFollowTheme": "跟随主题",
+  "settingsBaseMapBrightnessHint": "适用于 OpenFreeMap；Dark 始终使用深色，其他地图源保留原始样式。",
+  "settingsCurrentLocation": "当前位置",
+  "settingsContinuousLocation": "持续更新当前位置",
+  "settingsContinuousLocationSubtitle": "开启定位后持续更新；关闭时仅在点击定位时获取一次。",
+  "settingsMapZoom": "地图缩放",
+  "settingsMaxZoom": "最大缩放倍率",
+  "settingsMaxZoomHint": "控制所有地图能够放大的最大级别。",
+  "settingsMapMarkers": "地图标记",
+  "settingsHideCompletedSpots": "隐藏已完成点位",
+  "settingsHideCompletedSpotsSubtitle": "在地图页不显示已标记完成的点位。关闭后仍可在地图上看到全部点位。",
+  "settingsMarkerSize": "地图标记大小",
+  "settingsMarkerSizeSubtitle": "统一调整点位、缩略图、聚合标记、当前位置和片区关键点的大小。",
+  "settingsAreaRange": "片区范围",
+  "settingsAreaRadius": "片区范围半径",
+  "settingsAreaRadiusSubtitle": "每个点位向外扩张的距离，用于生成地图上的片区轮廓。",
+  "settingsSpotClustering": "地图点位聚合",
+  "settingsAutoCluster": "自动聚合密集点位",
+  "settingsAutoClusterSubtitle": "仅合并地图标记的显示；点位数据、选择和导入功能不受影响。",
+  "settingsClusterRadius": "聚合范围",
+  "settingsClusterRadiusSubtitle": "屏幕上相距较近的点位会合并为一个带数量的聚合标记。",
+  "settingsClusterMaxZoom": "停止聚合级别",
+  "settingsClusterMaxZoomSubtitle": "地图放大超过该级别后显示每个原始点位。",
+  "settingsMapThumbnails": "地图缩略图",
+  "settingsThumbnailThreshold": "缩略图显示阈值",
+  "settingsThumbnailThresholdHint": "阈值为 0 时不会在地图上显示缩略图。",
+  "settingsPlans": "计划",
+  "settingsPlansLoadFailed": "计划列表读取失败",
+  "settingsSelectPlans": "选择计划",
+  "settingsSelectAll": "全选",
+  "settingsClearSelection": "清空",
+  "settingsClearDownloadedReferenceCache": "清除下载的参考图缓存",
+  "settingsCacheScanFailed": "缓存扫描失败",
+  "settingsNoCacheToClear": "所选计划没有可清理的下载缓存",
+  "settingsClearReferenceCacheTitle": "清除参考图缓存？",
+  "settingsClear": "清除",
+  "settingsLauncher": "启动器",
+  "settingsAppInfo": "应用信息",
+  "settingsAppTagline": "动漫圣地巡礼计划与拍摄参考工具",
+  "settingsCurrentVersion": "当前版本",
+  "settingsLoading": "读取中",
+  "settingsAuthor": "作者",
+  "settingsContactEmail": "联系邮箱",
+  "settingsSourceRepository": "开源仓库",
+  "settingsLicense": "开源许可",
+  "settingsPrivacyPolicy": "隐私政策",
+  "settingsViewPrivacyPolicy": "查看隐私政策",
+  "settingsDataAndCopyright": "数据与版权",
+  "settingsMap": "地图",
+  "settingsMapDataDescription": "可使用 OpenFreeMap、OpenStreetMap 或自定义地图服务。",
+  "settingsWorks": "作品",
+  "settingsWorksDataDescription": "作品搜索数据来自 Bangumi。",
+  "settingsPilgrimageContent": "巡礼内容",
+  "settingsPilgrimageContentDescription": "巡礼点位与参考图来自 Anitabi。",
+  "settingsImageSource": "图片源",
+  "settingsImageSourceDescription": "图片源设置只影响访问域名，远端链接统一保留 Anitabi 默认格式。",
+  "settingsCopyright": "版权归属",
+  "settingsCopyrightDescription": "第三方数据、截图和图片版权归原平台、贡献者或权利方所有。",
+  "settingsAspectAuto": "自动",
+  "settingsAspectNative": "原生",
+  "settingsCustom": "自定义",
+  "settingsAspectWidescreen": "宽屏",
+  "settingsAspectCinema": "电影",
+  "settingsAspectClassic": "经典",
+  "settingsAspectCamera": "相机",
+  "settingsAspectPortrait": "竖屏",
+  "settingsAspectFullScreen": "全面屏",
+  "settingsAspectVertical": "竖幅",
+  "settingsAspectSquare": "方形",
+  "settingsAspectCustomShort": "自定",
+  "settingsDecrease": "减少",
+  "settingsIncrease": "增加",
+  "settingsCacheContents": "缓存内容",
+  "settingsFullReferenceCacheSubtitle": "清除相机参考和大图查看使用的完整参考图。缩略图缓存会保留，以保持列表和地图加载速度。",
+  "settingsCustomAspectRatio": "自定义比例",
+  "settingsWidth": "宽",
+  "settingsHeight": "高",
+  "settingsEnterValidRatio": "请输入有效比例",
+  "settingsEnterColorName": "请输入颜色名称",
+  "settingsCustomThemeColor": "自定义主题色",
+  "settingsName": "名称",
+  "settingsColorCode": "色号",
+  "settingsAdd": "添加",
+  "settingsHueSaturation": "色相和饱和度",
+  "settingsBrightness": "明度",
+  "settingsSourceDefault": "默认",
+  "settingsSourceRemote": "远程配置",
+  "settingsProbeFailed": "失败",
+  "settingsNavDefault": "默认选项",
+  "settingsNavPopularInChina": "国内常用",
+  "settingsNavIosNative": "iOS 原生",
+  "settingsNavCity": "城市导航",
+  "settingsNavGoogleDescription": "导航按钮会通过 Google Maps 官方 Maps URL 打开步行路线。",
+  "settingsNavAppleDescription": "导航按钮会通过 Apple Map Links 打开步行路线。",
+  "settingsNavAmapDescription": "导航按钮会通过高德 URI API 打开步行路线，并使用 WGS84 坐标。",
+  "settingsNavBaiduDescription": "导航按钮会通过百度地图 URI API 打开步行路线，并使用 WGS84 坐标。",
+  "settingsMapRecommendedDefault": "推荐默认",
+  "settingsMapStandardTiles": "标准瓦片",
+  "settingsMapTileTemplate": "瓦片模板",
+  "settingsMapStyleUrl": "样式 URL",
+  "settingsAnitabiSummaryCustom": "已自定义，点击管理全部服务",
+  "settingsAnitabiSummaryRemote": "使用远程更新的地址，点击管理全部服务",
+  "settingsAnitabiSummaryDefault": "使用默认地址，点击管理全部服务",
+  "settingsImageSourceAuto": "自动选择",
+  "settingsImageSourceOfficial": "官方默认",
+  "settingsImageSourceMirror": "备用源",
+  "privacyPolicyTitle": "隐私政策",
+  "privacyPolicyLoading": "正在读取隐私政策...",
+  "privacyPolicyLoadFailed": "隐私政策读取失败",
+  "addPointsClipboardReadFailed": "无法读取剪贴板。",
+  "addPointsClipboardNoCoordinate": "剪贴板中没有有效坐标。",
+  "addPointsCoordinateFilled": "已填入坐标。",
+  "addPointsTitle": "添加内容",
+  "addPointsRoutePlannerLead": "点位很多、懒得逐个整理？",
+  "addPointsManualEntryReference": "手动录入",
+  "addPointsPointSaveFailed": "点位保存失败，请稍后重试。",
+  "addPointsWorkAdded": "已添加「{title}」。",
+  "@addPointsWorkAdded": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "addPointsWorkAddFailed": "作品添加失败，请稍后重试。",
+  "addPointsSearchBangumiTitle": "搜索 Bangumi",
+  "addPointsWorkNameLabel": "作品名称",
+  "addPointsWorkNameSearchHint": "例如：轻音少女",
+  "addPointsClearSearch": "清空搜索",
+  "addPointsSearching": "搜索中",
+  "addPointsSearchWorks": "搜索作品",
+  "addPointsBangumiSearchFailed": "Bangumi 搜索失败，请检查网络后重试。",
+  "addPointsFilterWorkTypes": "筛选作品类型",
+  "addPointsSelectedTypeCount": "已选 {count} 项",
+  "@addPointsSelectedTypeCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "addPointsLinkClipboardReadFailed": "无法读取剪贴板，请手动粘贴 Anitabi 链接。",
+  "addPointsLinkClipboardEmpty": "剪贴板中没有可用的 Anitabi 链接。",
+  "addPointsLinkImportTitle": "Anitabi 链接导入",
+  "addPointsAddingTo": "加入到：{planName}",
+  "@addPointsAddingTo": {
+    "placeholders": {
+      "planName": {
+        "type": "String"
+      }
+    }
+  },
+  "addPointsAnitabiLinkLabel": "Anitabi 链接",
+  "addPointsAnitabiLinkHint": "粘贴 Anitabi 作品或点位链接",
+  "addPointsClearInput": "清除搜索框",
+  "addPointsPaste": "粘贴",
+  "addPointsOpenAnitabiSpots": "打开 Anitabi 点位",
+  "addPointsLinkRequired": "请输入 Anitabi 链接",
+  "addPointsLinkInvalid": "请输入有效的 Anitabi 地图链接",
+  "addPointsLinkMissingWorkId": "链接缺少作品 ID，请先在 Anitabi 进入对应作品后复制链接",
+  "addPointsLinkExampleTitle": "有效链接示例",
+  "addPointsLinkExampleBody": "如果链接里包含作品 ID，会只加载对应作品；\n如果还包含点位 ID，会自动选中该点位。\n没有作品 ID 的链接需要先在 Anitabi 中进入对应作品后重新复制。",
+  "addPointsLinkExampleBangumiIdNote": "Bangumi 作品 ID（必须）",
+  "addPointsLinkExampleSpotIdNote": "Anitabi 点位 ID（可选）",
+  "addPointsNoOriginalTitle": "暂无作品原名",
+  "addPointsWorkSaveFailed": "作品保存失败，请稍后重试。",
+  "addPointsManualAddWork": "手动添加作品",
+  "addPointsFillingGuide": "填写指南",
+  "addPointsWorkNameHint": "请输入作品的中文名称",
+  "addPointsOriginalTitleLabel": "作品原名",
+  "addPointsOriginalTitleHint": "请输入作品的原名（如日文/英文）",
+  "addPointsWorkTypeLabel": "作品类型",
+  "addPointsMainRegionLabel": "主要地区",
+  "addPointsMainRegionHint": "输入作品主要发生或取景的地区",
+  "addPointsSaving": "保存中",
+  "addPointsSaveWork": "保存作品",
+  "addPointsFieldRequired": "请填写此项",
+  "addPointsPointGuideTitle": "点位填写指南",
+  "addPointsPointGuideIntro": "重点记录现场可识别的信息，方便到达后快速确认位置、场景和拍摄条件。",
+  "addPointsWorkLabel": "所属作品",
+  "addPointsBadgeRequired": "必填",
+  "addPointsBadgeOptional": "选填",
+  "addPointsBadgeCoordinatesRequired": "坐标必填",
+  "addPointsPointGuideWorkBody": "选择点位对应的作品。计划中还没有作品时，先填写作品名称、原名和主要地区。",
+  "addPointsGuideWorkExample": "轻音少女",
+  "addPointsGuideNameLocationTitle": "名称与位置说明",
+  "addPointsGuideNameLocationBody": "名称优先填写中文常用名；位置说明优先填写当地原语言的地标、建筑或店铺名称，方便现场核对。",
+  "addPointsGuideNameLocationExample": "东京国际会展中心 / 東京ビッグサイト",
+  "addPointsGuideSceneSourceTitle": "场景标签与参考来源",
+  "addPointsGuideSceneSourceBody": "场景标签只写集数、时间点或场景编号；参考来源填写该点位原来所在的平台，或原始上传者。",
+  "addPointsGuideSceneSourceExample": "EP 1 / 12:32\n示例：小红书@BilyHurington / Bilibili@麦块晓天",
+  "addPointsNotesLabel": "备注",
+  "addPointsGuideNotesBody": "记录营业时间、闭店翻修、拍摄限制、推荐机位或其他到访前需要知道的信息。",
+  "addPointsGuideNotesExample": "2025年完成翻修；最佳拍摄时间为上午；周末游客较多；",
+  "addPointsGuideCoordinateImageTitle": "坐标与参考图",
+  "addPointsGuideCoordinateImageBody": "优先从地图选择准确位置，也可粘贴纬度、经度。参考图建议使用能清楚辨认构图的原始画面。",
+  "addPointsGuideCheckMarkerTip": "保存前建议核对地图标记是否落在正确建筑或道路一侧；坐标偏差会直接影响导航和现场查找。",
+  "addPointsGuideGotIt": "知道了",
+  "addPointsWorkGuideTitle": "作品填写指南",
+  "addPointsWorkGuideIntro": "填写作品本身的信息，点位名称、场景说明和具体地址请在添加点位时录入。",
+  "addPointsWorkGuideNameBody": "填写常用中文译名或最容易辨认的名称，不要填写集数或具体场景名。",
+  "addPointsWorkGuideOriginalTitleBody": "可填写官方日文、英文或其他原始标题；没有可靠信息时可以留空。",
+  "addPointsWorkGuideTypeBody": "选择最接近作品发行形式的类型，方便在作品列表中辨认和筛选。",
+  "addPointsGuideWorkTypeExample": "动画",
+  "addPointsWorkGuideRegionBody": "填写主要发生地或取景城市，可使用“城市 / 区域”的简洁格式；留空时沿用当前计划地区。",
+  "addPointsWorkGuideRegionExample": "京都市 / 宇治市",
+  "addPointsWorkGuideFooter": "保存作品后，表单会清空以便继续添加。作品不会自动生成点位，可随后使用“手动添加点位”录入巡礼地点。",
+  "addPointsGuideExample": "示例：{example}",
+  "@addPointsGuideExample": {
+    "placeholders": {
+      "example": {
+        "type": "String"
+      }
+    }
+  },
+  "addPointsLatitudeAlsoRequired": "请同时填写纬度",
+  "addPointsLongitudeAlsoRequired": "请同时填写经度",
+  "addPointsLatitudeInvalid": "纬度格式不正确",
+  "addPointsLongitudeInvalid": "经度格式不正确",
+  "addPointsQuickManualAddPoint": "快速手动添加点位",
+  "addPointsSelectWorkRequired": "请选择作品",
+  "addPointsPointNameLabel": "点位名称",
+  "addPointsPointNameHint": "例如：东京国际会展中心",
+  "addPointsCoordinateLabel": "坐标位置",
+  "addPointsLatitude": "纬度",
+  "addPointsLongitude": "经度",
+  "addPointsLatitudeHint": "例如：35.712576",
+  "addPointsLongitudeHint": "例如：139.722166",
+  "addPointsPickFromMap": "从地图选择",
+  "addPointsPickFromMapShort": "地图选择",
+  "addPointsPickFromMapSemantic": "从地图选择坐标",
+  "addPointsPasteCoordinates": "粘贴剪贴板坐标",
+  "addPointsSavePoint": "保存点位",
+  "addPointsQuickGuideTitle": "快速添加填写指南",
+  "addPointsQuickGuideIntro": "先录入最基本的信息，之后可从点位编辑页继续补充位置说明、场景标签、参考来源、备注和参考图。",
+  "addPointsQuickGuideWorkBody": "选择点位对应的已有作品。若列表中没有目标作品，请先返回添加内容页添加作品。",
+  "addPointsQuickGuideNameBody": "填写便于识别和搜索的中文常用名称，后续可在编辑页修改。",
+  "addPointsGuidePointNameExample": "东京国际会展中心",
+  "addPointsQuickGuideCoordinateBody": "暂时不知道准确位置时可以留空；填写时需同时提供纬度和经度，也可从地图选择或粘贴坐标。",
+  "addPointsSaveUnconfirmed": "保存结果未确认，请返回并刷新计划，检查点位是否已添加。",
+  "addPointsReferenceImageReadFailed": "参考图读取失败，请重新选择。",
+  "addPointsEditPoint": "编辑点位",
+  "addPointsManualAddPoint": "手动添加点位",
+  "addPointsEditing": "修改：{name}",
+  "@addPointsEditing": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "addPointsLocationNoteLabel": "位置说明",
+  "addPointsLocationNoteHint": "例如：東京ビッグサイト",
+  "addPointsSceneTagLabel": "集数/场景标签",
+  "addPointsSceneTagHint": "例如：EP 1 / 12:32",
+  "addPointsReferenceSourceLabel": "参考来源",
+  "addPointsReferenceSourceHint": "例如：小红书@BilyHurington / Bilibili@麦块晓天",
+  "addPointsNotesHint": "例如：2025年完成翻修；最佳拍摄时间为上午；周末游客较多",
+  "addPointsSaveChanges": "保存修改",
+  "addPointsLatitudeRequired": "请填写纬度",
+  "addPointsLongitudeRequired": "请填写经度",
+  "addPointsCoordinateInvalid": "请输入有效坐标",
+  "addPointsPickCoordinateTitle": "选择点位坐标",
+  "addPointsExitMapPick": "关闭地图选点",
+  "addPointsStartMapPick": "在地图上选点",
+  "addPointsMapPickHint": "点击地图任意位置设置点位坐标",
+  "addPointsMapPickIdleHint": "先点击右上角选点按钮，再点击地图设置坐标",
+  "addPointsMapAdjustHint": "点击地图可继续调整位置\n{coordinates}",
+  "@addPointsMapAdjustHint": {
+    "placeholders": {
+      "coordinates": {
+        "type": "String"
+      }
+    }
+  },
+  "addPointsMapPickTitle": "地图选点",
+  "addPointsUse": "使用",
+  "addPointsLinkedWorks": "已关联作品",
+  "addPointsLinkedWorksSummary": "共 {workCount} 部作品，{pointCount} 个点位",
+  "@addPointsLinkedWorksSummary": {
+    "placeholders": {
+      "workCount": {
+        "type": "int"
+      },
+      "pointCount": {
+        "type": "int"
+      }
+    }
+  },
+  "addPointsManageWorks": "管理作品",
+  "addPointsNoLinkedWorks": "还没有关联作品，可从 Bangumi 搜索或手动添加。",
+  "addPointsAddFromBangumi": "从Bangumi添加",
+  "addPointsAddFromBangumiSubtitle": "自动获取信息",
+  "addPointsManualAddWorkSubtitle": "未收录时使用",
+  "addPointsViewFullImage": "查看大图",
+  "addPointsNoReferenceImage": "暂无参考图",
+  "addPointsReferenceImageLabel": "参考图片",
+  "addPointsReferenceImagePending": "已选择新图片，保存后生效。",
+  "addPointsReferenceImageCurrent": "当前参考图，重新选择后需保存才会生效。",
+  "addPointsReferenceImageOptional": "可选，保存时会复制到 App 本地目录。",
+  "addPointsReselectImage": "重新选择",
+  "addPointsUploadReferenceImage": "上传参考图",
+  "addPointsRemoveImage": "移除",
+  "addPointsAdded": "已添加",
+  "addPointsAdd": "加入",
+  "addPointsSearchHelpTitle": "搜索说明",
+  "addPointsSearchHelpBody": "输入作品名后搜索，选择结果即可加入当前计划。",
+  "addPointsBangumiNetworkNote": "Bangumi需要国际网络环境才能正常搜索。",
+  "addPointsQuickImport": "快速导入",
+  "addPointsRecommended": "推荐",
+  "addPointsQuickImportSubtitle": "在导入Anitabi点位的同时自动导入作品",
+  "addPointsAddPointsSection": "添加点位",
+  "addPointsImportFromWorkMap": "从作品地图导入点位",
+  "addPointsImportFromWorkMapSubtitle": "在作品地图上选择并导入点位",
+  "addPointsAddWorkViaBangumiFirst": "请先通过 Bangumi 搜索添加作品",
+  "addPointsQuickManualSubtitle": "只填写作品、名称和可选坐标",
+  "addPointsAddWorkFirst": "请先添加作品",
+  "addPointsManualAddPointSubtitle": "手动输入点位信息，逐个添加",
+  "groupAnchorPickerTitle": "选择关键点",
+  "groupAnchorPickerExitMapPick": "关闭地图点选",
+  "groupAnchorPickerStartMapPick": "在地图上选点",
+  "groupAnchorPickerEnterCoordinates": "输入经纬度",
+  "groupAnchorPickerClearSelection": "清除选点",
+  "groupAnchorPickerClearMessage": "将清除当前选择的关键点，可继续在本页重新选择。",
+  "groupAnchorPickerManualAnchor": "手动关键点",
+  "groupAnchorPickerSelectPoint": "选择点位",
+  "groupAnchorPickerNoneSelected": "尚未选择关键点",
+  "groupAnchorPickerMapPickHint": "点击地图任意位置设置关键点",
+  "groupAnchorPickerIdleHint": "可点选点位、地图或输入经纬度",
+  "pointManagerSelectedCount": "已选 {count}",
+  "@pointManagerSelectedCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pointManagerTitle": "管理计划",
+  "pointManagerGroupManagement": "片区管理",
+  "pointManagerCachingFullReferences": "正在缓存完整参考图",
+  "pointManagerCacheFullReferences": "缓存完整参考图",
+  "pointManagerExitMultiSelect": "退出多选",
+  "pointManagerMultiSelect": "多选",
+  "pointManagerCreateGroupFailed": "片区创建失败，请稍后重试。",
+  "pointManagerUngroupedNoAnchor": "未分配点位没有关键点。",
+  "pointManagerGroupNotFound": "片区不存在。",
+  "pointManagerAnchorSaveFailed": "关键点保存失败",
+  "pointManagerUngroupedNoOrder": "未分配点位不需要排序方式。",
+  "pointManagerOrderModeSaveFailed": "排序方式保存失败",
+  "pointManagerMoveGroupFailed": "移动片区失败",
+  "pointManagerOpenCameraHint": "请从计划页或地图页打开拍摄。",
+  "pointManagerReferenceSaveFailed": "参考图保存失败",
+  "pointManagerUngroupedSpots": "未分配点位",
+  "pointManagerUnknownGroup": "未知片区",
+  "pointManagerMoveToGroup": "移动到片区",
+  "pointManagerMoveToGroupSubtitle": "选择一个片区作为当前点位所属片区",
+  "pointManagerNotInGroup": "未分入片区",
+  "pointManagerPointOrderSaveFailed": "点位顺序保存失败",
+  "pointManagerDeletePoint": "删除点位",
+  "pointManagerDeletePointMessage": "将从计划中删除「{name}」。",
+  "@pointManagerDeletePointMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pointManagerDeleteIrreversible": "删除后无法撤销",
+  "pointManagerDeletePointFailed": "点位删除失败",
+  "pointManagerBatchDeleteTitle": "批量删除点位",
+  "pointManagerBatchDeleteMessage": "将从计划中删除 {countText}。",
+  "@pointManagerBatchDeleteMessage": {
+    "placeholders": {
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "pointManagerSpotCount": "{count} 个点位",
+  "@pointManagerSpotCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pointManagerBatchDeleteFailed": "批量删除失败",
+  "pointManagerCurrentTargetSaveFailed": "当前目标保存失败",
+  "pointManagerCompletionSaveFailed": "完成状态保存失败",
+  "pointManagerStatusSaveFailed": "点位状态保存失败",
+  "pointManagerBatchCompleteFailed": "批量完成失败",
+  "pointManagerBatchResetFailed": "批量重置失败",
+  "pointManagerNothingToCache": "当前计划没有需要缓存的参考图",
+  "pointManagerCacheMessage": "将缓存当前计划中 {countText}完整参考图，可能需要较长时间和网络流量。",
+  "@pointManagerCacheMessage": {
+    "placeholders": {
+      "countText": {
+        "type": "String"
+      }
+    }
+  },
+  "pointManagerImageCount": "{count} 张",
+  "@pointManagerImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pointManagerStartCache": "开始缓存",
+  "pointManagerCacheWifiNotice": "建议在 Wi-Fi 环境下进行缓存",
+  "pointManagerGroupNameEmpty": "片区名不能为空",
+  "pointManagerNewGroup": "新建片区",
+  "pointManagerGroupNameLabel": "片区名称",
+  "pointManagerCreate": "创建",
+  "pointManagerAnchor": "关键点：{name}",
+  "@pointManagerAnchor": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pointManagerAnchorUnset": "关键点：未设置",
+  "pointManagerPreviousGroup": "上一个片区",
+  "pointManagerNextGroup": "下一个片区",
+  "pointManagerChange": "更改",
+  "pointManagerUnitSpots": "点位",
+  "pointManagerUnitCompleted": "完成",
+  "pointManagerUngroupedWaitSuffix": " 个点位等待整理",
+  "@pointManagerUngroupedWaitSuffix": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pointManagerNearestAssign": "最近分配",
+  "pointManagerBoxAssign": "框选分配",
+  "pointManagerOrderUnordered": "无序",
+  "pointManagerOrderManual": "手动排序",
+  "pointManagerGroupOrder": "片区内顺序",
+  "pointManagerStatusCurrent": "当前目标",
+  "pointManagerStatusCompleted": "已完成",
+  "pointManagerStatusPending": "待访问",
+  "pointManagerPointActions": "点位操作",
+  "pointManagerSetCurrentTarget": "设为当前目标",
+  "pointManagerUnmarkCompleted": "取消完成",
+  "pointManagerMarkCompleted": "标记完成",
+  "pointManagerReferenceNone": "无参考图",
+  "pointManagerReferenceLocal": "本地上传",
+  "pointManagerReferenceCached": "已缓存",
+  "pointManagerReferenceRemote": "未缓存",
+  "pointManagerClearSelection": "清空",
+  "pointManagerSelectAll": "全选",
+  "pointManagerMove": "移动",
+  "pointManagerComplete": "完成",
+  "pointManagerReset": "重置",
+  "pointManagerEmpty": "还没有可以管理的点位",
+  "coordinateInputClipboardReadFailed": "无法读取剪贴板。",
+  "coordinateInputClipboardNoCoordinate": "剪贴板中没有可识别的坐标。",
+  "coordinateInputInvalid": "请输入有效经纬度",
+  "coordinateInputTitle": "输入经纬度",
+  "coordinateInputLatitude": "纬度",
+  "coordinateInputLongitude": "经度",
+  "coordinateInputConfirm": "确定",
+  "planGroupUtilsOrderPending": "待整理",
+  "planGroupUtilsOrderManual": "手动",
+  "planGroupUtilsOrderUnordered": "无序",
+  "planGroupUtilsAwaitingGroup": "等待分入片区",
+  "planGroupUtilsAnchorUnset": "未设置关键点",
+  "planGroupUtilsAnchor": "关键点：{name}",
+  "@planGroupUtilsAnchor": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "planGroupUtilsUngrouped": "未分组",
+  "planGroupPickerTitle": "选择区域",
+  "planGroupPickerCount": "共 {count} 个区域",
+  "@planGroupPickerCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planGroupPickerNewGroup": "新建片区",
+  "planManagerSwitchFailed": "切换计划失败，请稍后重试。",
+  "planManagerAreaNotSet": "未设置区域",
+  "planManagerKeepOnePlan": "至少需要保留一个计划",
+  "planManagerDeletePlan": "删除计划",
+  "planManagerCopyFailed": "复制计划失败，请稍后重试。",
+  "planManagerSaveOrderFailed": "保存计划顺序失败，已恢复原来的顺序。",
+  "planManagerReorderTitle": "调整计划顺序",
+  "planManagerTitle": "切换计划",
+  "planManagerDoneSorting": "完成排序",
+  "planManagerSortPlans": "计划排序",
+  "planManagerSkillLead": "不想手动整理点位？",
+  "planManagerAllPlans": "全部计划",
+  "planManagerEditInfo": "编辑计划信息",
+  "planManagerPlanName": "计划名称",
+  "planManagerAreaLabel": "地区 / 区域",
+  "planManagerNewPlan": "新建计划",
+  "planManagerPlanInfo": "计划信息",
+  "planManagerNoWorks": "暂无作品",
+  "planManagerDragToReorder": "拖动调整顺序",
+  "planManagerCurrentPlan": "当前计划",
+  "planManagerSwitchable": "可切换",
+  "planManagerDragSort": "拖动排序",
+  "planManagerMoreActions": "更多计划操作",
+  "planManagerImportExport": "导入导出",
+  "planManagerCopyPlan": "复制计划",
+  "planManagerReload": "重新加载计划",
+  "planManagerNewPlanName": "新巡礼计划 {number}",
+  "@planManagerNewPlanName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "planManagerDeleteMessage": "将删除「{name}」及其中的点位、片区、作品和巡礼记录。只属于这个计划的巡礼照片、调色图和参考图文件也会一并删除；其他计划或记录仍在使用的文件会保留。",
+  "@planManagerDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "planManagerCopyName": "{name} 副本",
+  "@planManagerCopyName": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "planManagerCopied": "已复制「{name}」",
+  "@planManagerCopied": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "planManagerPlanSummary": "{area}  /  {spotCount} 个点位  /  {workCount} 部作品",
+  "@planManagerPlanSummary": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      },
+      "spotCount": {
+        "type": "int"
+      },
+      "workCount": {
+        "type": "int"
+      }
+    }
+  },
+  "planManagerPlanCopyText": "{name}\n{area}\n{spotCount} 个点位\n{workCount} 部作品",
+  "@planManagerPlanCopyText": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "area": {
+        "type": "String"
+      },
+      "spotCount": {
+        "type": "int"
+      },
+      "workCount": {
+        "type": "int"
+      }
+    }
+  },
+  "planMemoUnsavedChanges": "未保存的修改",
+  "planMemoImageUnsupported": "备忘录不支持图片：{label}",
+  "@planMemoImageUnsupported": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "planMemoDiscardTitle": "放弃未保存内容？",
+  "planMemoDiscardMessage": "当前备忘录还有未保存的修改。",
+  "planMemoDiscard": "放弃",
+  "planMemoKeepEditing": "继续编辑",
+  "planMemoDiscardNotice": "未保存的修改不会被保留",
+  "planMemoSavingWait": "正在保存备忘录，请稍候",
+  "planMemoSavedEditsPending": "已保存，后续输入仍待保存",
+  "planMemoSaved": "计划备忘录已保存",
+  "planMemoSaveFailed": "计划备忘录保存失败",
+  "planMemoTaskSaveFailed": "待办状态保存失败",
+  "planMemoHeading": "标题",
+  "planMemoBoldPlaceholder": "加粗文字",
+  "planMemoListPlaceholder": "列表项",
+  "planMemoTaskPlaceholder": "待办事项",
+  "planMemoQuotePlaceholder": "引用内容",
+  "planMemoLinkPlaceholder": "链接文字",
+  "planMemoCode": "代码",
+  "planMemoInvalidLink": "链接格式不正确",
+  "planMemoOpenLinkFailed": "无法打开链接",
+  "planMemoTitle": "计划备忘录",
+  "planMemoEdit": "编辑",
+  "planMemoContent": "备忘录内容",
+  "planMemoHint": "可以记录交通、预约、补拍事项、同行安排等。",
+  "planMemoBold": "加粗",
+  "planMemoList": "列表",
+  "planMemoTask": "待办",
+  "planMemoQuote": "引用",
+  "planMemoDivider": "分割线",
+  "planMemoLink": "链接",
+  "planMemoUncheck": "取消勾选",
+  "planMemoMarkDone": "标记完成",
+  "planMemoSuggestTransport": "交通安排",
+  "planMemoSuggestTransportDetail": "如车次、换乘方案、出发时间等",
+  "planMemoSuggestHotel": "酒店预约",
+  "planMemoSuggestHotelDetail": "酒店地址、入住时间、联系方式等",
+  "planMemoSuggestTickets": "活动门票",
+  "planMemoSuggestTicketsDetail": "活动门票、预约时间、注意事项等",
+  "planMemoSuggestShooting": "拍摄计划",
+  "planMemoSuggestShootingDetail": "拍摄地点、时间、天气备选方案等",
+  "planMemoSuggestNotes": "注意事项",
+  "planMemoSuggestNotesDetail": "携带物品、预算、当地注意事项等",
+  "planMemoEmptyTitle": "还没有计划备忘",
+  "planMemoEmptyBody": "记录本次巡礼的重要事项",
+  "planMemoSuggestionsTitle": "可记录内容",
+  "planMemoStart": "开始记录",
+  "nearestGroupAssignUngroupedSpots": "{count} 个未分组点位",
+  "@nearestGroupAssignUngroupedSpots": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nearestGroupAssignConfirmMessage": "将把 {spots}分配到最近的片区关键点，最大距离为 {distance}。",
+  "@nearestGroupAssignConfirmMessage": {
+    "placeholders": {
+      "spots": {
+        "type": "String"
+      },
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "nearestGroupAssignDone": "已分配 {count} 个点位",
+  "@nearestGroupAssignDone": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nearestGroupAssignDoneDistanceUnsaved": "已分配 {count} 个点位，距离设置未保存",
+  "@nearestGroupAssignDoneDistanceUnsaved": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nearestGroupAssignBoxConfirmMessage": "将把 {spots}移动到「{area}」。",
+  "@nearestGroupAssignBoxConfirmMessage": {
+    "placeholders": {
+      "spots": {
+        "type": "String"
+      },
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "nearestGroupAssignAreaCount": "共 {count} 个片区",
+  "@nearestGroupAssignAreaCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nearestGroupAssignBoxStatus": "已框选 {selected} / 待分配 {ungrouped}",
+  "@nearestGroupAssignBoxStatus": {
+    "placeholders": {
+      "selected": {
+        "type": "int"
+      },
+      "ungrouped": {
+        "type": "int"
+      }
+    }
+  },
+  "nearestGroupAssignMaxDistance": "最大距离 {distance}",
+  "@nearestGroupAssignMaxDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "nearestGroupAssignAssignableCount": "可分配 {assignable}/{ungrouped}",
+  "@nearestGroupAssignAssignableCount": {
+    "placeholders": {
+      "assignable": {
+        "type": "int"
+      },
+      "ungrouped": {
+        "type": "int"
+      }
+    }
+  },
+  "nearestGroupAssignCurrentDistance": "当前 {distance}",
+  "@nearestGroupAssignCurrentDistance": {
+    "placeholders": {
+      "distance": {
+        "type": "String"
+      }
+    }
+  },
+  "nearestGroupAssignInRange": "在最大距离范围内",
+  "nearestGroupAssignOutOfRange": "超出最大距离",
+  "nearestGroupAssignUngroupedHint": "未分组 {count} 个 · 点击地图点位查看详情",
+  "@nearestGroupAssignUngroupedHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "nearestGroupAssignTitle": "最近分配",
+  "nearestGroupAssignNoneInRange": "当前距离内没有可分配点位",
+  "nearestGroupAssignConfirmTitle": "确认最近分配",
+  "nearestGroupAssignStart": "开始分配",
+  "nearestGroupAssignFailed": "最近分配失败",
+  "nearestGroupAssignFinishFirst": "请先完成片区分配",
+  "nearestGroupAssignBoxTitle": "框选分配",
+  "nearestGroupAssignBoxSelected": "已框选",
+  "nearestGroupAssignNotBoxSelected": "未框选",
+  "nearestGroupAssignCreateAreaFailed": "片区创建失败",
+  "nearestGroupAssignCreateAreaFirst": "请先创建片区",
+  "nearestGroupAssignBoxNoUngrouped": "框选范围内没有未分组点位",
+  "nearestGroupAssignBoxConfirmTitle": "确认框选分配",
+  "nearestGroupAssignAssign": "分配",
+  "nearestGroupAssignBoxFailed": "框选分配失败",
+  "nearestGroupAssignChooseArea": "选择片区",
+  "nearestGroupAssignNewArea": "新建片区",
+  "nearestGroupAssignAreaNameEmpty": "片区名不能为空",
+  "nearestGroupAssignAreaName": "片区名称",
+  "nearestGroupAssignCreate": "创建",
+  "nearestGroupAssignEndBox": "结束框选",
+  "nearestGroupAssignBox": "框选",
+  "nearestGroupAssignEnd": "结束",
+  "nearestGroupAssignStartBox": "开始框选",
+  "nearestGroupAssignAssigning": "分配中",
+  "nearestGroupAssignAssigningSpots": "正在分配",
+  "nearestGroupAssignAssignSelected": "分配选中点位",
+  "nearestGroupAssignExplain": "未分组点位会分配到距离最近、且在最大距离范围内的片区关键点。",
+  "nearestGroupAssignNoAnchor": "没有可用片区关键点",
+  "nearestGroupAssignSetAnchorFirst": "请先在片区管理中设置关键点",
+  "nearestGroupAssignAssignableSpot": "可分配点位",
+  "nearestGroupAssignOutOfRangeSpot": "距离外点位",
+  "planCacheFullImageCount": "{count} 张",
+  "@planCacheFullImageCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planCacheFullReferencesMessage": "将缓存当前计划中 {images}完整参考图，可能需要较长时间和网络流量。",
+  "@planCacheFullReferencesMessage": {
+    "placeholders": {
+      "images": {
+        "type": "String"
+      }
+    }
+  },
+  "planAreaProgress": "{anchor} · {completed}/{total} 完成 · {order}",
+  "@planAreaProgress": {
+    "placeholders": {
+      "anchor": {
+        "type": "String"
+      },
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "order": {
+        "type": "String"
+      }
+    }
+  },
+  "planSummary": "{area} / {spotCount} 个点位 / {works}",
+  "@planSummary": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      },
+      "spotCount": {
+        "type": "int"
+      },
+      "works": {
+        "type": "String"
+      }
+    }
+  },
+  "planWorkCount": "{count} 部作品",
+  "@planWorkCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planAddSpots": "添加点位",
+  "planHideActions": "收起计划操作",
+  "planShowActions": "展开计划操作",
+  "planCreateAreaFailed": "片区创建失败，请稍后重试。",
+  "planNoReferencesToCache": "当前计划没有需要缓存的参考图",
+  "planCacheFullReferencesTitle": "缓存完整参考图",
+  "planStartCaching": "开始缓存",
+  "planCacheWifiNotice": "建议在 Wi-Fi 环境下进行缓存",
+  "planNewArea": "新建片区",
+  "planAreaName": "片区名称",
+  "planCreate": "创建",
+  "planSwitchPlan": "切换计划",
+  "planManagePlan": "管理计划",
+  "planCacheReferences": "缓存参考图",
+  "planActionMemo": "计划备忘录",
+  "planActionImportExport": "导入导出",
+  "planPreviousArea": "上一个片区",
+  "planNextArea": "下一个片区",
+  "planHideMap": "收起地图",
+  "planMap": "地图",
+  "planSortDefaultOrder": "默认计划顺序",
+  "planSortByDistanceFromHere": "按距离当前位置",
+  "planSortDefault": "默认计划",
+  "planSortDistance": "按距离",
+  "planSortReversed": "反序",
+  "planSortForward": "正序",
+  "planSortFarToNear": "远到近",
+  "planSortNearToFar": "近到远",
+  "planHideLocation": "隐藏当前位置",
+  "planShowLocation": "显示当前位置",
+  "planNoSpotsYet": "还没有点位",
+  "planOnboardingWorksTitle": "加作品",
+  "planOnboardingWorksBody": "点击右上角展开计划操作，选择“添加点位”，再点击“作品管理”，搜索并添加想要加入巡礼计划的作品。",
+  "planOnboardingSpotsTitle": "选点位",
+  "planOnboardingSpotsBody": "在“添加点位”页面点击“从作品地图导入”，在这里你可以选择并添加巡礼点位。\n你也可以在“添加点位”页面点击“从Anitabi链接导入”。通过使用有效链接，导入点位时作品也会被一起添加。",
+  "planOnboardingAreasTitle": "划片区",
+  "planOnboardingAreasBody": "回到“计划”页，点击右上角展开计划操作，选择“管理计划”。在这里可以细致管理已加入计划的点位，创建片区并归纳距离接近的点位。",
+  "planUndoCheckIn": "撤回打卡",
+  "planComplete": "完成",
+  "planShootReference": "拍摄参考",
+  "anitabiMapImportAddAllMessage": "将把当前作品中 {count} 个还不在计划里的点位加入计划，并暂时放在未分组。",
+  "@anitabiMapImportAddAllMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "anitabiMapImportAddBoxMessage": "将把框选范围内 {count} 个还不在计划里的点位加入计划，并暂时放在未分组。",
+  "@anitabiMapImportAddBoxMessage": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "anitabiMapImportImporting": "正在导入 {count} 个点位...",
+  "@anitabiMapImportImporting": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "anitabiMapImportCachingThumbnails": "正在缓存缩略图 {processed}/{total}，成功 {succeeded}",
+  "@anitabiMapImportCachingThumbnails": {
+    "placeholders": {
+      "processed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "succeeded": {
+        "type": "int"
+      }
+    }
+  },
+  "anitabiMapImportImportedPartialCache": "已导入 {count} 个点位，缩略图缓存 {cached}/{count}，其余稍后会自动补齐。",
+  "@anitabiMapImportImportedPartialCache": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "cached": {
+        "type": "int"
+      }
+    }
+  },
+  "anitabiMapImportAssigned": "已将 {count} 个点位分配到「{area}」",
+  "@anitabiMapImportAssigned": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "anitabiMapImportDetailPartial": "当前只取得 {loaded} / 共 {expected} 个点位。请重新加载，或检查网络是否能访问 Anitabi 地图数据。",
+  "@anitabiMapImportDetailPartial": {
+    "placeholders": {
+      "loaded": {
+        "type": "int"
+      },
+      "expected": {
+        "type": "int"
+      }
+    }
+  },
+  "anitabiMapImportSpotCount": "{count} 个点位",
+  "@anitabiMapImportSpotCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "anitabiMapImportShownCount": "已导入 {imported} / 当前显示 {shown}",
+  "@anitabiMapImportShownCount": {
+    "placeholders": {
+      "imported": {
+        "type": "int"
+      },
+      "shown": {
+        "type": "int"
+      }
+    }
+  },
+  "anitabiMapImportShownCountOfTotal": "已导入 {imported} / 当前显示 {shown} / 共 {total}",
+  "@anitabiMapImportShownCountOfTotal": {
+    "placeholders": {
+      "imported": {
+        "type": "int"
+      },
+      "shown": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "anitabiMapImportImportCount": "导入 {count} 个",
+  "@anitabiMapImportImportCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "anitabiMapImportOpenAppFailed": "无法打开{app}。",
+  "@anitabiMapImportOpenAppFailed": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "anitabiMapImportNoImageSpots": "当前作品共有 {count} 个点位，但没有可导入的带图参考点位。",
+  "@anitabiMapImportNoImageSpots": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "anitabiMapImportWorkNoSpots": "「{title}」暂无可导入的 Anitabi 点位。",
+  "@anitabiMapImportWorkNoSpots": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "anitabiMapImportSettingsSaveFailed": "设置保存失败",
+  "anitabiMapImportTryLater": "请稍后重试",
+  "anitabiMapImportClearingCache": "正在清除缓存并重新加载 Anitabi 点位...",
+  "anitabiMapImportManualWorkNoId": "手动添加的作品没有 Bangumi ID，无法从 Anitabi 地图导入点位。",
+  "anitabiMapImportManualWorkState": "手动添加的作品没有 Bangumi ID，无法从 Anitabi 地图导入点位。\n\n请通过 Bangumi/Anitabi 搜索添加作品，或使用手动添加点位。",
+  "anitabiMapImportAddedContinue": "已加入计划，可继续选择点位。",
+  "anitabiMapImportSpotImportFailed": "点位导入失败，请稍后重试。",
+  "anitabiMapImportAddAll": "添加所有点位",
+  "anitabiMapImportAddAllConfirm": "添加全部",
+  "anitabiMapImportAddedAll": "已添加所有未加入的点位。",
+  "anitabiMapImportBulkFailed": "批量导入失败，请稍后重试。",
+  "anitabiMapImportBoxEmpty": "框选范围内没有可添加点位",
+  "anitabiMapImportAddBoxTitle": "添加框选点位",
+  "anitabiMapImportAddBoxConfirm": "添加框选",
+  "anitabiMapImportAddedBox": "已添加框选点位。",
+  "anitabiMapImportBoxFailed": "框选点位导入失败，请稍后重试。",
+  "anitabiMapImportOrganizeOpenFailed": "点位已导入，但整理流程打开失败，可以稍后在计划中调整片区。",
+  "anitabiMapImportAssignToArea": "分配到片区",
+  "anitabiMapImportAssignToAreaSubtitle": "选择一个片区作为刚导入点位的所属片区",
+  "anitabiMapImportNotInArea": "未分入片区",
+  "anitabiMapImportSelectedArea": "所选片区",
+  "anitabiMapImportAssignFailed": "点位分配失败，请稍后重试。",
+  "anitabiMapImportCreateAreaFailed": "片区创建失败，请稍后重试。",
+  "anitabiMapImportThumbnailMarkers": "缩略图标记",
+  "anitabiMapImportOnlyNotAdded": "只看未加入",
+  "anitabiMapImportOnlyNotAddedDesc": "隐藏已加入计划的点位",
+  "anitabiMapImportAreaBounds": "片区范围",
+  "anitabiMapImportAreaBoundsDesc": "显示计划中已有的片区",
+  "anitabiMapImportClustering": "自动聚合密集点位",
+  "anitabiMapImportAnitabiSpot": "Anitabi 点位",
+  "anitabiMapImportTitle": "从作品地图导入",
+  "anitabiMapImportLayers": "图层",
+  "anitabiMapImportClearCacheReload": "清除缓存并重新加载 Anitabi 点位",
+  "anitabiMapImportAdded": "已加入",
+  "anitabiMapImportErrorDataUnavailable": "Anitabi 地图数据无法加载",
+  "anitabiMapImportErrorWorkNotFound": "Anitabi 中没有找到这个作品",
+  "anitabiMapImportErrorNoPoints": "当前作品暂无 Anitabi 点位",
+  "anitabiMapImportErrorPartial": "Anitabi 点位只加载到一部分",
+  "anitabiMapImportError404": "这个 Bangumi 条目暂无 Anitabi 地图数据",
+  "anitabiMapImportErrorPointNotFound": "没有找到这个 Anitabi 点位",
+  "anitabiMapImportErrorGeneric": "Anitabi 点位加载失败",
+  "anitabiMapImportDetailDataUnavailableWeb": "可能是 Anitabi 地图数据缓存版本不一致，或当前预览服务网络请求被拦截。请清除缓存并重新加载 Anitabi 点位。",
+  "anitabiMapImportDetailDataUnavailable": "无法读取 Anitabi 地图索引。请检查网络连接，或清除缓存并重新加载 Anitabi 点位。",
+  "anitabiMapImportDetailWorkNotFound": "这个 Bangumi 条目在 Anitabi 地图数据中没有对应作品。可以尝试添加同名动画、原作或其它关联条目。",
+  "anitabiMapImportDetailNoPoints": "Anitabi 中能找到这个作品，但当前还没有可导入的地图点位。",
+  "anitabiMapImportDetail404": "可以尝试在作品管理中添加同名的原作、游戏或其他关联条目。",
+  "anitabiMapImportDetailPointNotFound": "链接里的点位 ID 可能已失效，或 Anitabi 地图数据尚未同步。",
+  "anitabiMapImportDetailGeneric": "请检查网络后重试，或稍后再重新加载。",
+  "anitabiMapImportOrganizeTitle": "整理刚导入的点位",
+  "anitabiMapImportOrganizeLead": "已导入 ",
+  "anitabiMapImportOrganizeTail": "，并暂时放在未分组。可以直接分配到片区，或按最近关键点快速分配。",
+  "anitabiMapImportNearestAssign": "最近分配",
+  "anitabiMapImportLater": "稍后",
+  "anitabiMapImportAreaNameEmpty": "片区名不能为空",
+  "anitabiMapImportNewArea": "新建片区",
+  "anitabiMapImportAreaName": "片区名称",
+  "anitabiMapImportCreate": "创建",
+  "anitabiMapImportImportedSpot": "已导入点位",
+  "anitabiMapImportImportableSpot": "可导入点位",
+  "anitabiMapImportLoadingSpots": "正在加载 Anitabi 点位",
+  "anitabiMapImportExitBox": "退出框选",
+  "anitabiMapImportBoxSelect": "框选点位",
+  "anitabiMapImportImportSelection": "导入框选结果",
+  "anitabiMapImportImport": "导入",
+  "anitabiMapImportSpotName": "点位名称",
+  "anitabiMapImportSpotInfo": "点位信息",
+  "anitabiMapImportSource": "来源",
+  "anitabiMapImportNavigate": "导航",
+  "anitabiMapImportOpenNavigation": "打开导航",
+  "anitabiMapImportInPlan": "已加入计划",
+  "anitabiMapImportAddToPlan": "加入计划",
+  "anitabiMapImportAddShort": "加入",
+  "anitabiMapImportScene": "场景",
+  "anitabiMapImportNote": "备注",
+  "anitabiMapImportCoordinates": "坐标",
+  "anitabiMapImportTapSpotHint": "点击地图上的点位查看缩略图和详情。",
+  "anitabiMapImportNoImportableSpots": "当前作品没有可导入的 Anitabi 点位。",
+  "anitabiMapImportNoWorks": "还没有作品",
+  "anitabiMapImportManageWorks": "作品管理",
+  "anitabiMapImportFromBangumiTitle": "从Bangumi导入",
+  "anitabiMapImportFromBangumiBody": "点击作品管理中的Bangumi按钮，搜索你想导入的作品并导入。之后你可以在这里直接查看对应作品在Anitabi上的点位。",
+  "anitabiMapImportLoadingWorks": "正在加载 Anitabi 作品和点位",
+  "planGroupManagerTitle": "片区管理",
+  "planGroupManagerNewArea": "新建片区",
+  "planGroupManagerCreate": "创建",
+  "planGroupManagerCreateFailed": "片区创建失败",
+  "planGroupManagerRenameTitle": "重命名片区",
+  "planGroupManagerRenameFailed": "片区改名失败",
+  "planGroupManagerOrderModeSaveFailed": "排序方式保存失败",
+  "planGroupManagerAnchorSaveFailed": "关键点保存失败",
+  "planGroupManagerDeleteArea": "删除片区",
+  "planGroupManagerDeleteMessage": "将删除「{name}」，其中 {count} 个点位会移入未分配点位。",
+  "@planGroupManagerDeleteMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planGroupManagerDeleteFailed": "片区删除失败",
+  "planGroupManagerReorderFailed": "片区顺序保存失败",
+  "planGroupManagerUngroupedSpots": "未分配点位",
+  "planGroupManagerUnknownArea": "未知片区",
+  "planGroupManagerNameRequired": "片区名不能为空",
+  "planGroupManagerNameLabel": "片区名称",
+  "planGroupManagerNewShort": "新建",
+  "planGroupManagerSummary": "{groupCount} 个片区 · {pointCount} 个点位",
+  "@planGroupManagerSummary": {
+    "placeholders": {
+      "groupCount": {
+        "type": "int"
+      },
+      "pointCount": {
+        "type": "int"
+      }
+    }
+  },
+  "planGroupManagerManualOrder": "手动排序",
+  "planGroupManagerUnordered": "无序",
+  "planGroupManagerEmpty": "空",
+  "planGroupManagerAnchorLabel": "关键点 · {name}",
+  "@planGroupManagerAnchorLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "planGroupManagerNoAnchor": "未设置关键点",
+  "planGroupManagerAreaActions": "片区操作",
+  "planGroupManagerRename": "重命名",
+  "planGroupManagerSetAnchor": "设置关键点",
+  "planGroupManagerSwitchToUnordered": "切换为无序",
+  "planGroupManagerSwitchToManualOrder": "切换为手动排序",
+  "planGroupManagerUngroupedWaiting": "{count} 个点位等待整理",
+  "@planGroupManagerUngroupedWaiting": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "workManagerTitle": "作品管理",
+  "workManagerDeleteWork": "删除作品",
+  "workManagerDeleteMessage": "将删除「{title}」。",
+  "@workManagerDeleteMessage": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "workManagerDeleteMessageWithPoints": "将删除「{title}」，并同时移除 {count} 个相关点位和对应记录。",
+  "@workManagerDeleteMessageWithPoints": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "workManagerDeleteFailed": "作品删除失败",
+  "workManagerAddFromBangumi": "从Bangumi添加",
+  "workManagerAddFromBangumiHint": "自动获取信息",
+  "workManagerAddManually": "手动添加作品",
+  "workManagerAddManuallyHint": "未收录时使用",
+  "workManagerNoOriginalTitle": "暂无作品原名",
+  "workManagerCopyTitle": "作品名称",
+  "workManagerCopyInfo": "作品信息",
+  "workManagerMoreActions": "更多操作",
+  "workManagerPointsAddedOfTotal": "已加入 {added} · 共 {total} 点位",
+  "@workManagerPointsAddedOfTotal": {
+    "placeholders": {
+      "added": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "workManagerPointsAddedOfUnknown": "已加入 {added} · 共 … 点位",
+  "@workManagerPointsAddedOfUnknown": {
+    "placeholders": {
+      "added": {
+        "type": "int"
+      }
+    }
+  },
+  "workManagerPointsAdded": "已加入 {added} 点位",
+  "@workManagerPointsAdded": {
+    "placeholders": {
+      "added": {
+        "type": "int"
+      }
+    }
+  },
+  "workManagerManualBadge": "手动添加",
+  "workManagerEmptyTitle": "还没有作品",
+  "workManagerOnboardingBangumiTitle": "从Bangumi导入",
+  "workManagerOnboardingBangumiBody": "点击上方按钮可从Bangumi搜索你想导入的作品并导入。之后你可以在“从作品地图导入点位”直接查看对应作品在Anitabi上的点位。",
+  "workManagerOnboardingManualBody": "若Bangumi未收录你想要添加到作品，你可以通过“手动添加”将作品加入到计划内。之后你可以通过“手动添加点位”自主上传想要巡礼的点位。",
+  "pilgrimageModelsSubjectBook": "书籍",
+  "pilgrimageModelsSubjectAnime": "动画",
+  "pilgrimageModelsSubjectMusic": "音乐",
+  "pilgrimageModelsSubjectGame": "游戏",
+  "pilgrimageModelsSubjectReal": "三次元",
+  "pilgrimageModelsPaletteClassicGreen": "经典绿",
+  "pilgrimageModelsPaletteDeepBlue": "深邃蓝",
+  "pilgrimageModelsPaletteCherryPink": "樱花粉",
+  "pilgrimageModelsPaletteTwilightPurple": "暮光紫",
+  "pilgrimageModelsPaletteMiriaYellow": "琵珀橙",
+  "pilgrimageModelsPaletteGraphite": "石墨黑",
+  "pilgrimageModelsPaletteCustom": "自定义",
+  "pilgrimageModelsThemeLight": "浅色",
+  "pilgrimageModelsThemeDark": "深色",
+  "pilgrimageModelsThemeSystem": "跟随系统",
+  "pilgrimageModelsAspectAuto": "自动",
+  "pilgrimageModelsAspectNative": "原生比例",
+  "pilgrimageModelsAspectCustom": "自定义",
+  "pilgrimageModelsNavAmap": "高德地图",
+  "pilgrimageModelsNavBaiduMaps": "百度地图",
+  "pilgrimageModelsLocationAskOnFirstCapture": "首次拍摄时询问",
+  "pilgrimageModelsLocationDisabled": "不记录定位",
+  "pilgrimageModelsLocationUseRecent": "使用最近一次定位",
+  "pilgrimageModelsLocationWaitOnConfirmation": "确认记录时获取定位（推荐）",
+  "referenceCacheProgressRetryAll": "重试全部",
+  "referenceCacheProgressRetryFailed": "重试失败",
+  "referenceCacheProgressInterrupted": "缓存中断，请重试；已保存的图片不会删除。",
+  "referenceCacheProgressTip": "提示：缓存过程中请保持网络连接，避免切换页面或锁屏。",
+  "referenceCacheProgressRunning": "正在缓存参考图...",
+  "referenceCacheProgressDone": "参考图缓存完成",
+  "referenceCacheProgressFailedTitle": "参考图缓存失败",
+  "referenceCacheProgressSuccessSummary": "{succeeded} / {total} 张成功，已保存到本地",
+  "@referenceCacheProgressSuccessSummary": {
+    "placeholders": {
+      "succeeded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "referenceCacheProgressPartialSummary": "{succeeded} / {total} 张成功 · {failed} 张失败",
+  "@referenceCacheProgressPartialSummary": {
+    "placeholders": {
+      "succeeded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "referenceFullCacheRunnerNothing": "当前计划没有需要缓存的参考图",
+  "referenceFullCacheRunnerDone": "已缓存 {succeeded}/{total} 张完整参考图",
+  "@referenceFullCacheRunnerDone": {
+    "placeholders": {
+      "succeeded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "referenceFullCacheRunnerDoneWithFailures": "已缓存 {succeeded}/{total} 张完整参考图，失败 {failed} 张",
+  "@referenceFullCacheRunnerDoneWithFailures": {
+    "placeholders": {
+      "succeeded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "failed": {
+        "type": "int"
+      }
+    }
+  },
+  "referenceFullCacheRunnerRunning": "正在缓存完整参考图 {processed}/{total}，成功 {succeeded}",
+  "@referenceFullCacheRunnerRunning": {
+    "placeholders": {
+      "processed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      },
+      "succeeded": {
+        "type": "int"
+      }
+    }
+  },
+  "pilgrimageWorkDropdownManual": "手动",
+  "pilgrimageWorkDropdownWork": "作品",
+  "pilgrimageWorkCoverLabel": "{title}封面",
+  "@pilgrimageWorkCoverLabel": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaServiceConfigUrlIncomplete": "请输入完整的服务地址",
+  "valhallaServiceConfigUrlScheme": "服务地址仅支持 HTTP 或 HTTPS",
+  "anitabiServiceConfigInvalidHttps": "请输入有效的 HTTPS 地址",
+  "anitabiServiceConfigNoExtras": "地址不能包含账号、查询参数或片段",
+  "anitabiServiceConfigNoLocal": "不能使用本机或局域网地址",
+  "bangumiApiClientNoRegion": "未设置地区",
+  "anitabiEndpointSyncUpdated": "已更新服务地址",
+  "anitabiEndpointSyncUnchanged": "服务地址已是最新",
+  "anitabiEndpointSyncOffline": "无法获取远程配置，请检查网络",
+  "anitabiEndpointSyncInvalid": "远程配置无效，已保留当前地址",
+  "anitabiEndpointSyncVerificationFailed": "新地址暂不可用，已保留当前地址",
+  "anitabiEndpointSyncRateLimited": "检查过于频繁，稍后再试",
+  "anitabiEndpointSyncDisabled": "已关闭自动更新",
+  "boundedImageFileStubUnsupported": "此平台无法读取此本地图片；原件未更改",
+  "anitabiClientNoRegion": "未设置地区",
+  "anitabiClientDefaultSpotName": "Anitabi 点位",
+  "anitabiClientPointNotFound": "没有找到对应的 Anitabi 点位",
+  "boundedImageDecoderEncodedTooLarge": "图片文件 {length} 字节超过读取预算 {maxBytes} 字节；原件未更改，可保存或导出原件",
+  "@boundedImageDecoderEncodedTooLarge": {
+    "placeholders": {
+      "length": {
+        "type": "int"
+      },
+      "maxBytes": {
+        "type": "int"
+      }
+    }
+  },
+  "boundedImageDecoderSizeUnreadable": "无法读取图片尺寸",
+  "boundedImageDecoderSourceTooLarge": "图片 {width} x {height} 超过来源预算（16000000 像素，单边 16384）；原件未更改，可保存或导出原件",
+  "@boundedImageDecoderSourceTooLarge": {
+    "placeholders": {
+      "width": {
+        "type": "int"
+      },
+      "height": {
+        "type": "int"
+      }
+    }
+  },
+  "boundedImageDecoderInvalidMetadata": "图片尺寸元数据无效或不一致；原件未更改",
+  "boundedImageDecoderUnsupportedFormat": "此平台暂不能安全预览此图片格式；原件未更改",
+  "boundedImageDecoderMetadataMismatch": "图片尺寸元数据不一致；原件未更改",
+  "boundedImageDecoderAnimatedFrameTooLarge": "动画首帧尺寸超过此处理预算；原件未更改",
+  "boundedImageDecoderTargetUnsupported": "平台无法满足图片处理尺寸预算",
+  "sqlitePilgrimageRepositoryImportedPlan": "导入的巡礼计划",
+  "sqlitePilgrimageRepositoryUnknownWork": "未知作品",
+  "sqlitePilgrimageRepositoryNoRegion": "未设置地区",
+  "samplePilgrimageRepositoryImportedPlan": "导入的巡礼计划",
+  "desktopRepositoryStateDefaultPlan": "桌面端计划",
+  "desktopRepositoryStateDefaultWork": "作品",
+  "desktopRepositoryStateDefaultGroup": "分组",
+  "desktopRepositoryStateUnknownWork": "未知作品",
+  "desktopRepositoryStateDefaultSpot": "点位",
+  "tauriBridgeWebAssetTooLarge": "图片超过读取预算 {maxBytes} 字节；原件未更改（{error}）",
+  "@tauriBridgeWebAssetTooLarge": {
+    "placeholders": {
+      "maxBytes": {
+        "type": "int"
+      },
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "appShellSettingsSaveFailed": "设置保存失败",
+  "appShellSettingsSaveFailedHint": "修改未能保存，请稍后重试",
+  "appShellReadingPlanFile": "正在读取计划文件…",
+  "appShellPlanImportFailed": "计划文件导入失败",
+  "appShellNavPlan": "计划",
+  "appShellNavMap": "地图",
+  "appShellNavRecords": "记录",
+  "appShellNavSettings": "设置",
+  "appShellLoadFailed": "计划加载失败",
+  "appShellLoading": "正在加载巡礼计划",
+  "appShellLoadFailedHint": "请稍后重试。",
+  "appShellLoadingHint": "准备今日点位和当前目标。",
+  "mainOpenDirectoryFailed": "无法打开目录：{error}",
+  "@mainOpenDirectoryFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "mainStartupFailed": "MiriaGo 启动失败",
+  "mainStartupFailedHint": "用户数据没有被删除。请重试，或打开日志目录查看 startup.log。",
+  "mainOpenLogFolder": "打开日志目录",
+  "mainOpenDataFolder": "打开数据目录",
+  "mainErrorDetails": "错误详情",
+  "pointDetailReplacingReference": "正在替换参考图...",
+  "pointDetailReplaceReferenceFailed": "参考图替换失败，请稍后重试。",
+  "pointDetailReplaceReferenceCanceled": "参考图替换已取消",
+  "pointDetailReferenceReplaced": "已替换参考图",
+  "pointDetailOpenNavigationFailed": "无法打开{app}。",
+  "@pointDetailOpenNavigationFailed": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "pointDetailMoveToArea": "移动到片区",
+  "pointDetailMoveToAreaHint": "选择一个片区作为当前点位所属片区",
+  "pointDetailNotInArea": "未分入片区",
+  "pointDetailCopySpotName": "点位名称",
+  "pointDetailWorkLabel": "作品",
+  "pointDetailSceneLabel": "场景",
+  "pointDetailCoordinatesLabel": "坐标",
+  "pointDetailCoordinatesMissing": "待补充",
+  "pointDetailReferenceLabel": "参考",
+  "pointDetailSourceLabel": "来源",
+  "pointDetailLinkLabel": "链接",
+  "pointDetailNoteLabel": "备注",
+  "pointDetailManualSource": "手动录入 / {reference}",
+  "@pointDetailManualSource": {
+    "placeholders": {
+      "reference": {
+        "type": "String"
+      }
+    }
+  },
+  "pointDetailUndoCheckIn": "撤回打卡",
+  "pointDetailMarkDone": "标记完成",
+  "pointDetailUnknownArea": "未知片区",
+  "pointDetailNoAnchor": "未设置关键点",
+  "pointDetailDeleteSpot": "删除点位",
+  "pointDetailDeleteSpotMessage": "将从计划中删除“{name}”。已有巡礼记录及照片将保留。",
+  "@pointDetailDeleteSpotMessage": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "pointDetailDeleteSpotFailed": "删除点位失败，请稍后重试。",
+  "pointDetailDeletingSpot": "正在删除点位",
+  "pointDetailSpotDeleted": "点位已删除",
+  "pointDetailNavigate": "导航",
+  "pointDetailNoCoordinates": "坐标待补充",
+  "pointDetailShootReference": "拍摄参考",
+  "pointDetailShootShort": "拍摄",
+  "pointDetailSetCurrent": "设为当前",
+  "pointDetailSetCurrentShort": "当前",
+  "pointDetailSetCurrentTarget": "设为当前目标",
+  "pointDetailEditSpot": "编辑点位",
+  "pointDetailReplace": "替换",
+  "pointDetailArea": "片区",
+  "pointDetailAreaAnchor": "片区关键点",
+  "pointDetailChange": "更改",
+  "pointDetailStatusCurrent": "当前目标",
+  "pointDetailStatusCompleted": "已完成",
+  "pointDetailStatusPending": "待访问",
+  "pointDetailRecordsCount": "本点记录 {count}",
+  "@pointDetailRecordsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pointDetailAll": "全部",
+  "importExportTitle": "导入导出",
+  "importExportImportSection": "导入",
+  "importExportImportSubtitleIos": "从文件、聊天、浏览器或网盘等位置用 MiriaGo 打开 .sjhplan。",
+  "importExportImportSubtitle": "选择 .sjhplan 文件，先预览内容再导入。",
+  "importExportReading": "读取中...",
+  "importExportOpenFromOtherApp": "从其他 App 打开 .sjhplan",
+  "importExportImportFile": "导入 MiriaGo 文件",
+  "importExportOpenFromOtherAppSubtitle": "在文件、聊天、浏览器下载页或网盘中选择 .sjhplan，然后分享或用 MiriaGo 打开。",
+  "importExportImportFileSubtitle": "支持 v2 数据包和旧版 v1 JSON 计划包。",
+  "importExportImportFromLink": "从链接导入",
+  "importExportImportFromLinkSubtitle": "粘贴 GitHub 发布或 .sjhplan / .zip 下载链接，下载后预览导入。",
+  "importExportPackageSection": "MiriaGo 数据包",
+  "importExportPackageSubtitle": "新版 .sjhplan，内部为 zip，包含 manifest.json。",
+  "importExportMyMapsSubtitle": "导出点位 CSV。图片写成链接，可按 Type 列设置样式。",
+  "importExportMyMapsExport": "导出 My Maps CSV",
+  "importExportMyMapsExportSubtitle": "前 6 列贴近示例格式，作品、集数、来源等拆成独立列。",
+  "importExportExportCanceled": "已取消导出",
+  "importExportReadFailed": "导入文件读取失败",
+  "importExportIosHelpMessage": "请在文件、聊天、浏览器下载页、网盘或其他保存位置找到 .sjhplan 文件，然后点开文件，或使用分享/更多菜单选择 MiriaGo。\n\nMiriaGo 收到文件后会自动进入导入预览页面。若列表里没有 MiriaGo，可以先把文件保存到“文件”App，再长按文件选择分享或打开方式。",
+  "importExportShareText": "MiriaGo数据包：{planName}",
+  "@importExportShareText": {
+    "placeholders": {
+      "planName": {
+        "type": "String"
+      }
+    }
+  },
+  "importExportPackageExported": "数据包已导出",
+  "importExportMissingAssetsTitle": "部分本地资源缺失",
+  "importExportContinueExport": "继续导出",
+  "importExportMissingAssetsNotice": "缺失资源不会进入数据包，导入后对应图片可能无法显示",
+  "importExportMyMapsShareText": "MiriaGo My Maps CSV：{planName}",
+  "@importExportMyMapsShareText": {
+    "placeholders": {
+      "planName": {
+        "type": "String"
+      }
+    }
+  },
+  "importExportPendingCoordinateWarning": "存在坐标待补充的点位",
+  "importExportMyMapsExported": "My Maps CSV 已导出",
+  "importExportExporting": "正在导出...",
+  "importExportExportFailed": "导出失败",
+  "importExportTryAgainLater": "请稍后重试",
+  "importExportSavedLocally": "已保存到本地",
+  "importExportShared": "已通过系统分享送出",
+  "importExportSomeAssetsSkipped": "部分资源未能加入",
+  "importExportWarnUserReferenceMissing": "{count} 张本地上传参考图缺失",
+  "@importExportWarnUserReferenceMissing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importExportWarnThumbnailMissing": "{count} 张缩略图未加入",
+  "@importExportWarnThumbnailMissing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importExportWarnFullReferenceDownloadFailed": "{count} 张完整参考图下载失败",
+  "@importExportWarnFullReferenceDownloadFailed": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importExportWarnFullReferenceMissing": "{count} 张完整参考图缺失",
+  "@importExportWarnFullReferenceMissing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importExportWarnVisitPhotoMissing": "{count} 张巡礼照片缺失",
+  "@importExportWarnVisitPhotoMissing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importExportWarnGradedPhotoMissing": "{count} 张调色照片缺失",
+  "@importExportWarnGradedPhotoMissing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importExportWarnPendingCoordinate": "{count} 个坐标待补充点位未导出",
+  "@importExportWarnPendingCoordinate": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importExportWarningSeparator": "，",
+  "importExportAreaCount": "{count} 个片区",
+  "@importExportAreaCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importExportSpotCount": "{count} 个点位",
+  "@importExportSpotCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "importExportPlanOnly": "纯计划",
+  "importExportPlanWithRecords": "计划+记录",
+  "importExportIncludeFullReference": "包含完整参考图缓存",
+  "importExportIncludeFullReferenceSubtitle": "开启后才会把完整参考图写入数据包；默认仍会包含缩略图和用户自己添加的参考图。",
+  "importExportExportingButton": "导出中...",
+  "importExportExportPackage": "导出 MiriaGo 数据包",
+  "importExportEstimating": "正在估算数据包大小...",
+  "importExportEstimateUnavailable": "预计数据包大小：暂时无法估算",
+  "planExportSizeEstimatorThumbnailsNotCached": "{count} 张缩略图未缓存，不会进入数据包",
+  "@planExportSizeEstimatorThumbnailsNotCached": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planExportSizeEstimatorFullReferencesToDownload": "{count} 张完整参考图将在导出时下载",
+  "@planExportSizeEstimatorFullReferencesToDownload": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planExportSizeEstimatorUserReferencesMissing": "{count} 张本地上传参考图文件缺失，导出后无法恢复",
+  "@planExportSizeEstimatorUserReferencesMissing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planExportSizeEstimatorVisitPhotosMissing": "{count} 张巡礼照片文件缺失",
+  "@planExportSizeEstimatorVisitPhotosMissing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planExportSizeEstimatorGradedPhotosMissing": "{count} 张调色照片文件缺失",
+  "@planExportSizeEstimatorGradedPhotosMissing": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planExportSizeEstimatorUnknownLocalAssets": "部分本地资源无法读取，实际包体可能变化",
+  "planExportSizeEstimatorLabelWithDetails": "预计数据包大小：至少约 {size}，{details}",
+  "@planExportSizeEstimatorLabelWithDetails": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      },
+      "details": {
+        "type": "String"
+      }
+    }
+  },
+  "planExportSizeEstimatorDetailSeparator": "；",
+  "planExportSizeEstimatorLabel": "预计数据包大小：约 {size}",
+  "@planExportSizeEstimatorLabel": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "planImportPreviewTitle": "导入内容",
+  "planImportPreviewChooseContent": "选择导入内容",
+  "planImportPreviewChooseContentSubtitle": "导入前不会修改当前数据。",
+  "planImportPreviewPlanStructure": "计划结构",
+  "planImportPreviewPlanStructureSubtitle": "作品、片区、点位、完成状态和当前目标。",
+  "planImportPreviewRecords": "拍摄记录",
+  "planImportPreviewRecordsLegacy": "v1 文件不包含照片资源，仅导入计划结构。",
+  "planImportPreviewRecordsCount": "{count} 条记录，包含照片路径和调色参数。",
+  "@planImportPreviewRecordsCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planImportPreviewRecordsNone": "这个包里没有拍摄记录。",
+  "planImportPreviewAssets": "图片和资源文件",
+  "planImportPreviewPackageNotes": "包内提示",
+  "planImportPreviewPackageNotesSubtitle": "导出时记录的缺失或兼容信息。",
+  "planImportPreviewImporting": "导入中...",
+  "planImportPreviewImportSelected": "导入所选内容",
+  "planImportPreviewImportedUnconfirmed": "已导入计划「{name}」，资源确认未完成",
+  "@planImportPreviewImportedUnconfirmed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "planImportPreviewImported": "已导入计划「{name}」",
+  "@planImportPreviewImported": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "planImportPreviewImportedPartial": "已导入计划「{name}」，部分资源未恢复",
+  "@planImportPreviewImportedPartial": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "planImportPreviewCleanupIncomplete": "导入未确认完成，已保留资源以避免误删",
+  "planImportPreviewFailed": "导入失败",
+  "planImportPreviewNoAssets": "这个包里没有可恢复的资源文件。",
+  "planImportPreviewNoRestorableAssets": "包内记录了资源，但没有可恢复的资源文件。",
+  "planImportPreviewAssetsUnsupported": "包内有 {count} 个资源文件；当前平台暂不支持恢复包内资源。",
+  "@planImportPreviewAssetsUnsupported": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planImportPreviewAssetsRestore": "包内有 {count} 个资源文件，将恢复到本机存储。",
+  "@planImportPreviewAssetsRestore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planImportPreviewStatWorks": "作品",
+  "planImportPreviewStatAreas": "片区",
+  "planImportPreviewStatSpots": "点位",
+  "planImportPreviewStatRecords": "记录",
+  "planImportPreviewStatFiles": "资源",
+  "planImportPreviewStatVersion": "版本",
+  "planImportPreviewStatExported": "导出",
+  "planLinkImportNoPlanFilesInRelease": "这个发布中没有 .sjhplan 或 .zip 文件",
+  "planLinkImportChooseArchiveEntry": "压缩包里有多个计划，选择要导入的一个",
+  "planLinkImportArchiveHasNoPlan": "压缩包里没有 .sjhplan 计划文件",
+  "planLinkImportNotAPlanPackage": "下载的文件不是 MiriaGo 计划包",
+  "planLinkImportReadFailed": "读取失败，请重试",
+  "planLinkImportTitle": "从链接导入",
+  "planLinkImportIntro": "粘贴 GitHub 发布页面或计划文件的下载链接，MiriaGo 会下载计划并打开导入预览。",
+  "planLinkImportWebUnavailableTitle": "网页版无法直接下载",
+  "planLinkImportWebUnavailableSubtitle": "请先在浏览器中下载 .sjhplan 或 .zip，再回到“导入导出”，用“导入 MiriaGo 文件”导入。",
+  "planLinkImportLinkLabel": "链接",
+  "planLinkImportPaste": "粘贴",
+  "planLinkImportReadLink": "读取链接",
+  "planLinkImportHelp": "支持：\n• GitHub 发布页面或仓库链接（自动列出最新发布中的计划文件）\n• GitHub 发布中的文件下载链接\n• 其他 https:// 开头的 .sjhplan 或 .zip 直链\n.zip 中可以带说明等其他文件，MiriaGo 只读取其中的 .sjhplan。下载会连接你输入的地址（以及它跳转到的下载服务器）；GitHub 发布或仓库链接还会向 api.github.com 查询发布中的文件。",
+  "planLinkImportResolving": "正在查找发布中的计划文件…",
+  "planLinkImportChooseFile": "选择要导入的文件",
+  "planLinkImportArchiveTag": "压缩包",
+  "planLinkImportDownloading": "正在下载 {name}",
+  "@planLinkImportDownloading": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "planLinkImportDownloaded": "已下载 {size}",
+  "@planLinkImportDownloaded": {
+    "placeholders": {
+      "size": {
+        "type": "String"
+      }
+    }
+  },
+  "planLinkImportReadingPlan": "正在读取计划…",
+  "planLinkEnterLink": "请输入链接",
+  "planLinkUnrecognized": "无法识别这个链接",
+  "planLinkHttpsOnly": "只支持 https:// 开头的链接",
+  "planLinkLatestRelease": "{repository} 最新发布",
+  "@planLinkLatestRelease": {
+    "placeholders": {
+      "repository": {
+        "type": "String"
+      }
+    }
+  },
+  "planLinkReleaseUnreadable": "GitHub 返回的发布信息无法读取",
+  "planLinkTooLarge": "文件超过 128 MB 上限，无法导入",
+  "planLinkNotPublic": "不支持本机或局域网地址",
+  "planLinkFileNotFound": "链接指向的文件不存在（HTTP 404）",
+  "planLinkServerRefused": "服务器拒绝了下载（HTTP {status}），请稍后再试",
+  "@planLinkServerRefused": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "planLinkDownloadFailedStatus": "下载失败（HTTP {status}）",
+  "@planLinkDownloadFailedStatus": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "planLinkReleaseNotFound": "没有找到这个发布：仓库可能是私有的、还没有发布版本，或只有预发布版本（请粘贴具体发布页链接）",
+  "planLinkGitHubRateLimited": "GitHub 请求过于频繁，请稍后再试",
+  "planLinkReleaseFetchFailed": "GitHub 发布信息读取失败（HTTP {status}）",
+  "@planLinkReleaseFetchFailed": {
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "planLinkCannotReachGitHub": "无法连接 GitHub，请检查网络后重试",
+  "planLinkDownloadFailed": "下载失败，请检查网络后重试",
+  "planLinkServiceIoTempFileFailed": "无法创建临时文件，请检查存储空间",
+  "planLinkServiceIoSaveFailed": "无法保存下载的文件，请检查存储空间",
+  "planLinkServiceWebUnavailable": "网页版无法直接下载，请先下载文件，再用“导入 MiriaGo 文件”导入",
+  "incomingPlanFileTooLarge": "导入超限：计划文件超过 {limit} MiB 上限。请拆分计划或减少打包图片后重试。",
+  "@incomingPlanFileTooLarge": {
+    "placeholders": {
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "incomingPlanFileFailed": "计划文件导入失败",
+  "planImportPackageLimitExceeded": "导入超限：{resource} 为 {actual}，上限 {limit}。请拆分计划或减少打包图片后重试。",
+  "@planImportPackageLimitExceeded": {
+    "placeholders": {
+      "resource": {
+        "type": "String"
+      },
+      "actual": {
+        "type": "String"
+      },
+      "limit": {
+        "type": "String"
+      }
+    }
+  },
+  "planImportPackageResourceEntryBytes": "单文件解压字节数",
+  "planImportPackageResourceJsonBytes": "JSON 字节数",
+  "planImportPackageResourceExpandedBytes": "总解压字节数",
+  "planImportPackageResourceArchiveBytes": "压缩包字节数",
+  "planImportPackageResourcePlanFileBytes": "计划文件字节数",
+  "planImportPackageResourceZipEntries": "ZIP 条目数",
+  "planImportPackageResourceImagePixels": "图片像素（{width} x {height} x {frames} 帧）",
+  "@planImportPackageResourceImagePixels": {
+    "placeholders": {
+      "width": {
+        "type": "String"
+      },
+      "height": {
+        "type": "String"
+      },
+      "frames": {
+        "type": "String"
+      }
+    }
+  },
+  "planImportPackageV2Label": "v2 数据包",
+  "planImportPackageInvalidCoordinates": "{count} 个点位坐标无效，已改为待补充坐标",
+  "@planImportPackageInvalidCoordinates": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planImportPackageUnnamedArea": "未命名片区",
+  "planPackageDefaultPlanName": "导入的巡礼计划",
+  "planPackageNoArea": "未设置区域",
+  "planPackageUnknownWork": "未知作品",
+  "planPackageNoRegion": "未设置地区",
+  "planPackageUnnamedSpot": "未命名点位",
+  "planPackageUnknownReferenceMode": "未知",
+  "planExportV2DeletedDuringExport": "{count} 个文件在导出过程中被删除，未包含在数据包中",
+  "@planExportV2DeletedDuringExport": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planExportV2CsvWork": "作品",
+  "planExportV2CsvArea": "片区",
+  "planExportV2CsvSpotName": "点位名",
+  "planExportV2CsvSubtitle": "副标题",
+  "planExportV2CsvLatitude": "纬度",
+  "planExportV2CsvLongitude": "经度",
+  "planExportV2CsvEpisode": "集数/场景",
+  "planExportV2CsvSource": "来源",
+  "planExportV2CsvSourceId": "来源ID",
+  "planExportV2CsvReferenceUrl": "参考图URL",
+  "planExportV2CsvCompleted": "已完成",
+  "planExportV2CsvRecordCount": "记录数",
+  "planExportV2CsvRecordId": "记录ID",
+  "planExportV2CsvCapturedAt": "拍摄时间",
+  "planExportV2CsvReferenceMode": "参考模式",
+  "planExportV2CsvColorMatched": "是否调色",
+  "planExportV2CsvPhotoFile": "照片文件名",
+  "planExportV2CsvGradedPhotoFile": "调色照片文件名",
+  "planExportV2CsvYes": "是",
+  "planExportV2CsvNo": "否",
+  "planExportV2Ungrouped": "未分组",
+  "planExportV2UnknownArea": "未知片区",
+  "myMapsCsvExportUngrouped": "未分组",
+  "colorGradingParamsModeNatural": "自然",
+  "colorGradingParamsModeStandard": "标准",
+  "colorGradingParamsModeStrong": "强匹配",
+  "colorGradingParameterSummaryIntensity": "调色强度",
+  "colorGradingParameterSummaryParameters": "调色参数",
+  "colorGradingParameterSummaryView": "查看",
+  "colorGradingParameterSummaryDescription": "显示当前调色强度下实际生效的参数。",
+  "colorGradingParameterSummaryBrightness": "亮度",
+  "colorGradingParameterSummaryExposure": "曝光",
+  "colorGradingParameterSummaryContrast": "对比度",
+  "colorGradingParameterSummarySaturation": "饱和度",
+  "colorGradingParameterSummaryTemperature": "色温",
+  "colorGradingParameterSummaryTint": "色调",
+  "colorGradingParameterSummaryHighlights": "高光",
+  "colorGradingParameterSummaryShadows": "阴影",
+  "colorGradingParameterSummaryRedShadowCurve": "红暗部曲线",
+  "colorGradingParameterSummaryRedMidCurve": "红中间调曲线",
+  "colorGradingParameterSummaryRedHighlightCurve": "红高光曲线",
+  "colorGradingParameterSummaryGreenShadowCurve": "绿暗部曲线",
+  "colorGradingParameterSummaryGreenMidCurve": "绿中间调曲线",
+  "colorGradingParameterSummaryGreenHighlightCurve": "绿高光曲线",
+  "colorGradingParameterSummaryBlueShadowCurve": "蓝暗部曲线",
+  "colorGradingParameterSummaryBlueMidCurve": "蓝中间调曲线",
+  "colorGradingParameterSummaryBlueHighlightCurve": "蓝高光曲线",
+  "colorGradingAutoMatchFailed": "自动调色失败",
+  "colorGradingPhotoReadFailed": "巡礼图读取失败",
+  "colorGradingNoReferenceForMatch": "没有可用于自动调色的参考图",
+  "colorGradingReferenceUnavailable": "参考图暂不可用，无法自动匹配色调",
+  "colorGradingAutoMatchDone": "已生成自动调色参数",
+  "colorGradingSaveFailedOriginalKept": "保存失败，原件未更改",
+  "colorGradingRestoredOriginal": "已还原为原图",
+  "colorGradingMatchFirst": "请先自动匹配色调",
+  "colorGradingSaveFailed": "保存失败",
+  "colorGradingSaved": "已保存调色结果",
+  "colorGradingResetTitle": "重置调色",
+  "colorGradingResetMessage": "将清除当前调色，恢复为原图。",
+  "colorGradingReset": "重置",
+  "colorGradingTitle": "自动调色",
+  "colorGradingMatching": "匹配中...",
+  "colorGradingAutoMatch": "自动匹配色调",
+  "colorGradingReference": "参考图",
+  "colorGradingNoReference": "没有参考图",
+  "colorGradingOriginal": "原图",
+  "colorGradingGraded": "调色后",
+  "colorGradingShowingOriginal": "正在显示原图",
+  "colorGradingHoldForOriginal": "按住显示原图",
+  "colorGradingMatchMode": "匹配模式",
+  "colorGradingParamsReady": "已恢复或生成调色参数，可保存结果",
+  "colorGradingMatchToSave": "自动匹配后可保存调色结果",
+  "colorGradingToneMatch": "色调匹配",
+  "colorGradingCurrent": "当前",
+  "colorGradingSaveResult": "保存结果",
+  "colorGradingSaveDescription": "保存后记录详情和导出会使用调色后的图片，原图和调色参数会保留。",
+  "colorGradingSaving": "保存中...",
+  "colorGradingSaveColorMatch": "保存调色结果",
+  "comparisonExportConfigJpegRecommended": "JPEG 推荐 (85)",
+  "comparisonExportConfigJpegHighQuality": "JPEG 高画质 (95)",
+  "comparisonExportConfigPngLossless": "PNG 无损",
+  "comparisonExportConfigWidthAuto": "自动",
+  "comparisonExportConfigFieldCapturedAt": "拍摄时间",
+  "comparisonExportConfigFieldWork": "作品",
+  "comparisonExportConfigFieldPlace": "地点",
+  "comparisonExportConfigFieldCoordinates": "坐标",
+  "comparisonExportConfigFieldScene": "场景",
+  "comparisonExportConfigEditorColorWhite": "白色",
+  "comparisonExportConfigEditorColorBlack": "黑色",
+  "comparisonExportConfigEditorColorTheme": "主题色",
+  "comparisonExportConfigEditorAppearance": "外观",
+  "comparisonExportConfigEditorFormat": "图片格式与质量",
+  "comparisonExportConfigEditorSummaryWidth": "宽度 {width}",
+  "@comparisonExportConfigEditorSummaryWidth": {
+    "placeholders": {
+      "width": {
+        "type": "String"
+      }
+    }
+  },
+  "comparisonExportConfigEditorSummaryNoBorder": "无边框",
+  "comparisonExportConfigEditorSummaryBorder": "边框 {percent}%",
+  "@comparisonExportConfigEditorSummaryBorder": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "comparisonExportConfigEditorSummaryLabelsOn": "显示标签",
+  "comparisonExportConfigEditorSummaryLabelsOff": "不显示标签",
+  "comparisonExportConfigEditorSummaryPilgrim": "巡礼者 {name}",
+  "@comparisonExportConfigEditorSummaryPilgrim": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "comparisonExportConfigEditorBorderWidth": "边框宽度",
+  "comparisonExportConfigEditorNone": "无",
+  "comparisonExportConfigEditorBorderColor": "边框颜色",
+  "comparisonExportConfigEditorAutoWidthTitle": "自动输出宽度",
+  "comparisonExportConfigEditorAutoWidthSubtitle": "根据图片尺寸自动确定输出宽度",
+  "comparisonExportConfigEditorShowLabelsTitle": "显示标签",
+  "comparisonExportConfigEditorShowLabelsSubtitle": "在参考图上显示“参考”字样，在你拍的巡礼图上显示“巡礼”字样",
+  "comparisonExportConfigEditorMetadata": "元数据",
+  "comparisonExportConfigEditorShowPilgrimTitle": "显示巡礼者名字",
+  "comparisonExportConfigEditorShowPilgrimSubtitle": "在图片上显示巡礼者名字",
+  "comparisonExportConfigEditorPilgrimHint": "请输入巡礼者名字",
+  "comparisonExportConfigEditorShowGradingTitle": "显示调色参数",
+  "comparisonExportConfigEditorShowGradingSubtitle": "在图片底部显示调色相关参数",
+  "comparisonExportConfigEditorContent": "显示内容",
+  "comparisonExportBudgetSizeUnfit": "对比图尺寸无法满足输出限制：最多 {maxPixels} 像素，最长边 {maxEdge} 像素。",
+  "@comparisonExportBudgetSizeUnfit": {
+    "placeholders": {
+      "maxPixels": {
+        "type": "int"
+      },
+      "maxEdge": {
+        "type": "int"
+      }
+    }
+  },
+  "comparisonExportBudgetTooNarrow": "对比图比例过于狭长，无法在 {maxPixels} 像素、最长边 {maxEdge} 像素内完整输出。",
+  "@comparisonExportBudgetTooNarrow": {
+    "placeholders": {
+      "maxPixels": {
+        "type": "int"
+      },
+      "maxEdge": {
+        "type": "int"
+      }
+    }
+  },
+  "comparisonExportSupportShareText": "MiriaGo 对比图",
+  "comparisonExportLoadSettingsFailed": "读取导出设置失败，请重试。",
+  "comparisonExportSaveSettingsFailed": "导出设置保存失败，导出时将重试。",
+  "comparisonExportBrowserDownload": "对比图已交给浏览器下载",
+  "comparisonExportFailed": "导出失败，设置或图片未能保存，请重试。",
+  "comparisonExportReferenceUnavailable": "参考图不可用，无法导出对比图片。",
+  "comparisonExportPhotoUnavailable": "巡礼图不可用，无法导出对比图片。",
+  "comparisonExportBudgetExceeded": "图片超过处理预算，原件未更改。",
+  "comparisonExportUnsupportedFormat": "当前平台不支持处理此图片格式。",
+  "comparisonExportInvalidData": "图片数据无法解码。",
+  "comparisonExportRenderFailed": "导出失败，请稍后重试。",
+  "comparisonExportTitle": "导出对比图",
+  "comparisonExportShortLabel": "导出",
+  "comparisonExportRendererReference": "参考",
+  "comparisonExportRendererPilgrimage": "巡礼",
+  "comparisonExportRendererPilgrim": "巡礼者",
+  "gallerySaveResultFailed": "保存失败，请稍后重试。",
+  "gallerySaveResultSaved": "已保存到相册",
+  "gallerySaveResultPermissionTitle": "需要相册权限",
+  "gallerySaveResultPermissionSubtitle": "请在系统设置中允许 MiriaGo 添加照片。",
+  "gallerySaveResultSettings": "设置",
+  "photoCompareSliderViewReference": "查看参考图",
+  "photoCompareSliderViewPhoto": "查看巡礼图",
+  "photoCompareSliderSemantics": "滑动对比，左侧参考图，右侧巡礼图",
+  "photoCompareSliderReference": "参考图",
+  "photoCompareSliderPhoto": "巡礼图",
+  "pointVisitRecordsTitle": "点位拍摄记录",
+  "pointVisitRecordsCountUnit": "{count, plural, other{条}}",
+  "@pointVisitRecordsCountUnit": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "pointVisitRecordsEmpty": "这个点位还没有拍摄记录",
+  "pointVisitRecordsListLabel": "拍摄记录",
+  "pointVisitRecordsColorMatched": "已调色",
+  "visitRecordDetailTitle": "记录详情",
+  "visitRecordDetailDeleteTooltip": "删除记录",
+  "visitRecordDetailCapturedAt": "拍摄时间",
+  "visitRecordDetailArea": "片区",
+  "visitRecordDetailScene": "场景",
+  "visitRecordDetailDeleteTitle": "删除记录",
+  "visitRecordDetailDeleteTarget": "这条巡礼记录",
+  "visitRecordDetailDeleteMessage": "将删除{target}，不会改变点位完成状态。",
+  "@visitRecordDetailDeleteMessage": {
+    "placeholders": {
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "visitRecordDetailDeleteFiles": "同时删除照片文件",
+  "visitRecordDetailDeleteFailed": "删除记录失败，照片未删除，请重试",
+  "visitRecordDetailDeletedPartly": "记录已删除，部分照片未清理",
+  "visitRecordDetailPhotoUnavailable": "巡礼图不可用，无法导出对比图片。",
+  "visitRecordDetailNoPrefsStorage": "当前平台暂不支持保存导出偏好。",
+  "visitRecordDetailUngrouped": "未分组",
+  "visitRecordDetailUnknownArea": "未知片区",
+  "visitRecordDetailBrightness": "亮度",
+  "visitRecordDetailExposure": "曝光",
+  "visitRecordDetailContrast": "对比",
+  "visitRecordDetailSaturation": "饱和",
+  "visitRecordDetailTemperature": "色温",
+  "visitRecordDetailTint": "色调",
+  "visitRecordDetailHighlights": "高光",
+  "visitRecordDetailShadows": "阴影",
+  "visitRecordDetailCurveShadows": "{channel}暗",
+  "@visitRecordDetailCurveShadows": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
+  "visitRecordDetailCurveMids": "{channel}中",
+  "@visitRecordDetailCurveMids": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
+  "visitRecordDetailCurveHighlights": "{channel}亮",
+  "@visitRecordDetailCurveHighlights": {
+    "placeholders": {
+      "channel": {
+        "type": "String"
+      }
+    }
+  },
+  "visitRecordDetailModeStacked": "上下",
+  "visitRecordDetailModeSlider": "滑动对比",
+  "visitRecordDetailReference": "参考图",
+  "visitRecordDetailPhoto": "巡礼图",
+  "visitRecordDetailOrphan": "这条记录对应的点位已不在当前计划中，照片和导出功能仍然可以使用。",
+  "visitRecordDetailColorMatchTitle": "自动调色",
+  "visitRecordDetailColorMatchSubtitle": "优化巡礼照片",
+  "visitRecordDetailExportTitle": "导出对比图",
+  "visitRecordDetailExportSubtitle": "生成分享图片",
+  "recordsTitle": "记录",
+  "recordsCollapseAll": "收起全部片区",
+  "recordsExpandAll": "展开全部片区",
+  "recordsUngrouped": "未分组",
+  "recordsUngroupedSubtitle": "还没有放入片区的记录",
+  "recordsOrphan": "孤立记录",
+  "recordsOrphanSubtitle": "对应点位已不在当前计划中",
+  "recordsNoCoordinates": "坐标待补充",
+  "recordsUnknownArea": "未知片区",
+  "recordsNoAnchor": "未设置关键点",
+  "recordsScopeFilterTooltip": "按作品和片区筛选",
+  "recordsWorks": "作品",
+  "recordsAreas": "片区",
+  "recordsFilterTitle": "筛选记录",
+  "recordsClear": "清除",
+  "recordsScopeSummary": "已选：作品 {works} · 片区 {areas}",
+  "@recordsScopeSummary": {
+    "placeholders": {
+      "works": {
+        "type": "int"
+      },
+      "areas": {
+        "type": "int"
+      }
+    }
+  },
+  "recordsAllWorks": "全部作品",
+  "recordsAllAreas": "全部片区",
+  "recordsWorksPicked": "已选 {count} 个作品",
+  "@recordsWorksPicked": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "recordsAreasPicked": "已选 {count} 个片区",
+  "@recordsAreasPicked": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "recordsApplyAll": "应用筛选（全部点位）",
+  "recordsApplySelected": "应用筛选（已选择）",
+  "recordsBackToFilter": "返回筛选记录",
+  "recordsSelectWorks": "选择作品",
+  "recordsSelectAreas": "选择片区",
+  "recordsNoOptions": "暂无可筛选项",
+  "recordsWorkBadge": "作品",
+  "recordsAreaBadge": "片区",
+  "recordsWorksChosen": "已选择 {count} 个作品",
+  "@recordsWorksChosen": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "recordsAreasChosen": "已选择 {count} 个片区",
+  "@recordsAreasChosen": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "recordsConfirmCount": "确定（{count}）",
+  "@recordsConfirmCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "recordsStatusAll": "全部",
+  "recordsStatusCompleted": "已完成",
+  "recordsStatusPending": "未完成",
+  "recordsStatusTooltip": "按状态筛选",
+  "recordsSelectStatus": "选择状态",
+  "recordsSearchHint": "搜索点位、作品、场景",
+  "recordsClearSearchTooltip": "清空搜索",
+  "recordsPhotos": "巡礼照片",
+  "recordsRecordCountLabel": "{count, plural, other{条巡礼记录}}",
+  "@recordsRecordCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "recordsCompleted": "已完成",
+  "recordsEmptySearchTitle": "没有找到相关记录",
+  "recordsEmptyFilterTitle": "没有符合筛选条件的记录",
+  "recordsEmptyTitle": "还没有巡礼记录",
+  "recordsEmptySearchFilterBody": "没有与当前关键词和筛选条件同时匹配的点位、作品或场景。试试更换关键词，或重置筛选条件。",
+  "recordsEmptySearchBody": "没有与当前关键词匹配的点位、作品或场景。试试更换关键词，或清除搜索查看全部记录。",
+  "recordsEmptyFilterBody": "调整状态、作品或片区筛选条件后再试。",
+  "recordsEmptyBody": "完成一次点位拍摄后，记录会自动汇总到这里。",
+  "recordsClearSearch": "清除搜索",
+  "recordsResetFilters": "重置筛选",
+  "recordsColorMatched": "已调色",
+  "copyableTextCopy": "复制",
+  "confirmActionGotIt": "知道了",
+  "confirmActionIrreversible": "此操作无法撤销",
+  "appBackButtonLabel": "返回",
+  "clearAnchorSelectionButtonTooltip": "清除选点",
+  "inputPaste": "粘贴",
+  "imageViewerSaveOrShare": "保存或分享原件",
+  "imageViewerReadFailed": "图片读取失败",
+  "imageViewerShareFailed": "无法打开分享",
+  "imageViewerSaveFailed": "保存失败",
+  "imageViewerShareText": "MiriaGo 图片",
+  "imageViewerSaveCanceled": "已取消保存",
+  "imageViewerSaved": "图片已保存",
+  "imageViewerLoading": "图片加载中",
+  "imageViewerEmpty": "暂无图片",
+  "imageViewerUnavailable": "图片暂不可用",
+  "imageViewerSaveImage": "保存图片",
+  "imageViewerShare": "分享",
+  "imageViewerSaveToPhotos": "保存到相册",
+  "boundedImageUnavailable": "图片暂不可用",
+  "boundedImageBadSource": "无法读取图片来源",
+  "boundedImageLoading": "图片加载中",
+  "splitNavigationButtonInApp": "应用内导航：{label}",
+  "@splitNavigationButtonInApp": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "splitNavigationButtonExternal": "打开外部地图",
+  "mapThumbnailMarkerTooltip": "巡礼点",
+  "referenceImagePlaceholderLoading": "参考图加载中",
+  "referenceImagePlaceholderUnavailable": "参考图暂不可用",
+  "referenceImagePlaceholderEmpty": "暂无参考图",
+  "routePlannerSkillHintTitle": "用 AI 一键规划巡礼行程",
+  "routePlannerSkillHintDescription": "让 ChatGPT、Claude Code、Codex 等 AI 助手调用 MiriaGo 路线规划 Skill。\n它会从 Anitabi、Google My Maps 等来源收集作品点位，自动划分区域、规划路线并生成行程备注；关键步骤会先向你确认，最终导出可直接使用的 .sjhplan 计划包。",
+  "routePlannerSkillHintOpenFailed": "无法打开链接",
+  "routePlannerSkillHintViewGuide": "查看使用说明",
+  "routePlannerSkillHintDismissFailed": "关闭提示失败，请重试。",
+  "routePlannerSkillHintTapForGuide": "点击查看使用说明",
+  "routePlannerSkillHintLinkText": "用 AI 一键规划行程并生成计划包",
+  "currentLocationResolverServiceDisabled": "定位服务未开启。",
+  "currentLocationResolverPermissionDenied": "需要定位权限来显示当前位置。",
+  "currentLocationResolverTimeout": "定位超时，请稍后重试。",
+  "mapLocationTrackerStopped": "定位更新已停止，请点击定位重试。",
+  "mapLocationTrackerStale": "暂未收到新的定位，当前位置可能已过期。",
+  "mapLocationTrackerServiceDisabled": "定位服务未开启，请开启后重试。",
+  "mapLocationTrackerPermissionDenied": "定位权限不可用，请检查权限后重试。",
+  "mapLocationTrackerFailed": "定位更新失败，请检查权限和定位服务后重试。",
+  "mapLayersPanelTitle": "图层",
+  "mapLayersPanelCloseLabel": "关闭{title}",
+  "@mapLayersPanelCloseLabel": {
+    "placeholders": {
+      "title": {
+        "type": "String"
+      }
+    }
+  },
+  "mapTileConfigLibertyDescription": "默认样式，信息密度较高。",
+  "mapTileConfigBrightDescription": "明亮标准样式。",
+  "mapTileConfigPositronDescription": "浅色低干扰样式。",
+  "mapTileConfigDarkDescription": "深色地图样式。",
+  "mapTileConfigFiordDescription": "柔和地形风格。",
+  "mapTileConfigCustomXyzLabel": "自定义 XYZ",
+  "mapTileConfigCustomMapLibreLabel": "自定义 MapLibre",
+  "mapTileConfigOpenFreeMapDescription": "默认地图，使用 MapLibre style。",
+  "mapTileConfigOpenStreetMapDescription": "使用 OpenStreetMap 标准 XYZ 瓦片。",
+  "mapTileConfigCustomXyzDescription": "使用包含 {pattern} 的栅格瓦片 URL。",
+  "@mapTileConfigCustomXyzDescription": {
+    "placeholders": {
+      "pattern": {
+        "type": "String"
+      }
+    }
+  },
+  "mapTileConfigCustomMapLibreDescription": "使用自定义 MapLibre style URL。",
+  "mapTileConfigCustomXyzInvalid": "自定义 XYZ URL 需要包含 {z}、{x}、{y}，并使用 http/https。",
+  "@mapTileConfigCustomXyzInvalid": {
+    "placeholders": {
+      "z": {
+        "type": "String"
+      },
+      "x": {
+        "type": "String"
+      },
+      "y": {
+        "type": "String"
+      }
+    }
+  },
+  "mapTileConfigCustomMapLibreInvalid": "自定义 MapLibre style URL 需要使用 http/https。",
+  "navigationHeadingStale": "上次定位，等待更新",
+  "navigationHeadingNoHeading": "当前位置，朝向不可用",
+  "navigationHeadingWithHeading": "当前位置，手机朝向",
+  "photoLocationStatusPanelSkip": "跳过",
+  "nativeCameraControllerPermissionRequestFailed": "相机权限请求失败：{error}",
+  "@nativeCameraControllerPermissionRequestFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "nativeCameraControllerPermissionRequired": "需要相机权限",
+  "nativeCameraControllerInitFailed": "原生相机初始化失败",
+  "nativeCameraControllerInitFailedWithError": "原生相机初始化失败：{error}",
+  "@nativeCameraControllerInitFailedWithError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "photoLocationChoiceTitle": "是否在巡礼照片中记录定位？",
+  "photoLocationChoiceChangeLater": "以后可以在“拍摄设置”中修改。",
+  "photoLocationChoiceNoSpotCoordinates": "不会使用点位坐标代替实际定位。",
+  "photoLocationChoiceRecentTitle": "使用最近一次定位",
+  "photoLocationChoiceRecentSubtitle": "优先快速写入近期有效定位，没有时获取一次。",
+  "photoLocationChoiceConfirmTitle": "确认记录时获取定位",
+  "photoLocationChoiceConfirmSubtitle": "拍摄后在确认页面等待新定位，适合需要更准确位置时。",
+  "photoLocationChoiceDisabledTitle": "不记录定位",
+  "photoLocationChoiceRecommended": "推荐",
+  "mapMarkerClusteringTapToBrowse": "点击浏览",
+  "mapMarkerClusteringTapToZoom": "点击放大",
+  "mapMarkerClusteringDone": "已完成",
+  "mapMarkerClusteringDoneSummary": "，其中 {done} 个{doneLabel}",
+  "@mapMarkerClusteringDoneSummary": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "doneLabel": {
+        "type": "String"
+      }
+    }
+  },
+  "mapMarkerClusteringBrowseOverlapping": "浏览 {count} 个重合点位",
+  "@mapMarkerClusteringBrowseOverlapping": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapMarkerClusteringSpotCount": "{count} 个点位",
+  "@mapMarkerClusteringSpotCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "mapMarkerClusteringSemantics": "{count} 个聚合点位{doneSummary}，{action}",
+  "@mapMarkerClusteringSemantics": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "doneSummary": {
+        "type": "String"
+      },
+      "action": {
+        "type": "String"
+      }
+    }
+  },
+  "mapMarkerClusteringTooltipDone": "{tooltip} · {done} 个{doneLabel}",
+  "@mapMarkerClusteringTooltipDone": {
+    "placeholders": {
+      "tooltip": {
+        "type": "String"
+      },
+      "done": {
+        "type": "int"
+      },
+      "doneLabel": {
+        "type": "String"
+      }
+    }
+  },
+  "mapMarkerClusteringPrevious": "上一个重合点位",
+  "mapMarkerClusteringPager": "重合点位  {index} / {total}",
+  "@mapMarkerClusteringPager": {
+    "placeholders": {
+      "index": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "mapMarkerClusteringNext": "下一个重合点位",
+  "valhallaRouteClientNeedsTwoStops": "路线至少需要起点和终点",
+  "valhallaRouteClientTimeout": "路径规划服务响应超时，请稍后重试",
+  "valhallaRouteClientConnectionFailed": "无法连接路径规划服务：{error}",
+  "@valhallaRouteClientConnectionFailed": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientRateLimited": "路径规划服务请求过于频繁，请稍后重试",
+  "valhallaRouteClientServiceUnavailable": "路径规划服务暂时不可用（{status}）",
+  "@valhallaRouteClientServiceUnavailable": {
+    "placeholders": {
+      "status": {
+        "type": "int"
+      }
+    }
+  },
+  "valhallaRouteClientRouteFailed": "无法规划这条步行路线（{status}）",
+  "@valhallaRouteClientRouteFailed": {
+    "placeholders": {
+      "status": {
+        "type": "int"
+      }
+    }
+  },
+  "valhallaRouteClientStatus": "服务返回 {status}",
+  "@valhallaRouteClientStatus": {
+    "placeholders": {
+      "status": {
+        "type": "int"
+      }
+    }
+  },
+  "valhallaRouteClientTestTimeout": "连接测试超时",
+  "valhallaRouteClientBadResponse": "路径规划服务返回了无法识别的数据",
+  "valhallaRouteClientError170": "起点和终点之间没有相连的步行道路",
+  "valhallaRouteClientError171": "起点或点位附近没有可步行的道路，请换个位置再试",
+  "valhallaRouteClientError154": "距离超过路径服务的步行路线上限",
+  "valhallaRouteClientError442": "找不到可步行的路线",
+  "valhallaRouteClientStartWalking": "开始步行",
+  "valhallaRouteClientStartAlong": "沿{road}出发",
+  "@valhallaRouteClientStartAlong": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientHeadRight": "向右出发",
+  "valhallaRouteClientHeadRightOnto": "向右出发，进入{road}",
+  "@valhallaRouteClientHeadRightOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientHeadLeft": "向左出发",
+  "valhallaRouteClientHeadLeftOnto": "向左出发，进入{road}",
+  "@valhallaRouteClientHeadLeftOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientArrive": "到达终点",
+  "valhallaRouteClientArriveNear": "到达{road}附近的终点",
+  "@valhallaRouteClientArriveNear": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientContinue": "继续前行",
+  "valhallaRouteClientContinueOnto": "继续前行，进入{road}",
+  "@valhallaRouteClientContinueOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientGoStraight": "继续直行",
+  "valhallaRouteClientGoStraightAlong": "沿{road}继续直行",
+  "@valhallaRouteClientGoStraightAlong": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientBearRight": "稍向右转",
+  "valhallaRouteClientBearRightOnto": "稍向右转，进入{road}",
+  "@valhallaRouteClientBearRightOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientTurnRight": "向右转",
+  "valhallaRouteClientTurnRightOnto": "向右转，进入{road}",
+  "@valhallaRouteClientTurnRightOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientSharpRight": "向右急转",
+  "valhallaRouteClientSharpRightOnto": "向右急转，进入{road}",
+  "@valhallaRouteClientSharpRightOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientUTurn": "请掉头",
+  "valhallaRouteClientSharpLeft": "向左急转",
+  "valhallaRouteClientSharpLeftOnto": "向左急转，进入{road}",
+  "@valhallaRouteClientSharpLeftOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientTurnLeft": "向左转",
+  "valhallaRouteClientTurnLeftOnto": "向左转，进入{road}",
+  "@valhallaRouteClientTurnLeftOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientBearLeft": "稍向左转",
+  "valhallaRouteClientBearLeftOnto": "稍向左转，进入{road}",
+  "@valhallaRouteClientBearLeftOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientRampStraight": "沿匝道直行",
+  "valhallaRouteClientRampStraightAlong": "沿{road}沿匝道直行",
+  "@valhallaRouteClientRampStraightAlong": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientRampRight": "沿右侧匝道前行",
+  "valhallaRouteClientRampRightOnto": "沿右侧匝道进入{road}",
+  "@valhallaRouteClientRampRightOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientRampLeft": "沿左侧匝道前行",
+  "valhallaRouteClientRampLeftOnto": "沿左侧匝道进入{road}",
+  "@valhallaRouteClientRampLeftOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientExitRight": "从右侧出口离开",
+  "valhallaRouteClientExitLeft": "从左侧出口离开",
+  "valhallaRouteClientStayStraight": "保持直行",
+  "valhallaRouteClientStayStraightAlong": "沿{road}保持直行",
+  "@valhallaRouteClientStayStraightAlong": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientKeepRight": "靠右行走",
+  "valhallaRouteClientKeepRightAlong": "沿{road}靠右行走",
+  "@valhallaRouteClientKeepRightAlong": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientKeepLeft": "靠左行走",
+  "valhallaRouteClientKeepLeftAlong": "沿{road}靠左行走",
+  "@valhallaRouteClientKeepLeftAlong": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientMerge": "汇入道路",
+  "valhallaRouteClientMergeOnto": "汇入道路，进入{road}",
+  "@valhallaRouteClientMergeOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientEnterRoundabout": "进入环岛",
+  "valhallaRouteClientExitRoundabout": "驶出环岛",
+  "valhallaRouteClientBoardFerry": "进入渡轮",
+  "valhallaRouteClientLeaveFerry": "离开渡轮",
+  "valhallaRouteClientTakeTransit": "搭乘公共交通",
+  "valhallaRouteClientTransfer": "换乘",
+  "valhallaRouteClientStayOnLine": "继续乘坐当前线路",
+  "valhallaRouteClientToTransitConnection": "前往公共交通连接点",
+  "valhallaRouteClientTransitArrive": "到达公共交通目的地",
+  "valhallaRouteClientMergeRight": "向右汇入道路",
+  "valhallaRouteClientMergeRightOnto": "向右汇入道路，进入{road}",
+  "@valhallaRouteClientMergeRightOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientMergeLeft": "向左汇入道路",
+  "valhallaRouteClientMergeLeftOnto": "向左汇入道路，进入{road}",
+  "@valhallaRouteClientMergeLeftOnto": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "valhallaRouteClientElevator": "乘坐电梯",
+  "valhallaRouteClientStairs": "走楼梯",
+  "valhallaRouteClientEscalator": "乘坐自动扶梯",
+  "valhallaRouteClientEnterBuilding": "进入建筑",
+  "valhallaRouteClientExitBuilding": "离开建筑",
+  "valhallaRouteClientOtherFloor": "前往其他楼层",
+  "valhallaRouteClientParkAndWalk": "停放车辆后继续步行",
+  "valhallaRouteClientContinueAlong": "沿{road}继续前行",
+  "@valhallaRouteClientContinueAlong": {
+    "placeholders": {
+      "road": {
+        "type": "String"
+      }
+    }
+  },
+  "navigationRouteConfirmLoadFailed": "路线加载失败，请检查定位和路径服务设置",
+  "navigationRouteConfirmTitle": "确认路线",
+  "navigationRouteConfirmChainArea": "串联整个片区",
+  "navigationRouteConfirmToSelected": "导航到选中点",
+  "navigationRouteConfirmChainSummary": "按顺序连接 {count} 个点位：{stops}",
+  "@navigationRouteConfirmChainSummary": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "stops": {
+        "type": "String"
+      }
+    }
+  },
+  "navigationRouteConfirmDestination": "终点：{name}",
+  "@navigationRouteConfirmDestination": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "navigationRouteConfirmLoading": "正在获取当前位置并规划步行路线…",
+  "navigationRouteConfirmReplan": "重新规划路线",
+  "navigationRouteConfirmExternalShort": "外部导航",
+  "navigationRouteConfirmExternalWith": "使用 {app} 导航",
+  "@navigationRouteConfirmExternalWith": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "navigationRouteConfirmExternalFailed": "无法打开外部地图",
+  "navigationRouteConfirmStart": "开始导航",
+  "navigationRouteConfirmStartArea": "串联整个片区导航",
+  "navigationRouteConfirmOnlySelected": "仅导航到选中点",
+  "navigationRouteConfirmOnlySelectedShort": "仅导航到点位",
+  "navigationRouteConfirmAreaBadge": "片区",
+  "inAppNavigationLocationStopped": "定位更新已停止，请重试。",
+  "inAppNavigationLocationStale": "暂未收到新的定位，当前位置可能已过期。",
+  "inAppNavigationPreciseOff": "精确位置已关闭，到达提醒和偏航判断可能不准确。",
+  "inAppNavigationOpenSettings": "去设置",
+  "inAppNavigationRetryLocation": "重试定位",
+  "inAppNavigationOnRoute": "路线中",
+  "inAppNavigationFollowRoute": "沿路线继续前行",
+  "inAppNavigationSideRight": "，在右侧",
+  "inAppNavigationSideLeft": "，在左侧",
+  "inAppNavigationArriveDestination": "到达终点{side}",
+  "@inAppNavigationArriveDestination": {
+    "placeholders": {
+      "side": {
+        "type": "String"
+      }
+    }
+  },
+  "inAppNavigationArriveWaypoint": "到达途经点{side}",
+  "@inAppNavigationArriveWaypoint": {
+    "placeholders": {
+      "side": {
+        "type": "String"
+      }
+    }
+  },
+  "inAppNavigationArriveDestinationNamed": "到达终点 {name}{side}",
+  "@inAppNavigationArriveDestinationNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "side": {
+        "type": "String"
+      }
+    }
+  },
+  "inAppNavigationArriveWaypointNamed": "到达途经点 {name}{side}",
+  "@inAppNavigationArriveWaypointNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "side": {
+        "type": "String"
+      }
+    }
+  },
+  "inAppNavigationMeters": "{meters}米",
+  "@inAppNavigationMeters": {
+    "placeholders": {
+      "meters": {
+        "type": "int"
+      }
+    }
+  },
+  "inAppNavigationKilometers": "{km}公里",
+  "@inAppNavigationKilometers": {
+    "placeholders": {
+      "km": {
+        "type": "String"
+      }
+    }
+  },
+  "inAppNavigationFinalStop": "终点: {name}",
+  "@inAppNavigationFinalStop": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "inAppNavigationAllStops": "全部点位",
+  "inAppNavigationStopCount": "共 {count} 个",
+  "@inAppNavigationStopCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "inAppNavigationArrived": "已到达",
+  "inAppNavigationEndRoute": "结束路线",
+  "inAppNavigationCollapse": "收起",
+  "inAppNavigationExpand": "展开",
+  "inAppNavigationMetricArrival": "到达",
+  "inAppNavigationMetricHours": "小时",
+  "inAppNavigationMetricKm": "公里",
+  "inAppNavigationAreaBadge": "片区",
+  "inAppNavigationRecenter": "回到当前位置",
+  "inAppNavigationArrivalTitle": "到达点位",
+  "inAppNavigationOpenCamera": "打开相机",
+  "inAppNavigationRemainingStop": "第 {stopNumber} / {remainingCount} 个剩余点位",
+  "@inAppNavigationRemainingStop": {
+    "placeholders": {
+      "stopNumber": {
+        "type": "int"
+      },
+      "remainingCount": {
+        "type": "int"
+      }
+    }
+  },
+  "inAppNavigationNextStop": "下一点位 · {subtitle}",
+  "@inAppNavigationNextStop": {
+    "placeholders": {
+      "subtitle": {
+        "type": "String"
+      }
+    }
+  },
+  "inAppNavigationGoNext": "前往下一点",
+  "pilgrimageMapLayerThumbnails": "缩略图标记",
+  "pilgrimageMapLayerAreas": "片区范围",
+  "pilgrimageMapLayerHideCompleted": "隐藏已完成点位",
+  "pilgrimageMapLayerClustering": "自动聚合密集点位",
+  "pilgrimageMapLayerContinuousLocation": "持续更新当前位置",
+  "pilgrimageMapLayerContinuousLocationHint": "关闭后只在点定位时获取一次位置，更省电",
+  "pilgrimageMapOpenAppFailed": "无法打开{app}。",
+  "@pilgrimageMapOpenAppFailed": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "pilgrimageMapNoSpotsSnack": "当前计划还没有点位。",
+  "pilgrimageMapCannotEdit": "当前环境无法编辑点位。",
+  "pilgrimageMapVisitedLabel": "已打卡",
+  "pilgrimageMapCurrentLocation": "当前位置",
+  "pilgrimageMapLocate": "定位",
+  "pilgrimageMapCurrentTarget": "当前目标",
+  "pilgrimageMapLayers": "图层",
+  "pilgrimageMapPointMarker": "巡礼点",
+  "pilgrimageMapCopySpotName": "点位名称",
+  "pilgrimageMapCopySpotInfo": "点位信息",
+  "pilgrimageMapNavigate": "导航",
+  "pilgrimageMapCoordinatesMissing": "坐标待补充",
+  "pilgrimageMapCamera": "拍摄参考",
+  "pilgrimageMapUndoVisit": "撤回打卡",
+  "pilgrimageMapMarkComplete": "标记完成",
+  "pilgrimageMapSetCurrent": "设为当前目标",
+  "pilgrimageMapEmptyTitle": "当前计划还没有点位",
+  "pilgrimageMapEmptyBody": "添加点位后会在地图上显示标记。",
+  "pilgrimageMapStatusCurrent": "当前",
+  "pilgrimageMapStatusCompleted": "完成",
+  "pilgrimageMapStatusPending": "待访",
+  "visitRecordConfirmationLocationReady": "已获取拍摄位置，保存时写入照片。",
+  "visitRecordConfirmationLocating": "正在获取拍摄位置...",
+  "visitRecordConfirmationLocationFailed": "定位获取失败，本次不添加位置，保留照片原有信息。",
+  "visitRecordConfirmationStorageUnavailable": "记录存储不可用，请返回后重试。",
+  "visitRecordConfirmationStageSaving": "保存记录中...",
+  "visitRecordConfirmationStageWritingLocation": "正在写入照片定位，请稍候...",
+  "visitRecordConfirmationStageBackingUp": "备份巡礼照片中...",
+  "visitRecordConfirmationStageComparison": "生成对比图中...",
+  "visitRecordConfirmationStageUpdatingSpot": "更新点位状态中...",
+  "visitRecordConfirmationLocationWriteFailed": "；定位写入失败，保留照片原有信息",
+  "visitRecordConfirmationCompleteFailed": "；标记完成失败，请在计划中重试",
+  "visitRecordConfirmationSaveUncertain": "保存结果未确认，请返回记录页检查，勿重复保存。",
+  "visitRecordConfirmationSaveFailed": "保存记录失败，请重试。",
+  "visitRecordConfirmationSavingWait": "正在保存记录，请稍候。",
+  "visitRecordConfirmationTitle": "确认记录",
+  "visitRecordConfirmationLocationSkipped": "已跳过定位，本次不添加位置，保留照片原有信息。",
+  "visitRecordConfirmationSavingButton": "保存中",
+  "visitRecordConfirmationSave": "保存记录",
+  "visitRecordConfirmationSaveAndComplete": "保存并标记完成",
+  "visitRecordConfirmationSavedAndCompleted": "已保存并标记完成",
+  "visitRecordConfirmationSaved": "记录已保存",
+  "visitRecordConfirmationBackedUp": "，并备份到相册",
+  "visitRecordConfirmationBackupFailed": "；相册备份失败",
+  "visitRecordConfirmationNext": "，下一个：{name}",
+  "@visitRecordConfirmationNext": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "visitRecordConfirmationDetail": "，{message}",
+  "@visitRecordConfirmationDetail": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "visitRecordConfirmationComparisonSaved": "，对比图已保存到相册",
+  "visitRecordConfirmationComparisonNoReference": "，参考图不可用，未生成对比图",
+  "visitRecordConfirmationComparisonNoPhoto": "，巡礼图不可用，未生成对比图",
+  "visitRecordConfirmationComparisonGalleryFailed": "，对比图保存到相册失败",
+  "visitRecordConfirmationComparisonRenderFailed": "，对比图生成失败",
+  "visitRecordConfirmationSaveToGallery": "保存到相册",
+  "visitRecordConfirmationReferenceImage": "参考图",
+  "visitRecordConfirmationPilgrimagePhoto": "巡礼图",
+  "visitRecordConfirmationReferenceMode": "参考模式",
+  "camerawesomeReferenceModeOverlay": "叠影",
+  "camerawesomeReferenceModeSplit": "上下",
+  "camerawesomeReferenceModePinned": "小窗",
+  "camerawesomeReferenceReadFailed": "参考图读取失败",
+  "camerawesomeReferenceImportFailed": "照片导入失败，请重新选择。",
+  "camerawesomeReferenceReadingRatio": "正在读取参考图比例，请稍后拍摄。",
+  "camerawesomeReferenceNotReady": "相机尚未就绪，请稍后再拍。",
+  "camerawesomeReferenceCaptureFailed": "拍摄失败，请重试。",
+  "camerawesomeReferenceBack": "返回",
+  "camerawesomeReferenceReferenceImage": "参考图",
+  "camerawesomeReferenceLandscapeUi": "切换横屏 UI",
+  "camerawesomeReferencePortraitUi": "切换竖屏 UI",
+  "camerawesomeReferenceGalleryImport": "相册导入",
+  "camerawesomeReferenceSwitchLens": "切换镜头",
+  "camerawesomeReferenceReviewPhotos": "检查照片",
+  "camerawesomeReferenceFlashOff": "闪光灯：关闭",
+  "camerawesomeReferenceFlashOn": "闪光灯：开启",
+  "camerawesomeReferenceFlashTorch": "闪光灯：常亮",
+  "camerawesomeReferenceFlashAuto": "闪光灯：自动",
+  "camerawesomeReferenceSwitchCamera": "切换摄像头",
+  "camerawesomeReferenceImportFromGallery": "从相册导入",
+  "camerawesomeReferenceImport": "导入",
+  "camerawesomeReferenceWebPreview": "Web 预览不启动实时相机",
+  "camerawesomeReferencePermissionTitle": "需要相机权限",
+  "camerawesomeReferencePermissionBody": "请在系统设置中允许 MiriaGo 使用相机，用于拍摄巡礼照片。",
+  "camerawesomeReferenceOpenSettings": "打开设置",
+  "camerawesomeReferencePickFromGallery": "从相册选择照片",
+  "camerawesomeReferenceUnavailableTitle": "相机无法启动",
+  "camerawesomeReferenceUnavailableBody": "相机暂时无法使用，请稍后重试。如果问题持续，请重启 MiriaGo。",
+  "anitabiMapImportClusterAdded": "已加入"
 }

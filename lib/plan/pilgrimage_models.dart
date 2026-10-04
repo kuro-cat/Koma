@@ -3,6 +3,7 @@ import 'package:latlong2/latlong.dart';
 import '../data/anitabi_remote_state.dart';
 import '../data/anitabi_service_config.dart';
 import '../data/valhalla_service_config.dart';
+import '../l10n/l10n.dart';
 
 const Object _unset = Object();
 
@@ -15,16 +16,33 @@ enum PointSource { manual, anitabi }
 enum PlanGroupOrderMode { unordered, manual }
 
 enum BangumiSubjectType {
-  book(1, '书籍'),
-  anime(2, '动画'),
-  music(3, '音乐'),
-  game(4, '游戏'),
-  real(6, '三次元');
+  book(1),
+  anime(2),
+  music(3),
+  game(4),
+  real(6);
 
-  const BangumiSubjectType(this.code, this.label);
+  const BangumiSubjectType(this.code);
 
   final int code;
-  final String label;
+
+  String get label => switch (this) {
+    BangumiSubjectType.book => l10n.pilgrimageModelsSubjectBook,
+    BangumiSubjectType.anime => l10n.pilgrimageModelsSubjectAnime,
+    BangumiSubjectType.music => l10n.pilgrimageModelsSubjectMusic,
+    BangumiSubjectType.game => l10n.pilgrimageModelsSubjectGame,
+    BangumiSubjectType.real => l10n.pilgrimageModelsSubjectReal,
+  };
+
+  /// The Chinese label older versions wrote into a work's `city` text, which
+  /// [PilgrimageWork.displayBangumiSubjectType] still has to recognise.
+  String get _legacyCityLabel => switch (this) {
+    BangumiSubjectType.book => '书籍',
+    BangumiSubjectType.anime => '动画',
+    BangumiSubjectType.music => '音乐',
+    BangumiSubjectType.game => '游戏',
+    BangumiSubjectType.real => '三次元',
+  };
 
   static BangumiSubjectType? fromCode(int? code) {
     for (final type in BangumiSubjectType.values) {
@@ -87,13 +105,14 @@ enum AppThemePalette {
 
   String get label {
     return switch (this) {
-      AppThemePalette.classicGreen => '\u7ecf\u5178\u7eff',
-      AppThemePalette.deepBlue => '\u6df1\u9083\u84dd',
-      AppThemePalette.cherryPink => '\u6a31\u82b1\u7c89',
-      AppThemePalette.twilightPurple => '\u66ae\u5149\u7d2b',
-      AppThemePalette.miriaYellow => '\u7435\u73c0\u6a59',
-      AppThemePalette.graphite => '\u77f3\u58a8\u9ed1',
-      AppThemePalette.aurora => '\u81ea\u5b9a\u4e49',
+      AppThemePalette.classicGreen => l10n.pilgrimageModelsPaletteClassicGreen,
+      AppThemePalette.deepBlue => l10n.pilgrimageModelsPaletteDeepBlue,
+      AppThemePalette.cherryPink => l10n.pilgrimageModelsPaletteCherryPink,
+      AppThemePalette.twilightPurple =>
+        l10n.pilgrimageModelsPaletteTwilightPurple,
+      AppThemePalette.miriaYellow => l10n.pilgrimageModelsPaletteMiriaYellow,
+      AppThemePalette.graphite => l10n.pilgrimageModelsPaletteGraphite,
+      AppThemePalette.aurora => l10n.pilgrimageModelsPaletteCustom,
     };
   }
 }
@@ -105,9 +124,9 @@ enum AppThemeMode {
 
   String get label {
     return switch (this) {
-      AppThemeMode.light => '浅色',
-      AppThemeMode.dark => '深色',
-      AppThemeMode.system => '跟随系统',
+      AppThemeMode.light => l10n.pilgrimageModelsThemeLight,
+      AppThemeMode.dark => l10n.pilgrimageModelsThemeDark,
+      AppThemeMode.system => l10n.pilgrimageModelsThemeSystem,
     };
   }
 }
@@ -115,8 +134,8 @@ enum AppThemeMode {
 extension CameraPhotoAspectRatioLabel on CameraPhotoAspectRatio {
   String get label {
     return switch (this) {
-      CameraPhotoAspectRatio.auto => '自动',
-      CameraPhotoAspectRatio.native => '原生比例',
+      CameraPhotoAspectRatio.auto => l10n.pilgrimageModelsAspectAuto,
+      CameraPhotoAspectRatio.native => l10n.pilgrimageModelsAspectNative,
       CameraPhotoAspectRatio.landscape16x9 => '16:9',
       CameraPhotoAspectRatio.cinema21x9 => '21:9',
       CameraPhotoAspectRatio.standard4x3 => '4:3',
@@ -126,7 +145,7 @@ extension CameraPhotoAspectRatioLabel on CameraPhotoAspectRatio {
       CameraPhotoAspectRatio.portrait3x4 => '3:4',
       CameraPhotoAspectRatio.portrait2x3 => '2:3',
       CameraPhotoAspectRatio.square1x1 => '1:1',
-      CameraPhotoAspectRatio.custom => '\u81ea\u5b9a\u4e49',
+      CameraPhotoAspectRatio.custom => l10n.pilgrimageModelsAspectCustom,
     };
   }
 }
@@ -162,9 +181,9 @@ enum NavigationApp {
   String get label {
     return switch (this) {
       NavigationApp.googleMaps => 'Google Maps',
-      NavigationApp.amap => '\u9ad8\u5fb7\u5730\u56fe',
+      NavigationApp.amap => l10n.pilgrimageModelsNavAmap,
       NavigationApp.appleMaps => 'Apple Maps',
-      NavigationApp.baiduMaps => '\u767e\u5ea6\u5730\u56fe',
+      NavigationApp.baiduMaps => l10n.pilgrimageModelsNavBaiduMaps,
     };
   }
 }
@@ -176,10 +195,13 @@ enum PhotoLocationStrategy {
   waitOnConfirmation;
 
   String get label => switch (this) {
-    PhotoLocationStrategy.askOnFirstCapture => '首次拍摄时询问',
-    PhotoLocationStrategy.disabled => '不记录定位',
-    PhotoLocationStrategy.useRecentLocation => '使用最近一次定位',
-    PhotoLocationStrategy.waitOnConfirmation => '确认记录时获取定位（推荐）',
+    PhotoLocationStrategy.askOnFirstCapture =>
+      l10n.pilgrimageModelsLocationAskOnFirstCapture,
+    PhotoLocationStrategy.disabled => l10n.pilgrimageModelsLocationDisabled,
+    PhotoLocationStrategy.useRecentLocation =>
+      l10n.pilgrimageModelsLocationUseRecent,
+    PhotoLocationStrategy.waitOnConfirmation =>
+      l10n.pilgrimageModelsLocationWaitOnConfirmation,
   };
 }
 
@@ -273,6 +295,12 @@ class AppSettings {
   final String comparisonExportConfigJson;
   final bool comparisonExportConfigMigrated;
   final String customThemeColorName;
+
+  /// The stored default name is Chinese persisted data; show it translated.
+  String get displayCustomThemeColorName =>
+      customThemeColorName == '\u81ea\u5b9a\u4e49'
+      ? l10n.settingsCustom
+      : customThemeColorName;
   final int customThemeColorValue;
   final List<CustomThemeColor> customThemeColors;
   final double customCameraAspectRatioWidth;
@@ -680,7 +708,7 @@ class PilgrimageWork {
 
     final cityType = city.split('/').first.trim();
     for (final type in BangumiSubjectType.values) {
-      if (type.label == cityType) {
+      if (type.label == cityType || type._legacyCityLabel == cityType) {
         return type;
       }
     }

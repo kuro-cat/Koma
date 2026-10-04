@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:latlong2/latlong.dart';
 
 import '../data/anitabi_image_url.dart';
+import '../l10n/l10n.dart';
 import '../plan/pilgrimage_models.dart';
 
 const seichiPlanFileExtension = 'sjhplan';
@@ -84,8 +85,8 @@ PilgrimagePlan _planFromJson(Map<String, Object?> json) {
 
   return PilgrimagePlan(
     id: _stringValue(json['id'], fallback: 'imported-plan'),
-    name: _stringValue(json['name'], fallback: '导入的巡礼计划'),
-    area: _stringValue(json['area'], fallback: '未设置区域'),
+    name: _stringValue(json['name'], fallback: l10n.planPackageDefaultPlanName),
+    area: _stringValue(json['area'], fallback: l10n.planPackageNoArea),
     memo: _optionalStringValue(json['memo']) ?? '',
     works: works,
     points: points,
@@ -115,9 +116,9 @@ PilgrimageWork _workFromJson(Map<String, Object?> json) {
     bangumiId: json['bangumiId'] is int ? json['bangumiId'] as int : null,
     bangumiSubjectType: _bangumiSubjectTypeValue(json['bangumiSubjectType']),
     coverImageUrl: json['coverImageUrl'] as String?,
-    title: _stringValue(json['title'], fallback: '未知作品'),
+    title: _stringValue(json['title'], fallback: l10n.planPackageUnknownWork),
     subtitle: _stringValue(json['subtitle'], fallback: ''),
-    city: _stringValue(json['city'], fallback: '未设置地区'),
+    city: _stringValue(json['city'], fallback: l10n.planPackageNoRegion),
     source: WorkSource.values.firstWhere(
       (source) => source.name == json['source'],
       orElse: () => WorkSource.manual,
@@ -163,16 +164,16 @@ PilgrimagePoint _pointFromJson(
       works[workId] ??
       PilgrimageWork(
         id: workId,
-        title: '未知作品',
+        title: l10n.planPackageUnknownWork,
         subtitle: '',
-        city: '未设置地区',
+        city: l10n.planPackageNoRegion,
         source: WorkSource.manual,
       );
 
   return PilgrimagePoint(
     id: _stringValue(json['id'], fallback: 'point-${json.hashCode}'),
     work: work,
-    name: _stringValue(json['name'], fallback: '未命名点位'),
+    name: _stringValue(json['name'], fallback: l10n.planPackageUnnamedSpot),
     subtitle: _stringValue(json['subtitle'], fallback: ''),
     position:
         importedCoordinate(json['latitude'], json['longitude']) ??
@@ -237,7 +238,10 @@ PilgrimageVisitRecord _visitRecordFromJson(Map<String, Object?> json) {
     colorGradingIntensity: (json['colorGradingIntensity'] as num?)?.toDouble(),
     referenceImagePath: json['referenceImagePath'] as String?,
     referenceImageUrl: _canonicalReferenceUrl(json['referenceImageUrl']),
-    referenceMode: _stringValue(json['referenceMode'], fallback: '未知'),
+    referenceMode: _stringValue(
+      json['referenceMode'],
+      fallback: l10n.planPackageUnknownReferenceMode,
+    ),
     capturedAt: _dateValue(json['capturedAt']),
   );
 }

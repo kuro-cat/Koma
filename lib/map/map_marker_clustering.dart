@@ -8,6 +8,7 @@ import 'package:latlong2/latlong.dart';
 import '../app_theme.dart';
 import 'map_colors.dart';
 import 'map_marker_scale.dart';
+import '../l10n/l10n.dart';
 
 class MapMarkerCluster<T> {
   const MapMarkerCluster({required this.items, required this.position});
@@ -137,7 +138,7 @@ class MapMarkerClusterBadge extends StatelessWidget {
     required this.onTap,
     this.opensPointBrowser = false,
     this.doneCount = 0,
-    this.doneLabel = '已完成',
+    this.doneLabel,
     super.key,
   });
 
@@ -149,7 +150,7 @@ class MapMarkerClusterBadge extends StatelessWidget {
   final int doneCount;
 
   /// What "done" means here, e.g. 已加入 or 已打卡.
-  final String doneLabel;
+  final String? doneLabel;
 
   static const _coreDiameter = 44.0;
   static const _ringWidth = 5.0;
@@ -158,19 +159,28 @@ class MapMarkerClusterBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final label = count > 999 ? '999+' : '$count';
     final fontSize = label.length >= 4 ? 13.0 : 15.0;
-    final actionLabel = opensPointBrowser ? '点击浏览' : '点击放大';
+    final actionLabel = opensPointBrowser
+        ? l10n.mapMarkerClusteringTapToBrowse
+        : l10n.mapMarkerClusteringTapToZoom;
+    final doneText = doneLabel ?? l10n.mapMarkerClusteringDone;
     final done = doneCount.clamp(0, count);
     final allDone = count > 0 && done == count;
     final doneColor = AppColors.textSecondary;
     final coreColor = allDone ? doneColor : MapColors.accent;
-    final doneSummary = done == 0 ? '' : '，其中 $done 个$doneLabel';
-    final tooltip = opensPointBrowser ? '浏览 $count 个重合点位' : '$count 个点位';
+    final doneSummary = done == 0
+        ? ''
+        : l10n.mapMarkerClusteringDoneSummary(done, doneText);
+    final tooltip = opensPointBrowser
+        ? l10n.mapMarkerClusteringBrowseOverlapping(count)
+        : l10n.mapMarkerClusteringSpotCount(count);
 
     return Semantics(
       button: true,
-      label: '$count 个聚合点位$doneSummary，$actionLabel',
+      label: l10n.mapMarkerClusteringSemantics(count, doneSummary, actionLabel),
       child: Tooltip(
-        message: done == 0 ? tooltip : '$tooltip · $done 个$doneLabel',
+        message: done == 0
+            ? tooltip
+            : l10n.mapMarkerClusteringTooltipDone(tooltip, done, doneText),
         child: Material(
           color: Colors.transparent,
           child: InkResponse(
@@ -292,14 +302,14 @@ class MapOverlapPointPager extends StatelessWidget {
       children: [
         IconButton(
           key: const ValueKey('map-overlap-previous'),
-          tooltip: '上一个重合点位',
+          tooltip: l10n.mapMarkerClusteringPrevious,
           visualDensity: VisualDensity.compact,
           onPressed: onPrevious,
           icon: const Icon(LucideIcons.chevronLeft),
         ),
         Expanded(
           child: Text(
-            '重合点位  ${currentIndex + 1} / $total',
+            l10n.mapMarkerClusteringPager(currentIndex + 1, total),
             textAlign: TextAlign.center,
             maxLines: 1,
             style: TextStyle(
@@ -312,7 +322,7 @@ class MapOverlapPointPager extends StatelessWidget {
         ),
         IconButton(
           key: const ValueKey('map-overlap-next'),
-          tooltip: '下一个重合点位',
+          tooltip: l10n.mapMarkerClusteringNext,
           visualDensity: VisualDensity.compact,
           onPressed: onNext,
           icon: const Icon(LucideIcons.chevronRight),

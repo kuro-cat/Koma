@@ -4,6 +4,7 @@ import 'package:latlong2/latlong.dart';
 import '../app_theme.dart';
 import '../widgets/input_dialog.dart';
 import 'coordinate_parser.dart';
+import '../l10n/l10n.dart';
 
 Future<LatLng?> showCoordinateInputDialog({
   required BuildContext context,
@@ -61,14 +62,14 @@ class _CoordinateInputDialogState extends State<_CoordinateInputDialog> {
       if (!mounted) {
         return;
       }
-      setState(() => _errorText = '无法读取剪贴板。');
+      setState(() => _errorText = l10n.coordinateInputClipboardReadFailed);
       return;
     }
     if (!mounted) {
       return;
     }
     if (coordinate == null) {
-      setState(() => _errorText = '剪贴板中没有可识别的坐标。');
+      setState(() => _errorText = l10n.coordinateInputClipboardNoCoordinate);
       return;
     }
     final parsed = coordinate;
@@ -89,7 +90,7 @@ class _CoordinateInputDialogState extends State<_CoordinateInputDialog> {
       latitude: false,
     );
     if (latitude == null || longitude == null) {
-      setState(() => _errorText = '请输入有效经纬度');
+      setState(() => _errorText = l10n.coordinateInputInvalid);
       return;
     }
     Navigator.of(context).pop(LatLng(latitude, longitude));
@@ -98,14 +99,14 @@ class _CoordinateInputDialogState extends State<_CoordinateInputDialog> {
   @override
   Widget build(BuildContext context) {
     return AppInputDialog(
-      title: '输入经纬度',
+      title: l10n.coordinateInputTitle,
       errorText: _errorText,
       titleTrailing: AppDialogPasteButton(onPressed: _pasteFromClipboard),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           AppDialogField(
-            label: '纬度',
+            label: l10n.coordinateInputLatitude,
             child: TextField(
               onTapOutside: dismissKeyboardOnTapOutside,
               controller: _latitudeController,
@@ -119,7 +120,7 @@ class _CoordinateInputDialogState extends State<_CoordinateInputDialog> {
           ),
           const SizedBox(height: 14),
           AppDialogField(
-            label: '经度',
+            label: l10n.coordinateInputLongitude,
             child: TextField(
               onTapOutside: dismissKeyboardOnTapOutside,
               controller: _longitudeController,
@@ -133,7 +134,7 @@ class _CoordinateInputDialogState extends State<_CoordinateInputDialog> {
           ),
         ],
       ),
-      confirmLabel: '确定',
+      confirmLabel: l10n.coordinateInputConfirm,
       onConfirm: _submit,
     );
   }

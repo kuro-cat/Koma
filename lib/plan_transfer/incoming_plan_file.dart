@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 
+import '../l10n/l10n.dart';
 import 'plan_import_package.dart';
 
 /// Native failure while copying a plan file handed to the app by another app.
@@ -15,10 +16,10 @@ class IncomingPlanFileException implements Exception {
 
   /// User-facing text, worded like [PlanImportLimitException].
   String get userMessage => isTooLarge
-      ? '导入超限：计划文件超过 '
-            '${const PlanImportLimits().maxCompressedBytes ~/ (1024 * 1024)} MiB '
-            '上限。请拆分计划或减少打包图片后重试。'
-      : '计划文件导入失败';
+      ? l10n.incomingPlanFileTooLarge(
+          '${const PlanImportLimits().maxCompressedBytes ~/ (1024 * 1024)}',
+        )
+      : l10n.incomingPlanFileFailed;
 
   @override
   String toString() => 'IncomingPlanFileException($code, $message)';

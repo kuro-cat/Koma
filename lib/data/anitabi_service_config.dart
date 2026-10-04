@@ -1,3 +1,5 @@
+import '../l10n/l10n.dart';
+
 const defaultAnitabiSiteBaseUrl = 'https://www.anitabi.cn';
 const defaultAnitabiStaticDataBaseUrl = 'https://www.anitabi.cn/d';
 
@@ -70,13 +72,13 @@ String normalizeAnitabiBaseUrl(String value, {required String fallback}) {
 String? validateAnitabiBaseUrl(String value) {
   final uri = Uri.tryParse(value.trim());
   if (uri == null || uri.scheme != 'https' || uri.host.isEmpty) {
-    return '请输入有效的 HTTPS 地址';
+    return l10n.anitabiServiceConfigInvalidHttps;
   }
   if (uri.userInfo.isNotEmpty || uri.hasQuery || uri.hasFragment) {
-    return '地址不能包含账号、查询参数或片段';
+    return l10n.anitabiServiceConfigNoExtras;
   }
   if (isLocalOrPrivateHost(uri.host)) {
-    return '不能使用本机或局域网地址';
+    return l10n.anitabiServiceConfigNoLocal;
   }
   return null;
 }

@@ -33,6 +33,7 @@ import 'coordinate_input_dialog.dart';
 import 'reference_cache_progress_dialog.dart';
 import 'reference_full_cache_runner.dart';
 import 'reference_image_status.dart';
+import '../l10n/l10n.dart';
 
 const Object _unsetGroupField = Object();
 
@@ -143,7 +144,9 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
             onPressed: () => Navigator.of(context).pop(_didUpdate),
           ),
           title: Text(
-            _selectionMode ? '已选 ${_selectedPointIds.length}' : '管理计划',
+            _selectionMode
+                ? l10n.pointManagerSelectedCount(_selectedPointIds.length)
+                : l10n.pointManagerTitle,
           ),
           actions: [
             if (_isSaving)
@@ -157,15 +160,16 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
               )
             else if (_plan.points.isNotEmpty)
               IconButton(
-                tooltip: '片区管理',
+                tooltip: l10n.pointManagerGroupManagement,
                 onPressed: _openGroupManager,
                 icon: const Icon(LucideIcons.network),
               ),
             if (!_isSaving && _plan.points.isNotEmpty)
               IconButton(
                 tooltip: _isCachingFullReferences
-                    ? _fullReferenceCacheProgress?.label ?? '正在缓存完整参考图'
-                    : '缓存完整参考图',
+                    ? _fullReferenceCacheProgress?.label ??
+                          l10n.pointManagerCachingFullReferences
+                    : l10n.pointManagerCacheFullReferences,
                 onPressed: _selectionMode && !_isCachingFullReferences
                     ? null
                     : _handleReferenceCachePressed,
@@ -179,7 +183,9 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
               ),
             if (!_isSaving && _plan.points.isNotEmpty)
               IconButton(
-                tooltip: _selectionMode ? '退出多选' : '多选',
+                tooltip: _selectionMode
+                    ? l10n.pointManagerExitMultiSelect
+                    : l10n.pointManagerMultiSelect,
                 onPressed: _toggleSelectionMode,
                 icon: Icon(
                   _selectionMode ? LucideIcons.x : LucideIcons.listChecks,
@@ -503,7 +509,10 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
           .firstOrNull;
     } catch (_) {
       if (mounted) {
-        _showInfo('片区创建失败，请稍后重试。', kind: AppStatusBannerKind.error);
+        _showInfo(
+          l10n.pointManagerCreateGroupFailed,
+          kind: AppStatusBannerKind.error,
+        );
       }
       return null;
     }
@@ -511,11 +520,11 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
 
   Future<void> _showAnchorSheet(PlanGroupBucket group) async {
     if (group.isUngrouped) {
-      return _showInfo('未分配点位没有关键点。');
+      return _showInfo(l10n.pointManagerUngroupedNoAnchor);
     }
     final sourceGroup = group.group;
     if (sourceGroup == null) {
-      return _showInfo('片区不存在。');
+      return _showInfo(l10n.pointManagerGroupNotFound);
     }
     final settings = await widget.repository.loadAppSettings();
     if (!mounted) {
@@ -542,7 +551,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
         anchorLongitude: selection.position?.longitude,
         anchorPointId: selection.pointId,
       ),
-      failureMessage: '关键点保存失败',
+      failureMessage: l10n.pointManagerAnchorSaveFailed,
     );
   }
 
@@ -551,14 +560,14 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
     PlanGroupOrderMode mode,
   ) async {
     if (group.isUngrouped || group.group == null) {
-      return _showInfo('未分配点位不需要排序方式。');
+      return _showInfo(l10n.pointManagerUngroupedNoOrder);
     }
     if (group.group!.orderMode == mode) {
       return;
     }
     await _updateGroup(
       _copyGroup(group.group!, orderMode: mode),
-      failureMessage: '排序方式保存失败',
+      failureMessage: l10n.pointManagerOrderModeSaveFailed,
     );
   }
 
@@ -620,7 +629,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
         pointIds: pointIds,
         groupId: groupId,
       ),
-      failureMessage: '移动片区失败',
+      failureMessage: l10n.pointManagerMoveGroupFailed,
     );
   }
 
@@ -635,7 +644,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
         pointIds: {point.id},
         groupId: groupId,
       ),
-      failureMessage: '移动片区失败',
+      failureMessage: l10n.pointManagerMoveGroupFailed,
     );
   }
 
@@ -646,7 +655,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
         pointIds: {point.id},
         groupId: groupId,
       ),
-      failureMessage: '移动片区失败',
+      failureMessage: l10n.pointManagerMoveGroupFailed,
     );
   }
 
@@ -659,7 +668,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
       point: currentPoint,
       status: _statusFor(currentPoint),
       onSetCurrent: () => _setCurrent(currentPoint),
-      onOpenCamera: () => _showInfo('请从计划页或地图页打开拍摄。'),
+      onOpenCamera: () => _showInfo(l10n.pointManagerOpenCameraHint),
       onComplete: () => _statusFor(currentPoint) == VisitStatus.completed
           ? _reopen(currentPoint)
           : _complete(currentPoint),
@@ -738,21 +747,21 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
           referenceFullImagePath: image.fullImagePath,
         ),
       ),
-      failureMessage: '参考图保存失败',
+      failureMessage: l10n.pointManagerReferenceSaveFailed,
     );
   }
 
   String _groupNameForPoint(PilgrimagePoint point) {
     final groupId = point.groupId;
     if (groupId == null) {
-      return '未分配点位';
+      return l10n.pointManagerUngroupedSpots;
     }
     return _plan.groups
         .firstWhere(
           (group) => group.id == groupId,
           orElse: () => PilgrimagePlanGroup(
             id: groupId,
-            name: '未知片区',
+            name: l10n.pointManagerUnknownGroup,
             orderIndex: 0,
             createdAt: DateTime.fromMillisecondsSinceEpoch(0),
           ),
@@ -767,11 +776,14 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
     final groups = sortGroupsByPlanOrder(_plan.groups);
     final selectedGroupId = await showPlanGroupSelectionSheet(
       context: context,
-      title: '移动到片区',
-      subtitle: '选择一个片区作为当前点位所属片区',
+      title: l10n.pointManagerMoveToGroup,
+      subtitle: l10n.pointManagerMoveToGroupSubtitle,
       selectedOptionId: currentGroupId ?? _ungroupedGroupMove,
       options: [
-        const PlanGroupSelectionOption(id: _ungroupedGroupMove, title: '未分入片区'),
+        PlanGroupSelectionOption(
+          id: _ungroupedGroupMove,
+          title: l10n.pointManagerNotInGroup,
+        ),
         for (final group in groups)
           PlanGroupSelectionOption(id: group.id, title: group.name),
       ],
@@ -859,18 +871,18 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
         groupId: group.id,
         pointIds: [for (final candidate in points) candidate.id],
       ),
-      failureMessage: '点位顺序保存失败',
+      failureMessage: l10n.pointManagerPointOrderSaveFailed,
     );
   }
 
   Future<void> _confirmDelete(PilgrimagePoint point) async {
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '删除点位',
-      message: '将从计划中删除「${point.name}」。',
-      confirmLabel: '删除点位',
+      title: l10n.pointManagerDeletePoint,
+      message: l10n.pointManagerDeletePointMessage(point.name),
+      confirmLabel: l10n.pointManagerDeletePoint,
       destructive: true,
-      notice: '删除后无法撤销',
+      notice: l10n.pointManagerDeleteIrreversible,
       emphasizedValues: [point.name],
     );
     if (!confirmed || !mounted) {
@@ -884,7 +896,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
           pointId: point.id,
         ),
       ),
-      failureMessage: '点位删除失败',
+      failureMessage: l10n.pointManagerDeletePointFailed,
     );
   }
 
@@ -892,13 +904,14 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
     if (_selectedPointIds.isEmpty) {
       return;
     }
+    final countText = l10n.pointManagerSpotCount(_selectedPointIds.length);
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '批量删除点位',
-      message: '将从计划中删除 ${_selectedPointIds.length} 个点位。',
-      confirmLabel: '删除',
+      title: l10n.pointManagerBatchDeleteTitle,
+      message: l10n.pointManagerBatchDeleteMessage(countText),
+      confirmLabel: l10n.commonDelete,
       destructive: true,
-      emphasizedValues: ['${_selectedPointIds.length} 个点位'],
+      emphasizedValues: [countText],
     );
     if (!confirmed || !mounted) {
       return;
@@ -915,7 +928,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
           pointIds: pointIds,
         ),
       ),
-      failureMessage: '批量删除失败',
+      failureMessage: l10n.pointManagerBatchDeleteFailed,
     );
   }
 
@@ -937,7 +950,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
         planId: _plan.id,
         pointId: point.id,
       ),
-      failureMessage: '当前目标保存失败',
+      failureMessage: l10n.pointManagerCurrentTargetSaveFailed,
     );
   }
 
@@ -957,7 +970,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
         pointId: point.id,
         nextCurrentPointId: nextCurrentPointId,
       ),
-      failureMessage: '完成状态保存失败',
+      failureMessage: l10n.pointManagerCompletionSaveFailed,
     );
   }
 
@@ -965,7 +978,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
     await _saveStatusChange(
       action: () =>
           widget.repository.reopenPoint(planId: _plan.id, pointId: point.id),
-      failureMessage: '点位状态保存失败',
+      failureMessage: l10n.pointManagerStatusSaveFailed,
     );
   }
 
@@ -979,7 +992,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
         planId: _plan.id,
         pointIds: pointIds,
       ),
-      failureMessage: '批量完成失败',
+      failureMessage: l10n.pointManagerBatchCompleteFailed,
     );
   }
 
@@ -991,7 +1004,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
     await _saveStatusChange(
       action: () =>
           widget.repository.reopenPoints(planId: _plan.id, pointIds: pointIds),
-      failureMessage: '批量重置失败',
+      failureMessage: l10n.pointManagerBatchResetFailed,
     );
   }
 
@@ -1109,15 +1122,16 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
     }
     final points = pointsNeedingFullReferenceCache(_plan.points);
     if (points.isEmpty) {
-      return _showInfo('当前计划没有需要缓存的参考图');
+      return _showInfo(l10n.pointManagerNothingToCache);
     }
+    final countText = l10n.pointManagerImageCount(points.length);
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '缓存完整参考图',
-      message: '将缓存当前计划中 ${points.length} 张完整参考图，可能需要较长时间和网络流量。',
-      confirmLabel: '开始缓存',
-      notice: '建议在 Wi-Fi 环境下进行缓存',
-      emphasizedValues: ['${points.length} 张'],
+      title: l10n.pointManagerCacheFullReferences,
+      message: l10n.pointManagerCacheMessage(countText),
+      confirmLabel: l10n.pointManagerStartCache,
+      notice: l10n.pointManagerCacheWifiNotice,
+      emphasizedValues: [countText],
     );
     if (confirmed) {
       await _cacheFullReferenceImages();
@@ -1157,7 +1171,7 @@ class _PointManagerCreateGroupDialogState
   void _submit() {
     final name = _controller.text.trim();
     if (name.isEmpty) {
-      setState(() => _errorText = '片区名不能为空');
+      setState(() => _errorText = l10n.pointManagerGroupNameEmpty);
       return;
     }
     Navigator.of(context).pop(name);
@@ -1166,9 +1180,9 @@ class _PointManagerCreateGroupDialogState
   @override
   Widget build(BuildContext context) {
     return AppInputDialog(
-      title: '新建片区',
+      title: l10n.pointManagerNewGroup,
       content: AppDialogField(
-        label: '片区名称',
+        label: l10n.pointManagerGroupNameLabel,
         child: TextField(
           onTapOutside: dismissKeyboardOnTapOutside,
           key: const ValueKey('point-manager-group-name-field'),
@@ -1184,7 +1198,7 @@ class _PointManagerCreateGroupDialogState
           onSubmitted: (_) => _submit(),
         ),
       ),
-      confirmLabel: '创建',
+      confirmLabel: l10n.pointManagerCreate,
       onConfirm: _submit,
     );
   }
@@ -1219,7 +1233,9 @@ class _PlanManagerHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     final anchorName = group.group?.anchorName?.trim();
     final hasAnchor = anchorName != null && anchorName.isNotEmpty;
-    final anchorText = hasAnchor ? '关键点：$anchorName' : '关键点：未设置';
+    final anchorText = hasAnchor
+        ? l10n.pointManagerAnchor(anchorName)
+        : l10n.pointManagerAnchorUnset;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
@@ -1228,7 +1244,7 @@ class _PlanManagerHeader extends StatelessWidget {
           Row(
             children: [
               IconButton(
-                tooltip: '上一个片区',
+                tooltip: l10n.pointManagerPreviousGroup,
                 onPressed: selectionMode ? null : onPreviousGroup,
                 icon: const Icon(LucideIcons.chevronLeft),
               ),
@@ -1250,7 +1266,7 @@ class _PlanManagerHeader extends StatelessWidget {
                 ),
               ),
               IconButton(
-                tooltip: '下一个片区',
+                tooltip: l10n.pointManagerNextGroup,
                 onPressed: selectionMode ? null : onNextGroup,
                 icon: const Icon(LucideIcons.chevronRight),
               ),
@@ -1297,7 +1313,7 @@ class _PlanManagerHeader extends StatelessWidget {
                               ),
                             ),
                             Text(
-                              '更改',
+                              l10n.pointManagerChange,
                               style: TextStyle(
                                 color: AppColors.textSecondary,
                                 fontSize: 13,
@@ -1325,7 +1341,7 @@ class _PlanManagerHeader extends StatelessWidget {
                             'point-manager-count-chip-points',
                           ),
                           count: group.points.length,
-                          unit: '点位',
+                          unit: l10n.pointManagerUnitSpots,
                         ),
                         const SizedBox(width: 6),
                         _HeaderCountChip(
@@ -1333,7 +1349,7 @@ class _PlanManagerHeader extends StatelessWidget {
                             'point-manager-count-chip-completed',
                           ),
                           count: group.completedCount,
-                          unit: '完成',
+                          unit: l10n.pointManagerUnitCompleted,
                         ),
                         const SizedBox(width: 8),
                         _GroupOrderModeButton(
@@ -1392,7 +1408,7 @@ class _UngroupedWaitLabel extends StatelessWidget {
           ),
         ),
         Text(
-          ' 个点位等待整理',
+          l10n.pointManagerUngroupedWaitSuffix(count),
           style: TextStyle(
             color: AppColors.textSecondary,
             fontSize: 13,
@@ -1422,7 +1438,7 @@ class _UngroupedActionRow extends StatelessWidget {
         Expanded(
           child: _HeaderPillButton(
             icon: LucideIcons.wandSparkles,
-            label: '最近分配',
+            label: l10n.pointManagerNearestAssign,
             onTap: () => onNearestAssign(),
           ),
         ),
@@ -1430,7 +1446,7 @@ class _UngroupedActionRow extends StatelessWidget {
         Expanded(
           child: _HeaderPillButton(
             icon: LucideIcons.scan,
-            label: '框选分配',
+            label: l10n.pointManagerBoxAssign,
             onTap: () => onBoxAssign(),
           ),
         ),
@@ -1551,9 +1567,13 @@ class _GroupOrderModeButton extends StatefulWidget {
 class _GroupOrderModeButtonState extends State<_GroupOrderModeButton> {
   var _isOpen = false;
 
-  static const _options = [
-    (PlanGroupOrderMode.unordered, '无序', 'unordered'),
-    (PlanGroupOrderMode.manual, '手动排序', 'manual'),
+  static List<(PlanGroupOrderMode, String, String)> get _options => [
+    (
+      PlanGroupOrderMode.unordered,
+      l10n.pointManagerOrderUnordered,
+      'unordered',
+    ),
+    (PlanGroupOrderMode.manual, l10n.pointManagerOrderManual, 'manual'),
   ];
 
   @override
@@ -1585,7 +1605,7 @@ class _GroupOrderModeButtonState extends State<_GroupOrderModeButton> {
       ),
       builder: (context, controller, child) {
         return Tooltip(
-          message: '片区内顺序',
+          message: l10n.pointManagerGroupOrder,
           child: OutlinedButton(
             key: const ValueKey('point-manager-order-button'),
             onPressed: widget.enabled
@@ -1637,10 +1657,10 @@ class _GroupOrderModeButtonState extends State<_GroupOrderModeButton> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Padding(
+                Padding(
                   padding: EdgeInsets.fromLTRB(8, 10, 8, 6),
                   child: Text(
-                    '片区内顺序',
+                    l10n.pointManagerGroupOrder,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
@@ -1752,9 +1772,9 @@ class _PointManagerTile extends StatelessWidget {
       VisitStatus.pending => AppColors.accentDark,
     };
     final statusText = switch (status) {
-      VisitStatus.current => '当前目标',
-      VisitStatus.completed => '已完成',
-      VisitStatus.pending => '待访问',
+      VisitStatus.current => l10n.pointManagerStatusCurrent,
+      VisitStatus.completed => l10n.pointManagerStatusCompleted,
+      VisitStatus.pending => l10n.pointManagerStatusPending,
     };
 
     return Material(
@@ -1833,7 +1853,7 @@ class _PointManagerTile extends StatelessWidget {
               if (!selectionMode)
                 PopupMenuButton<String>(
                   key: ValueKey('point-manager-actions-${point.id}'),
-                  tooltip: '点位操作',
+                  tooltip: l10n.pointManagerPointActions,
                   enabled: !isBusy,
                   icon: const Icon(LucideIcons.ellipsisVertical),
                   position: PopupMenuPosition.under,
@@ -1866,9 +1886,9 @@ class _PointManagerTile extends StatelessWidget {
                       value: 'move',
                       height: 42,
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: const _PointActionRow(
+                      child: _PointActionRow(
                         icon: LucideIcons.folderInput,
-                        label: '移动到片区',
+                        label: l10n.pointManagerMoveToGroup,
                       ),
                     ),
                     if (status != VisitStatus.current)
@@ -1876,9 +1896,9 @@ class _PointManagerTile extends StatelessWidget {
                         value: 'current',
                         height: 42,
                         padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: const _PointActionRow(
+                        child: _PointActionRow(
                           icon: LucideIcons.flag,
-                          label: '设为当前目标',
+                          label: l10n.pointManagerSetCurrentTarget,
                         ),
                       ),
                     PopupMenuItem(
@@ -1890,8 +1910,8 @@ class _PointManagerTile extends StatelessWidget {
                             ? LucideIcons.rotateCcw
                             : LucideIcons.check,
                         label: status == VisitStatus.completed
-                            ? '取消完成'
-                            : '标记完成',
+                            ? l10n.pointManagerUnmarkCompleted
+                            : l10n.pointManagerMarkCompleted,
                       ),
                     ),
                     const PopupMenuDivider(),
@@ -1899,9 +1919,9 @@ class _PointManagerTile extends StatelessWidget {
                       value: 'delete',
                       height: 42,
                       padding: const EdgeInsets.symmetric(horizontal: 8),
-                      child: const _PointActionRow(
+                      child: _PointActionRow(
                         icon: LucideIcons.trash2,
-                        label: '删除点位',
+                        label: l10n.pointManagerDeletePoint,
                         destructive: true,
                       ),
                     ),
@@ -1964,10 +1984,10 @@ class _CacheStatusPill extends StatelessWidget {
       fullCacheIsCurrent: fullCached,
     );
     final label = switch (status) {
-      ReferenceImageStatus.none => '无参考图',
-      ReferenceImageStatus.localUpload => '本地上传',
-      ReferenceImageStatus.fullCached => '已缓存',
-      ReferenceImageStatus.remote => '未缓存',
+      ReferenceImageStatus.none => l10n.pointManagerReferenceNone,
+      ReferenceImageStatus.localUpload => l10n.pointManagerReferenceLocal,
+      ReferenceImageStatus.fullCached => l10n.pointManagerReferenceCached,
+      ReferenceImageStatus.remote => l10n.pointManagerReferenceRemote,
     };
     final color = switch (status) {
       ReferenceImageStatus.none => AppColors.textSecondary,
@@ -2087,7 +2107,9 @@ class _BatchActionBar extends StatelessWidget {
             child: Row(
               children: [
                 IconButton(
-                  tooltip: allSelected ? '清空' : '全选',
+                  tooltip: allSelected
+                      ? l10n.pointManagerClearSelection
+                      : l10n.pointManagerSelectAll,
                   onPressed: isBusy
                       ? null
                       : allSelected
@@ -2106,22 +2128,22 @@ class _BatchActionBar extends StatelessWidget {
                 const Spacer(),
                 _BatchActionButton(
                   icon: LucideIcons.folderInput,
-                  label: '移动',
+                  label: l10n.pointManagerMove,
                   onPressed: isBusy || !hasSelection ? null : onMove,
                 ),
                 _BatchActionButton(
                   icon: LucideIcons.check,
-                  label: '完成',
+                  label: l10n.pointManagerComplete,
                   onPressed: isBusy || !hasSelection ? null : onComplete,
                 ),
                 _BatchActionButton(
                   icon: LucideIcons.rotateCcw,
-                  label: '重置',
+                  label: l10n.pointManagerReset,
                   onPressed: isBusy || !hasSelection ? null : onReopen,
                 ),
                 _BatchActionButton(
                   icon: LucideIcons.trash2,
-                  label: '删除',
+                  label: l10n.commonDelete,
                   color: AppColors.error,
                   onPressed: isBusy || !hasSelection ? null : onDelete,
                 ),
@@ -2249,7 +2271,7 @@ class _GroupAnchorMapPickerScreenState
     return Scaffold(
       appBar: AppBar(
         leading: appBackButtonIfCanPop(context),
-        title: const Text('选择关键点'),
+        title: Text(l10n.groupAnchorPickerTitle),
         actions: [
           ClearAnchorSelectionButton(
             onPressed: _selectedPoint == null && _manualPosition == null
@@ -2336,7 +2358,9 @@ class _GroupAnchorMapPickerScreenState
               child: Column(
                 children: [
                   _MapToolButton(
-                    tooltip: _manualPickMode ? '关闭地图点选' : '在地图上选点',
+                    tooltip: _manualPickMode
+                        ? l10n.groupAnchorPickerExitMapPick
+                        : l10n.groupAnchorPickerStartMapPick,
                     selected: _manualPickMode,
                     onTap: () {
                       setState(() {
@@ -2347,7 +2371,7 @@ class _GroupAnchorMapPickerScreenState
                   ),
                   const SizedBox(height: 8),
                   _MapToolButton(
-                    tooltip: '输入经纬度',
+                    tooltip: l10n.groupAnchorPickerEnterCoordinates,
                     selected: false,
                     onTap: _showCoordinateInput,
                     icon: LucideIcons.mapPinPen,
@@ -2394,9 +2418,9 @@ class _GroupAnchorMapPickerScreenState
   Future<void> _confirmClearSelection() async {
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '清除选点',
-      message: '将清除当前选择的关键点，可继续在本页重新选择。',
-      confirmLabel: '清除选点',
+      title: l10n.groupAnchorPickerClearSelection,
+      message: l10n.groupAnchorPickerClearMessage,
+      confirmLabel: l10n.groupAnchorPickerClearSelection,
     );
     if (!confirmed || !mounted) {
       return;
@@ -2453,7 +2477,7 @@ class _GroupAnchorMapPickerScreenState
     }
     Navigator.of(context).pop(
       _GroupAnchorSelection(
-        name: '手动关键点',
+        name: l10n.groupAnchorPickerManualAnchor,
         position: manualPosition,
         pointId: null,
       ),
@@ -2470,7 +2494,7 @@ class _AnchorPointMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      tooltip: '选择点位',
+      tooltip: l10n.groupAnchorPickerSelectPoint,
       onPressed: onTap,
       style: IconButton.styleFrom(
         backgroundColor: selected ? MapColors.accent : MapColors.surface,
@@ -2549,9 +2573,15 @@ class _AnchorSelectionCard extends StatelessWidget {
     final bottomInset = MediaQuery.paddingOf(context).bottom;
     final point = selectedPoint;
     final position = point?.position ?? manualPosition;
-    final title = point?.name ?? (position == null ? '尚未选择关键点' : '手动关键点');
+    final title =
+        point?.name ??
+        (position == null
+            ? l10n.groupAnchorPickerNoneSelected
+            : l10n.groupAnchorPickerManualAnchor);
     final subtitle = point == null
-        ? (manualPickMode ? '点击地图任意位置设置关键点' : '可点选点位、地图或输入经纬度')
+        ? (manualPickMode
+              ? l10n.groupAnchorPickerMapPickHint
+              : l10n.groupAnchorPickerIdleHint)
         : '${groupNameForPoint(point)} / ${point.subtitle}';
 
     return Container(
@@ -2598,7 +2628,7 @@ class _AnchorSelectionCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          FilledButton(onPressed: onSave, child: const Text('保存')),
+          FilledButton(onPressed: onSave, child: Text(l10n.commonSave)),
         ],
       ),
     );
@@ -2612,7 +2642,7 @@ class _EmptyPlanManager extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Text(
-        '还没有可以管理的点位',
+        l10n.pointManagerEmpty,
         style: TextStyle(
           color: AppColors.textSecondary,
           fontSize: 15,

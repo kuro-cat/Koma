@@ -15,6 +15,7 @@ import '../valhalla_service_config.dart';
 import 'app_database.dart';
 import 'database_connection/stub_connection.dart'
     if (dart.library.io) 'database_connection/native_connection.dart';
+import '../../l10n/l10n.dart';
 
 class SqlitePilgrimageRepository implements PilgrimageRepository {
   SqlitePilgrimageRepository({
@@ -1933,7 +1934,9 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
   }
 
   String _uniquePlanName(String baseName, Set<String> existingNames) {
-    final trimmed = baseName.trim().isEmpty ? '导入的巡礼计划' : baseName.trim();
+    final trimmed = baseName.trim().isEmpty
+        ? l10n.sqlitePilgrimageRepositoryImportedPlan
+        : baseName.trim();
     if (!existingNames.contains(trimmed)) {
       return trimmed;
     }
@@ -2146,9 +2149,9 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
         work ??
         PilgrimageWork(
           id: _modelId(planId, row.workId),
-          title: '未知作品',
+          title: l10n.sqlitePilgrimageRepositoryUnknownWork,
           subtitle: 'Unknown Work',
-          city: '未设置地区',
+          city: l10n.sqlitePilgrimageRepositoryNoRegion,
           source: WorkSource.manual,
         );
 

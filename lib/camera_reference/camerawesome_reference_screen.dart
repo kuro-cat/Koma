@@ -39,17 +39,37 @@ import 'reference_image_bytes_stub.dart'
     as reference_image_bytes;
 import 'visit_record_confirmation_screen.dart';
 import '../settings/app_settings_updater.dart';
+import '../l10n/l10n.dart';
 
 enum AwesomeReferenceMode { overlay, split, pinned }
 
 extension AwesomeReferenceModeLabel on AwesomeReferenceMode {
-  String get label {
+  /// Saved as VisitRecord.referenceMode. Persisted data, so it stays the
+  /// same in every language; show [label] instead.
+  String get storageValue {
     return switch (this) {
       AwesomeReferenceMode.overlay => '叠影',
       AwesomeReferenceMode.split => '上下',
       AwesomeReferenceMode.pinned => '小窗',
     };
   }
+
+  String get label {
+    return switch (this) {
+      AwesomeReferenceMode.overlay => l10n.camerawesomeReferenceModeOverlay,
+      AwesomeReferenceMode.split => l10n.camerawesomeReferenceModeSplit,
+      AwesomeReferenceMode.pinned => l10n.camerawesomeReferenceModePinned,
+    };
+  }
+}
+
+/// Display text for a stored VisitRecord.referenceMode: the localized mode
+/// name when it is one of [AwesomeReferenceMode], otherwise the value as is.
+String referenceModeDisplayLabel(String stored) {
+  for (final mode in AwesomeReferenceMode.values) {
+    if (mode.storageValue == stored) return mode.label;
+  }
+  return stored;
 }
 
 class CamerawesomeReferenceScreen extends StatefulWidget {
@@ -218,7 +238,9 @@ class _CamerawesomeReferenceScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
-          title: error is ImageBudgetException ? error.message : '参考图读取失败',
+          title: error is ImageBudgetException
+              ? error.message
+              : l10n.camerawesomeReferenceReadFailed,
         );
       }
       return;
@@ -284,7 +306,7 @@ class _CamerawesomeReferenceScreenState
       }
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.error,
-        title: '照片导入失败，请重新选择。',
+        title: l10n.camerawesomeReferenceImportFailed,
       );
       await _restoreCameraOrientation(landscape: restoreLandscape);
       return;
@@ -374,7 +396,7 @@ class _CamerawesomeReferenceScreenState
     if (_shouldWaitForReferenceAspectRatio(reference)) {
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.running,
-        title: '正在读取参考图比例，请稍后拍摄。',
+        title: l10n.camerawesomeReferenceReadingRatio,
         icon: LucideIcons.ratio,
       );
       return;
@@ -391,7 +413,7 @@ class _CamerawesomeReferenceScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.warning,
-          title: '相机尚未就绪，请稍后再拍。',
+          title: l10n.camerawesomeReferenceNotReady,
         );
       }
       return;
@@ -403,9 +425,10 @@ class _CamerawesomeReferenceScreenState
     if (!mounted) {
       return;
     }
-    ScaffoldMessenger.of(
-      context,
-    ).showStatusSnack(kind: AppStatusBannerKind.error, title: '拍摄失败，请重试。');
+    ScaffoldMessenger.of(context).showStatusSnack(
+      kind: AppStatusBannerKind.error,
+      title: l10n.camerawesomeReferenceCaptureFailed,
+    );
   }
 
   /// Native preview writer when available; on Android it falls back to the
@@ -448,7 +471,7 @@ class _CamerawesomeReferenceScreenState
               point: widget.point,
               controller: widget.controller,
               photoPath: photoPath,
-              referenceMode: _mode.label,
+              referenceMode: _mode.storageValue,
               referenceBytes: _localReferenceBytes,
               referenceImagePath: widget.point.referenceFullImagePath,
               referenceImageUrl: _localReferenceBytes != null
@@ -1276,13 +1299,13 @@ class _NativeCameraTopBar extends StatelessWidget {
         children: [
           _CameraCircleButton(
             tooltip: null,
-            semanticLabel: '返回',
+            semanticLabel: l10n.camerawesomeReferenceBack,
             icon: LucideIcons.arrowLeft,
             onPressed: () => Navigator.of(context).maybePop(),
           ),
           const Spacer(),
           _CameraCircleButton(
-            tooltip: '参考图',
+            tooltip: l10n.camerawesomeReferenceReferenceImage,
             icon: LucideIcons.image,
             onPressed: onPickReference,
           ),
@@ -1290,7 +1313,7 @@ class _NativeCameraTopBar extends StatelessWidget {
           _NativeFlashButton(controller: controller, showTooltip: true),
           const SizedBox(width: 8),
           _CameraCircleButton(
-            tooltip: '切换横屏 UI',
+            tooltip: l10n.camerawesomeReferenceLandscapeUi,
             icon: LucideIcons.rotate3d,
             onPressed: onPreferLandscapeUi,
           ),
@@ -1348,7 +1371,7 @@ class _NativeCameraBottomPanel extends StatelessWidget {
           Row(
             children: [
               _CameraActionButton(
-                tooltip: '相册导入',
+                tooltip: l10n.camerawesomeReferenceGalleryImport,
                 icon: galleryImage == null
                     ? LucideIcons.images
                     : LucideIcons.images,
@@ -1361,7 +1384,7 @@ class _NativeCameraBottomPanel extends StatelessWidget {
               ),
               const Spacer(),
               _CameraActionButton(
-                tooltip: '切换镜头',
+                tooltip: l10n.camerawesomeReferenceSwitchLens,
                 icon: _nativeLensIcon(controller),
                 text: _nativeLensText(controller),
                 onPressed: controller.switchLens,
@@ -1508,7 +1531,7 @@ class _NativeLandscapeLeftRail extends StatelessWidget {
                 size: metrics.controlButtonSize,
                 iconSize: metrics.controlIconSize,
                 tooltip: null,
-                semanticLabel: '返回',
+                semanticLabel: l10n.camerawesomeReferenceBack,
                 icon: LucideIcons.arrowLeft,
                 onPressed: onBack,
               ),
@@ -1516,7 +1539,7 @@ class _NativeLandscapeLeftRail extends StatelessWidget {
               _CameraCircleButton(
                 size: metrics.controlButtonSize,
                 iconSize: metrics.controlIconSize,
-                tooltip: '参考图',
+                tooltip: l10n.camerawesomeReferenceReferenceImage,
                 icon: LucideIcons.image,
                 onPressed: onPickReference,
               ),
@@ -1631,7 +1654,7 @@ class _NativeLandscapeRightRail extends StatelessWidget {
                 _CameraCircleButton(
                   size: layout.controlButtonSize,
                   iconSize: layout.controlIconSize,
-                  tooltip: '切换镜头',
+                  tooltip: l10n.camerawesomeReferenceSwitchLens,
                   icon: _nativeLensIcon(controller),
                   text: _nativeLensText(controller),
                   onPressed: controller.switchLens,
@@ -1639,7 +1662,7 @@ class _NativeLandscapeRightRail extends StatelessWidget {
                 _CameraCircleButton(
                   size: layout.controlButtonSize,
                   iconSize: layout.controlIconSize,
-                  tooltip: '切换竖屏 UI',
+                  tooltip: l10n.camerawesomeReferencePortraitUi,
                   icon: LucideIcons.rotate3d,
                   onPressed: onPreferPortraitUi,
                 ),
@@ -1695,7 +1718,7 @@ class _NativeLandscapeRightRail extends StatelessWidget {
                         ? _CameraActionButton(
                             size: layout.actionButtonSize,
                             iconSize: layout.actionIconSize,
-                            tooltip: '检查照片',
+                            tooltip: l10n.camerawesomeReferenceReviewPhotos,
                             icon: LucideIcons.listChecks,
                             onPressed: () {},
                           )
@@ -1824,10 +1847,10 @@ class _NativeFlashButton extends StatelessWidget {
       _ => LucideIcons.zap,
     };
     final label = switch (controller.flashMode) {
-      'off' => '闪光灯：关闭',
-      'on' => '闪光灯：开启',
-      'torch' => '闪光灯：常亮',
-      _ => '闪光灯：自动',
+      'off' => l10n.camerawesomeReferenceFlashOff,
+      'on' => l10n.camerawesomeReferenceFlashOn,
+      'torch' => l10n.camerawesomeReferenceFlashTorch,
+      _ => l10n.camerawesomeReferenceFlashAuto,
     };
 
     return _CameraCircleButton(
@@ -2296,13 +2319,13 @@ class _CameraTopBar extends StatelessWidget {
         children: [
           _CameraCircleButton(
             tooltip: null,
-            semanticLabel: '返回',
+            semanticLabel: l10n.camerawesomeReferenceBack,
             icon: LucideIcons.arrowLeft,
             onPressed: () => Navigator.of(context).maybePop(),
           ),
           const Spacer(),
           _CameraCircleButton(
-            tooltip: '参考图',
+            tooltip: l10n.camerawesomeReferenceReferenceImage,
             icon: LucideIcons.image,
             onPressed: onPickReference,
           ),
@@ -2466,7 +2489,7 @@ class _LandscapeCaptureRail extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             _CameraActionButton(
-              tooltip: '相册导入',
+              tooltip: l10n.camerawesomeReferenceGalleryImport,
               icon: hasGalleryImage ? LucideIcons.images : LucideIcons.images,
               onPressed: onPickGallery,
             ),
@@ -2477,7 +2500,7 @@ class _LandscapeCaptureRail extends StatelessWidget {
             if (hasGalleryImage) ...[
               const SizedBox(width: 18),
               _CameraActionButton(
-                tooltip: '检查照片',
+                tooltip: l10n.camerawesomeReferenceReviewPhotos,
                 icon: LucideIcons.listChecks,
                 onPressed: () {},
               ),
@@ -2570,10 +2593,10 @@ class _CompactFlashButton extends StatelessWidget {
               FlashMode.always => LucideIcons.flashlight,
             };
             final label = switch (flashMode) {
-              FlashMode.none => '闪光灯：关闭',
-              FlashMode.on => '闪光灯：开启',
-              FlashMode.auto => '闪光灯：自动',
-              FlashMode.always => '闪光灯：常亮',
+              FlashMode.none => l10n.camerawesomeReferenceFlashOff,
+              FlashMode.on => l10n.camerawesomeReferenceFlashOn,
+              FlashMode.auto => l10n.camerawesomeReferenceFlashAuto,
+              FlashMode.always => l10n.camerawesomeReferenceFlashTorch,
             };
 
             return _CameraCircleButton(
@@ -2602,7 +2625,7 @@ class _CompactCameraSwitchButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _CameraCircleButton(
-      tooltip: showTooltip ? '切换摄像头' : null,
+      tooltip: showTooltip ? l10n.camerawesomeReferenceSwitchCamera : null,
       icon: LucideIcons.switchCamera,
       onPressed: () => state.switchCameraSensor(
         zoom: state.sensorConfig.zoom,
@@ -2667,7 +2690,7 @@ class _CameraBottomPanel extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               _CameraActionButton(
-                tooltip: '相册导入',
+                tooltip: l10n.camerawesomeReferenceGalleryImport,
                 icon: galleryImage == null
                     ? LucideIcons.images
                     : LucideIcons.images,
@@ -2677,7 +2700,7 @@ class _CameraBottomPanel extends StatelessWidget {
               _ReferenceCaptureButton(state: state),
               const Spacer(),
               _CameraActionButton(
-                tooltip: '检查照片',
+                tooltip: l10n.camerawesomeReferenceReviewPhotos,
                 icon: LucideIcons.listChecks,
                 onPressed: galleryImage == null ? null : () {},
               ),
@@ -2698,8 +2721,8 @@ class _ModeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const modes = [
-      (AwesomeReferenceMode.overlay, LucideIcons.layers, '叠影'),
-      (AwesomeReferenceMode.split, LucideIcons.panelsTopLeft, '上下'),
+      (AwesomeReferenceMode.overlay, LucideIcons.layers),
+      (AwesomeReferenceMode.split, LucideIcons.panelsTopLeft),
     ];
 
     return LayoutBuilder(
@@ -2721,7 +2744,7 @@ class _ModeSelector extends StatelessWidget {
                   child: _ModeChip(
                     selected: mode == entry.$1,
                     icon: entry.$2,
-                    label: entry.$3,
+                    label: entry.$1.label,
                     compact: compact,
                     onTap: () => onChanged(entry.$1),
                   ),
@@ -2748,8 +2771,8 @@ class _ModeColumnSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const modes = [
-      (AwesomeReferenceMode.overlay, LucideIcons.layers, '叠影'),
-      (AwesomeReferenceMode.split, LucideIcons.panelsTopLeft, '上下'),
+      (AwesomeReferenceMode.overlay, LucideIcons.layers),
+      (AwesomeReferenceMode.split, LucideIcons.panelsTopLeft),
     ];
 
     return Column(
@@ -2759,7 +2782,7 @@ class _ModeColumnSelector extends StatelessWidget {
             metrics: metrics,
             selected: mode == entry.$1,
             icon: entry.$2,
-            label: entry.$3,
+            label: entry.$1.label,
             onTap: () => onChanged(entry.$1),
           ),
           SizedBox(height: metrics.modeGap),
@@ -3396,7 +3419,7 @@ class _GalleryImportButton extends StatelessWidget {
   Widget build(BuildContext context) {
     if (!showLabel) {
       return _CameraActionButton(
-        tooltip: '从相册导入',
+        tooltip: l10n.camerawesomeReferenceImportFromGallery,
         icon: LucideIcons.imagePlus,
         size: size,
         iconSize: iconSize,
@@ -3405,7 +3428,7 @@ class _GalleryImportButton extends StatelessWidget {
     }
 
     return Tooltip(
-      message: '从相册导入',
+      message: l10n.camerawesomeReferenceImportFromGallery,
       child: TextButton.icon(
         style: TextButton.styleFrom(
           foregroundColor: Colors.white,
@@ -3416,9 +3439,9 @@ class _GalleryImportButton extends StatelessWidget {
         ),
         onPressed: onPressed,
         icon: Icon(LucideIcons.imagePlus, size: iconSize),
-        label: const Text(
-          '导入',
-          style: TextStyle(fontSize: 11, fontWeight: FontWeight.w800),
+        label: Text(
+          l10n.camerawesomeReferenceImport,
+          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800),
         ),
       ),
     );
@@ -3549,7 +3572,7 @@ class _WebCameraFallback extends StatelessWidget {
                 Row(
                   children: [
                     _CameraActionButton(
-                      tooltip: '相册导入',
+                      tooltip: l10n.camerawesomeReferenceGalleryImport,
                       icon: galleryImage == null
                           ? LucideIcons.images
                           : LucideIcons.images,
@@ -3594,7 +3617,10 @@ class _FallbackTopBar extends StatelessWidget {
         children: [
           IconButton(
             onPressed: () => Navigator.of(context).maybePop(),
-            icon: const Icon(LucideIcons.arrowLeft, semanticLabel: '返回'),
+            icon: Icon(
+              LucideIcons.arrowLeft,
+              semanticLabel: l10n.camerawesomeReferenceBack,
+            ),
           ),
           Expanded(
             child: Text(
@@ -3609,7 +3635,7 @@ class _FallbackTopBar extends StatelessWidget {
             ),
           ),
           IconButton(
-            tooltip: '参考图',
+            tooltip: l10n.camerawesomeReferenceReferenceImage,
             onPressed: onPickReference,
             icon: const Icon(LucideIcons.image),
           ),
@@ -3633,7 +3659,7 @@ class _FallbackPreview extends StatelessWidget {
             Icon(LucideIcons.camera, color: AppColors.accentDark),
             SizedBox(height: 8),
             Text(
-              'Web 预览不启动实时相机',
+              l10n.camerawesomeReferenceWebPreview,
               style: TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 14,
@@ -3678,9 +3704,9 @@ class _CameraPermissionDeniedMessage extends StatelessWidget {
                   size: 36,
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  '需要相机权限',
-                  style: TextStyle(
+                Text(
+                  l10n.camerawesomeReferencePermissionTitle,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -3688,10 +3714,10 @@ class _CameraPermissionDeniedMessage extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  '请在系统设置中允许 MiriaGo 使用相机，用于拍摄巡礼照片。',
+                Text(
+                  l10n.camerawesomeReferencePermissionBody,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white70,
                     fontSize: 13,
                     letterSpacing: 0,
@@ -3711,13 +3737,13 @@ class _CameraPermissionDeniedMessage extends StatelessWidget {
                       ),
                       onPressed: () => Navigator.of(context).maybePop(),
                       icon: const Icon(LucideIcons.arrowLeft),
-                      label: const Text('返回'),
+                      label: Text(l10n.camerawesomeReferenceBack),
                     ),
                     FilledButton.icon(
                       key: const ValueKey('camera-permission-settings'),
                       onPressed: onOpenSettings,
                       icon: const Icon(LucideIcons.settings),
-                      label: const Text('打开设置'),
+                      label: Text(l10n.camerawesomeReferenceOpenSettings),
                     ),
                   ],
                 ),
@@ -3733,7 +3759,7 @@ class _CameraPermissionDeniedMessage extends StatelessWidget {
                       ),
                       onPressed: onPickGallery,
                       icon: const Icon(LucideIcons.images),
-                      label: const Text('从相册选择照片'),
+                      label: Text(l10n.camerawesomeReferencePickFromGallery),
                     ),
                     TextButton.icon(
                       key: const ValueKey('camera-permission-retry'),
@@ -3742,7 +3768,7 @@ class _CameraPermissionDeniedMessage extends StatelessWidget {
                       ),
                       onPressed: onRetry,
                       icon: const Icon(LucideIcons.refreshCw),
-                      label: const Text('重试'),
+                      label: Text(l10n.commonRetry),
                     ),
                   ],
                 ),
@@ -3777,9 +3803,9 @@ class _NativeCameraUnavailableMessage extends StatelessWidget {
                   size: 36,
                 ),
                 const SizedBox(height: 12),
-                const Text(
-                  '相机无法启动',
-                  style: TextStyle(
+                Text(
+                  l10n.camerawesomeReferenceUnavailableTitle,
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 17,
                     fontWeight: FontWeight.w700,
@@ -3789,10 +3815,10 @@ class _NativeCameraUnavailableMessage extends StatelessWidget {
                 const SizedBox(height: 8),
                 // The native error text is English and technical; it goes
                 // to the log instead.
-                const Text(
-                  '相机暂时无法使用，请稍后重试。如果问题持续，请重启 MiriaGo。',
+                Text(
+                  l10n.camerawesomeReferenceUnavailableBody,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white70,
                     fontSize: 13,
                     letterSpacing: 0,
@@ -3802,14 +3828,14 @@ class _NativeCameraUnavailableMessage extends StatelessWidget {
                 FilledButton.icon(
                   onPressed: () => Navigator.of(context).maybePop(),
                   icon: const Icon(LucideIcons.arrowLeft),
-                  label: const Text('返回'),
+                  label: Text(l10n.camerawesomeReferenceBack),
                 ),
                 const SizedBox(height: 8),
                 TextButton.icon(
                   style: TextButton.styleFrom(foregroundColor: Colors.white),
                   onPressed: onPickGallery,
                   icon: const Icon(LucideIcons.images),
-                  label: const Text('从相册选择照片'),
+                  label: Text(l10n.camerawesomeReferencePickFromGallery),
                 ),
               ],
             ),

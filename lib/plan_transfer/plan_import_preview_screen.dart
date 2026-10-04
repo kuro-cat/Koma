@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../app_theme.dart';
 import '../data/pilgrimage_repository.dart';
 import '../data/reference_asset_paths.dart';
+import '../l10n/l10n.dart';
 import '../widgets/app_back_button.dart';
 import '../widgets/snackbar_helper.dart';
 import 'plan_import_asset_restore.dart';
@@ -38,7 +39,7 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: appBackButtonIfCanPop(context),
-        title: const Text('导入内容'),
+        title: Text(l10n.planImportPreviewTitle),
       ),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
@@ -49,14 +50,14 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
           const SizedBox(height: 18),
           _SectionTitle(
             icon: LucideIcons.listChecks,
-            title: '选择导入内容',
-            subtitle: '导入前不会修改当前数据。',
+            title: l10n.planImportPreviewChooseContent,
+            subtitle: l10n.planImportPreviewChooseContentSubtitle,
           ),
           const SizedBox(height: 10),
           _ImportOptionTile(
             icon: LucideIcons.route,
-            title: '计划结构',
-            subtitle: '作品、片区、点位、完成状态和当前目标。',
+            title: l10n.planImportPreviewPlanStructure,
+            subtitle: l10n.planImportPreviewPlanStructureSubtitle,
             value: true,
             enabled: false,
             onChanged: null,
@@ -64,12 +65,12 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
           const SizedBox(height: 8),
           _ImportOptionTile(
             icon: LucideIcons.folders,
-            title: '拍摄记录',
+            title: l10n.planImportPreviewRecords,
             subtitle: _package.isLegacyJson
-                ? 'v1 文件不包含照片资源，仅导入计划结构。'
+                ? l10n.planImportPreviewRecordsLegacy
                 : _package.hasVisitRecords
-                ? '${_package.visitRecordCount} 条记录，包含照片路径和调色参数。'
-                : '这个包里没有拍摄记录。',
+                ? l10n.planImportPreviewRecordsCount(_package.visitRecordCount)
+                : l10n.planImportPreviewRecordsNone,
             value: _includeRecords,
             enabled: !_importing && _package.hasVisitRecords,
             onChanged: (value) => setState(() => _includeRecords = value),
@@ -77,7 +78,7 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
           const SizedBox(height: 8),
           _ImportOptionTile(
             icon: LucideIcons.images,
-            title: '图片和资源文件',
+            title: l10n.planImportPreviewAssets,
             subtitle: _assetImportSubtitle,
             value: _includeAssets,
             enabled:
@@ -90,8 +91,8 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
             const SizedBox(height: 18),
             _SectionTitle(
               icon: LucideIcons.triangleAlert,
-              title: '包内提示',
-              subtitle: '导出时记录的缺失或兼容信息。',
+              title: l10n.planImportPreviewPackageNotes,
+              subtitle: l10n.planImportPreviewPackageNotesSubtitle,
             ),
             const SizedBox(height: 10),
             for (final warning in _package.warnings.take(6))
@@ -121,7 +122,11 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : const Icon(LucideIcons.download),
-            label: Text(_importing ? '导入中...' : '导入所选内容'),
+            label: Text(
+              _importing
+                  ? l10n.planImportPreviewImporting
+                  : l10n.planImportPreviewImportSelected,
+            ),
           ),
         ),
       ),
@@ -167,10 +172,10 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
             ? AppStatusBannerKind.success
             : AppStatusBannerKind.warning,
         title: finalizationFailed
-            ? '已导入计划「${importedPlan.name}」，资源确认未完成'
+            ? l10n.planImportPreviewImportedUnconfirmed(importedPlan.name)
             : restored.warnings.isEmpty
-            ? '已导入计划「${importedPlan.name}」'
-            : '已导入计划「${importedPlan.name}」，部分资源未恢复',
+            ? l10n.planImportPreviewImported(importedPlan.name)
+            : l10n.planImportPreviewImportedPartial(importedPlan.name),
       );
       Navigator.of(context).pop(true);
     } catch (_) {
@@ -194,7 +199,9 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
       }
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.error,
-        title: cleanupIncomplete ? '导入未确认完成，已保留资源以避免误删' : '导入失败',
+        title: cleanupIncomplete
+            ? l10n.planImportPreviewCleanupIncomplete
+            : l10n.planImportPreviewFailed,
       );
     } finally {
       if (mounted) {
@@ -233,15 +240,15 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
 
   String get _assetImportSubtitle {
     if (!_package.hasAssets) {
-      return '这个包里没有可恢复的资源文件。';
+      return l10n.planImportPreviewNoAssets;
     }
     if (!_package.hasRestorableAssets) {
-      return '包内记录了资源，但没有可恢复的资源文件。';
+      return l10n.planImportPreviewNoRestorableAssets;
     }
     if (!supportsPlanImportAssetRestore) {
-      return '包内有 ${_package.totalAssetCount} 个资源文件；当前平台暂不支持恢复包内资源。';
+      return l10n.planImportPreviewAssetsUnsupported(_package.totalAssetCount);
     }
-    return '包内有 ${_package.totalAssetCount} 个资源文件，将恢复到本机存储。';
+    return l10n.planImportPreviewAssetsRestore(_package.totalAssetCount);
   }
 }
 
@@ -317,16 +324,34 @@ class _StatsGrid extends StatelessWidget {
       spacing: 8,
       runSpacing: 8,
       children: [
-        _StatChip(label: '作品', value: '${importPackage.workCount}'),
-        _StatChip(label: '片区', value: '${importPackage.groupCount}'),
-        _StatChip(label: '点位', value: '${importPackage.pointCount}'),
-        _StatChip(label: '记录', value: '${importPackage.visitRecordCount}'),
-        _StatChip(label: '资源', value: '${importPackage.totalAssetCount}'),
+        _StatChip(
+          label: l10n.planImportPreviewStatWorks,
+          value: '${importPackage.workCount}',
+        ),
+        _StatChip(
+          label: l10n.planImportPreviewStatAreas,
+          value: '${importPackage.groupCount}',
+        ),
+        _StatChip(
+          label: l10n.planImportPreviewStatSpots,
+          value: '${importPackage.pointCount}',
+        ),
+        _StatChip(
+          label: l10n.planImportPreviewStatRecords,
+          value: '${importPackage.visitRecordCount}',
+        ),
+        _StatChip(
+          label: l10n.planImportPreviewStatFiles,
+          value: '${importPackage.totalAssetCount}',
+        ),
         if (importPackage.appVersion != null)
-          _StatChip(label: '版本', value: importPackage.appVersion!),
+          _StatChip(
+            label: l10n.planImportPreviewStatVersion,
+            value: importPackage.appVersion!,
+          ),
         if (exportedAt != null)
           _StatChip(
-            label: '导出',
+            label: l10n.planImportPreviewStatExported,
             value:
                 '${exportedAt.year}-${exportedAt.month.toString().padLeft(2, '0')}-${exportedAt.day.toString().padLeft(2, '0')}',
           ),

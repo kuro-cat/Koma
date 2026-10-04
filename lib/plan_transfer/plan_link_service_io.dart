@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
 import '../data/public_http.dart';
+import '../l10n/l10n.dart';
 import 'plan_import_package.dart';
 import 'plan_import_stream.dart';
 import 'plan_link.dart';
@@ -38,7 +39,7 @@ class _IoPlanLinkService implements PlanLinkService {
     } on PlanLinkException {
       rethrow;
     } on Object {
-      throw const PlanLinkException('无法连接 GitHub，请检查网络后重试');
+      throw PlanLinkException(l10n.planLinkCannotReachGitHub);
     } finally {
       client.close();
     }
@@ -56,7 +57,7 @@ class _IoPlanLinkService implements PlanLinkService {
       directory = await _downloadDirectory();
       await directory.create(recursive: true);
     } on Object {
-      throw const PlanLinkException('无法创建临时文件，请检查存储空间');
+      throw PlanLinkException(l10n.planLinkServiceIoTempFileFailed);
     }
     final client = http.Client();
     // Closing the client aborts the transfer at once.
@@ -114,9 +115,9 @@ class _IoPlanLinkService implements PlanLinkService {
         throw planLinkNotPublic;
       }
       if (error is FileSystemException) {
-        throw const PlanLinkException('无法保存下载的文件，请检查存储空间');
+        throw PlanLinkException(l10n.planLinkServiceIoSaveFailed);
       }
-      throw const PlanLinkException('下载失败，请检查网络后重试');
+      throw PlanLinkException(l10n.planLinkDownloadFailed);
     } finally {
       client.close();
     }

@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 
 import '../config/bangumi_config.dart';
 import '../plan/pilgrimage_models.dart';
+import '../l10n/l10n.dart';
 
 class BangumiApiClient {
   BangumiApiClient({http.Client? httpClient})
@@ -130,7 +131,9 @@ class BangumiApiClient {
       coverImageUrl: coverImageUrl,
       title: title,
       subtitle: subtitle,
-      city: metaParts.isEmpty ? '未设置地区' : metaParts.join(' / '),
+      city: metaParts.isEmpty
+          ? l10n.bangumiApiClientNoRegion
+          : metaParts.join(' / '),
       source: WorkSource.bangumi,
     );
   }

@@ -7,6 +7,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:http/http.dart' as http;
 
 import '../app_theme.dart';
+import '../l10n/l10n.dart';
 import '../app_version.dart';
 import '../camera_reference/camera_zoom_capabilities.dart';
 import '../data/pilgrimage_repository.dart';
@@ -129,14 +130,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
       appBar: AppBar(
         key: const ValueKey('settings-app-bar'),
         toolbarHeight: AppTheme.appBarHeight,
-        title: const Text(
-          '设置',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+        title: Text(
+          l10n.settingsTitle,
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
         ),
         actions: [
           IconButton(
             key: const ValueKey('settings-reset-button'),
-            tooltip: '恢复初始设置',
+            tooltip: l10n.settingsResetTitle,
             onPressed: _confirmResetSettings,
             icon: const Icon(LucideIcons.rotateCcw),
           ),
@@ -150,8 +151,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             key: const ValueKey('settings-appearance-card'),
             header: _SettingsCardHeader(
               icon: LucideIcons.palette,
-              title: '外观设置',
-              subtitle: '主题色、深浅色、缩放、显示等',
+              title: l10n.settingsAppearanceTitle,
+              subtitle: l10n.settingsAppearanceSubtitle,
               onTap: () => _pushDetail(
                 _AppearanceSettingsPage(
                   settings: settings,
@@ -164,7 +165,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: [
                   _SummaryTile(
                     icon: LucideIcons.circle,
-                    title: '主题色',
+                    title: l10n.settingsThemeColor,
                     value: settings.themePalette.label,
                     swatch: _ThemeSwatch(
                       palette: settings.themePalette,
@@ -179,7 +180,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   _SummaryTile(
                     icon: LucideIcons.moon,
-                    title: '主题模式',
+                    title: l10n.settingsThemeMode,
                     value: settings.themeMode.label,
                     onTap: () => _pushDetail(
                       _AppearanceSettingsPage(
@@ -196,8 +197,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _SettingsCard(
             header: _SettingsCardHeader(
               icon: LucideIcons.camera,
-              title: '拍摄设置',
-              subtitle: '照片比例、参考图比例、备份等',
+              title: l10n.settingsCameraTitle,
+              subtitle: l10n.settingsCameraSubtitle,
               onTap: () => _pushDetail(
                 _CameraSettingsPage(
                   settings: settings,
@@ -211,7 +212,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 children: [
                   _SummaryTile(
                     icon: LucideIcons.crop,
-                    title: '拍摄图片比例',
+                    title: l10n.settingsCaptureAspectRatio,
                     value: settings.cameraCaptureAspectRatio.label,
                     onTap: () => _pushDetail(
                       _CameraSettingsPage(
@@ -223,7 +224,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                   _SummaryTile(
                     icon: LucideIcons.panelRight,
-                    title: '相机缩放',
+                    title: l10n.settingsCameraZoom,
                     value:
                         '${settings.cameraMinZoom.toStringAsFixed(1)}x-${settings.cameraMaxZoom.toStringAsFixed(1)}x',
                     onTap: () => _pushDetail(
@@ -239,8 +240,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
               if (_shouldShowMobileGallerySettings)
                 _SummarySwitchTile(
                   icon: LucideIcons.cloudUpload,
-                  title: '照片备份',
-                  subtitle: '保存巡礼照片到相册',
+                  title: l10n.settingsPhotoBackup,
+                  subtitle: l10n.settingsSavePhotoToGallery,
                   value: settings.saveVisitPhotoToGallery,
                   onChanged: (value) {
                     widget.onChanged(
@@ -254,16 +255,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _SettingsCard(
             header: _SettingsCardHeader(
               icon: LucideIcons.arrowLeftRight,
-              title: '对比图设置',
-              subtitle: '导出样式、自动保存到相册',
+              title: l10n.settingsComparisonTitle,
+              subtitle: l10n.settingsComparisonSubtitle,
               onTap: () => _openComparisonStyleSettings(settings),
             ),
             children: [
               if (_shouldShowMobileGallerySettings) ...[
                 _SummarySwitchTile(
                   icon: LucideIcons.images,
-                  title: '自动保存对比图',
-                  subtitle: '保存记录时保存到相册',
+                  title: l10n.settingsAutoSaveComparison,
+                  subtitle: l10n.settingsAutoSaveComparisonSubtitle,
                   value: settings.autoSaveComparisonToGallery,
                   onChanged: (value) {
                     widget.onChanged(
@@ -278,8 +279,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _SettingsCard(
             header: _SettingsCardHeader(
               icon: LucideIcons.map,
-              title: '数据源设置',
-              subtitle: '地图源、图片源等',
+              title: l10n.settingsDataSourceTitle,
+              subtitle: l10n.settingsDataSourceSubtitle,
               onTap: () => _pushDetail(
                 _DataSourceSettingsPage(
                   settings: settings,
@@ -293,8 +294,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _SettingsCard(
             header: _SettingsCardHeader(
               icon: LucideIcons.layers,
-              title: '地图显示',
-              subtitle: '点位、片区、聚合与缩略图',
+              title: l10n.settingsMapDisplayTitle,
+              subtitle: l10n.settingsMapDisplaySubtitle,
               onTap: () => _pushDetail(
                 _MapDisplaySettingsPage(
                   settings: settings,
@@ -308,8 +309,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _SettingsCard(
               header: _SettingsCardHeader(
                 icon: LucideIcons.brushCleaning,
-                title: '清除缓存',
-                subtitle: '完整参考图缓存',
+                title: l10n.settingsClearCacheTitle,
+                subtitle: l10n.settingsFullReferenceCache,
                 onTap: () => _pushDetail(
                   _CacheCleanupSettingsPage(repository: widget.repository),
                 ),
@@ -321,8 +322,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
             _SettingsCard(
               header: _SettingsCardHeader(
                 icon: LucideIcons.monitor,
-                title: '桌面端',
-                subtitle: '启动器、数据目录等',
+                title: l10n.settingsDesktopTitle,
+                subtitle: l10n.settingsDesktopSubtitle,
                 onTap: () => _pushDetail(
                   _DesktopSettingsPage(
                     desktopLauncherInfo: _desktopLauncherInfo,
@@ -336,8 +337,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
           _SettingsCard(
             header: _SettingsCardHeader(
               icon: LucideIcons.info,
-              title: '关于 MiriaGo',
-              subtitle: '版本信息、开源许可等',
+              title: l10n.settingsAboutTitle,
+              subtitle: l10n.settingsAboutSubtitle,
               onTap: () => _pushDetail(
                 _AboutSettingsPage(appVersionLabel: _appVersionLabel),
               ),
@@ -367,11 +368,11 @@ class _SettingsScreenState extends State<SettingsScreen> {
   Future<void> _confirmResetSettings() async {
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '恢复初始设置',
-      message: '所有外观、拍摄和地图设置将恢复为默认值。',
-      confirmLabel: '恢复',
-      notice: '恢复后仍可重新调整各项设置',
-      emphasizedValues: const ['所有外观、拍摄和地图设置'],
+      title: l10n.settingsResetTitle,
+      message: l10n.settingsResetMessage(l10n.settingsResetTarget),
+      confirmLabel: l10n.settingsReset,
+      notice: l10n.settingsResetNotice,
+      emphasizedValues: [l10n.settingsResetTarget],
     );
     if (!confirmed) {
       return;
@@ -382,29 +383,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
     }
     ComparisonExportConfig.lastUsed = const ComparisonExportConfig();
     if (mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showStatusSnack(kind: AppStatusBannerKind.success, title: '已恢复初始设置');
+      ScaffoldMessenger.of(context).showStatusSnack(
+        kind: AppStatusBannerKind.success,
+        title: l10n.settingsResetDone,
+      );
     }
     await clearComparisonExportConfig();
   }
 
   String get _desktopLauncherStatusText {
     if (!_desktopLauncherLoaded) {
-      return '桌面启动器 检查中';
+      return l10n.settingsDesktopLauncherChecking;
     }
     final info = _desktopLauncherInfo;
     if (info == null || !isTauriLauncherAvailable) {
-      return '桌面启动器 不可用';
+      return l10n.settingsDesktopLauncherUnavailable;
     }
     final mode = info.platform == 'macos'
-        ? '系统数据目录'
+        ? l10n.settingsDesktopSystemDataDir
         : info.fallbackUsed
-        ? '系统数据目录'
+        ? l10n.settingsDesktopSystemDataDir
         : info.portable
-        ? '便携目录'
-        : '应用数据目录';
-    return '桌面启动器 可用 / ${info.platform} / $mode';
+        ? l10n.settingsDesktopPortableDir
+        : l10n.settingsDesktopAppDataDir;
+    return l10n.settingsDesktopLauncherAvailable(info.platform, mode);
   }
 
   bool get _shouldShowDesktopSection => kIsWeb;
@@ -426,7 +428,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           content: Form(
             key: formKey,
             child: AppDialogField(
-              label: 'URL 地址',
+              label: l10n.settingsUrlLabel,
               child: TextFormField(
                 onTapOutside: dismissKeyboardOnTapOutside,
                 controller: controller,
@@ -437,7 +439,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
               ),
             ),
           ),
-          confirmLabel: '保存',
+          confirmLabel: l10n.commonSave,
           onConfirm: () {
             if (!formKey.currentState!.validate()) {
               return;
@@ -546,7 +548,7 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
         platformBrightness: MediaQuery.platformBrightnessOf(context),
       ),
       child: _ScaledDetailScaffold(
-        title: '\u5916\u89c2\u8bbe\u7f6e',
+        title: l10n.settingsAppearanceTitle,
         uiScale: settings.uiScale,
         fontScale: settings.fontScale,
         children: [
@@ -554,9 +556,9 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const _InlineSectionTitle(
-                  title: '主题模式',
-                  subtitle: '影响应用整体浅色或深色显示',
+                _InlineSectionTitle(
+                  title: l10n.settingsThemeMode,
+                  subtitle: l10n.settingsThemeModeSubtitle,
                 ),
                 const SizedBox(height: 16),
                 Row(
@@ -565,7 +567,7 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                       child: _ModeButton(
                         key: const ValueKey('appearance-theme-mode-light'),
                         icon: LucideIcons.sun,
-                        label: '浅色',
+                        label: l10n.settingsLight,
                         selected: settings.themeMode == AppThemeMode.light,
                         onTap: () {
                           _update(
@@ -579,7 +581,7 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                       child: _ModeButton(
                         key: const ValueKey('appearance-theme-mode-dark'),
                         icon: LucideIcons.moon,
-                        label: '深色',
+                        label: l10n.settingsDark,
                         selected: settings.themeMode == AppThemeMode.dark,
                         onTap: () {
                           _update(
@@ -593,7 +595,7 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                       child: _ModeButton(
                         key: const ValueKey('appearance-theme-mode-system'),
                         icon: LucideIcons.smartphone,
-                        label: '跟随系统',
+                        label: l10n.settingsFollowSystem,
                         selected: settings.themeMode == AppThemeMode.system,
                         onTap: () {
                           _update(
@@ -605,7 +607,10 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                   ],
                 ),
                 const SizedBox(height: 22),
-                const _InlineSectionTitle(title: '主题色', subtitle: '影响应用整体配色'),
+                _InlineSectionTitle(
+                  title: l10n.settingsThemeColor,
+                  subtitle: l10n.settingsThemeColorSubtitle,
+                ),
                 const SizedBox(height: 16),
                 SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
@@ -650,7 +655,7 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                           selected:
                               settings.themePalette == AppThemePalette.aurora,
                           colorValue: settings.customThemeColorValue,
-                          label: settings.customThemeColorName,
+                          label: settings.displayCustomThemeColorName,
                           onTap: _showCustomThemeColorDialog,
                         ),
                       ),
@@ -675,7 +680,7 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                     const SizedBox(width: 8),
                     Expanded(
                       child: Text(
-                        '\u9875\u9762\u7f29\u653e',
+                        l10n.settingsPageScale,
                         style: _titleTextStyle,
                       ),
                     ),
@@ -694,7 +699,7 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 28, right: 8),
                   child: Text(
-                    '\u8c03\u6574\u754c\u9762\u6574\u4f53\u5927\u5c0f\uff08\u4e0d\u5f71\u54cd\u53c2\u8003\u56fe\uff09',
+                    l10n.settingsPageScaleSubtitle,
                     style: _captionTextStyle,
                   ),
                 ),
@@ -719,28 +724,28 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                       child: Row(
                         children: [
                           _FontSizeButton(
-                            label: '\u5c0f',
+                            label: l10n.settingsFontSmall,
                             selected: fontScale <= 0.9,
                             onTap: () =>
                                 _update(settings.copyWith(fontScale: 0.9)),
                           ),
                           const SizedBox(width: 10),
                           _FontSizeButton(
-                            label: '\u6807\u51c6',
+                            label: l10n.settingsFontStandard,
                             selected: fontScale > 0.9 && fontScale < 1.1,
                             onTap: () =>
                                 _update(settings.copyWith(fontScale: 1)),
                           ),
                           const SizedBox(width: 10),
                           _FontSizeButton(
-                            label: '\u5927',
+                            label: l10n.settingsFontLarge,
                             selected: fontScale >= 1.1 && fontScale < 1.2,
                             onTap: () =>
                                 _update(settings.copyWith(fontScale: 1.1)),
                           ),
                           const SizedBox(width: 10),
                           _FontSizeButton(
-                            label: '\u7279\u5927',
+                            label: l10n.settingsFontExtraLarge,
                             selected: fontScale >= 1.2,
                             onTap: () =>
                                 _update(settings.copyWith(fontScale: 1.2)),
@@ -758,7 +763,7 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('个性化功能配置', style: _cardTitleTextStyle),
+                Text(l10n.settingsPersonalization, style: _cardTitleTextStyle),
                 const SizedBox(height: 4),
                 Material(
                   color: Colors.transparent,
@@ -769,9 +774,12 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                       LucideIcons.moveHorizontal,
                       color: AppColors.textSecondary,
                     ),
-                    title: Text('显示片区进度条', style: _titleTextStyle),
+                    title: Text(
+                      l10n.settingsShowAreaProgress,
+                      style: _titleTextStyle,
+                    ),
                     subtitle: Text(
-                      '在片区选择弹窗中显示未完成片区的进度背景；完成后仅显示对勾。',
+                      l10n.settingsShowAreaProgressSubtitle,
                       style: _secondaryTextStyle,
                     ),
                     value: settings.showPlanGroupProgress,
@@ -791,9 +799,12 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                       LucideIcons.pointer,
                       color: AppColors.textSecondary,
                     ),
-                    title: Text('点击空白收回计划操作', style: _titleTextStyle),
+                    title: Text(
+                      l10n.settingsDismissPlanActions,
+                      style: _titleTextStyle,
+                    ),
                     subtitle: Text(
-                      '展开计划操作后，点击面板外的空白区域自动收回',
+                      l10n.settingsDismissPlanActionsSubtitle,
                       style: _secondaryTextStyle,
                     ),
                     value: settings.dismissPlanActionsOnOutsideTap,
@@ -910,16 +921,16 @@ class _CameraSettingsPageState extends State<_CameraSettingsPage> {
     );
 
     return _ScaledDetailScaffold(
-      title: '拍摄设置',
+      title: l10n.settingsCameraTitle,
       uiScale: settings.uiScale,
       fontScale: settings.fontScale,
       children: [
         _SettingsSection(
-          title: '\u62cd\u6444\u56fe\u7247\u6bd4\u4f8b',
+          title: l10n.settingsCaptureAspectRatio,
           titleSpacing: 6,
           children: [
             Text(
-              '\u81ea\u52a8\u4f1a\u4f18\u5148\u8ddf\u968f\u53c2\u8003\u56fe\u6bd4\u4f8b\uff1b\u9009\u62e9\u56fa\u5b9a\u6bd4\u4f8b\u540e\u4f1a\u6309\u8be5\u6bd4\u4f8b\u62cd\u6444\u3002',
+              l10n.settingsCaptureAspectRatioHint,
               style: _secondaryTextStyle,
             ),
             const SizedBox(height: 10),
@@ -950,11 +961,11 @@ class _CameraSettingsPageState extends State<_CameraSettingsPage> {
         ),
         const SizedBox(height: 12),
         _SettingsSection(
-          title: '\u65e0\u53c2\u8003\u56fe\u65f6\u6bd4\u4f8b',
+          title: l10n.settingsFallbackAspectRatio,
           titleSpacing: 6,
           children: [
             Text(
-              '\u62cd\u6444\u56fe\u7247\u6bd4\u4f8b\u4e3a\u81ea\u52a8\u3001\u4e14\u6ca1\u6709\u53c2\u8003\u56fe\u53ef\u5bf9\u9f50\u65f6\u4f7f\u7528\u3002',
+              l10n.settingsFallbackAspectRatioHint,
               style: _secondaryTextStyle,
             ),
             const SizedBox(height: 10),
@@ -985,8 +996,9 @@ class _CameraSettingsPageState extends State<_CameraSettingsPage> {
         ),
         const SizedBox(height: 12),
         _SettingsSection(
-          title:
-              '\u53c2\u8003\u56fe\u663e\u793a ${(settings.referenceImageScale * 100).round()}%',
+          title: l10n.settingsReferenceImageScale(
+            (settings.referenceImageScale * 100).round(),
+          ),
           children: [
             _PercentScaleControl(
               value: settings.referenceImageScale.clamp(0.8, 1.0),
@@ -1003,8 +1015,10 @@ class _CameraSettingsPageState extends State<_CameraSettingsPage> {
         ),
         const SizedBox(height: 12),
         _SettingsSection(
-          title:
-              '\u76f8\u673a\u7f29\u653e ${cameraMinZoom.toStringAsFixed(1)}x - ${cameraMaxZoom.toStringAsFixed(1)}x',
+          title: l10n.settingsCameraZoomRange(
+            cameraMinZoom.toStringAsFixed(1),
+            cameraMaxZoom.toStringAsFixed(1),
+          ),
           children: [
             SliderTheme(
               data: SliderTheme.of(context).copyWith(
@@ -1050,7 +1064,7 @@ class _CameraSettingsPageState extends State<_CameraSettingsPage> {
         if (_shouldShowPhotoLocationSettings) ...[
           const SizedBox(height: 12),
           _SettingsSection(
-            title: '照片定位信息',
+            title: l10n.settingsPhotoLocation,
             titleSpacing: 6,
             children: [
               _PhotoLocationStrategyDropdown(
@@ -1075,7 +1089,7 @@ class _CameraSettingsPageState extends State<_CameraSettingsPage> {
         if (_shouldShowMobileGallerySettings) ...[
           const SizedBox(height: 12),
           _SettingsSection(
-            title: '照片备份',
+            title: l10n.settingsPhotoBackup,
             children: [
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,
@@ -1083,8 +1097,14 @@ class _CameraSettingsPageState extends State<_CameraSettingsPage> {
                   LucideIcons.cloudUpload,
                   color: AppColors.textSecondary,
                 ),
-                title: Text('保存巡礼照片到相册', style: _titleTextStyle),
-                subtitle: Text('保存记录时同时备份一张巡礼照片。', style: _secondaryTextStyle),
+                title: Text(
+                  l10n.settingsSavePhotoToGallery,
+                  style: _titleTextStyle,
+                ),
+                subtitle: Text(
+                  l10n.settingsPhotoBackupSubtitle,
+                  style: _secondaryTextStyle,
+                ),
                 value: settings.saveVisitPhotoToGallery,
                 onChanged: (value) {
                   _update(settings.copyWith(saveVisitPhotoToGallery: value));
@@ -1100,26 +1120,32 @@ class _CameraSettingsPageState extends State<_CameraSettingsPage> {
 
 String _photoLocationStrategyDescription(PhotoLocationStrategy strategy) {
   return switch (strategy) {
-    PhotoLocationStrategy.askOnFirstCapture => '第一次按下快门时选择。定位仅写入照片，不使用点位坐标。',
-    PhotoLocationStrategy.disabled => '不申请照片定位权限，也不向照片写入 GPS 信息。',
+    PhotoLocationStrategy.askOnFirstCapture =>
+      l10n.settingsPhotoLocationAskDescription,
+    PhotoLocationStrategy.disabled =>
+      l10n.settingsPhotoLocationDisabledDescription,
     PhotoLocationStrategy.useRecentLocation =>
-      '拍摄时优先使用设备最近的有效定位；没有可用定位时尝试获取一次。',
-    PhotoLocationStrategy.waitOnConfirmation => '拍摄后在确认记录页面获取新定位，完成或失败后再允许保存。',
+      l10n.settingsPhotoLocationRecentDescription,
+    PhotoLocationStrategy.waitOnConfirmation =>
+      l10n.settingsPhotoLocationConfirmDescription,
   };
 }
 
 String _photoLocationStrategyBadge(PhotoLocationStrategy strategy) {
   return switch (strategy) {
-    PhotoLocationStrategy.askOnFirstCapture => '询问',
-    PhotoLocationStrategy.disabled => '关闭',
-    PhotoLocationStrategy.useRecentLocation => '最近',
-    PhotoLocationStrategy.waitOnConfirmation => '推荐',
+    PhotoLocationStrategy.askOnFirstCapture =>
+      l10n.settingsPhotoLocationBadgeAsk,
+    PhotoLocationStrategy.disabled => l10n.settingsPhotoLocationBadgeOff,
+    PhotoLocationStrategy.useRecentLocation =>
+      l10n.settingsPhotoLocationBadgeRecent,
+    PhotoLocationStrategy.waitOnConfirmation => l10n.settingsRecommended,
   };
 }
 
 String _photoLocationStrategyMenuLabel(PhotoLocationStrategy strategy) {
   return switch (strategy) {
-    PhotoLocationStrategy.waitOnConfirmation => '确认记录时获取定位',
+    PhotoLocationStrategy.waitOnConfirmation =>
+      l10n.settingsPhotoLocationConfirmLabel,
     _ => strategy.label,
   };
 }
@@ -1220,7 +1246,9 @@ class _AnitabiServiceSettingsPageState
   late AppSettings _settings = widget.settings;
   var _testing = false;
   var _checking = false;
-  Map<String, String> _testResults = const {};
+
+  /// Probe round-trip time per service; null when the probe failed.
+  Map<AnitabiServiceField, int?> _testResults = const {};
 
   /// The addresses in use: custom ones, else the remote configuration, else
   /// the built-in defaults.
@@ -1252,7 +1280,7 @@ class _AnitabiServiceSettingsPageState
     return widget.showUrlDialog(
       title: title,
       initialValue: value,
-      helperText: '仅支持公开可访问的 HTTPS 基础地址，不要填写接口路径参数。',
+      helperText: l10n.settingsAnitabiUrlHelper,
       validator: validateAnitabiBaseUrl,
       onSaved: (value) =>
           onSaved(normalizeAnitabiBaseUrl(value, fallback: value.trim())),
@@ -1280,8 +1308,8 @@ class _AnitabiServiceSettingsPageState
     }
     ScaffoldMessenger.of(context).showStatusSnack(
       kind: AppStatusBannerKind.error,
-      title: '设置保存失败',
-      subtitle: '请稍后重试',
+      title: l10n.settingsSaveFailed,
+      subtitle: l10n.settingsTryAgainLater,
     );
   }
 
@@ -1347,18 +1375,18 @@ class _AnitabiServiceSettingsPageState
       _testResults = const {};
     });
     final config = _config;
-    final probes = <String, Uri>{
-      '主站地址': config.siteUri('/'),
-      '静态地图数据': config.staticDataUri('g.json'),
-      '数据 API': config.apiUri('bangumi/115908/lite'),
-      '官方图片服务': Uri.parse(
+    final probes = <AnitabiServiceField, Uri>{
+      AnitabiServiceField.site: config.siteUri('/'),
+      AnitabiServiceField.staticData: config.staticDataUri('g.json'),
+      AnitabiServiceField.api: config.apiUri('bangumi/115908/lite'),
+      AnitabiServiceField.officialImage: Uri.parse(
         config.officialImageUrl(
           Uri.parse(
             'https://image.anitabi.cn/points/115908/qys7fu.jpg?plan=h160',
           ),
         ),
       ),
-      '备用图片服务': Uri.parse(
+      AnitabiServiceField.mirrorImage: Uri.parse(
         config.mirrorImageUrl(
           Uri.parse(
             'https://image.anitabi.cn/points/115908/qys7fu.jpg?plan=h160',
@@ -1366,7 +1394,7 @@ class _AnitabiServiceSettingsPageState
         ),
       ),
     };
-    final results = <String, String>{};
+    final results = <AnitabiServiceField, int?>{};
     final client = http.Client();
     try {
       for (final entry in probes.entries) {
@@ -1383,7 +1411,8 @@ class _AnitabiServiceSettingsPageState
     }
   }
 
-  Future<String> _probe(http.Client client, Uri uri) async {
+  /// Returns the round-trip time in ms, or null when the service failed.
+  Future<int?> _probe(http.Client client, Uri uri) async {
     final stopwatch = Stopwatch()..start();
     try {
       final response = await sendPublicGet(
@@ -1394,22 +1423,24 @@ class _AnitabiServiceSettingsPageState
       await response.stream.timeout(const Duration(seconds: 12)).drain<void>();
       stopwatch.stop();
       if (response.statusCode < 200 || response.statusCode >= 300) {
-        return '失败 · HTTP ${response.statusCode}';
+        return null;
       }
-      return '连接成功 · ${stopwatch.elapsedMilliseconds} ms';
+      return stopwatch.elapsedMilliseconds;
     } catch (_) {
-      return '连接失败';
+      return null;
     }
   }
 
   Future<void> _restoreDefaults() async {
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '恢复默认地址',
-      message: '将把全部 Anitabi 服务地址恢复为官方默认值。',
-      confirmLabel: '恢复默认',
-      notice: '当前自定义地址不会被保留',
-      emphasizedValues: const ['全部 Anitabi 服务地址'],
+      title: l10n.settingsRestoreDefaultAddresses,
+      message: l10n.settingsAnitabiRestoreMessage(
+        l10n.settingsAnitabiRestoreTarget,
+      ),
+      confirmLabel: l10n.settingsRestoreDefault,
+      notice: l10n.settingsAnitabiRestoreNotice,
+      emphasizedValues: [l10n.settingsAnitabiRestoreTarget],
     );
     if (!confirmed || !mounted) {
       return;
@@ -1442,7 +1473,7 @@ class _AnitabiServiceSettingsPageState
           (
             key: const ValueKey('anitabi-site-base-url'),
             icon: LucideIcons.globe,
-            title: '主站地址',
+            title: l10n.settingsAnitabiSite,
             field: AnitabiServiceField.site,
             onSaved: (value) =>
                 _update(settings.copyWith(anitabiSiteBaseUrl: value)),
@@ -1450,7 +1481,7 @@ class _AnitabiServiceSettingsPageState
           (
             key: const ValueKey('anitabi-static-data-base-url'),
             icon: LucideIcons.braces,
-            title: '静态地图数据',
+            title: l10n.settingsAnitabiStaticData,
             field: AnitabiServiceField.staticData,
             onSaved: (value) =>
                 _update(settings.copyWith(anitabiStaticDataBaseUrl: value)),
@@ -1458,7 +1489,7 @@ class _AnitabiServiceSettingsPageState
           (
             key: const ValueKey('anitabi-api-base-url'),
             icon: LucideIcons.webhook,
-            title: '数据 API',
+            title: l10n.settingsAnitabiApi,
             field: AnitabiServiceField.api,
             onSaved: (value) =>
                 _update(settings.copyWith(anitabiApiBaseUrl: value)),
@@ -1466,7 +1497,7 @@ class _AnitabiServiceSettingsPageState
           (
             key: const ValueKey('anitabi-official-image-base-url'),
             icon: LucideIcons.image,
-            title: '官方图片服务',
+            title: l10n.settingsAnitabiOfficialImage,
             field: AnitabiServiceField.officialImage,
             onSaved: (value) =>
                 _update(settings.copyWith(anitabiOfficialImageBaseUrl: value)),
@@ -1474,19 +1505,19 @@ class _AnitabiServiceSettingsPageState
           (
             key: const ValueKey('anitabi-mirror-image-base-url'),
             icon: LucideIcons.cloud,
-            title: '备用图片服务',
+            title: l10n.settingsAnitabiMirrorImage,
             field: AnitabiServiceField.mirrorImage,
             onSaved: (value) =>
                 _update(settings.copyWith(anitabiMirrorImageBaseUrl: value)),
           ),
         ];
     return _ScaledDetailScaffold(
-      title: 'Anitabi 服务地址',
+      title: l10n.settingsAnitabiServices,
       uiScale: settings.uiScale,
       fontScale: settings.fontScale,
       children: [
         _SettingsSection(
-          title: '服务地址',
+          title: l10n.settingsServiceAddresses,
           titleSpacing: 4,
           children: [
             for (var index = 0; index < services.length; index += 1) ...[
@@ -1504,9 +1535,10 @@ class _AnitabiServiceSettingsPageState
                     title: service.title,
                     url: resolved.value,
                     source: resolved.source,
-                    status: _testResults[service.title],
+                    tested: _testResults.containsKey(service.field),
+                    elapsedMs: _testResults[service.field],
                     testing:
-                        _testing && !_testResults.containsKey(service.title),
+                        _testing && !_testResults.containsKey(service.field),
                     onTap: () => _edit(
                       title: service.title,
                       value: resolved.value,
@@ -1536,7 +1568,11 @@ class _AnitabiServiceSettingsPageState
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Icon(LucideIcons.wifi),
-                label: Text(_testing ? '正在测试连接' : '测试全部连接'),
+                label: Text(
+                  _testing
+                      ? l10n.settingsTestingConnections
+                      : l10n.settingsTestAllConnections,
+                ),
               ),
             ),
             const SizedBox(height: 8),
@@ -1546,14 +1582,14 @@ class _AnitabiServiceSettingsPageState
                 key: const ValueKey('anitabi-service-restore-defaults'),
                 onPressed: _testing ? null : _restoreDefaults,
                 icon: const Icon(LucideIcons.history),
-                label: const Text('恢复默认地址'),
+                label: Text(l10n.settingsRestoreDefaultAddresses),
               ),
             ),
           ],
         ),
         const SizedBox(height: 12),
         _SettingsSection(
-          title: '地址自动更新',
+          title: l10n.settingsAddressAutoUpdate,
           titleSpacing: 4,
           children: [
             Row(
@@ -1563,7 +1599,7 @@ class _AnitabiServiceSettingsPageState
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        '连接 Anitabi 失败时，从 MiriaGo 仓库读取最新服务地址，验证可用后再替换。自定义的地址不会被改动。',
+                        l10n.settingsAddressAutoUpdateDescription,
                         style: _secondaryTextStyle,
                       ),
                     ],
@@ -1596,7 +1632,9 @@ class _AnitabiServiceSettingsPageState
                           child: CircularProgressIndicator(strokeWidth: 2),
                         )
                       : const Icon(LucideIcons.refreshCw),
-                  label: Text(_checking ? '正在检查' : '立即检查更新'),
+                  label: Text(
+                    _checking ? l10n.settingsChecking : l10n.settingsCheckNow,
+                  ),
                 ),
               ),
             ],
@@ -1610,8 +1648,8 @@ class _AnitabiServiceSettingsPageState
 String _anitabiRemoteStatusText(AnitabiRemoteState state) {
   final lastGood = state.lastGood;
   final applied = lastGood == null
-      ? '尚未应用远程配置'
-      : '已应用远程配置 v${lastGood.version}';
+      ? l10n.settingsRemoteConfigNotApplied
+      : l10n.settingsRemoteConfigApplied(lastGood.version);
   final lastCheck = state.lastCheckAt;
   if (lastCheck == null) {
     return applied;
@@ -1624,7 +1662,9 @@ String _anitabiRemoteStatusText(AnitabiRemoteState state) {
   final time =
       '${local.year}-${two(local.month)}-${two(local.day)} '
       '${two(local.hour)}:${two(local.minute)}';
-  return '$applied · 上次检查 $time${result == null ? '' : '，${result.label}'}';
+  return result == null
+      ? l10n.settingsRemoteLastCheck(applied, time)
+      : l10n.settingsRemoteLastCheckResult(applied, time, result.label);
 }
 
 class _ComparisonStyleSettingsPage extends StatefulWidget {
@@ -1750,7 +1790,7 @@ class _ComparisonStyleSettingsPageState
   @override
   Widget build(BuildContext context) {
     return _ScaledDetailScaffold(
-      title: '对比图设置',
+      title: l10n.settingsComparisonTitle,
       uiScale: _settings.uiScale,
       fontScale: _settings.fontScale,
       children: [
@@ -1831,14 +1871,14 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.success,
-          title: '路径规划服务连接正常',
+          title: l10n.settingsRoutingConnectionOk,
         );
       }
     } on Object catch (error) {
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
-          title: '路径规划服务连接失败',
+          title: l10n.settingsRoutingConnectionFailed,
           subtitle: error.toString(),
         );
       }
@@ -1852,13 +1892,14 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
     final settings = _settings;
 
     return _ScaledDetailScaffold(
-      title: '数据源设置',
+      title: l10n.settingsDataSourceTitle,
       uiScale: settings.uiScale,
       fontScale: settings.fontScale,
       children: [
         _SettingsSection(
-          title:
-              '\u5730\u56fe\u6e90 ${mapTileProviderOption(settings.mapTileProvider).label}',
+          title: l10n.settingsMapSource(
+            mapTileProviderOption(settings.mapTileProvider).label,
+          ),
           children: [
             _MapSourceGrid(
               selectedProvider: settings.mapTileProvider,
@@ -1875,8 +1916,9 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
               const SizedBox(height: 12),
               _SettingsSubheading(
                 icon: LucideIcons.layers,
-                title:
-                    'OpenFreeMap 样式 ${openFreeMapStyleOption(settings.openFreeMapStyle).label}',
+                title: l10n.settingsOpenFreeMapStyle(
+                  openFreeMapStyleOption(settings.openFreeMapStyle).label,
+                ),
               ),
               const SizedBox(height: 8),
               _OpenFreeMapStyleGrid(
@@ -1896,14 +1938,15 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
               _MapUrlRow(
                 icon: LucideIcons.grid3X3,
                 label: settings.customXyzTileUrl.trim().isEmpty
-                    ? '未设置自定义 XYZ URL'
+                    ? l10n.settingsCustomXyzUrlNotSet
                     : settings.customXyzTileUrl.trim(),
                 onTap: () => widget.showMapUrlDialog(
-                  title: '自定义 XYZ URL',
+                  title: l10n.settingsCustomXyzUrl,
                   initialValue: settings.customXyzTileUrl,
-                  helperText: 'URL 需要包含 {z}、{x}、{y}。',
-                  validator: (value) =>
-                      isValidXyzTileUrl(value.trim()) ? null : 'URL 格式无效',
+                  helperText: l10n.settingsXyzUrlHelper('{z}', '{x}', '{y}'),
+                  validator: (value) => isValidXyzTileUrl(value.trim())
+                      ? null
+                      : l10n.settingsInvalidUrl,
                   onSaved: (value) {
                     _update(settings.copyWith(customXyzTileUrl: value.trim()));
                   },
@@ -1916,12 +1959,12 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
               _MapUrlRow(
                 icon: LucideIcons.braces,
                 label: settings.customMapLibreStyleUrl.trim().isEmpty
-                    ? '未设置 MapLibre style URL'
+                    ? l10n.settingsMapLibreStyleUrlNotSet
                     : settings.customMapLibreStyleUrl.trim(),
                 onTap: () => widget.showMapUrlDialog(
                   title: 'MapLibre style URL',
                   initialValue: settings.customMapLibreStyleUrl,
-                  helperText: 'URL 需要指向可公开读取的 style JSON。',
+                  helperText: l10n.settingsMapLibreStyleUrlHelper,
                   validator: (value) {
                     final testSettings = settings.copyWith(
                       customMapLibreStyleUrl: value.trim(),
@@ -1950,7 +1993,7 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
           title: '',
           showTitle: false,
           children: [
-            const _SettingsSubheading(title: 'Anitabi 服务地址'),
+            _SettingsSubheading(title: l10n.settingsAnitabiServices),
             const SizedBox(height: 8),
             _AnitabiServiceEntryRow(
               key: const ValueKey('anitabi-service-settings-entry'),
@@ -1967,12 +2010,14 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
               ),
             ),
             const SizedBox(height: 10),
-            Text('服务域名变化时可单独调整，不会改写计划中的标准图片链接。', style: _secondaryTextStyle),
+            Text(l10n.settingsAnitabiServicesHint, style: _secondaryTextStyle),
             const SizedBox(height: 20),
             Divider(height: 1, thickness: 1, color: AppColors.surfaceMuted),
             const SizedBox(height: 18),
             Text(
-              'Anitabi 图片源 ${_anitabiImageSourceLabel(settings.anitabiImageSource)}',
+              l10n.settingsAnitabiImageSource(
+                _anitabiImageSourceLabel(settings.anitabiImageSource),
+              ),
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 15,
@@ -1997,13 +2042,15 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
             const SizedBox(height: 18),
             _NumberStepperSetting(
               icon: LucideIcons.cloudDownload,
-              title: '图片同时请求数',
-              subtitle: '缩略图和完整参考图均按此数量并发请求。数值越大速度可能越快，但网络和内存占用也更高。',
+              title: l10n.settingsConcurrentImageLoads,
+              subtitle: l10n.settingsConcurrentImageLoadsSubtitle,
               value: settings.mapThumbnailConcurrentLoads,
               min: 1,
               max: 30,
               step: 1,
-              valueLabel: '${settings.mapThumbnailConcurrentLoads} 个',
+              valueLabel: l10n.settingsCountValue(
+                settings.mapThumbnailConcurrentLoads,
+              ),
               onChanged: (value) {
                 _update(settings.copyWith(mapThumbnailConcurrentLoads: value));
               },
@@ -2012,7 +2059,7 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
         ),
         const SizedBox(height: 12),
         _SettingsSection(
-          title: '导航地图 ${settings.navigationApp.label}',
+          title: l10n.settingsNavigationApp(settings.navigationApp.label),
           children: [
             _NavigationAppGrid(
               selectedApp: settings.navigationApp,
@@ -2029,15 +2076,15 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
         ),
         const SizedBox(height: 12),
         _SettingsSection(
-          title: '步行路径规划',
+          title: l10n.settingsWalkingRoutes,
           children: [
             _MapUrlRow(
               icon: LucideIcons.route,
               label: settings.valhallaBaseUrl,
               onTap: () => widget.showMapUrlDialog(
-                title: 'Valhalla 服务地址',
+                title: l10n.settingsValhallaAddress,
                 initialValue: settings.valhallaBaseUrl,
-                helperText: '用于应用内步行路线规划。公开服务没有可用性保证。',
+                helperText: l10n.settingsValhallaHelper,
                 validator: validateValhallaBaseUrl,
                 onSaved: (value) {
                   _update(
@@ -2057,11 +2104,11 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
                         dimension: 16,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : const ResponsiveButtonContent(
+                    : ResponsiveButtonContent(
                         icon: LucideIcons.radio,
-                        label: '测试连接',
-                        shortLabel: '测试',
-                        semanticLabel: '测试 Valhalla 连接',
+                        label: l10n.settingsTestConnection,
+                        shortLabel: l10n.settingsTest,
+                        semanticLabel: l10n.settingsTestValhallaConnection,
                       ),
               ),
               second: OutlinedButton(
@@ -2072,16 +2119,16 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
                           valhallaBaseUrl: defaultValhallaBaseUrl,
                         ),
                       ),
-                child: const ResponsiveButtonContent(
+                child: ResponsiveButtonContent(
                   icon: LucideIcons.history,
-                  label: '恢复默认',
-                  shortLabel: '恢复',
-                  semanticLabel: '恢复默认 Valhalla 地址',
+                  label: l10n.settingsRestoreDefault,
+                  shortLabel: l10n.settingsReset,
+                  semanticLabel: l10n.settingsRestoreDefaultValhalla,
                 ),
               ),
             ),
             const SizedBox(height: 8),
-            Text('仅发送路线坐标，不会上传计划、作品或照片信息。', style: _secondaryTextStyle),
+            Text(l10n.settingsValhallaPrivacy, style: _secondaryTextStyle),
           ],
         ),
       ],
@@ -2134,12 +2181,12 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
     final settings = _settings;
 
     return _ScaledDetailScaffold(
-      title: '地图显示',
+      title: l10n.settingsMapDisplayTitle,
       uiScale: settings.uiScale,
       fontScale: settings.fontScale,
       children: [
         _SettingsSection(
-          title: '底图明暗',
+          title: l10n.settingsBaseMapBrightness,
           children: [
             Row(
               children: [
@@ -2155,9 +2202,9 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
                         MapAppearance.dark => LucideIcons.moon,
                       },
                       label: switch (appearance) {
-                        MapAppearance.automatic => '跟随主题',
-                        MapAppearance.light => '浅色',
-                        MapAppearance.dark => '深色',
+                        MapAppearance.automatic => l10n.settingsFollowTheme,
+                        MapAppearance.light => l10n.settingsLight,
+                        MapAppearance.dark => l10n.settingsDark,
                       },
                       selected: settings.mapAppearance == appearance,
                       onTap: () =>
@@ -2169,21 +2216,24 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
             ),
             const SizedBox(height: 8),
             Text(
-              '适用于 OpenFreeMap；Dark 始终使用深色，其他地图源保留原始样式。',
+              l10n.settingsBaseMapBrightnessHint,
               style: _secondaryTextStyle,
             ),
           ],
         ),
         const SizedBox(height: 12),
         _SettingsSection(
-          title: '当前位置',
+          title: l10n.settingsCurrentLocation,
           children: [
             SwitchListTile(
               key: const ValueKey('continuous-map-location-switch'),
               contentPadding: EdgeInsets.zero,
-              title: Text('持续更新当前位置', style: _titleTextStyle),
+              title: Text(
+                l10n.settingsContinuousLocation,
+                style: _titleTextStyle,
+              ),
               subtitle: Text(
-                '开启定位后持续更新；关闭时仅在点击定位时获取一次。',
+                l10n.settingsContinuousLocationSubtitle,
                 style: _secondaryTextStyle,
               ),
               value: settings.continuousMapLocation,
@@ -2194,7 +2244,7 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
         ),
         const SizedBox(height: 12),
         _SettingsSection(
-          title: '地图缩放',
+          title: l10n.settingsMapZoom,
           children: [
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -2212,10 +2262,13 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
                       Row(
                         children: [
                           Expanded(
-                            child: Text('最大缩放倍率', style: _titleTextStyle),
+                            child: Text(
+                              l10n.settingsMaxZoom,
+                              style: _titleTextStyle,
+                            ),
                           ),
                           Text(
-                            '${settings.mapMaxZoom} 级',
+                            l10n.settingsZoomLevel(settings.mapMaxZoom),
                             style: TextStyle(
                               color: AppColors.accentForeground,
                               fontSize: 13,
@@ -2226,14 +2279,17 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
                         ],
                       ),
                       const SizedBox(height: 3),
-                      Text('控制所有地图能够放大的最大级别。', style: _secondaryTextStyle),
+                      Text(
+                        l10n.settingsMaxZoomHint,
+                        style: _secondaryTextStyle,
+                      ),
                       Slider(
                         key: const ValueKey('map-max-zoom-slider'),
                         min: 16,
                         max: 24,
                         divisions: 8,
                         value: settings.mapMaxZoom.toDouble().clamp(16, 24),
-                        label: '${settings.mapMaxZoom} 级',
+                        label: l10n.settingsZoomLevel(settings.mapMaxZoom),
                         onChanged: (value) {
                           final mapMaxZoom = value.round();
                           final clusterMaxZoom =
@@ -2270,7 +2326,7 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
         ),
         const SizedBox(height: 12),
         _SettingsSection(
-          title: '地图标记',
+          title: l10n.settingsMapMarkers,
           children: [
             Material(
               color: Colors.transparent,
@@ -2281,9 +2337,12 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
                   LucideIcons.eyeOff,
                   color: AppColors.textSecondary,
                 ),
-                title: Text('隐藏已完成点位', style: _titleTextStyle),
+                title: Text(
+                  l10n.settingsHideCompletedSpots,
+                  style: _titleTextStyle,
+                ),
                 subtitle: Text(
-                  '在地图页不显示已标记完成的点位。关闭后仍可在地图上看到全部点位。',
+                  l10n.settingsHideCompletedSpotsSubtitle,
                   style: _secondaryTextStyle,
                 ),
                 value: settings.hideCompletedPointsOnMap,
@@ -2306,10 +2365,10 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text('地图标记大小', style: _titleTextStyle),
+                      Text(l10n.settingsMarkerSize, style: _titleTextStyle),
                       const SizedBox(height: 3),
                       Text(
-                        '统一调整点位、缩略图、聚合标记、当前位置和片区关键点的大小。',
+                        l10n.settingsMarkerSizeSubtitle,
                         style: _secondaryTextStyle,
                       ),
                       const SizedBox(height: 8),
@@ -2332,12 +2391,12 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
         ),
         const SizedBox(height: 12),
         _SettingsSection(
-          title: '片区范围',
+          title: l10n.settingsAreaRange,
           children: [
             _NumberStepperSetting(
               icon: LucideIcons.hand,
-              title: '片区范围半径',
-              subtitle: '每个点位向外扩张的距离，用于生成地图上的片区轮廓。',
+              title: l10n.settingsAreaRadius,
+              subtitle: l10n.settingsAreaRadiusSubtitle,
               value: settings.mapGroupAreaRadiusMeters,
               min: 25,
               max: 500,
@@ -2351,7 +2410,7 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
         ),
         const SizedBox(height: 12),
         _SettingsSection(
-          title: '地图点位聚合',
+          title: l10n.settingsSpotClustering,
           children: [
             Material(
               color: Colors.transparent,
@@ -2361,9 +2420,9 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
                   LucideIcons.gitBranch,
                   color: AppColors.textSecondary,
                 ),
-                title: Text('自动聚合密集点位', style: _titleTextStyle),
+                title: Text(l10n.settingsAutoCluster, style: _titleTextStyle),
                 subtitle: Text(
-                  '仅合并地图标记的显示；点位数据、选择和导入功能不受影响。',
+                  l10n.settingsAutoClusterSubtitle,
                   style: _secondaryTextStyle,
                 ),
                 value: settings.mapMarkerClusteringEnabled,
@@ -2376,8 +2435,8 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
               const SizedBox(height: 8),
               _NumberStepperSetting(
                 icon: LucideIcons.circleDashed,
-                title: '聚合范围',
-                subtitle: '屏幕上相距较近的点位会合并为一个带数量的聚合标记。',
+                title: l10n.settingsClusterRadius,
+                subtitle: l10n.settingsClusterRadiusSubtitle,
                 value: settings.mapMarkerClusterRadius,
                 min: 32,
                 max: 120,
@@ -2390,13 +2449,15 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
               const SizedBox(height: 12),
               _NumberStepperSetting(
                 icon: LucideIcons.maximize,
-                title: '停止聚合级别',
-                subtitle: '地图放大超过该级别后显示每个原始点位。',
+                title: l10n.settingsClusterMaxZoom,
+                subtitle: l10n.settingsClusterMaxZoomSubtitle,
                 value: settings.mapMarkerClusterMaxZoom,
                 min: 10,
                 max: settings.mapMaxZoom.clamp(10, 22),
                 step: 1,
-                valueLabel: '${settings.mapMarkerClusterMaxZoom} 级',
+                valueLabel: l10n.settingsZoomLevel(
+                  settings.mapMarkerClusterMaxZoom,
+                ),
                 onChanged: (value) {
                   _update(settings.copyWith(mapMarkerClusterMaxZoom: value));
                 },
@@ -2406,24 +2467,30 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
         ),
         const SizedBox(height: 12),
         _SettingsSection(
-          title: '地图缩略图',
+          title: l10n.settingsMapThumbnails,
           children: [
             _NumberStepperSetting(
               icon: LucideIcons.maximize,
-              title: '缩略图显示阈值',
-              subtitle:
-                  '视图内点位不超过 ${settings.mapThumbnailVisibleThreshold} 个时显示缩略图；超过时仅显示圆点。',
+              title: l10n.settingsThumbnailThreshold,
+              subtitle: l10n.settingsThumbnailThresholdSubtitle(
+                settings.mapThumbnailVisibleThreshold,
+              ),
               value: settings.mapThumbnailVisibleThreshold,
               min: 0,
               max: 200,
               step: 5,
-              valueLabel: '${settings.mapThumbnailVisibleThreshold} 个',
+              valueLabel: l10n.settingsCountValue(
+                settings.mapThumbnailVisibleThreshold,
+              ),
               onChanged: (value) {
                 _update(settings.copyWith(mapThumbnailVisibleThreshold: value));
               },
             ),
             const SizedBox(height: 8),
-            Text('阈值为 0 时不会在地图上显示缩略图。', style: _secondaryTextStyle),
+            Text(
+              l10n.settingsThumbnailThresholdHint,
+              style: _secondaryTextStyle,
+            ),
           ],
         ),
       ],
@@ -2457,16 +2524,16 @@ class _CacheCleanupSettingsPageState extends State<_CacheCleanupSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return _DetailScaffold(
-      title: '清除缓存',
+      title: l10n.settingsClearCacheTitle,
       children: [
         FutureBuilder<List<PilgrimagePlan>>(
           future: _plansFuture,
           builder: (context, snapshot) {
             final plans = snapshot.data;
             if (snapshot.connectionState != ConnectionState.done) {
-              return const _SettingsSection(
-                title: '计划',
-                children: [
+              return _SettingsSection(
+                title: l10n.settingsPlans,
+                children: const [
                   Center(
                     child: SizedBox(
                       width: 22,
@@ -2479,11 +2546,11 @@ class _CacheCleanupSettingsPageState extends State<_CacheCleanupSettingsPage> {
             }
             if (snapshot.hasError || plans == null) {
               return _SettingsSection(
-                title: '计划',
+                title: l10n.settingsPlans,
                 children: [
-                  const _InfoRow(
+                  _InfoRow(
                     icon: LucideIcons.circleAlert,
-                    text: '计划列表读取失败',
+                    text: l10n.settingsPlansLoadFailed,
                   ),
                   const SizedBox(height: 12),
                   OutlinedButton.icon(
@@ -2493,7 +2560,7 @@ class _CacheCleanupSettingsPageState extends State<_CacheCleanupSettingsPage> {
                       });
                     },
                     icon: const Icon(LucideIcons.refreshCw, size: 18),
-                    label: const Text('重试'),
+                    label: Text(l10n.commonRetry),
                   ),
                 ],
               );
@@ -2506,18 +2573,21 @@ class _CacheCleanupSettingsPageState extends State<_CacheCleanupSettingsPage> {
             return Column(
               children: [
                 _SettingsSection(
-                  title: '选择计划',
+                  title: l10n.settingsSelectPlans,
                   children: [
                     Row(
                       children: [
                         Expanded(
                           child: Text(
-                            '已选择 ${_selectedPlanIds.length} / ${plans.length} 个计划',
+                            l10n.settingsSelectedPlans(
+                              _selectedPlanIds.length,
+                              plans.length,
+                            ),
                             style: _secondaryTextStyle,
                           ),
                         ),
                         IconButton(
-                          tooltip: '全选',
+                          tooltip: l10n.settingsSelectAll,
                           onPressed: () {
                             setState(() {
                               _selectedPlanIds
@@ -2528,7 +2598,7 @@ class _CacheCleanupSettingsPageState extends State<_CacheCleanupSettingsPage> {
                           icon: const Icon(LucideIcons.scan),
                         ),
                         IconButton(
-                          tooltip: '清空',
+                          tooltip: l10n.settingsClearSelection,
                           onPressed: _selectedPlanIds.isEmpty
                               ? null
                               : () {
@@ -2547,7 +2617,10 @@ class _CacheCleanupSettingsPageState extends State<_CacheCleanupSettingsPage> {
                         controlAffinity: ListTileControlAffinity.leading,
                         title: Text(plan.name, style: _titleTextStyle),
                         subtitle: Text(
-                          '${plan.area} / ${plan.points.length} 个点位',
+                          l10n.settingsPlanSummary(
+                            plan.area,
+                            plan.points.length,
+                          ),
                           style: _secondaryTextStyle,
                         ),
                         value: _selectedPlanIds.contains(plan.id),
@@ -2585,8 +2658,8 @@ class _CacheCleanupSettingsPageState extends State<_CacheCleanupSettingsPage> {
                         : const Icon(LucideIcons.brushCleaning),
                     label: Text(
                       _busy && _total > 0
-                          ? '正在清理 $_completed / $_total'
-                          : '清除下载的参考图缓存',
+                          ? l10n.settingsCleaningProgress(_completed, _total)
+                          : l10n.settingsClearDownloadedReferenceCache,
                     ),
                   ),
                 ),
@@ -2614,7 +2687,7 @@ class _CacheCleanupSettingsPageState extends State<_CacheCleanupSettingsPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
-          title: '缓存扫描失败',
+          title: l10n.settingsCacheScanFailed,
           subtitle: error.toString(),
         );
       }
@@ -2626,26 +2699,28 @@ class _CacheCleanupSettingsPageState extends State<_CacheCleanupSettingsPage> {
     if (scan.fileCount == 0) {
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.success,
-        title: '所选计划没有可清理的下载缓存',
+        title: l10n.settingsNoCacheToClear,
       );
       return;
     }
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('清除参考图缓存？'),
+        title: Text(l10n.settingsClearReferenceCacheTitle),
         content: Text(
-          '将删除 ${scan.fileCount} 个下载缓存，约 ${_formatByteSize(scan.byteCount)}。'
-          '本地上传图片和计划包导入图片不会被删除。',
+          l10n.settingsClearReferenceCacheMessage(
+            scan.fileCount,
+            _formatByteSize(scan.byteCount),
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('取消'),
+            child: Text(l10n.commonCancel),
           ),
           FilledButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('清除'),
+            child: Text(l10n.settingsClear),
           ),
         ],
       ),
@@ -2673,10 +2748,10 @@ class _CacheCleanupSettingsPageState extends State<_CacheCleanupSettingsPage> {
         kind: result.failedFileCount == 0
             ? AppStatusBannerKind.success
             : AppStatusBannerKind.warning,
-        title: '已清理 ${result.deletedFileCount} 个缓存文件',
+        title: l10n.settingsCacheCleared(result.deletedFileCount),
         subtitle: result.failedFileCount == 0
-            ? '释放 ${_formatByteSize(result.reclaimedBytes)}'
-            : '${result.failedFileCount} 个文件清理失败',
+            ? l10n.settingsFreedSpace(_formatByteSize(result.reclaimedBytes))
+            : l10n.settingsCacheClearFailedFiles(result.failedFileCount),
       );
       setState(() {
         _plansFuture = widget.repository.loadPlans();
@@ -2705,10 +2780,10 @@ class _DesktopSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _DetailScaffold(
-      title: '桌面端',
+      title: l10n.settingsDesktopTitle,
       children: [
         _SettingsSection(
-          title: '启动器',
+          title: l10n.settingsLauncher,
           children: [
             _InfoRow(
               icon: LucideIcons.monitor,
@@ -2750,10 +2825,10 @@ class _AboutSettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _DetailScaffold(
-      title: '关于 MiriaGo',
+      title: l10n.settingsAboutTitle,
       children: [
         _SettingsSection(
-          title: '应用信息',
+          title: l10n.settingsAppInfo,
           children: [
             Row(
               children: [
@@ -2773,7 +2848,7 @@ class _AboutSettingsPage extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: 3),
-                      Text('动漫圣地巡礼计划与拍摄参考工具', style: _secondaryTextStyle),
+                      Text(l10n.settingsAppTagline, style: _secondaryTextStyle),
                     ],
                   ),
                 ),
@@ -2782,33 +2857,33 @@ class _AboutSettingsPage extends StatelessWidget {
             const SizedBox(height: 14),
             _AboutInfoTile(
               icon: LucideIcons.badge,
-              label: '当前版本',
-              value: appVersionLabel ?? '读取中',
+              label: l10n.settingsCurrentVersion,
+              value: appVersionLabel ?? l10n.settingsLoading,
             ),
-            const _AboutInfoTile(
+            _AboutInfoTile(
               icon: LucideIcons.user,
-              label: '作者',
+              label: l10n.settingsAuthor,
               value: 'BilyHurington',
             ),
-            const _AboutInfoTile(
+            _AboutInfoTile(
               icon: LucideIcons.mail,
-              label: '联系邮箱',
+              label: l10n.settingsContactEmail,
               value: 'bilyhurington@gmail.com',
             ),
-            const _AboutInfoTile(
+            _AboutInfoTile(
               icon: LucideIcons.code,
-              label: '开源仓库',
+              label: l10n.settingsSourceRepository,
               value: 'github.com/BilyHurington/MiriaGo',
             ),
-            const _AboutInfoTile(
+            _AboutInfoTile(
               icon: LucideIcons.scale,
-              label: '开源许可',
+              label: l10n.settingsLicense,
               value: 'MIT License',
             ),
             _AboutInfoTile(
               icon: LucideIcons.shieldCheck,
-              label: '隐私政策',
-              value: '查看隐私政策',
+              label: l10n.settingsPrivacyPolicy,
+              value: l10n.settingsViewPrivacyPolicy,
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute<void>(
                   builder: (_) => const PrivacyPolicyScreen(),
@@ -2818,33 +2893,33 @@ class _AboutSettingsPage extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 12),
-        const _SettingsSection(
-          title: '数据与版权',
+        _SettingsSection(
+          title: l10n.settingsDataAndCopyright,
           children: [
             _AboutDataItem(
               icon: LucideIcons.map,
-              label: '地图',
-              description: '可使用 OpenFreeMap、OpenStreetMap 或自定义地图服务。',
+              label: l10n.settingsMap,
+              description: l10n.settingsMapDataDescription,
             ),
             _AboutDataItem(
               icon: LucideIcons.search,
-              label: '作品',
-              description: '作品搜索数据来自 Bangumi。',
+              label: l10n.settingsWorks,
+              description: l10n.settingsWorksDataDescription,
             ),
             _AboutDataItem(
               icon: LucideIcons.mapPin,
-              label: '巡礼内容',
-              description: '巡礼点位与参考图来自 Anitabi。',
+              label: l10n.settingsPilgrimageContent,
+              description: l10n.settingsPilgrimageContentDescription,
             ),
             _AboutDataItem(
               icon: LucideIcons.image,
-              label: '图片源',
-              description: '图片源设置只影响访问域名，远端链接统一保留 Anitabi 默认格式。',
+              label: l10n.settingsImageSource,
+              description: l10n.settingsImageSourceDescription,
             ),
             _AboutDataItem(
               icon: LucideIcons.copyright,
-              label: '版权归属',
-              description: '第三方数据、截图和图片版权归原平台、贡献者或权利方所有。',
+              label: l10n.settingsCopyright,
+              description: l10n.settingsCopyrightDescription,
               bottomSpacing: 0,
             ),
           ],
@@ -2906,8 +2981,8 @@ class _ScaledDetailScaffold extends StatelessWidget {
 extension _SettingsAspectRatioLabel on CameraPhotoAspectRatio {
   String get shortLabel {
     return switch (this) {
-      CameraPhotoAspectRatio.auto => '\u81ea\u52a8',
-      CameraPhotoAspectRatio.native => '\u539f\u751f',
+      CameraPhotoAspectRatio.auto => l10n.settingsAspectAuto,
+      CameraPhotoAspectRatio.native => l10n.settingsAspectNative,
       CameraPhotoAspectRatio.landscape16x9 => '16:9',
       CameraPhotoAspectRatio.cinema21x9 => '21:9',
       CameraPhotoAspectRatio.standard4x3 => '4:3',
@@ -2917,24 +2992,24 @@ extension _SettingsAspectRatioLabel on CameraPhotoAspectRatio {
       CameraPhotoAspectRatio.portrait3x4 => '3:4',
       CameraPhotoAspectRatio.portrait2x3 => '2:3',
       CameraPhotoAspectRatio.square1x1 => '1:1',
-      CameraPhotoAspectRatio.custom => '\u81ea\u5b9a\u4e49',
+      CameraPhotoAspectRatio.custom => l10n.settingsCustom,
     };
   }
 
   String get settingHintLabel {
     return switch (this) {
-      CameraPhotoAspectRatio.auto => '\u63a8\u8350',
-      CameraPhotoAspectRatio.native => '\u539f\u751f',
-      CameraPhotoAspectRatio.landscape16x9 => '\u5bbd\u5c4f',
-      CameraPhotoAspectRatio.cinema21x9 => '\u7535\u5f71',
-      CameraPhotoAspectRatio.standard4x3 => '\u7ecf\u5178',
-      CameraPhotoAspectRatio.photo3x2 => '\u76f8\u673a',
-      CameraPhotoAspectRatio.portrait9x16 => '\u7ad6\u5c4f',
-      CameraPhotoAspectRatio.portrait9x21 => '\u5168\u9762\u5c4f',
-      CameraPhotoAspectRatio.portrait3x4 => '\u7ad6\u5e45',
-      CameraPhotoAspectRatio.portrait2x3 => '\u7ad6\u5e45',
-      CameraPhotoAspectRatio.square1x1 => '\u65b9\u5f62',
-      CameraPhotoAspectRatio.custom => '\u81ea\u5b9a',
+      CameraPhotoAspectRatio.auto => l10n.settingsRecommended,
+      CameraPhotoAspectRatio.native => l10n.settingsAspectNative,
+      CameraPhotoAspectRatio.landscape16x9 => l10n.settingsAspectWidescreen,
+      CameraPhotoAspectRatio.cinema21x9 => l10n.settingsAspectCinema,
+      CameraPhotoAspectRatio.standard4x3 => l10n.settingsAspectClassic,
+      CameraPhotoAspectRatio.photo3x2 => l10n.settingsAspectCamera,
+      CameraPhotoAspectRatio.portrait9x16 => l10n.settingsAspectPortrait,
+      CameraPhotoAspectRatio.portrait9x21 => l10n.settingsAspectFullScreen,
+      CameraPhotoAspectRatio.portrait3x4 => l10n.settingsAspectVertical,
+      CameraPhotoAspectRatio.portrait2x3 => l10n.settingsAspectVertical,
+      CameraPhotoAspectRatio.square1x1 => l10n.settingsAspectSquare,
+      CameraPhotoAspectRatio.custom => l10n.settingsAspectCustomShort,
     };
   }
 }
@@ -3302,7 +3377,7 @@ class _NumberStepperSetting extends StatelessWidget {
           children: [
             _NumberStepperIconButton(
               icon: LucideIcons.minus,
-              tooltip: '减少',
+              tooltip: l10n.settingsDecrease,
               onTap: canDecrease
                   ? () => onChanged((value - step).clamp(min, max))
                   : null,
@@ -3331,7 +3406,7 @@ class _NumberStepperSetting extends StatelessWidget {
             ),
             _NumberStepperIconButton(
               icon: LucideIcons.plus,
-              tooltip: '增加',
+              tooltip: l10n.settingsIncrease,
               onTap: canIncrease
                   ? () => onChanged((value + step).clamp(min, max))
                   : null,
@@ -3433,14 +3508,13 @@ class _FullReferenceCacheSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const _SettingsSection(
-      title: '\u7f13\u5b58\u5185\u5bb9',
+    return _SettingsSection(
+      title: l10n.settingsCacheContents,
       children: [
         _CacheTargetCard(
           icon: LucideIcons.images,
-          title: '\u5b8c\u6574\u53c2\u8003\u56fe\u7f13\u5b58',
-          subtitle:
-              '\u6e05\u9664\u76f8\u673a\u53c2\u8003\u548c\u5927\u56fe\u67e5\u770b\u4f7f\u7528\u7684\u5b8c\u6574\u53c2\u8003\u56fe\u3002\u7f29\u7565\u56fe\u7f13\u5b58\u4f1a\u4fdd\u7559\uff0c\u4ee5\u4fdd\u6301\u5217\u8868\u548c\u5730\u56fe\u52a0\u8f7d\u901f\u5ea6\u3002',
+          title: l10n.settingsFullReferenceCache,
+          subtitle: l10n.settingsFullReferenceCacheSubtitle,
         ),
       ],
     );
@@ -3529,7 +3603,7 @@ class _CustomAspectRatioOption extends StatelessWidget {
         ),
         child: Center(
           child: Text(
-            '\u81ea\u5b9a\u4e49',
+            l10n.settingsCustom,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
@@ -3582,7 +3656,7 @@ class _CustomAspectRatioDialogState extends State<_CustomAspectRatioDialog> {
     final width = double.tryParse(_widthController.text.trim());
     final height = double.tryParse(_heightController.text.trim());
     if (width == null || height == null || width <= 0 || height <= 0) {
-      setState(() => _errorText = '请输入有效比例');
+      setState(() => _errorText = l10n.settingsEnterValidRatio);
       return;
     }
     Navigator.of(context).pop((width: width, height: height));
@@ -3591,14 +3665,14 @@ class _CustomAspectRatioDialogState extends State<_CustomAspectRatioDialog> {
   @override
   Widget build(BuildContext context) {
     return AppInputDialog(
-      title: '\u81ea\u5b9a\u4e49\u6bd4\u4f8b',
+      title: l10n.settingsCustomAspectRatio,
       errorText: _errorText,
       content: Row(
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           Expanded(
             child: AppDialogField(
-              label: '\u5bbd',
+              label: l10n.settingsWidth,
               child: TextField(
                 onTapOutside: dismissKeyboardOnTapOutside,
                 controller: _widthController,
@@ -3623,7 +3697,7 @@ class _CustomAspectRatioDialogState extends State<_CustomAspectRatioDialog> {
           ),
           Expanded(
             child: AppDialogField(
-              label: '\u9ad8',
+              label: l10n.settingsHeight,
               child: TextField(
                 onTapOutside: dismissKeyboardOnTapOutside,
                 controller: _heightController,
@@ -3642,7 +3716,7 @@ class _CustomAspectRatioDialogState extends State<_CustomAspectRatioDialog> {
           ),
         ],
       ),
-      confirmLabel: '\u4fdd\u5b58',
+      confirmLabel: l10n.commonSave,
       onConfirm: _submit,
     );
   }
@@ -3853,7 +3927,7 @@ class _AddThemeColorOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return _ThemeColorButton(
       color: Color(colorValue),
-      label: label.trim().isEmpty ? '\u81ea\u5b9a\u4e49' : label.trim(),
+      label: label.trim().isEmpty ? l10n.settingsCustom : label.trim(),
       selected: selected,
       icon: LucideIcons.plus,
       onTap: onTap,
@@ -3952,7 +4026,7 @@ class _CustomThemeColorDialogState extends State<_CustomThemeColorDialog> {
     super.initState();
     _color = Color(widget.settings.customThemeColorValue);
     _nameController = TextEditingController(
-      text: widget.settings.customThemeColorName,
+      text: widget.settings.displayCustomThemeColorName,
     );
     _hexController = TextEditingController(text: _hexFromColor(_color));
   }
@@ -3984,7 +4058,7 @@ class _CustomThemeColorDialogState extends State<_CustomThemeColorDialog> {
     final name = _nameController.text.trim();
     final color = _colorFromHex(_hexController.text) ?? _color;
     if (name.isEmpty) {
-      setState(() => _errorText = '请输入颜色名称');
+      setState(() => _errorText = l10n.settingsEnterColorName);
       return;
     }
     Navigator.of(
@@ -3995,7 +4069,7 @@ class _CustomThemeColorDialogState extends State<_CustomThemeColorDialog> {
   @override
   Widget build(BuildContext context) {
     return AppInputDialog(
-      title: '\u81ea\u5b9a\u4e49\u4e3b\u9898\u8272',
+      title: l10n.settingsCustomThemeColor,
       errorText: _errorText,
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -4022,7 +4096,7 @@ class _CustomThemeColorDialogState extends State<_CustomThemeColorDialog> {
           ),
           const SizedBox(height: 14),
           AppDialogField(
-            label: '\u540d\u79f0',
+            label: l10n.settingsName,
             child: TextField(
               onTapOutside: dismissKeyboardOnTapOutside,
               controller: _nameController,
@@ -4036,7 +4110,7 @@ class _CustomThemeColorDialogState extends State<_CustomThemeColorDialog> {
           ),
           const SizedBox(height: 10),
           AppDialogField(
-            label: '\u8272\u53f7',
+            label: l10n.settingsColorCode,
             child: TextField(
               onTapOutside: dismissKeyboardOnTapOutside,
               key: const ValueKey('custom-theme-color-hex-field'),
@@ -4050,7 +4124,7 @@ class _CustomThemeColorDialogState extends State<_CustomThemeColorDialog> {
           _HsvColorPalette(color: _color, onChanged: _setColor),
         ],
       ),
-      confirmLabel: '\u6dfb\u52a0',
+      confirmLabel: l10n.settingsAdd,
       onConfirm: _submit,
     );
   }
@@ -4093,13 +4167,19 @@ class _HsvColorPalette extends StatelessWidget {
           children: [
             Semantics(
               slider: true,
-              label: '色相和饱和度',
-              value:
-                  '色相 ${hsv.hue.round()} 度，饱和度 ${(hsv.saturation * 100).round()}%',
-              increasedValue:
-                  '色相 ${((hsv.hue + 5) % 360).round()} 度，饱和度 ${(hsv.saturation * 100).round()}%',
-              decreasedValue:
-                  '色相 ${((hsv.hue - 5) % 360).round()} 度，饱和度 ${(hsv.saturation * 100).round()}%',
+              label: l10n.settingsHueSaturation,
+              value: l10n.settingsHueSaturationValue(
+                hsv.hue.round(),
+                (hsv.saturation * 100).round(),
+              ),
+              increasedValue: l10n.settingsHueSaturationValue(
+                ((hsv.hue + 5) % 360).round(),
+                (hsv.saturation * 100).round(),
+              ),
+              decreasedValue: l10n.settingsHueSaturationValue(
+                ((hsv.hue - 5) % 360).round(),
+                (hsv.saturation * 100).round(),
+              ),
               onIncrease: () => onChanged(
                 hsv.withHue((hsv.hue + 5) % 360).toColor().withAlpha(255),
               ),
@@ -4124,7 +4204,7 @@ class _HsvColorPalette extends StatelessWidget {
             const SizedBox(width: 12),
             Semantics(
               slider: true,
-              label: '明度',
+              label: l10n.settingsBrightness,
               value: '${(hsv.value * 100).round()}%',
               increasedValue:
                   '${((hsv.value + 0.05).clamp(0.0, 1.0) * 100).round()}%',
@@ -4550,7 +4630,8 @@ class _AnitabiServiceRow extends StatelessWidget {
     required this.url,
     required this.onTap,
     this.source = AnitabiServiceSource.builtIn,
-    this.status,
+    this.tested = false,
+    this.elapsedMs,
     this.testing = false,
   });
 
@@ -4559,15 +4640,20 @@ class _AnitabiServiceRow extends StatelessWidget {
   final String url;
   final AnitabiServiceSource source;
   final VoidCallback onTap;
-  final String? status;
+  final bool tested;
+
+  /// Round-trip time of a successful probe; null when it failed.
+  final int? elapsedMs;
   final bool testing;
 
   @override
   Widget build(BuildContext context) {
-    final compactStatus = status == null
+    final succeeded = elapsedMs != null;
+    final compactStatus = !tested
         ? null
-        : _compactAnitabiProbeStatus(status!);
-    final succeeded = status?.startsWith('连接成功') ?? false;
+        : succeeded
+        ? l10n.settingsProbeSucceeded(elapsedMs!)
+        : l10n.settingsProbeFailed;
     final statusColor = succeeded
         ? AppColors.accentForeground
         : AppColors.error;
@@ -4601,9 +4687,11 @@ class _AnitabiServiceRow extends StatelessWidget {
                       const SizedBox(width: 6),
                       Text(
                         switch (source) {
-                          AnitabiServiceSource.builtIn => '默认',
-                          AnitabiServiceSource.remote => '远程配置',
-                          AnitabiServiceSource.custom => '自定义',
+                          AnitabiServiceSource.builtIn =>
+                            l10n.settingsSourceDefault,
+                          AnitabiServiceSource.remote =>
+                            l10n.settingsSourceRemote,
+                          AnitabiServiceSource.custom => l10n.settingsCustom,
                         },
                         key: ValueKey('anitabi-service-source-$title'),
                         style: TextStyle(
@@ -4663,17 +4751,6 @@ class _AnitabiServiceRow extends StatelessWidget {
       ),
     );
   }
-}
-
-String _compactAnitabiProbeStatus(String result) {
-  if (result.startsWith('连接成功')) {
-    final match = RegExp(r'(\d+)\s*ms').firstMatch(result);
-    if (match != null) {
-      return '成功 · ${match.group(1)}ms';
-    }
-    return '成功';
-  }
-  return '失败';
 }
 
 class _AnitabiServiceEntryRow extends StatelessWidget {
@@ -5134,28 +5211,28 @@ IconData _navigationAppIcon(NavigationApp app) {
 
 String _navigationAppHint(NavigationApp app) {
   return switch (app) {
-    NavigationApp.googleMaps => '\u9ed8\u8ba4\u9009\u9879',
-    NavigationApp.amap => '\u56fd\u5185\u5e38\u7528',
-    NavigationApp.appleMaps => 'iOS \u539f\u751f',
-    NavigationApp.baiduMaps => '\u57ce\u5e02\u5bfc\u822a',
+    NavigationApp.googleMaps => l10n.settingsNavDefault,
+    NavigationApp.amap => l10n.settingsNavPopularInChina,
+    NavigationApp.appleMaps => l10n.settingsNavIosNative,
+    NavigationApp.baiduMaps => l10n.settingsNavCity,
   };
 }
 
 String _navigationAppDescription(NavigationApp app) {
   return switch (app) {
-    NavigationApp.googleMaps => '导航按钮会通过 Google Maps 官方 Maps URL 打开步行路线。',
-    NavigationApp.appleMaps => '导航按钮会通过 Apple Map Links 打开步行路线。',
-    NavigationApp.amap => '导航按钮会通过高德 URI API 打开步行路线，并使用 WGS84 坐标。',
-    NavigationApp.baiduMaps => '导航按钮会通过百度地图 URI API 打开步行路线，并使用 WGS84 坐标。',
+    NavigationApp.googleMaps => l10n.settingsNavGoogleDescription,
+    NavigationApp.appleMaps => l10n.settingsNavAppleDescription,
+    NavigationApp.amap => l10n.settingsNavAmapDescription,
+    NavigationApp.baiduMaps => l10n.settingsNavBaiduDescription,
   };
 }
 
 String _mapProviderHint(MapTileProvider provider) {
   return switch (provider) {
-    MapTileProvider.openFreeMap => '\u63a8\u8350\u9ed8\u8ba4',
-    MapTileProvider.openStreetMap => '\u6807\u51c6\u74e6\u7247',
-    MapTileProvider.customXyz => '\u74e6\u7247\u6a21\u677f',
-    MapTileProvider.customMapLibreStyle => '\u6837\u5f0f URL',
+    MapTileProvider.openFreeMap => l10n.settingsMapRecommendedDefault,
+    MapTileProvider.openStreetMap => l10n.settingsMapStandardTiles,
+    MapTileProvider.customXyz => l10n.settingsMapTileTemplate,
+    MapTileProvider.customMapLibreStyle => l10n.settingsMapStyleUrl,
   };
 }
 
@@ -5165,29 +5242,35 @@ String _anitabiServiceSummary(AppSettings settings) {
       settings.resolvedAnitabiAddress(field).source,
   };
   if (sources.contains(AnitabiServiceSource.custom)) {
-    return '已自定义，点击管理全部服务';
+    return l10n.settingsAnitabiSummaryCustom;
   }
   if (sources.contains(AnitabiServiceSource.remote)) {
-    return '使用远程更新的地址，点击管理全部服务';
+    return l10n.settingsAnitabiSummaryRemote;
   }
-  return '使用默认地址，点击管理全部服务';
+  return l10n.settingsAnitabiSummaryDefault;
 }
 
 String _anitabiImageSourceLabel(AnitabiImageSource source) {
   return switch (source) {
-    AnitabiImageSource.auto => '自动选择',
-    AnitabiImageSource.official => '官方默认',
-    AnitabiImageSource.mirror => '备用源',
+    AnitabiImageSource.auto => l10n.settingsImageSourceAuto,
+    AnitabiImageSource.official => l10n.settingsImageSourceOfficial,
+    AnitabiImageSource.mirror => l10n.settingsImageSourceMirror,
   };
 }
 
 String _anitabiImageSourceDescription(AppSettings settings) {
   final config = settings.anitabiServiceConfig;
   return switch (settings.anitabiImageSource) {
-    AnitabiImageSource.auto =>
-      '优先使用 ${config.officialImageBaseUrl}；失败后尝试 ${config.mirrorImageBaseUrl}。',
-    AnitabiImageSource.official => '固定使用 ${config.officialImageBaseUrl}。',
-    AnitabiImageSource.mirror => '固定使用 ${config.mirrorImageBaseUrl}。',
+    AnitabiImageSource.auto => l10n.settingsImageSourceAutoDescription(
+      config.officialImageBaseUrl,
+      config.mirrorImageBaseUrl,
+    ),
+    AnitabiImageSource.official => l10n.settingsImageSourceFixedDescription(
+      config.officialImageBaseUrl,
+    ),
+    AnitabiImageSource.mirror => l10n.settingsImageSourceFixedDescription(
+      config.mirrorImageBaseUrl,
+    ),
   };
 }
 

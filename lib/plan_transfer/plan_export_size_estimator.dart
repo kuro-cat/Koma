@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import '../data/local_asset_size_stub.dart'
     if (dart.library.io) '../data/local_asset_size_io.dart';
+import '../l10n/l10n.dart';
 import '../plan/pilgrimage_models.dart';
 import '../plan/reference_image_status.dart';
 import 'plan_export_v2.dart';
@@ -30,36 +31,39 @@ class PlanExportSizeEstimate {
       missingVisitPhotoCount > 0 ||
       missingGradedPhotoCount > 0;
 
-  List<String> get detailMessages {
-    final messages = <String>[];
-    if (missingThumbnailCount > 0) {
-      messages.add('$missingThumbnailCount 张缩略图未缓存，不会进入数据包');
-    }
-    if (missingFullReferenceCount > 0) {
-      messages.add('$missingFullReferenceCount 张完整参考图将在导出时下载');
-    }
-    if (missingUserReferenceCount > 0) {
-      messages.add('$missingUserReferenceCount 张本地上传参考图文件缺失，导出后无法恢复');
-    }
-    if (missingVisitPhotoCount > 0) {
-      messages.add('$missingVisitPhotoCount 张巡礼照片文件缺失');
-    }
-    if (missingGradedPhotoCount > 0) {
-      messages.add('$missingGradedPhotoCount 张调色照片文件缺失');
-    }
-    if (hasUnknownLocalAssets) {
-      messages.add('部分本地资源无法读取，实际包体可能变化');
-    }
-    return messages;
-  }
+  /// The messages behind [hasMissingCriticalAssets].
+  List<String> get criticalDetailMessages => [
+    if (missingUserReferenceCount > 0)
+      l10n.planExportSizeEstimatorUserReferencesMissing(
+        missingUserReferenceCount,
+      ),
+    if (missingVisitPhotoCount > 0)
+      l10n.planExportSizeEstimatorVisitPhotosMissing(missingVisitPhotoCount),
+    if (missingGradedPhotoCount > 0)
+      l10n.planExportSizeEstimatorGradedPhotosMissing(missingGradedPhotoCount),
+  ];
+
+  List<String> get detailMessages => [
+    if (missingThumbnailCount > 0)
+      l10n.planExportSizeEstimatorThumbnailsNotCached(missingThumbnailCount),
+    if (missingFullReferenceCount > 0)
+      l10n.planExportSizeEstimatorFullReferencesToDownload(
+        missingFullReferenceCount,
+      ),
+    ...criticalDetailMessages,
+    if (hasUnknownLocalAssets) l10n.planExportSizeEstimatorUnknownLocalAssets,
+  ];
 
   String get label {
     final size = _formatBytes(knownBytes);
     final details = detailMessages;
     if (details.isNotEmpty) {
-      return '预计数据包大小：至少约 $size，${details.join('；')}';
+      return l10n.planExportSizeEstimatorLabelWithDetails(
+        size,
+        details.join(l10n.planExportSizeEstimatorDetailSeparator),
+      );
     }
-    return '预计数据包大小：约 $size';
+    return l10n.planExportSizeEstimatorLabel(size);
   }
 }
 

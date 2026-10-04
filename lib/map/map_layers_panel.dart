@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../app_theme.dart';
 import '../plan/pilgrimage_models.dart';
+import '../l10n/l10n.dart';
 
 /// One switch in the map 图层 panel.
 class MapLayerToggle {
@@ -38,8 +39,9 @@ Future<void> showMapLayersPanel(
   BuildContext anchorContext, {
   required List<MapLayerToggle> toggles,
   required AppSettings settings,
-  String title = '图层',
+  String? title,
 }) {
+  final panelTitle = title ?? l10n.mapLayersPanelTitle;
   final screenSize = MediaQuery.sizeOf(anchorContext);
   if (screenSize.width < mapLayersSheetBreakpoint) {
     return showModalBottomSheet<void>(
@@ -49,7 +51,7 @@ Future<void> showMapLayersPanel(
       backgroundColor: AppColors.surface,
       builder: (context) => _PanelTextScale(
         settings: settings,
-        child: MapLayersPanel(title: title, toggles: toggles),
+        child: MapLayersPanel(title: panelTitle, toggles: toggles),
       ),
     );
   }
@@ -61,7 +63,7 @@ Future<void> showMapLayersPanel(
   return showGeneralDialog<void>(
     context: anchorContext,
     barrierDismissible: true,
-    barrierLabel: '关闭$title',
+    barrierLabel: l10n.mapLayersPanelCloseLabel(panelTitle),
     barrierColor: Colors.transparent,
     transitionDuration: const Duration(milliseconds: 150),
     pageBuilder: (context, _, _) {
@@ -97,7 +99,7 @@ Future<void> showMapLayersPanel(
               child: _PanelTextScale(
                 settings: settings,
                 child: MapLayersPanel(
-                  title: title,
+                  title: panelTitle,
                   toggles: toggles,
                   framed: true,
                 ),

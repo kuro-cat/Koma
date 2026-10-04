@@ -14,14 +14,18 @@ String statusBannerSentence(String text) {
   if (text.endsWith('。') && !text.substring(0, text.length - 1).contains('。')) {
     return text.substring(0, text.length - 1);
   }
+  // English: same rule, but keep "..." and multi-sentence text.
+  if (text.endsWith('.') &&
+      !text.endsWith('..') &&
+      !text.substring(0, text.length - 1).contains('. ')) {
+    return text.substring(0, text.length - 1);
+  }
   return text;
 }
 
-IconData statusBannerIcon({
-  required AppStatusBannerKind kind,
-  required String title,
-  IconData? icon,
-}) {
+/// Running banners show [icon] when the caller names one, else an hourglass.
+/// The icon never comes from the title text, which is translated.
+IconData statusBannerIcon({required AppStatusBannerKind kind, IconData? icon}) {
   if (icon != null) {
     return icon;
   }
@@ -29,39 +33,8 @@ IconData statusBannerIcon({
     AppStatusBannerKind.success => LucideIcons.check,
     AppStatusBannerKind.warning => LucideIcons.triangleAlert,
     AppStatusBannerKind.error => LucideIcons.circleAlert,
-    AppStatusBannerKind.running => statusBannerRunningIcon(title),
+    AppStatusBannerKind.running => LucideIcons.hourglass,
   };
-}
-
-IconData statusBannerRunningIcon(String title) {
-  if (title.contains('取消')) {
-    return LucideIcons.circleX;
-  }
-  if (title.contains('导出')) {
-    return LucideIcons.share2;
-  }
-  if (title.contains('导入')) {
-    return LucideIcons.mapPinPlus;
-  }
-  if (title.contains('替换')) {
-    return LucideIcons.arrowLeftRight;
-  }
-  if (title.contains('比例') || title.contains('读取')) {
-    return LucideIcons.ratio;
-  }
-  if (title.contains('清除') || title.contains('重新加载')) {
-    return LucideIcons.brushCleaning;
-  }
-  if (title.contains('缩略图')) {
-    return LucideIcons.images;
-  }
-  if (title.contains('缓存')) {
-    return LucideIcons.refreshCw;
-  }
-  if (title.contains('保存')) {
-    return LucideIcons.save;
-  }
-  return LucideIcons.hourglass;
 }
 
 SnackBar appStatusSnackBar({
@@ -231,12 +204,7 @@ class AppStatusBanner extends StatelessWidget {
               children: [
                 AppContentFade(
                   revision: kind,
-                  child: _StatusIcon(
-                    kind: kind,
-                    palette: palette,
-                    title: title,
-                    icon: icon,
-                  ),
+                  child: _StatusIcon(kind: kind, palette: palette, icon: icon),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
@@ -355,16 +323,10 @@ class AppStatusBannerPalette {
 }
 
 class _StatusIcon extends StatelessWidget {
-  const _StatusIcon({
-    required this.kind,
-    required this.palette,
-    required this.title,
-    this.icon,
-  });
+  const _StatusIcon({required this.kind, required this.palette, this.icon});
 
   final AppStatusBannerKind kind;
   final AppStatusBannerPalette palette;
-  final String title;
   final IconData? icon;
 
   @override
@@ -375,7 +337,7 @@ class _StatusIcon extends StatelessWidget {
     if (kind == AppStatusBannerKind.error) {
       return Icon(LucideIcons.circleAlert, size: 32, color: palette.iconFill);
     }
-    final resolved = statusBannerIcon(kind: kind, title: title, icon: icon);
+    final resolved = statusBannerIcon(kind: kind, icon: icon);
     return Container(
       width: 32,
       height: 32,

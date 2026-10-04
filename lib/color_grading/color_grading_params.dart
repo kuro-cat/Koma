@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import '../l10n/l10n.dart';
+
 enum ColorMatchMode {
   natural,
   standard,
@@ -7,9 +9,9 @@ enum ColorMatchMode {
 
   String get label {
     return switch (this) {
-      ColorMatchMode.natural => '自然',
-      ColorMatchMode.standard => '标准',
-      ColorMatchMode.strong => '强匹配',
+      ColorMatchMode.natural => l10n.colorGradingParamsModeNatural,
+      ColorMatchMode.standard => l10n.colorGradingParamsModeStandard,
+      ColorMatchMode.strong => l10n.colorGradingParamsModeStrong,
     };
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import '../l10n/l10n.dart';
 import 'plan_import_package.dart';
 import 'plan_import_stream.dart';
 import 'plan_transfer_background.dart';
@@ -33,7 +34,11 @@ Future<PlanImportPackage> _readPlanImportPackageFromPath(
   const limits = PlanImportLimits();
   final size = await file.length();
   if (size > limits.maxCompressedBytes) {
-    throw PlanImportLimitException('压缩包字节数', size, limits.maxCompressedBytes);
+    throw PlanImportLimitException(
+      l10n.planImportPackageResourceArchiveBytes,
+      size,
+      limits.maxCompressedBytes,
+    );
   }
   return readPlanImportPackageFromBytes(
     await readBoundedPlanImportStream(file.openRead()),

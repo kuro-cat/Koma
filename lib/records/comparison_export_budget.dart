@@ -1,4 +1,5 @@
 import 'dart:math' as math;
+import '../l10n/l10n.dart';
 
 class ComparisonOutputLimitException implements Exception {
   const ComparisonOutputLimitException(this.message);
@@ -20,7 +21,7 @@ class ComparisonRenderBudget {
         maxPixels < 1 ||
         maxEdge < 1) {
       throw ComparisonOutputLimitException(
-        '对比图尺寸无法满足输出限制：最多 $maxPixels 像素，最长边 $maxEdge 像素。',
+        l10n.comparisonExportBudgetSizeUnfit(maxPixels, maxEdge),
       );
     }
     final scale = math.min(
@@ -34,7 +35,7 @@ class ComparisonRenderBudget {
     final targetHeight = (height * scale).floor();
     if (targetWidth < 1 || targetHeight < 1) {
       throw ComparisonOutputLimitException(
-        '对比图比例过于狭长，无法在 $maxPixels 像素、最长边 $maxEdge 像素内完整输出。',
+        l10n.comparisonExportBudgetTooNarrow(maxPixels, maxEdge),
       );
     }
     return ComparisonCanvasSize(

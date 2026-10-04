@@ -7,6 +7,7 @@ import '../data/pilgrimage_repository.dart';
 import '../utils/limited_concurrency.dart';
 import 'pilgrimage_models.dart';
 import 'reference_image_status.dart';
+import '../l10n/l10n.dart';
 
 class ReferenceFullCacheProgress {
   const ReferenceFullCacheProgress({
@@ -25,14 +26,18 @@ class ReferenceFullCacheProgress {
 
   String get label {
     if (total == 0) {
-      return '当前计划没有需要缓存的参考图';
+      return l10n.referenceFullCacheRunnerNothing;
     }
     if (done) {
       return failed == 0
-          ? '已缓存 $succeeded/$total 张完整参考图'
-          : '已缓存 $succeeded/$total 张完整参考图，失败 $failed 张';
+          ? l10n.referenceFullCacheRunnerDone(succeeded, total)
+          : l10n.referenceFullCacheRunnerDoneWithFailures(
+              succeeded,
+              total,
+              failed,
+            );
     }
-    return '正在缓存完整参考图 $processed/$total，成功 $succeeded';
+    return l10n.referenceFullCacheRunnerRunning(processed, total, succeeded);
   }
 }
 

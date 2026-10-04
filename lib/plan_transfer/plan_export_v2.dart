@@ -6,6 +6,7 @@ import 'package:archive/archive.dart';
 import '../app_version.dart';
 import '../data/anitabi_image_url.dart';
 import '../data/image_bytes.dart';
+import '../l10n/l10n.dart';
 import '../plan/pilgrimage_models.dart';
 import '../plan/reference_image_status.dart';
 import 'plan_export_asset_stub.dart'
@@ -383,7 +384,7 @@ Future<PlanExportV2Result> _buildPlanExportV2Package({
   if (encoded.skipped.isNotEmpty) {
     // Deleted between collecting assets and zipping them; the package is
     // still usable, the importer treats them as missing.
-    warnings.add('${encoded.skipped.length} 个文件在导出过程中被删除，未包含在数据包中');
+    warnings.add(l10n.planExportV2DeletedDuringExport(encoded.skipped.length));
     warningCounts[PlanExportWarningType.deletedDuringExport.key] =
         encoded.skipped.length;
   }
@@ -681,18 +682,18 @@ String _pointsCsv(
   }
   final lines = <List<Object?>>[
     [
-      '作品',
-      '片区',
-      '点位名',
-      '副标题',
-      '纬度',
-      '经度',
-      '集数/场景',
-      '来源',
-      '来源ID',
-      '参考图URL',
-      '已完成',
-      '记录数',
+      l10n.planExportV2CsvWork,
+      l10n.planExportV2CsvArea,
+      l10n.planExportV2CsvSpotName,
+      l10n.planExportV2CsvSubtitle,
+      l10n.planExportV2CsvLatitude,
+      l10n.planExportV2CsvLongitude,
+      l10n.planExportV2CsvEpisode,
+      l10n.planExportV2CsvSource,
+      l10n.planExportV2CsvSourceId,
+      l10n.planExportV2CsvReferenceUrl,
+      l10n.planExportV2CsvCompleted,
+      l10n.planExportV2CsvRecordCount,
     ],
     for (final point in plan.points)
       [
@@ -706,7 +707,9 @@ String _pointsCsv(
         point.source.name,
         point.sourceId,
         isLocalUploadedReference(point) ? null : point.referenceImageUrl,
-        plan.completedPointIds.contains(point.id) ? '是' : '否',
+        plan.completedPointIds.contains(point.id)
+            ? l10n.planExportV2CsvYes
+            : l10n.planExportV2CsvNo,
         recordCounts[point.id] ?? 0,
       ],
   ];
@@ -716,7 +719,17 @@ String _pointsCsv(
 String _recordsCsv(PilgrimagePlan plan, List<PilgrimageVisitRecord> records) {
   final pointById = {for (final point in plan.points) point.id: point};
   final lines = <List<Object?>>[
-    ['作品', '片区', '点位名', '记录ID', '拍摄时间', '参考模式', '是否调色', '照片文件名', '调色照片文件名'],
+    [
+      l10n.planExportV2CsvWork,
+      l10n.planExportV2CsvArea,
+      l10n.planExportV2CsvSpotName,
+      l10n.planExportV2CsvRecordId,
+      l10n.planExportV2CsvCapturedAt,
+      l10n.planExportV2CsvReferenceMode,
+      l10n.planExportV2CsvColorMatched,
+      l10n.planExportV2CsvPhotoFile,
+      l10n.planExportV2CsvGradedPhotoFile,
+    ],
     for (final record in records)
       [
         pointById[record.pointId]?.work.title ??
@@ -726,7 +739,9 @@ String _recordsCsv(PilgrimagePlan plan, List<PilgrimageVisitRecord> records) {
         record.id,
         record.capturedAt.toIso8601String(),
         record.referenceMode,
-        record.hasColorGrading ? '是' : '否',
+        record.hasColorGrading
+            ? l10n.planExportV2CsvYes
+            : l10n.planExportV2CsvNo,
         _fileName(record.photoPath),
         record.gradedPhotoPath == null
             ? ''
@@ -738,10 +753,10 @@ String _recordsCsv(PilgrimagePlan plan, List<PilgrimageVisitRecord> records) {
 
 String _groupName(PilgrimagePlan plan, String? groupId) {
   if (groupId == null) {
-    return '未分组';
+    return l10n.planExportV2Ungrouped;
   }
   return plan.groups.where((group) => group.id == groupId).firstOrNull?.name ??
-      '未知片区';
+      l10n.planExportV2UnknownArea;
 }
 
 String _prettyJson(Object? value) {

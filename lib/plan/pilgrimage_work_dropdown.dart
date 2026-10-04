@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../app_theme.dart';
 import '../widgets/app_scaled_route.dart';
 import 'pilgrimage_models.dart';
+import '../l10n/l10n.dart';
 
 class PilgrimageWorkDropdown extends StatelessWidget {
   const PilgrimageWorkDropdown({
@@ -137,7 +138,9 @@ class _WorkDropdownItemState extends State<_WorkDropdownItem> {
     final reserveScrollbarSpace = widget.menuItem && !widget.omitScrollbarInset;
     final badgeLabel =
         work.displayBangumiSubjectType?.label ??
-        (work.source == WorkSource.manual ? '手动' : '作品');
+        (work.source == WorkSource.manual
+            ? l10n.pilgrimageWorkDropdownManual
+            : l10n.pilgrimageWorkDropdownWork);
 
     final item = SizedBox(
       width: double.infinity,

@@ -20,6 +20,7 @@ import 'navigation_progress.dart';
 import 'valhalla_route_client.dart';
 import 'map_location_tracker.dart';
 import 'navigation_heading.dart';
+import '../l10n/l10n.dart';
 
 const _endRouteRed = Color(0xFFFF3B30);
 
@@ -305,7 +306,7 @@ class _InAppNavigationScreenState extends State<InAppNavigationScreen>
         },
         onDone: () {
           if (!mounted || session != _locationSession) return;
-          setState(() => _locationError = '定位更新已停止，请重试。');
+          setState(() => _locationError = l10n.inAppNavigationLocationStopped);
         },
       );
       _armLocationExpiry(session);
@@ -320,7 +321,7 @@ class _InAppNavigationScreenState extends State<InAppNavigationScreen>
     _locationExpiry?.cancel();
     _locationExpiry = Timer(const Duration(seconds: 45), () {
       if (mounted && session == _locationSession) {
-        setState(() => _locationError = '暂未收到新的定位，当前位置可能已过期。');
+        setState(() => _locationError = l10n.inAppNavigationLocationStale);
       }
     });
   }
@@ -872,12 +873,12 @@ class _InAppNavigationScreenState extends State<InAppNavigationScreen>
                             color: chrome.panel,
                             child: ListTile(
                               dense: true,
-                              title: const Text('精确位置已关闭，到达提醒和偏航判断可能不准确。'),
+                              title: Text(l10n.inAppNavigationPreciseOff),
                               trailing: TextButton(
                                 // The state is re-checked when the app returns to the
                                 // foreground (onLocationActivityChanged).
                                 onPressed: Geolocator.openAppSettings,
-                                child: const Text('去设置'),
+                                child: Text(l10n.inAppNavigationOpenSettings),
                               ),
                             ),
                           ),
@@ -891,7 +892,7 @@ class _InAppNavigationScreenState extends State<InAppNavigationScreen>
                                 key: const ValueKey(
                                   'navigation-location-retry',
                                 ),
-                                tooltip: '重试定位',
+                                tooltip: l10n.inAppNavigationRetryLocation,
                                 icon: const Icon(LucideIcons.refreshCw),
                                 onPressed: () =>
                                     syncLocationActivity(force: true),
@@ -997,11 +998,11 @@ List<_PreviewStep> _stepsFor(
   List<PilgrimagePoint> stops = const [],
 }) {
   if (route.maneuvers.isEmpty) {
-    return const [
+    return [
       _PreviewStep(
         icon: LucideIcons.arrowUp,
-        distanceLabel: '路线中',
-        instruction: '沿路线继续前行',
+        distanceLabel: l10n.inAppNavigationOnRoute,
+        instruction: l10n.inAppNavigationFollowRoute,
       ),
     ];
   }
@@ -1020,12 +1021,18 @@ List<_PreviewStep> _stepsFor(
         ? stops[legIndex]
         : null;
     final side = switch (maneuver.type) {
-      5 => '，在右侧',
-      6 => '，在左侧',
+      5 => l10n.inAppNavigationSideRight,
+      6 => l10n.inAppNavigationSideLeft,
       _ => '',
     };
-    if (stop == null) return isLastLeg ? '到达终点$side' : '到达途经点$side';
-    return isLastLeg ? '到达终点 ${stop.name}$side' : '到达途经点 ${stop.name}$side';
+    if (stop == null) {
+      return isLastLeg
+          ? l10n.inAppNavigationArriveDestination(side)
+          : l10n.inAppNavigationArriveWaypoint(side);
+    }
+    return isLastLeg
+        ? l10n.inAppNavigationArriveDestinationNamed(stop.name, side)
+        : l10n.inAppNavigationArriveWaypointNamed(stop.name, side);
   }
 
   return [
@@ -1060,8 +1067,12 @@ IconData navigationManeuverIcon(int type) => switch (type) {
 
 String _distanceLabel(double kilometers) {
   final meters = kilometers * 1000;
-  if (meters < 1000) return '${math.max(1, meters.round())}米';
-  return '${kilometers.toStringAsFixed(kilometers >= 10 ? 0 : 1)}公里';
+  if (meters < 1000) {
+    return l10n.inAppNavigationMeters(math.max(1, meters.round()));
+  }
+  return l10n.inAppNavigationKilometers(
+    kilometers.toStringAsFixed(kilometers >= 10 ? 0 : 1),
+  );
 }
 
 List<PilgrimagePoint> _resolvedStops({
@@ -1079,7 +1090,7 @@ List<PilgrimagePoint> _resolvedStops({
 }
 
 String _stopHeadline(PilgrimagePoint stop, {required bool isLast}) {
-  return isLast ? '终点: ${stop.name}' : stop.name;
+  return isLast ? l10n.inAppNavigationFinalStop(stop.name) : stop.name;
 }
 
 class _InstructionBanner extends StatelessWidget {
@@ -1361,8 +1372,10 @@ class _BottomPanel extends StatelessWidget {
                       icon: LucideIcons.list,
                       iconColor: chrome.primaryText,
                       iconBackground: chrome.detailsIconBackground,
-                      title: '全部点位',
-                      subtitle: stops.isEmpty ? null : '共 ${stops.length} 个',
+                      title: l10n.inAppNavigationAllStops,
+                      subtitle: stops.isEmpty
+                          ? null
+                          : l10n.inAppNavigationStopCount(stops.length),
                       onTap: onShowAllStops,
                     ),
                     const SizedBox(height: 16),
@@ -1384,7 +1397,7 @@ class _BottomPanel extends StatelessWidget {
                             letterSpacing: 0,
                           ),
                         ),
-                        child: const Text('已到达'),
+                        child: Text(l10n.inAppNavigationArrived),
                       ),
                     ),
                     const SizedBox(height: 10),
@@ -1406,7 +1419,7 @@ class _BottomPanel extends StatelessWidget {
                             letterSpacing: 0,
                           ),
                         ),
-                        child: const Text('结束路线'),
+                        child: Text(l10n.inAppNavigationEndRoute),
                       ),
                     ),
                   ],
@@ -1457,7 +1470,9 @@ class _SheetHeader extends StatelessWidget {
             ),
             const SizedBox(width: 12),
             Tooltip(
-              message: expanded ? '收起' : '展开',
+              message: expanded
+                  ? l10n.inAppNavigationCollapse
+                  : l10n.inAppNavigationExpand,
               child: Material(
                 color: chrome.iconButton,
                 shape: const CircleBorder(),
@@ -1505,17 +1520,17 @@ class _TripSummaryRow extends StatelessWidget {
         _TripMetricColumn(
           chrome: chrome,
           value: metrics.arrivalText,
-          label: '到达',
+          label: l10n.inAppNavigationMetricArrival,
         ),
         _TripMetricColumn(
           chrome: chrome,
           value: metrics.durationText,
-          label: '小时',
+          label: l10n.inAppNavigationMetricHours,
         ),
         _TripMetricColumn(
           chrome: chrome,
           value: metrics.distanceText,
-          label: '公里',
+          label: l10n.inAppNavigationMetricKm,
         ),
       ],
     );
@@ -1594,7 +1609,7 @@ class _GroupNameRow extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
-            '片区',
+            l10n.inAppNavigationAreaBadge,
             style: TextStyle(
               color: AppColors.accent,
               fontSize: 11,
@@ -1716,7 +1731,7 @@ class _RecenterButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: '回到当前位置',
+      message: l10n.inAppNavigationRecenter,
       child: Material(
         color: chrome.recenterFill,
         shape: const CircleBorder(),
@@ -1860,7 +1875,7 @@ class _ArrivalSheet extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '到达点位',
+              l10n.inAppNavigationArrivalTitle,
               style: TextStyle(
                 color: chrome.primaryText,
                 fontSize: 20,
@@ -1884,8 +1899,11 @@ class _ArrivalSheet extends StatelessWidget {
               icon: LucideIcons.camera,
               iconColor: chrome.primaryText,
               iconBackground: chrome.detailsIconBackground,
-              title: '打开相机',
-              subtitle: '第 $stopNumber / $remainingCount 个剩余点位',
+              title: l10n.inAppNavigationOpenCamera,
+              subtitle: l10n.inAppNavigationRemainingStop(
+                stopNumber,
+                remainingCount,
+              ),
               onTap: onOpenCamera,
             ),
             if (nextStop != null) ...[
@@ -1896,7 +1914,9 @@ class _ArrivalSheet extends StatelessWidget {
                 iconColor: chrome.primaryText,
                 iconBackground: chrome.detailsIconBackground,
                 title: nextStop!.name,
-                subtitle: '下一点位 · ${_destinationSubtitle(nextStop!)}',
+                subtitle: l10n.inAppNavigationNextStop(
+                  _destinationSubtitle(nextStop!),
+                ),
               ),
             ],
             if (onGoNext != null) ...[
@@ -1919,7 +1939,7 @@ class _ArrivalSheet extends StatelessWidget {
                       letterSpacing: 0,
                     ),
                   ),
-                  child: const Text('前往下一点'),
+                  child: Text(l10n.inAppNavigationGoNext),
                 ),
               ),
             ],
@@ -1938,7 +1958,7 @@ class _ArrivalSheet extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: const Text('结束路线'),
+                  child: Text(l10n.inAppNavigationEndRoute),
                 ),
               ),
             ],
@@ -1978,7 +1998,7 @@ class _AllStopsSheet extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '全部点位',
+                  l10n.inAppNavigationAllStops,
                   style: TextStyle(
                     color: chrome.primaryText,
                     fontSize: 20,

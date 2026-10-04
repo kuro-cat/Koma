@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../app_theme.dart';
 import '../widgets/constrained_menu_anchor.dart';
 import 'comparison_export_config.dart';
+import '../l10n/l10n.dart';
 
 class ComparisonExportConfigEditor extends StatelessWidget {
   const ComparisonExportConfigEditor({
@@ -23,14 +24,18 @@ class ComparisonExportConfigEditor extends StatelessWidget {
     AppColors.accent,
   ];
 
-  static const borderColorLabels = <String>['白色', '黑色', '主题色'];
+  static List<String> get borderColorLabels => <String>[
+    l10n.comparisonExportConfigEditorColorWhite,
+    l10n.comparisonExportConfigEditorColorBlack,
+    l10n.comparisonExportConfigEditorColorTheme,
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _SectionLabel('外观'),
+        _SectionLabel(l10n.comparisonExportConfigEditorAppearance),
         const SizedBox(height: 12),
         ComparisonAppearanceSection(
           config: config,
@@ -39,7 +44,7 @@ class ComparisonExportConfigEditor extends StatelessWidget {
           onChanged: onChanged,
         ),
         const SizedBox(height: 18),
-        const _FieldLabel('图片格式与质量'),
+        _FieldLabel(l10n.comparisonExportConfigEditorFormat),
         const SizedBox(height: 8),
         ConstrainedMenuAnchor(
           maxMenuWidth: double.infinity,
@@ -96,15 +101,23 @@ class ComparisonExportConfigEditor extends StatelessWidget {
 
 String comparisonExportConfigSummary(ComparisonExportConfig config) {
   final labels = <String>[
-    '宽度 ${config.outputWidth.label}',
+    l10n.comparisonExportConfigEditorSummaryWidth(config.outputWidth.label),
     config.imageEncoding.label,
     config.borderWidthPercent == 0
-        ? '无边框'
-        : '边框 ${config.borderWidthPercent.toStringAsFixed(1)}%',
-    config.showLabels ? '显示标签' : '不显示标签',
+        ? l10n.comparisonExportConfigEditorSummaryNoBorder
+        : l10n.comparisonExportConfigEditorSummaryBorder(
+            config.borderWidthPercent.toStringAsFixed(1),
+          ),
+    config.showLabels
+        ? l10n.comparisonExportConfigEditorSummaryLabelsOn
+        : l10n.comparisonExportConfigEditorSummaryLabelsOff,
   ];
   if (config.showPilgrimName && config.pilgrimName.trim().isNotEmpty) {
-    labels.add('巡礼者 ${config.pilgrimName.trim()}');
+    labels.add(
+      l10n.comparisonExportConfigEditorSummaryPilgrim(
+        config.pilgrimName.trim(),
+      ),
+    );
   }
   return labels.join(' / ');
 }
@@ -132,11 +145,11 @@ class ComparisonAppearanceSection extends StatelessWidget {
       children: [
         Row(
           children: [
-            const _FieldLabel('边框宽度'),
+            _FieldLabel(l10n.comparisonExportConfigEditorBorderWidth),
             const Spacer(),
             _ValueCapsule(
               label: config.borderWidthPercent == 0
-                  ? '无'
+                  ? l10n.comparisonExportConfigEditorNone
                   : '${config.borderWidthPercent.toStringAsFixed(1)}%',
             ),
           ],
@@ -159,7 +172,7 @@ class ComparisonAppearanceSection extends StatelessWidget {
             max: 3.0,
             divisions: 30,
             label: config.borderWidthPercent == 0
-                ? '无'
+                ? l10n.comparisonExportConfigEditorNone
                 : '${config.borderWidthPercent.toStringAsFixed(1)}%',
             onChanged: (v) => onChanged(config.copyWith(borderWidthPercent: v)),
           ),
@@ -167,7 +180,7 @@ class ComparisonAppearanceSection extends StatelessWidget {
         const SizedBox(height: 8),
         const _SectionDivider(),
         const SizedBox(height: 16),
-        const _FieldLabel('边框颜色'),
+        _FieldLabel(l10n.comparisonExportConfigEditorBorderColor),
         const SizedBox(height: 10),
         Wrap(
           spacing: 10,
@@ -188,8 +201,8 @@ class ComparisonAppearanceSection extends StatelessWidget {
         const _SectionDivider(),
         const SizedBox(height: 16),
         _ToggleSetting(
-          title: '自动输出宽度',
-          subtitle: '根据图片尺寸自动确定输出宽度',
+          title: l10n.comparisonExportConfigEditorAutoWidthTitle,
+          subtitle: l10n.comparisonExportConfigEditorAutoWidthSubtitle,
           value: automaticOutput,
           switchKey: const ValueKey('comparison-output-auto'),
           onChanged: (useAutomatic) {
@@ -220,8 +233,8 @@ class ComparisonAppearanceSection extends StatelessWidget {
         const _SectionDivider(),
         const SizedBox(height: 8),
         _ToggleSetting(
-          title: '显示标签',
-          subtitle: '在参考图上显示“参考”字样，在你拍的巡礼图上显示“巡礼”字样',
+          title: l10n.comparisonExportConfigEditorShowLabelsTitle,
+          subtitle: l10n.comparisonExportConfigEditorShowLabelsSubtitle,
           value: config.showLabels,
           onChanged: (value) => onChanged(config.copyWith(showLabels: value)),
         ),
@@ -445,11 +458,11 @@ class ComparisonMetadataSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const _SectionLabel('元数据'),
+        _SectionLabel(l10n.comparisonExportConfigEditorMetadata),
         const SizedBox(height: 12),
         _ToggleSetting(
-          title: '显示巡礼者名字',
-          subtitle: '在图片上显示巡礼者名字',
+          title: l10n.comparisonExportConfigEditorShowPilgrimTitle,
+          subtitle: l10n.comparisonExportConfigEditorShowPilgrimSubtitle,
           value: config.showPilgrimName,
           switchKey: const ValueKey('comparison-show-pilgrim-name'),
           onChanged: (value) =>
@@ -465,7 +478,7 @@ class ComparisonMetadataSection extends StatelessWidget {
             controller: pilgrimNameController,
             enabled: config.showPilgrimName,
             decoration: _comparisonTextFieldDecoration(
-              hintText: '请输入巡礼者名字',
+              hintText: l10n.comparisonExportConfigEditorPilgrimHint,
               enabled: config.showPilgrimName,
             ),
             textInputAction: TextInputAction.done,
@@ -477,8 +490,8 @@ class ComparisonMetadataSection extends StatelessWidget {
         const _SectionDivider(),
         const SizedBox(height: 10),
         _ToggleSetting(
-          title: '显示调色参数',
-          subtitle: '在图片底部显示调色相关参数',
+          title: l10n.comparisonExportConfigEditorShowGradingTitle,
+          subtitle: l10n.comparisonExportConfigEditorShowGradingSubtitle,
           value: config.showColorGradingParams,
           onChanged: (value) =>
               onChanged(config.copyWith(showColorGradingParams: value)),
@@ -486,7 +499,7 @@ class ComparisonMetadataSection extends StatelessWidget {
         const SizedBox(height: 20),
         const _SectionDivider(),
         const SizedBox(height: 18),
-        const _SectionLabel('显示内容'),
+        _SectionLabel(l10n.comparisonExportConfigEditorContent),
         const SizedBox(height: 10),
         LayoutBuilder(
           builder: (context, constraints) {

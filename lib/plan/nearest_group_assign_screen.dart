@@ -7,6 +7,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../app_theme.dart';
+import '../l10n/l10n.dart';
 import '../map/map_colors.dart';
 import '../widgets/responsive_button.dart';
 import '../data/anitabi_image_source_scope.dart';
@@ -125,7 +126,7 @@ class _NearestGroupAssignScreenState extends State<NearestGroupAssignScreen> {
           leading: AppBackButton(
             onPressed: () => Navigator.of(context).pop(_didUpdate),
           ),
-          title: const Text('最近分配'),
+          title: Text(l10n.nearestGroupAssignTitle),
         ),
         body: Stack(
           children: [
@@ -314,17 +315,19 @@ class _NearestGroupAssignScreenState extends State<NearestGroupAssignScreen> {
     if (count == 0) {
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.warning,
-        title: '当前距离内没有可分配点位',
+        title: l10n.nearestGroupAssignNoneInRange,
       );
       return;
     }
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '确认最近分配',
-      message:
-          '将把 $count 个未分组点位分配到最近的片区关键点，最大距离为 ${_formatDistance(_distanceMeters)}。',
-      confirmLabel: '开始分配',
-      emphasizedValues: ['$count 个未分组点位'],
+      title: l10n.nearestGroupAssignConfirmTitle,
+      message: l10n.nearestGroupAssignConfirmMessage(
+        l10n.nearestGroupAssignUngroupedSpots(count),
+        _formatDistance(_distanceMeters),
+      ),
+      confirmLabel: l10n.nearestGroupAssignStart,
+      emphasizedValues: [l10n.nearestGroupAssignUngroupedSpots(count)],
     );
     if (!confirmed || !mounted) {
       return;
@@ -355,9 +358,10 @@ class _NearestGroupAssignScreenState extends State<NearestGroupAssignScreen> {
         _selectedPoint = null;
         _isSaving = false;
       });
-      ScaffoldMessenger.of(
-        context,
-      ).showStatusSnack(kind: AppStatusBannerKind.error, title: '最近分配失败');
+      ScaffoldMessenger.of(context).showStatusSnack(
+        kind: AppStatusBannerKind.error,
+        title: l10n.nearestGroupAssignFailed,
+      );
       return;
     }
 
@@ -380,7 +384,9 @@ class _NearestGroupAssignScreenState extends State<NearestGroupAssignScreen> {
       kind: settingsSaved
           ? AppStatusBannerKind.success
           : AppStatusBannerKind.warning,
-      title: settingsSaved ? '已分配 $count 个点位' : '已分配 $count 个点位，距离设置未保存',
+      title: settingsSaved
+          ? l10n.nearestGroupAssignDone(count)
+          : l10n.nearestGroupAssignDoneDistanceUnsaved(count),
     );
   }
 
@@ -400,9 +406,10 @@ class _NearestGroupAssignScreenState extends State<NearestGroupAssignScreen> {
       status: VisitStatus.pending,
       onSetCurrent: () {},
       onOpenCamera: () {
-        ScaffoldMessenger.of(
-          context,
-        ).showStatusSnack(kind: AppStatusBannerKind.warning, title: '请先完成片区分配');
+        ScaffoldMessenger.of(context).showStatusSnack(
+          kind: AppStatusBannerKind.warning,
+          title: l10n.nearestGroupAssignFinishFirst,
+        );
       },
       onComplete: () {},
       onReplaceReference: _replaceReferenceImage,
@@ -579,7 +586,7 @@ class _BoxGroupAssignScreenState extends State<BoxGroupAssignScreen> {
           leading: AppBackButton(
             onPressed: () => Navigator.of(context).pop(_didUpdate),
           ),
-          title: const Text('框选分配'),
+          title: Text(l10n.nearestGroupAssignBoxTitle),
         ),
         body: Stack(
           children: [
@@ -716,8 +723,8 @@ class _BoxGroupAssignScreenState extends State<BoxGroupAssignScreen> {
                       assignable: selectedBoxPoints.any(
                         (point) => point.id == _selectedPoint!.id,
                       ),
-                      assignableLabel: '已框选',
-                      unassignableLabel: '未框选',
+                      assignableLabel: l10n.nearestGroupAssignBoxSelected,
+                      unassignableLabel: l10n.nearestGroupAssignNotBoxSelected,
                       onOpenDetail: () => _showPointDetail(_selectedPoint!),
                     ),
             ),
@@ -800,9 +807,10 @@ class _BoxGroupAssignScreenState extends State<BoxGroupAssignScreen> {
       setState(() {
         _isSaving = false;
       });
-      ScaffoldMessenger.of(
-        context,
-      ).showStatusSnack(kind: AppStatusBannerKind.error, title: '片区创建失败');
+      ScaffoldMessenger.of(context).showStatusSnack(
+        kind: AppStatusBannerKind.error,
+        title: l10n.nearestGroupAssignCreateAreaFailed,
+      );
     }
   }
 
@@ -813,24 +821,31 @@ class _BoxGroupAssignScreenState extends State<BoxGroupAssignScreen> {
     final targetGroup = _targetGroup;
     final points = _selectedBoxPoints;
     if (targetGroup == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showStatusSnack(kind: AppStatusBannerKind.warning, title: '请先创建片区');
+      ScaffoldMessenger.of(context).showStatusSnack(
+        kind: AppStatusBannerKind.warning,
+        title: l10n.nearestGroupAssignCreateAreaFirst,
+      );
       return;
     }
     if (points.isEmpty) {
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.warning,
-        title: '框选范围内没有未分组点位',
+        title: l10n.nearestGroupAssignBoxNoUngrouped,
       );
       return;
     }
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '确认框选分配',
-      message: '将把 ${points.length} 个未分组点位移动到「${targetGroup.name}」。',
-      confirmLabel: '分配',
-      emphasizedValues: ['${points.length} 个未分组点位', targetGroup.name],
+      title: l10n.nearestGroupAssignBoxConfirmTitle,
+      message: l10n.nearestGroupAssignBoxConfirmMessage(
+        l10n.nearestGroupAssignUngroupedSpots(points.length),
+        targetGroup.name,
+      ),
+      confirmLabel: l10n.nearestGroupAssignAssign,
+      emphasizedValues: [
+        l10n.nearestGroupAssignUngroupedSpots(points.length),
+        targetGroup.name,
+      ],
     );
     if (!confirmed || !mounted) {
       return;
@@ -858,7 +873,7 @@ class _BoxGroupAssignScreenState extends State<BoxGroupAssignScreen> {
       });
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.success,
-        title: '已分配 ${points.length} 个点位',
+        title: l10n.nearestGroupAssignDone(points.length),
       );
     } catch (_) {
       if (!mounted) {
@@ -867,9 +882,10 @@ class _BoxGroupAssignScreenState extends State<BoxGroupAssignScreen> {
       setState(() {
         _isSaving = false;
       });
-      ScaffoldMessenger.of(
-        context,
-      ).showStatusSnack(kind: AppStatusBannerKind.error, title: '框选分配失败');
+      ScaffoldMessenger.of(context).showStatusSnack(
+        kind: AppStatusBannerKind.error,
+        title: l10n.nearestGroupAssignBoxFailed,
+      );
     }
   }
 
@@ -880,9 +896,10 @@ class _BoxGroupAssignScreenState extends State<BoxGroupAssignScreen> {
       status: VisitStatus.pending,
       onSetCurrent: () {},
       onOpenCamera: () {
-        ScaffoldMessenger.of(
-          context,
-        ).showStatusSnack(kind: AppStatusBannerKind.warning, title: '请先完成片区分配');
+        ScaffoldMessenger.of(context).showStatusSnack(
+          kind: AppStatusBannerKind.warning,
+          title: l10n.nearestGroupAssignFinishFirst,
+        );
       },
       onComplete: () {},
       onReplaceReference: _replaceReferenceImage,
@@ -1040,7 +1057,8 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                         const SizedBox(width: 10),
                         Expanded(
                           child: Text(
-                            widget.selectedGroup?.name ?? '选择片区',
+                            widget.selectedGroup?.name ??
+                                l10n.nearestGroupAssignChooseArea,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
@@ -1078,9 +1096,9 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                       padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
                       child: Row(
                         children: [
-                          const Expanded(
+                          Expanded(
                             child: Text(
-                              '选择片区',
+                              l10n.nearestGroupAssignChooseArea,
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w800,
@@ -1089,7 +1107,9 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                             ),
                           ),
                           Text(
-                            '共 ${widget.groups.length} 个片区',
+                            l10n.nearestGroupAssignAreaCount(
+                              widget.groups.length,
+                            ),
                             style: TextStyle(
                               color: AppColors.textSecondary,
                               fontSize: 12,
@@ -1216,8 +1236,8 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                             ),
                           ),
                         ),
-                        child: const Text(
-                          '新建片区',
+                        child: Text(
+                          l10n.nearestGroupAssignNewArea,
                           style: TextStyle(
                             fontWeight: FontWeight.w700,
                             letterSpacing: 0,
@@ -1258,7 +1278,7 @@ class _BoxAssignCreateGroupDialogState
   void _submit() {
     final name = _controller.text.trim();
     if (name.isEmpty) {
-      setState(() => _errorText = '片区名不能为空');
+      setState(() => _errorText = l10n.nearestGroupAssignAreaNameEmpty);
       return;
     }
     Navigator.of(context).pop(name);
@@ -1267,9 +1287,9 @@ class _BoxAssignCreateGroupDialogState
   @override
   Widget build(BuildContext context) {
     return AppInputDialog(
-      title: '新建片区',
+      title: l10n.nearestGroupAssignNewArea,
       content: AppDialogField(
-        label: '片区名称',
+        label: l10n.nearestGroupAssignAreaName,
         child: TextField(
           onTapOutside: dismissKeyboardOnTapOutside,
           key: const ValueKey('box-assign-group-name-field'),
@@ -1285,7 +1305,7 @@ class _BoxAssignCreateGroupDialogState
           onSubmitted: (_) => _submit(),
         ),
       ),
-      confirmLabel: '创建',
+      confirmLabel: l10n.nearestGroupAssignCreate,
       onConfirm: _submit,
     );
   }
@@ -1352,9 +1372,15 @@ class _BoxAssignPanel extends StatelessWidget {
                     child: ResponsiveButtonContent(
                       icon: isBoxSelecting ? LucideIcons.x : LucideIcons.scan,
                       iconSize: 17,
-                      label: isBoxSelecting ? '结束框选' : '框选',
-                      shortLabel: isBoxSelecting ? '结束' : '框选',
-                      semanticLabel: isBoxSelecting ? '结束框选' : '开始框选',
+                      label: isBoxSelecting
+                          ? l10n.nearestGroupAssignEndBox
+                          : l10n.nearestGroupAssignBox,
+                      shortLabel: isBoxSelecting
+                          ? l10n.nearestGroupAssignEnd
+                          : l10n.nearestGroupAssignBox,
+                      semanticLabel: isBoxSelecting
+                          ? l10n.nearestGroupAssignEndBox
+                          : l10n.nearestGroupAssignStartBox,
                     ),
                   ),
                 ),
@@ -1365,7 +1391,10 @@ class _BoxAssignPanel extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    '已框选 $selectedCount / 待分配 $ungroupedCount',
+                    l10n.nearestGroupAssignBoxStatus(
+                      selectedCount,
+                      ungroupedCount,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -1390,8 +1419,12 @@ class _BoxAssignPanel extends StatelessWidget {
                     child: ResponsiveButtonContent(
                       icon: LucideIcons.folderInput,
                       iconSize: 17,
-                      label: isSaving ? '分配中' : '分配',
-                      semanticLabel: isSaving ? '正在分配' : '分配选中点位',
+                      label: isSaving
+                          ? l10n.nearestGroupAssignAssigning
+                          : l10n.nearestGroupAssignAssign,
+                      semanticLabel: isSaving
+                          ? l10n.nearestGroupAssignAssigningSpots
+                          : l10n.nearestGroupAssignAssignSelected,
                     ),
                   ),
                 ),
@@ -1476,7 +1509,9 @@ class _NearestAssignPanel extends StatelessWidget {
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    '最大距离 ${_formatDistance(distanceMeters)}',
+                    l10n.nearestGroupAssignMaxDistance(
+                      _formatDistance(distanceMeters),
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
@@ -1486,7 +1521,10 @@ class _NearestAssignPanel extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  '可分配 $assignableCount/$ungroupedCount',
+                  l10n.nearestGroupAssignAssignableCount(
+                    assignableCount,
+                    ungroupedCount,
+                  ),
                   style: TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 13,
@@ -1498,7 +1536,7 @@ class _NearestAssignPanel extends StatelessWidget {
             ),
             const SizedBox(height: 3),
             Text(
-              '未分组点位会分配到距离最近、且在最大距离范围内的片区关键点。',
+              l10n.nearestGroupAssignExplain,
               style: TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 12,
@@ -1511,7 +1549,9 @@ class _NearestAssignPanel extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '当前 ${_formatDistance(distanceMeters)}',
+                  l10n.nearestGroupAssignCurrentDistance(
+                    _formatDistance(distanceMeters),
+                  ),
                   style: TextStyle(
                     color: AppColors.accentDark,
                     fontSize: 12,
@@ -1546,7 +1586,11 @@ class _NearestAssignPanel extends StatelessWidget {
                   height: 38,
                   child: FilledButton(
                     onPressed: isSaving || groupCount == 0 ? null : onAssign,
-                    child: Text(isSaving ? '分配中' : '分配'),
+                    child: Text(
+                      isSaving
+                          ? l10n.nearestGroupAssignAssigning
+                          : l10n.nearestGroupAssignAssign,
+                    ),
                   ),
                 ),
               ],
@@ -1569,8 +1613,8 @@ class _NearestAssignPointCard extends StatelessWidget {
     required this.distanceMeters,
     required this.assignable,
     required this.onOpenDetail,
-    this.assignableLabel = '在最大距离范围内',
-    this.unassignableLabel = '超出最大距离',
+    this.assignableLabel,
+    this.unassignableLabel,
   });
 
   final String planId;
@@ -1581,8 +1625,8 @@ class _NearestAssignPointCard extends StatelessWidget {
   final PilgrimagePlanGroup? nearestGroup;
   final double? distanceMeters;
   final bool assignable;
-  final String assignableLabel;
-  final String unassignableLabel;
+  final String? assignableLabel;
+  final String? unassignableLabel;
   final VoidCallback onOpenDetail;
 
   @override
@@ -1640,7 +1684,7 @@ class _NearestAssignPointCard extends StatelessWidget {
                       const SizedBox(height: 3),
                       Text(
                         nearestGroup == null
-                            ? '没有可用片区关键点'
+                            ? l10n.nearestGroupAssignNoAnchor
                             : '${nearestGroup!.name} · ${_formatDistance(distanceMeters ?? 0)}',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
@@ -1652,7 +1696,10 @@ class _NearestAssignPointCard extends StatelessWidget {
                       ),
                       const SizedBox(height: 3),
                       Text(
-                        assignable ? assignableLabel : unassignableLabel,
+                        assignable
+                            ? assignableLabel ?? l10n.nearestGroupAssignInRange
+                            : unassignableLabel ??
+                                  l10n.nearestGroupAssignOutOfRange,
                         style: TextStyle(
                           color: assignable
                               ? AppColors.accentDark
@@ -1704,8 +1751,8 @@ class _NearestAssignHintCard extends StatelessWidget {
           padding: const EdgeInsets.all(12),
           child: Text(
             groupCount == 0
-                ? '请先在片区管理中设置关键点'
-                : '未分组 $ungroupedCount 个 · 点击地图点位查看详情',
+                ? l10n.nearestGroupAssignSetAnchorFirst
+                : l10n.nearestGroupAssignUngroupedHint(ungroupedCount),
             textAlign: TextAlign.center,
             style: TextStyle(
               color: AppColors.textSecondary,
@@ -1734,7 +1781,9 @@ class _AssignPointMarker extends StatelessWidget {
   Widget build(BuildContext context) {
     final color = assignable ? MapColors.accent : MapColors.surfaceMuted;
     return IconButton(
-      tooltip: assignable ? '可分配点位' : '距离外点位',
+      tooltip: assignable
+          ? l10n.nearestGroupAssignAssignableSpot
+          : l10n.nearestGroupAssignOutOfRangeSpot,
       onPressed: onTap,
       style: IconButton.styleFrom(
         backgroundColor: selected ? MapColors.accentDark : color,

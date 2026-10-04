@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../l10n/l10n.dart';
 import '../app_theme.dart';
 import '../map/map_colors.dart';
 import '../plan/pilgrimage_models.dart';
@@ -20,7 +21,7 @@ class MapThumbnailMarker extends StatelessWidget {
     this.localPath,
     this.imageUrl,
     this.imageSource = AnitabiImageSource.auto,
-    this.tooltip = '巡礼点',
+    this.tooltip,
     super.key,
   });
 
@@ -33,7 +34,7 @@ class MapThumbnailMarker extends StatelessWidget {
   final String? localPath;
   final String? imageUrl;
   final AnitabiImageSource imageSource;
-  final String tooltip;
+  final String? tooltip;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,7 @@ class MapThumbnailMarker extends StatelessWidget {
     final tailBottom = markerHeight - dotTop - 3;
 
     return Tooltip(
-      message: tooltip,
+      message: tooltip ?? l10n.mapThumbnailMarkerTooltip,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
         onTap: onTap,

@@ -8,6 +8,7 @@ import 'pilgrimage_models.dart';
 import 'plan_order.dart';
 import '../app_theme.dart';
 import '../map/map_colors.dart';
+import '../l10n/l10n.dart';
 
 export 'plan_order.dart';
 
@@ -71,20 +72,22 @@ class PlanGroupBucket {
 
   String get orderModeLabel {
     if (isUngrouped) {
-      return '待整理';
+      return l10n.planGroupUtilsOrderPending;
     }
-    return isManualOrder ? '手动' : '无序';
+    return isManualOrder
+        ? l10n.planGroupUtilsOrderManual
+        : l10n.planGroupUtilsOrderUnordered;
   }
 
   String get anchorLabel {
     if (isUngrouped) {
-      return '等待分入片区';
+      return l10n.planGroupUtilsAwaitingGroup;
     }
     final anchorName = group?.anchorName;
     if (anchorName == null || anchorName.trim().isEmpty) {
-      return '未设置关键点';
+      return l10n.planGroupUtilsAnchorUnset;
     }
-    return '关键点：$anchorName';
+    return l10n.planGroupUtilsAnchor(anchorName);
   }
 }
 
@@ -117,7 +120,7 @@ List<PlanGroupBucket> planGroupBuckets(
   buckets.add(
     PlanGroupBucket(
       id: 'ungrouped',
-      name: '未分组',
+      name: l10n.planGroupUtilsUngrouped,
       points: ungroupedPoints,
       completedCount: ungroupedPoints
           .where((point) => completedPointIds.contains(point.id))

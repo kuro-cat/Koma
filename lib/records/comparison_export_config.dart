@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../plan/pilgrimage_models.dart';
+import '../l10n/l10n.dart';
 
 enum ComparisonOutputWidth { auto, w1080, w1920, w2560, w3840 }
 
@@ -19,9 +20,11 @@ extension ComparisonImageEncodingValue on ComparisonImageEncoding {
   String get mimeType =>
       this == ComparisonImageEncoding.png ? 'image/png' : 'image/jpeg';
   String get label => switch (this) {
-    ComparisonImageEncoding.jpegRecommended => 'JPEG 推荐 (85)',
-    ComparisonImageEncoding.jpegHighQuality => 'JPEG 高画质 (95)',
-    ComparisonImageEncoding.png => 'PNG 无损',
+    ComparisonImageEncoding.jpegRecommended =>
+      l10n.comparisonExportConfigJpegRecommended,
+    ComparisonImageEncoding.jpegHighQuality =>
+      l10n.comparisonExportConfigJpegHighQuality,
+    ComparisonImageEncoding.png => l10n.comparisonExportConfigPngLossless,
   };
 }
 
@@ -44,7 +47,7 @@ extension ComparisonOutputWidthValue on ComparisonOutputWidth {
   };
 
   String get label => switch (this) {
-    ComparisonOutputWidth.auto => '自动',
+    ComparisonOutputWidth.auto => l10n.comparisonExportConfigWidthAuto,
     ComparisonOutputWidth.w1080 => '1080px',
     ComparisonOutputWidth.w1920 => '1920px',
     ComparisonOutputWidth.w2560 => '2560px',
@@ -54,12 +57,15 @@ extension ComparisonOutputWidthValue on ComparisonOutputWidth {
 
 extension ComparisonMetadataFieldLabel on ComparisonMetadataField {
   String get label => switch (this) {
-    ComparisonMetadataField.capturedAt => '拍摄时间',
-    ComparisonMetadataField.workTitle => '作品',
-    ComparisonMetadataField.pointName => '地点',
-    ComparisonMetadataField.coordinates => '坐标',
+    ComparisonMetadataField.capturedAt =>
+      l10n.comparisonExportConfigFieldCapturedAt,
+    ComparisonMetadataField.workTitle => l10n.comparisonExportConfigFieldWork,
+    ComparisonMetadataField.pointName => l10n.comparisonExportConfigFieldPlace,
+    ComparisonMetadataField.coordinates =>
+      l10n.comparisonExportConfigFieldCoordinates,
     ComparisonMetadataField.anitabiId => 'Anitabi ID',
-    ComparisonMetadataField.episodeLabel => '场景',
+    ComparisonMetadataField.episodeLabel =>
+      l10n.comparisonExportConfigFieldScene,
   };
 }
 

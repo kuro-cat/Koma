@@ -23,12 +23,14 @@ import '../widgets/app_back_button.dart';
 import '../widgets/reference_image_source_stub.dart'
     if (dart.library.io) '../widgets/reference_image_source_io.dart';
 import 'auto_comparison_gallery_backup.dart';
+import 'camerawesome_reference_screen.dart' show referenceModeDisplayLabel;
 import 'photo_location.dart';
 import 'photo_location_save_stub.dart'
     if (dart.library.io) 'photo_location_save_io.dart';
 import 'photo_location_status_panel.dart';
 import 'visit_record_save_assets.dart';
 import '../map/current_location_resolver.dart';
+import '../l10n/l10n.dart';
 
 enum VisitRecordConfirmationResult { saved, completed }
 
@@ -161,7 +163,7 @@ class _VisitRecordConfirmationScreenState
     if (widget.photoLocationStrategy != PhotoLocationStrategy.disabled) {
       _pendingLocation = widget.pendingPhotoLocation;
       if (_pendingLocation != null) {
-        _locationStatus = '已获取拍摄位置，保存时写入照片。';
+        _locationStatus = l10n.visitRecordConfirmationLocationReady;
       }
     }
     // "Use recent location" is resolved after capture too, so a stale fix
@@ -196,7 +198,7 @@ class _VisitRecordConfirmationScreenState
     final request = ++_locationRequest;
     setState(() {
       _locating = true;
-      _locationStatus = '正在获取拍摄位置...';
+      _locationStatus = l10n.visitRecordConfirmationLocating;
     });
     try {
       final location = await _locatePhoto();
@@ -206,7 +208,7 @@ class _VisitRecordConfirmationScreenState
       setState(() {
         _locating = false;
         _pendingLocation = location;
-        _locationStatus = '已获取拍摄位置，保存时写入照片。';
+        _locationStatus = l10n.visitRecordConfirmationLocationReady;
       });
     } on CurrentLocationException catch (error) {
       if (!mounted || request != _locationRequest) {
@@ -222,7 +224,7 @@ class _VisitRecordConfirmationScreenState
       }
       setState(() {
         _locating = false;
-        _locationStatus = '定位获取失败，本次不添加位置，保留照片原有信息。';
+        _locationStatus = l10n.visitRecordConfirmationLocationFailed;
       });
     }
   }
@@ -239,14 +241,14 @@ class _VisitRecordConfirmationScreenState
     if (controller?.repository == null) {
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.error,
-        title: '记录存储不可用，请返回后重试。',
+        title: l10n.visitRecordConfirmationStorageUnavailable,
       );
       return;
     }
 
     setState(() {
       _saving = true;
-      _savingStage = '保存记录中...';
+      _savingStage = l10n.visitRecordConfirmationStageSaving;
     });
 
     try {
@@ -261,7 +263,10 @@ class _VisitRecordConfirmationScreenState
       final location = _pendingLocation;
       if (location != null && _preparedPhoto == null) {
         if (mounted) {
-          setState(() => _savingStage = '正在写入照片定位，请稍候...');
+          setState(
+            () =>
+                _savingStage = l10n.visitRecordConfirmationStageWritingLocation,
+          );
         }
         final writer = widget.writePhotoLocation;
         _preparedPhoto = writer == null
@@ -273,7 +278,9 @@ class _VisitRecordConfirmationScreenState
               );
       }
       if (!mounted) return;
-      if (mounted) setState(() => _savingStage = '保存记录中...');
+      if (mounted) {
+        setState(() => _savingStage = l10n.visitRecordConfirmationStageSaving);
+      }
       final photoPath = _preparedPhoto?.path ?? widget.photoPath;
       final fallbackReferencePath =
           referenceImageLocalPathCanDisplay(widget.referenceImagePath)
@@ -320,7 +327,9 @@ class _VisitRecordConfirmationScreenState
       var galleryBackupSucceeded = false;
       if (widget.saveVisitPhotoToGallery) {
         if (mounted) {
-          setState(() => _savingStage = '备份巡礼照片中...');
+          setState(
+            () => _savingStage = l10n.visitRecordConfirmationStageBackingUp,
+          );
         }
         attemptedGalleryBackup = true;
         try {
@@ -335,7 +344,9 @@ class _VisitRecordConfirmationScreenState
       AutoComparisonGalleryResult? comparisonBackupResult;
       if (widget.autoSaveComparisonToGallery) {
         if (mounted) {
-          setState(() => _savingStage = '生成对比图中...');
+          setState(
+            () => _savingStage = l10n.visitRecordConfirmationStageComparison,
+          );
         }
         try {
           comparisonBackupResult = widget.backupComparison != null
@@ -360,7 +371,9 @@ class _VisitRecordConfirmationScreenState
       var completionFailed = false;
       if (completePoint) {
         if (mounted) {
-          setState(() => _savingStage = '更新点位状态中...');
+          setState(
+            () => _savingStage = l10n.visitRecordConfirmationStageUpdatingSpot,
+          );
         }
         try {
           await controller.completePointAndWait(widget.point);
@@ -382,9 +395,11 @@ class _VisitRecordConfirmationScreenState
         comparisonBackupResult: comparisonBackupResult,
       );
       if (_preparedPhoto?.written == false) {
-        message += '；定位写入失败，保留照片原有信息';
+        message += l10n.visitRecordConfirmationLocationWriteFailed;
       }
-      if (completionFailed) message += '；标记完成失败，请在计划中重试';
+      if (completionFailed) {
+        message += l10n.visitRecordConfirmationCompleteFailed;
+      }
       ScaffoldMessenger.of(
         context,
       ).showStatusSnack(kind: AppStatusBannerKind.success, title: message);
@@ -400,8 +415,8 @@ class _VisitRecordConfirmationScreenState
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
           title: _recordCommitUncertain
-              ? '保存结果未确认，请返回记录页检查，勿重复保存。'
-              : '保存记录失败，请重试。',
+              ? l10n.visitRecordConfirmationSaveUncertain
+              : l10n.visitRecordConfirmationSaveFailed,
         );
       }
     } finally {
@@ -423,7 +438,7 @@ class _VisitRecordConfirmationScreenState
         if (!didPop && _saving) {
           ScaffoldMessenger.of(context).showStatusSnack(
             kind: AppStatusBannerKind.running,
-            title: '正在保存记录，请稍候。',
+            title: l10n.visitRecordConfirmationSavingWait,
             icon: LucideIcons.save,
           );
         }
@@ -431,7 +446,7 @@ class _VisitRecordConfirmationScreenState
       child: Scaffold(
         appBar: AppBar(
           leading: appBackButtonIfCanPop(context),
-          title: const Text('确认记录'),
+          title: Text(l10n.visitRecordConfirmationTitle),
         ),
         body: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
@@ -480,7 +495,8 @@ class _VisitRecordConfirmationScreenState
                           _locationRequest += 1;
                           _locating = false;
                           _pendingLocation = null;
-                          _locationStatus = '已跳过定位，本次不添加位置，保留照片原有信息。';
+                          _locationStatus =
+                              l10n.visitRecordConfirmationLocationSkipped;
                         });
                       }
                     : null,
@@ -508,7 +524,11 @@ class _VisitRecordConfirmationScreenState
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : const Icon(LucideIcons.save, size: 18),
-              label: Text(_saving ? '保存中' : '保存记录'),
+              label: Text(
+                _saving
+                    ? l10n.visitRecordConfirmationSavingButton
+                    : l10n.visitRecordConfirmationSave,
+              ),
             ),
             const SizedBox(height: 8),
             OutlinedButton.icon(
@@ -516,7 +536,7 @@ class _VisitRecordConfirmationScreenState
                   ? null
                   : () => _save(completePoint: true),
               icon: const Icon(LucideIcons.circleCheckBig, size: 18),
-              label: const Text('保存并标记完成'),
+              label: Text(l10n.visitRecordConfirmationSaveAndComplete),
             ),
             const SizedBox(height: 8),
             TextButton(
@@ -525,7 +545,7 @@ class _VisitRecordConfirmationScreenState
                   : () {
                       if (!_saving) Navigator.of(context).pop();
                     },
-              child: const Text('取消'),
+              child: Text(l10n.commonCancel),
             ),
           ],
         ),
@@ -549,13 +569,17 @@ String _saveSuccessMessage({
   required bool galleryBackupSucceeded,
   required AutoComparisonGalleryResult? comparisonBackupResult,
 }) {
-  final base = completePoint ? '已保存并标记完成' : '记录已保存';
+  final base = completePoint
+      ? l10n.visitRecordConfirmationSavedAndCompleted
+      : l10n.visitRecordConfirmationSaved;
   final backupText = attemptedGalleryBackup
-      ? (galleryBackupSucceeded ? '，并备份到相册' : '；相册备份失败')
+      ? (galleryBackupSucceeded
+            ? l10n.visitRecordConfirmationBackedUp
+            : l10n.visitRecordConfirmationBackupFailed)
       : '';
   final comparisonText = _comparisonBackupMessage(comparisonBackupResult);
   final nextText = completePoint && nextPointName != null
-      ? '，下一个：$nextPointName'
+      ? l10n.visitRecordConfirmationNext(nextPointName)
       : '';
   return '$base$backupText$comparisonText$nextText';
 }
@@ -564,13 +588,20 @@ String _comparisonBackupMessage(AutoComparisonGalleryResult? result) {
   if (result == null) {
     return '';
   }
-  if (result.message != null) return '，${result.message}';
+  if (result.message != null) {
+    return l10n.visitRecordConfirmationDetail(result.message!);
+  }
   return switch (result.status) {
-    AutoComparisonGalleryStatus.saved => '，对比图已保存到相册',
-    AutoComparisonGalleryStatus.referenceUnavailable => '，参考图不可用，未生成对比图',
-    AutoComparisonGalleryStatus.capturedPhotoUnavailable => '，巡礼图不可用，未生成对比图',
-    AutoComparisonGalleryStatus.galleryFailed => '，对比图保存到相册失败',
-    AutoComparisonGalleryStatus.renderFailed => '，对比图生成失败',
+    AutoComparisonGalleryStatus.saved =>
+      l10n.visitRecordConfirmationComparisonSaved,
+    AutoComparisonGalleryStatus.referenceUnavailable =>
+      l10n.visitRecordConfirmationComparisonNoReference,
+    AutoComparisonGalleryStatus.capturedPhotoUnavailable =>
+      l10n.visitRecordConfirmationComparisonNoPhoto,
+    AutoComparisonGalleryStatus.galleryFailed =>
+      l10n.visitRecordConfirmationComparisonGalleryFailed,
+    AutoComparisonGalleryStatus.renderFailed =>
+      l10n.visitRecordConfirmationComparisonRenderFailed,
   };
 }
 
@@ -587,7 +618,7 @@ Future<void> _showGallerySaveSheet(
           const SizedBox(height: 12),
           ListTile(
             leading: const Icon(LucideIcons.download),
-            title: const Text('保存到相册'),
+            title: Text(l10n.visitRecordConfirmationSaveToGallery),
             onTap: () => Navigator.of(context).pop('save'),
           ),
           const SizedBox(height: 12),
@@ -623,7 +654,7 @@ class _ComparisonPanel extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         _ImageCompareTile(
-          label: '参考图',
+          label: l10n.visitRecordConfirmationReferenceImage,
           child: _ReferencePreview(
             bytes: referenceBytes,
             imagePath: referenceImagePath,
@@ -638,7 +669,7 @@ class _ComparisonPanel extends StatelessWidget {
         ),
         const SizedBox(height: 12),
         _ImageCompareTile(
-          label: '巡礼图',
+          label: l10n.visitRecordConfirmationPilgrimagePhoto,
           child: VisitRecordPhoto(
             path: photoPath,
             fit: BoxFit.contain,
@@ -762,7 +793,7 @@ class _InfoPanel extends StatelessWidget {
           Icon(LucideIcons.layers, color: AppColors.textSecondary),
           const SizedBox(width: 8),
           Text(
-            '参考模式',
+            l10n.visitRecordConfirmationReferenceMode,
             style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 13,
@@ -772,7 +803,7 @@ class _InfoPanel extends StatelessWidget {
           ),
           const Spacer(),
           Text(
-            referenceMode,
+            referenceModeDisplayLabel(referenceMode),
             style: const TextStyle(
               fontSize: 13,
               fontWeight: FontWeight.w800,

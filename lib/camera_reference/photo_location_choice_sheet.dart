@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_theme.dart';
 import '../plan/pilgrimage_models.dart';
+import '../l10n/l10n.dart';
 
 class PhotoLocationChoiceSheet extends StatelessWidget {
   const PhotoLocationChoiceSheet({super.key});
@@ -18,7 +19,7 @@ class PhotoLocationChoiceSheet extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '是否在巡礼照片中记录定位？',
+              l10n.photoLocationChoiceTitle,
               style: TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 20,
@@ -29,7 +30,7 @@ class PhotoLocationChoiceSheet extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              '以后可以在“拍摄设置”中修改。',
+              l10n.photoLocationChoiceChangeLater,
               style: TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 14,
@@ -38,7 +39,7 @@ class PhotoLocationChoiceSheet extends StatelessWidget {
               ),
             ),
             Text(
-              '不会使用点位坐标代替实际定位。',
+              l10n.photoLocationChoiceNoSpotCoordinates,
               style: TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 14,
@@ -50,8 +51,8 @@ class PhotoLocationChoiceSheet extends StatelessWidget {
             _PhotoLocationChoiceTile(
               key: const ValueKey('photo-location-choice-recent'),
               icon: LucideIcons.history,
-              title: '使用最近一次定位',
-              subtitle: '优先快速写入近期有效定位，没有时获取一次。',
+              title: l10n.photoLocationChoiceRecentTitle,
+              subtitle: l10n.photoLocationChoiceRecentSubtitle,
               onTap: () => Navigator.of(
                 context,
               ).pop(PhotoLocationStrategy.useRecentLocation),
@@ -60,8 +61,8 @@ class PhotoLocationChoiceSheet extends StatelessWidget {
             _PhotoLocationChoiceTile(
               key: const ValueKey('photo-location-choice-confirm'),
               icon: LucideIcons.locateFixed,
-              title: '确认记录时获取定位',
-              subtitle: '拍摄后在确认页面等待新定位，适合需要更准确位置时。',
+              title: l10n.photoLocationChoiceConfirmTitle,
+              subtitle: l10n.photoLocationChoiceConfirmSubtitle,
               recommended: true,
               onTap: () => Navigator.of(
                 context,
@@ -71,7 +72,7 @@ class PhotoLocationChoiceSheet extends StatelessWidget {
             _PhotoLocationChoiceTile(
               key: const ValueKey('photo-location-choice-disabled'),
               icon: LucideIcons.mapPinOff,
-              title: '不记录定位',
+              title: l10n.photoLocationChoiceDisabledTitle,
               onTap: () =>
                   Navigator.of(context).pop(PhotoLocationStrategy.disabled),
             ),
@@ -150,7 +151,7 @@ class _PhotoLocationChoiceTile extends StatelessWidget {
                               borderRadius: BorderRadius.circular(4),
                             ),
                             child: Text(
-                              '推荐',
+                              l10n.photoLocationChoiceRecommended,
                               style: TextStyle(
                                 color: AppColors.accent,
                                 fontSize: 11,

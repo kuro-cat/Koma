@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../l10n/l10n.dart';
 import '../app_theme.dart';
 import 'responsive_button.dart';
 
@@ -10,7 +11,7 @@ Future<bool> showConfirmActionDialog(
   required String message,
   required String confirmLabel,
   bool destructive = false,
-  String cancelLabel = '取消',
+  String? cancelLabel,
   String? notice,
   List<String> emphasizedValues = const [],
 }) async {
@@ -33,7 +34,7 @@ Future<void> showInfoActionDialog(
   BuildContext context, {
   required String title,
   required String message,
-  String confirmLabel = '知道了',
+  String? confirmLabel,
 }) {
   return showDialog<void>(
     context: context,
@@ -51,7 +52,7 @@ class ConfirmActionDialog extends StatelessWidget {
     required this.message,
     required this.confirmLabel,
     this.destructive = false,
-    this.cancelLabel = '取消',
+    this.cancelLabel,
     this.notice,
     this.emphasizedValues = const [],
     this.additionalContent,
@@ -62,7 +63,7 @@ class ConfirmActionDialog extends StatelessWidget {
   final String message;
   final String confirmLabel;
   final bool destructive;
-  final String cancelLabel;
+  final String? cancelLabel;
   final String? notice;
   final List<String> emphasizedValues;
   final Widget? additionalContent;
@@ -76,7 +77,7 @@ class ConfirmActionDialog extends StatelessWidget {
         title: title,
         message: message,
         confirmLabel: confirmLabel,
-        cancelLabel: cancelLabel,
+        cancelLabel: cancelLabel ?? l10n.commonCancel,
         notice: notice,
         emphasizedValues: emphasizedValues,
         additionalContent: additionalContent,
@@ -122,17 +123,17 @@ class ConfirmActionDialog extends StatelessWidget {
                     color: dangerColor.withValues(alpha: 0.08),
                     borderRadius: BorderRadius.circular(10),
                   ),
-                  child: const Row(
+                  child: Row(
                     children: [
-                      Icon(
+                      const Icon(
                         LucideIcons.triangleAlert,
                         color: dangerColor,
                         size: 17,
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       Text(
-                        '此操作无法撤销',
-                        style: TextStyle(
+                        l10n.confirmActionIrreversible,
+                        style: const TextStyle(
                           color: dangerColor,
                           fontSize: 13,
                           fontWeight: FontWeight.w700,
@@ -144,7 +145,7 @@ class ConfirmActionDialog extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 AppDialogActionRow(
-                  cancelLabel: cancelLabel,
+                  cancelLabel: cancelLabel ?? l10n.commonCancel,
                   confirmLabel: confirmLabel,
                   confirmColor: dangerColor,
                   onCancel: () => Navigator.of(context).pop(false),
@@ -163,13 +164,13 @@ class InfoActionDialog extends StatelessWidget {
   const InfoActionDialog({
     required this.title,
     required this.message,
-    this.confirmLabel = '知道了',
+    this.confirmLabel,
     super.key,
   });
 
   final String title;
   final String message;
-  final String confirmLabel;
+  final String? confirmLabel;
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +209,9 @@ class InfoActionDialog extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10),
                     ),
                   ),
-                  child: _DialogActionLabel(confirmLabel),
+                  child: _DialogActionLabel(
+                    confirmLabel ?? l10n.confirmActionGotIt,
+                  ),
                 ),
               ],
             ),

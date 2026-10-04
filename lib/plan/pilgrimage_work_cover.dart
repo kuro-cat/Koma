@@ -8,6 +8,7 @@ import '../data/public_http.dart';
 import '../widgets/anitabi_network_image.dart';
 import '../widgets/public_network_image.dart';
 import 'pilgrimage_models.dart';
+import '../l10n/l10n.dart';
 
 class PilgrimageWorkCover extends StatelessWidget {
   const PilgrimageWorkCover({
@@ -26,7 +27,7 @@ class PilgrimageWorkCover extends StatelessWidget {
     final imageUrl = work.coverImageUrl?.trim();
     return Semantics(
       image: imageUrl != null && imageUrl.isNotEmpty,
-      label: '${work.title}封面',
+      label: l10n.pilgrimageWorkCoverLabel(work.title),
       child: Container(
         width: width,
         height: height,

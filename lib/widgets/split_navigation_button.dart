@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../l10n/l10n.dart';
 
 class SplitNavigationButton extends StatelessWidget {
   const SplitNavigationButton({
@@ -63,7 +64,7 @@ class SplitNavigationButton extends StatelessWidget {
               child: _SplitNavHalf(
                 buttonKey: inAppKey,
                 enabled: onOpenInAppNavigation != null,
-                label: '应用内导航：$inAppLabel',
+                label: l10n.splitNavigationButtonInApp(inAppLabel),
                 onTap: onOpenInAppNavigation,
                 iconColor: foregroundColor,
                 child: Icon(Icons.directions_walk, size: walkIconSize),
@@ -81,7 +82,7 @@ class SplitNavigationButton extends StatelessWidget {
               child: _SplitNavHalf(
                 buttonKey: externalKey,
                 enabled: onOpenExternalNavigation != null,
-                label: '打开外部地图',
+                label: l10n.splitNavigationButtonExternal,
                 onTap: onOpenExternalNavigation,
                 iconColor: foregroundColor,
                 child: Icon(LucideIcons.navigation, size: 21),

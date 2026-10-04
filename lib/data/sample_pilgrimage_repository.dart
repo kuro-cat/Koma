@@ -3,6 +3,7 @@ import 'package:latlong2/latlong.dart';
 import '../plan/pilgrimage_models.dart';
 import '../plan/plan_order.dart';
 import 'pilgrimage_repository.dart';
+import '../l10n/l10n.dart';
 
 class SamplePilgrimageRepository implements PilgrimageRepository {
   SamplePilgrimageRepository({
@@ -1092,7 +1093,9 @@ class SamplePilgrimageRepository implements PilgrimageRepository {
   }
 
   String _uniquePlanName(String baseName, Set<String> existingNames) {
-    final trimmed = baseName.trim().isEmpty ? '导入的巡礼计划' : baseName.trim();
+    final trimmed = baseName.trim().isEmpty
+        ? l10n.samplePilgrimageRepositoryImportedPlan
+        : baseName.trim();
     if (!existingNames.contains(trimmed)) {
       return trimmed;
     }

@@ -10,6 +10,7 @@ import 'anitabi_remote_state.dart';
 import 'anitabi_service_config.dart';
 import 'anitabi_static_data_reader.dart';
 import 'public_http.dart';
+import '../l10n/l10n.dart';
 
 /// Where the app looks for `config/anitabi-services.json`, in order.
 /// raw.githubusercontent.com updates within minutes but is often unreachable
@@ -54,13 +55,14 @@ enum AnitabiSyncOutcome {
 
 extension AnitabiSyncOutcomeLabel on AnitabiSyncOutcome {
   String get label => switch (this) {
-    AnitabiSyncOutcome.updated => '已更新服务地址',
-    AnitabiSyncOutcome.unchanged => '服务地址已是最新',
-    AnitabiSyncOutcome.offline => '无法获取远程配置，请检查网络',
-    AnitabiSyncOutcome.invalid => '远程配置无效，已保留当前地址',
-    AnitabiSyncOutcome.verificationFailed => '新地址暂不可用，已保留当前地址',
-    AnitabiSyncOutcome.rateLimited => '检查过于频繁，稍后再试',
-    AnitabiSyncOutcome.disabled => '已关闭自动更新',
+    AnitabiSyncOutcome.updated => l10n.anitabiEndpointSyncUpdated,
+    AnitabiSyncOutcome.unchanged => l10n.anitabiEndpointSyncUnchanged,
+    AnitabiSyncOutcome.offline => l10n.anitabiEndpointSyncOffline,
+    AnitabiSyncOutcome.invalid => l10n.anitabiEndpointSyncInvalid,
+    AnitabiSyncOutcome.verificationFailed =>
+      l10n.anitabiEndpointSyncVerificationFailed,
+    AnitabiSyncOutcome.rateLimited => l10n.anitabiEndpointSyncRateLimited,
+    AnitabiSyncOutcome.disabled => l10n.anitabiEndpointSyncDisabled,
   };
 }
 

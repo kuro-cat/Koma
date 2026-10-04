@@ -2,6 +2,7 @@ import 'dart:typed_data';
 
 import 'package:file_selector/file_selector.dart' as file_selector;
 
+import '../l10n/l10n.dart';
 import 'plan_export_delivery_result.dart';
 
 Future<PreparedPlanExportDestination?> preparePlanExportDestinationImpl({
@@ -62,7 +63,7 @@ Future<file_selector.FileSaveLocation?> _getSaveLocation({
       ),
     ],
     suggestedName: fileName,
-    confirmButtonText: '保存',
+    confirmButtonText: l10n.commonSave,
   );
 }
 

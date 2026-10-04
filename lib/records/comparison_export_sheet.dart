@@ -6,6 +6,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../app_theme.dart';
 import '../data/pilgrimage_repository.dart';
 import '../data/anitabi_image_source_scope.dart';
+import '../l10n/l10n.dart';
 import '../plan/pilgrimage_models.dart';
 import '../settings/app_settings_updater.dart';
 import '../widgets/image_viewer_screen.dart';
@@ -113,7 +114,7 @@ class _ComparisonExportSheetState extends State<ComparisonExportSheet> {
         _pilgrimNameController.text = config.pilgrimName;
       });
     } catch (_) {
-      _showFailure('读取导出设置失败，请重试。');
+      _showFailure(l10n.comparisonExportLoadSettingsFailed);
     } finally {
       if (mounted) setState(() => _loading = false);
     }
@@ -144,7 +145,7 @@ class _ComparisonExportSheetState extends State<ComparisonExportSheet> {
     try {
       await _persistConfig(config);
     } catch (_) {
-      _showFailure('导出设置保存失败，导出时将重试。');
+      _showFailure(l10n.comparisonExportSaveSettingsFailed);
     }
   }
 
@@ -240,7 +241,7 @@ class _ComparisonExportSheetState extends State<ComparisonExportSheet> {
       if (result.disposition == ComparisonExportDisposition.downloaded) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.success,
-          title: '对比图已交给浏览器下载',
+          title: l10n.comparisonExportBrowserDownload,
         );
       }
       setState(() {
@@ -262,7 +263,7 @@ class _ComparisonExportSheetState extends State<ComparisonExportSheet> {
         );
       }
     } catch (_) {
-      _showFailure('导出失败，设置或图片未能保存，请重试。');
+      _showFailure(l10n.comparisonExportFailed);
     } finally {
       if (mounted && !_isExiting) setState(() => _exporting = false);
     }
@@ -272,13 +273,17 @@ class _ComparisonExportSheetState extends State<ComparisonExportSheet> {
     return result.message ??
         switch (result.failureReason) {
           ComparisonExportFailureReason.referenceUnavailable =>
-            '参考图不可用，无法导出对比图片。',
+            l10n.comparisonExportReferenceUnavailable,
           ComparisonExportFailureReason.capturedPhotoUnavailable =>
-            '巡礼图不可用，无法导出对比图片。',
-          ComparisonExportFailureReason.budgetExceeded => '图片超过处理预算，原件未更改。',
-          ComparisonExportFailureReason.unsupportedFormat => '当前平台不支持处理此图片格式。',
-          ComparisonExportFailureReason.invalidData => '图片数据无法解码。',
-          ComparisonExportFailureReason.renderFailed || null => '导出失败，请稍后重试。',
+            l10n.comparisonExportPhotoUnavailable,
+          ComparisonExportFailureReason.budgetExceeded =>
+            l10n.comparisonExportBudgetExceeded,
+          ComparisonExportFailureReason.unsupportedFormat =>
+            l10n.comparisonExportUnsupportedFormat,
+          ComparisonExportFailureReason.invalidData =>
+            l10n.comparisonExportInvalidData,
+          ComparisonExportFailureReason.renderFailed ||
+          null => l10n.comparisonExportRenderFailed,
         };
   }
 }
@@ -296,10 +301,10 @@ class _SheetHeader extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
         child: Row(
           children: [
-            const Expanded(
+            Expanded(
               child: Text(
-                '导出对比图',
-                style: TextStyle(
+                l10n.comparisonExportTitle,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0,
@@ -307,7 +312,7 @@ class _SheetHeader extends StatelessWidget {
               ),
             ),
             IconButton(
-              tooltip: '关闭',
+              tooltip: l10n.commonClose,
               onPressed: exporting ? null : () => Navigator.of(context).pop(),
               icon: const Icon(LucideIcons.x),
             ),
@@ -343,7 +348,7 @@ class _SheetFooter extends StatelessWidget {
           stackBelowWidth: 250,
           first: OutlinedButton(
             onPressed: exporting ? null : () => Navigator.of(context).pop(),
-            child: const Text('取消'),
+            child: Text(l10n.commonCancel),
           ),
           second: FilledButton(
             onPressed: exporting ? null : onExport,
@@ -359,11 +364,11 @@ class _SheetFooter extends StatelessWidget {
                       color: Colors.white,
                     ),
                   )
-                : const ResponsiveButtonContent(
+                : ResponsiveButtonContent(
                     icon: LucideIcons.download,
-                    label: '导出对比图',
-                    shortLabel: '导出',
-                    semanticLabel: '导出对比图',
+                    label: l10n.comparisonExportTitle,
+                    shortLabel: l10n.comparisonExportShortLabel,
+                    semanticLabel: l10n.comparisonExportTitle,
                   ),
           ),
         ),

@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../app_theme.dart';
+import '../l10n/l10n.dart';
 import '../map/map_colors.dart';
 import '../data/pilgrimage_repository.dart';
 import '../widgets/auto_caching_reference_thumbnail.dart';
@@ -367,13 +368,15 @@ class _PlanScreenState extends State<PlanScreen>
         actions: [
           IconButton(
             key: const ValueKey('plan-add-points-button'),
-            tooltip: '添加点位',
+            tooltip: l10n.planAddSpots,
             onPressed: () => _openPlanAction(widget.onOpenAddPoints),
             icon: const Icon(LucideIcons.mapPinPlus),
           ),
           IconButton(
             key: const ValueKey('plan-actions-toggle'),
-            tooltip: _showPlanActions ? '收起计划操作' : '展开计划操作',
+            tooltip: _showPlanActions
+                ? l10n.planHideActions
+                : l10n.planShowActions,
             onPressed: _togglePlanActions,
             icon: Icon(
               _showPlanActions
@@ -616,7 +619,7 @@ class _PlanScreenState extends State<PlanScreen>
           .firstOrNull;
     } catch (_) {
       if (mounted) {
-        _showSnackBar('片区创建失败，请稍后重试。');
+        _showSnackBar(l10n.planCreateAreaFailed);
       }
       return null;
     }
@@ -673,17 +676,22 @@ class _PlanScreenState extends State<PlanScreen>
 
     final points = pointsNeedingFullReferenceCache(controller.points);
     if (points.isEmpty) {
-      _showSnackBar('当前计划没有需要缓存的参考图', kind: AppStatusBannerKind.warning);
+      _showSnackBar(
+        l10n.planNoReferencesToCache,
+        kind: AppStatusBannerKind.warning,
+      );
       return;
     }
 
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '缓存完整参考图',
-      message: '将缓存当前计划中 ${points.length} 张完整参考图，可能需要较长时间和网络流量。',
-      confirmLabel: '开始缓存',
-      notice: '建议在 Wi-Fi 环境下进行缓存',
-      emphasizedValues: ['${points.length} 张'],
+      title: l10n.planCacheFullReferencesTitle,
+      message: l10n.planCacheFullReferencesMessage(
+        l10n.planCacheFullImageCount(points.length),
+      ),
+      confirmLabel: l10n.planStartCaching,
+      notice: l10n.planCacheWifiNotice,
+      emphasizedValues: [l10n.planCacheFullImageCount(points.length)],
     );
     if (!confirmed || !mounted) {
       return;
@@ -753,9 +761,9 @@ class _PlanPointCreateGroupDialogState
   @override
   Widget build(BuildContext context) {
     return AppInputDialog(
-      title: '新建片区',
+      title: l10n.planNewArea,
       content: AppDialogField(
-        label: '片区名称',
+        label: l10n.planAreaName,
         child: TextField(
           onTapOutside: dismissKeyboardOnTapOutside,
           key: const ValueKey('plan-point-group-name-field'),
@@ -766,7 +774,7 @@ class _PlanPointCreateGroupDialogState
           onSubmitted: (value) => Navigator.of(context).pop(value),
         ),
       ),
-      confirmLabel: '创建',
+      confirmLabel: l10n.planCreate,
       onConfirm: () => Navigator.of(context).pop(_nameController.text),
     );
   }
@@ -819,13 +827,13 @@ class _PlanActionsPanel extends StatelessWidget {
       _PlanActionItem(
         key: const ValueKey('plan-action-switch-plan'),
         icon: const Icon(LucideIcons.arrowLeftRight, size: 20),
-        title: '切换计划',
+        title: l10n.planSwitchPlan,
         onTap: onSwitchPlan,
       ),
       _PlanActionItem(
         key: const ValueKey('plan-action-manage-points'),
         icon: const Icon(LucideIcons.slidersHorizontal, size: 20),
-        title: '管理计划',
+        title: l10n.planManagePlan,
         onTap: onManagePoints,
       ),
       _PlanActionItem(
@@ -836,19 +844,19 @@ class _PlanActionsPanel extends StatelessWidget {
                 child: CircularProgressIndicator(strokeWidth: 2),
               )
             : const Icon(LucideIcons.cloudDownload, size: 20),
-        title: '缓存参考图',
+        title: l10n.planCacheReferences,
         onTap: onCacheReferences,
       ),
       _PlanActionItem(
         key: const ValueKey('plan-action-memo'),
         icon: const Icon(LucideIcons.stickyNote, size: 20),
-        title: '计划备忘录',
+        title: l10n.planActionMemo,
         onTap: onOpenMemo,
       ),
       _PlanActionItem(
         key: const ValueKey('plan-action-import-export'),
         icon: const Icon(LucideIcons.import, size: 20),
-        title: '导入导出',
+        title: l10n.planActionImportExport,
         onTap: onImportExport,
       ),
     ];
@@ -996,7 +1004,7 @@ class _GroupSwitcher extends StatelessWidget {
                 ? null
                 : () => onSelectGroup(groups[selectedIndex - 1]),
             icon: const Icon(LucideIcons.chevronLeft),
-            tooltip: '上一个片区',
+            tooltip: l10n.planPreviousArea,
           ),
           Expanded(
             child: FilledButton.tonal(
@@ -1019,7 +1027,7 @@ class _GroupSwitcher extends StatelessWidget {
                 ? null
                 : () => onSelectGroup(groups[selectedIndex + 1]),
             icon: const Icon(LucideIcons.chevronRight),
-            tooltip: '下一个片区',
+            tooltip: l10n.planNextArea,
           ),
         ],
       ),
@@ -1120,7 +1128,7 @@ class _PlanGroupControls extends StatelessWidget {
                   showMap ? LucideIcons.map : LucideIcons.map,
                   size: 18,
                 ),
-                label: Text(showMap ? '收起地图' : '地图'),
+                label: Text(showMap ? l10n.planHideMap : l10n.planMap),
               ),
             ],
           ),
@@ -1221,12 +1229,12 @@ class _SortOrderControl extends StatelessWidget {
                   MenuItemButton(
                     leadingIcon: const Icon(LucideIcons.listOrdered),
                     onPressed: () => onChanged(PointSortMode.plan),
-                    child: const Text('默认计划顺序'),
+                    child: Text(l10n.planSortDefaultOrder),
                   ),
                   MenuItemButton(
                     leadingIcon: const Icon(LucideIcons.navigation),
                     onPressed: () => onChanged(PointSortMode.distance),
-                    child: const Text('按距离当前位置'),
+                    child: Text(l10n.planSortByDistanceFromHere),
                   ),
                 ],
               ),
@@ -1261,15 +1269,17 @@ class _SortOrderControl extends StatelessWidget {
 
 String _sortModeLabel(PointSortMode mode) {
   return switch (mode) {
-    PointSortMode.plan => '默认计划',
-    PointSortMode.distance => '按距离',
+    PointSortMode.plan => l10n.planSortDefault,
+    PointSortMode.distance => l10n.planSortDistance,
   };
 }
 
 String _sortDirectionTooltip(PointSortMode mode, bool descending) {
   return switch (mode) {
-    PointSortMode.plan => descending ? '反序' : '正序',
-    PointSortMode.distance => descending ? '远到近' : '近到远',
+    PointSortMode.plan =>
+      descending ? l10n.planSortReversed : l10n.planSortForward,
+    PointSortMode.distance =>
+      descending ? l10n.planSortFarToNear : l10n.planSortNearToFar,
   };
 }
 
@@ -1449,7 +1459,9 @@ class _PlanInlineMapState extends State<_PlanInlineMap> {
                 right: 10,
                 top: 10,
                 child: _MapFloatingIconButton(
-                  tooltip: widget.showVirtualLocation ? '隐藏当前位置' : '显示当前位置',
+                  tooltip: widget.showVirtualLocation
+                      ? l10n.planHideLocation
+                      : l10n.planShowLocation,
                   icon: widget.isLocating
                       ? null
                       : widget.showVirtualLocation
@@ -1490,7 +1502,12 @@ class _MapCompactSummary extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         child: Text(
-          '${group.anchorLabel} · ${group.completedCount}/${group.points.length} 完成 · ${group.orderModeLabel}',
+          l10n.planAreaProgress(
+            group.anchorLabel,
+            group.completedCount,
+            group.points.length,
+            group.orderModeLabel,
+          ),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(
@@ -1676,7 +1693,7 @@ class _EmptyPlanCard extends StatelessWidget {
               Icon(LucideIcons.package, color: AppColors.accent),
               const SizedBox(width: 10),
               Text(
-                '还没有点位',
+                l10n.planNoSpotsYet,
                 style: TextStyle(
                   color: AppColors.accentDark,
                   fontSize: 18,
@@ -1699,7 +1716,7 @@ class _EmptyPlanCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
               ),
               icon: const Icon(LucideIcons.mapPinPlus, size: 20),
-              label: const Text('添加点位'),
+              label: Text(l10n.planAddSpots),
             ),
           ),
         ],
@@ -1713,24 +1730,22 @@ class _OnboardingTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
         _OnboardingStep(
           number: 1,
-          title: '加作品',
-          body: '点击右上角展开计划操作，选择“添加点位”，再点击“作品管理”，搜索并添加想要加入巡礼计划的作品。',
+          title: l10n.planOnboardingWorksTitle,
+          body: l10n.planOnboardingWorksBody,
         ),
         _OnboardingStep(
           number: 2,
-          title: '选点位',
-          body:
-              '在“添加点位”页面点击“从作品地图导入”，在这里你可以选择并添加巡礼点位。\n你也可以在“添加点位”页面点击“从Anitabi链接导入”。通过使用有效链接，导入点位时作品也会被一起添加。',
+          title: l10n.planOnboardingSpotsTitle,
+          body: l10n.planOnboardingSpotsBody,
         ),
         _OnboardingStep(
           number: 3,
-          title: '划片区',
-          body:
-              '回到“计划”页，点击右上角展开计划操作，选择“管理计划”。在这里可以细致管理已加入计划的点位，创建片区并归纳距离接近的点位。',
+          title: l10n.planOnboardingAreasTitle,
+          body: l10n.planOnboardingAreasBody,
           isLast: true,
         ),
       ],
@@ -1870,7 +1885,11 @@ class _WorkHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  '${plan.area} / ${plan.points.length} 个点位 / ${_workCountText(plan)}',
+                  l10n.planSummary(
+                    plan.area,
+                    plan.points.length,
+                    _workCountText(plan),
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -1891,7 +1910,7 @@ class _WorkHeader extends StatelessWidget {
     final count = plan.works.isNotEmpty
         ? plan.works.length
         : plan.points.map((point) => point.work.id).toSet().length;
-    return '$count 部作品';
+    return l10n.planWorkCount(count);
   }
 }
 
@@ -1982,7 +2001,9 @@ class _PlanPointTile extends StatelessWidget {
                 ),
               ),
               IconButton(
-                tooltip: status == VisitStatus.completed ? '撤回打卡' : '完成',
+                tooltip: status == VisitStatus.completed
+                    ? l10n.planUndoCheckIn
+                    : l10n.planComplete,
                 onPressed: status == VisitStatus.completed
                     ? onReopen
                     : onComplete,
@@ -1993,7 +2014,7 @@ class _PlanPointTile extends StatelessWidget {
                 ),
               ),
               IconButton(
-                tooltip: '拍摄参考',
+                tooltip: l10n.planShootReference,
                 onPressed: onOpenCamera,
                 icon: SizedBox(
                   width: 24,

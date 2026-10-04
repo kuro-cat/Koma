@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_theme.dart';
+import '../l10n/l10n.dart';
 
 /// The reference and the photo in one frame, split by a divider that can be
 /// dragged (or moved with the arrow keys) to compare them. The reference is
@@ -34,8 +35,10 @@ class PhotoCompareSlider extends StatefulWidget {
 }
 
 class _PhotoCompareSliderState extends State<PhotoCompareSlider> {
-  static const _viewReferenceAction = CustomSemanticsAction(label: '查看参考图');
-  static const _viewPhotoAction = CustomSemanticsAction(label: '查看巡礼图');
+  static CustomSemanticsAction get _viewReferenceAction =>
+      CustomSemanticsAction(label: l10n.photoCompareSliderViewReference);
+  static CustomSemanticsAction get _viewPhotoAction =>
+      CustomSemanticsAction(label: l10n.photoCompareSliderViewPhoto);
   static const _keyboardStep = 0.05;
   static const _handleHitWidth = 44.0;
 
@@ -89,7 +92,7 @@ class _PhotoCompareSliderState extends State<PhotoCompareSlider> {
             return Semantics(
               key: const ValueKey('photo-compare-slider'),
               slider: true,
-              label: '滑动对比，左侧参考图，右侧巡礼图',
+              label: l10n.photoCompareSliderSemantics,
               value: percentOf(split),
               increasedValue: percentOf(split + _keyboardStep),
               decreasedValue: percentOf(split - _keyboardStep),
@@ -124,15 +127,15 @@ class _PhotoCompareSliderState extends State<PhotoCompareSlider> {
                         clipper: _SplitClipper(split),
                         child: widget.photo,
                       ),
-                      const Positioned(
+                      Positioned(
                         left: 8,
                         top: 8,
-                        child: _CornerLabel('参考图'),
+                        child: _CornerLabel(l10n.photoCompareSliderReference),
                       ),
-                      const Positioned(
+                      Positioned(
                         right: 8,
                         top: 8,
-                        child: _CornerLabel('巡礼图'),
+                        child: _CornerLabel(l10n.photoCompareSliderPhoto),
                       ),
                       Positioned(
                         left: dividerX - _handleHitWidth / 2,

@@ -9,6 +9,7 @@ import '../data/bounded_image_decoder.dart';
 import '../widgets/bounded_image.dart';
 
 import '../app_theme.dart';
+import '../l10n/l10n.dart';
 import '../plan/pilgrimage_models.dart';
 import '../plan/pilgrimage_plan_controller.dart';
 import '../records/visit_record_reference_bytes.dart';
@@ -163,7 +164,9 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
-          title: error is ImageBudgetException ? error.message : '自动调色失败',
+          title: error is ImageBudgetException
+              ? error.message
+              : l10n.colorGradingAutoMatchFailed,
         );
       }
     } finally {
@@ -178,7 +181,7 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
     if (captured == null) {
       messenger.showStatusSnack(
         kind: AppStatusBannerKind.error,
-        title: '巡礼图读取失败',
+        title: l10n.colorGradingPhotoReadFailed,
       );
       return;
     }
@@ -189,8 +192,8 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
         title: error is ImageBudgetException
             ? error.message
             : error == null
-            ? '没有可用于自动调色的参考图'
-            : '参考图暂不可用，无法自动匹配色调',
+            ? l10n.colorGradingNoReferenceForMatch
+            : l10n.colorGradingReferenceUnavailable,
       );
       return;
     }
@@ -224,7 +227,9 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
       kind: result == null
           ? AppStatusBannerKind.error
           : AppStatusBannerKind.success,
-      title: result == null ? '自动调色失败' : '已生成自动调色参数',
+      title: result == null
+          ? l10n.colorGradingAutoMatchFailed
+          : l10n.colorGradingAutoMatchDone,
     );
   }
 
@@ -236,7 +241,9 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
-          title: error is ImageBudgetException ? error.message : '保存失败，原件未更改',
+          title: error is ImageBudgetException
+              ? error.message
+              : l10n.colorGradingSaveFailedOriginalKept,
         );
       }
     } finally {
@@ -266,7 +273,7 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
       setState(() => _saving = false);
       messenger.showStatusSnack(
         kind: AppStatusBannerKind.success,
-        title: '已还原为原图',
+        title: l10n.colorGradingRestoredOriginal,
       );
       Navigator.of(context).pop(updated);
       return;
@@ -274,7 +281,7 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
     if (targetParams == null) {
       messenger.showStatusSnack(
         kind: AppStatusBannerKind.warning,
-        title: '请先自动匹配色调',
+        title: l10n.colorGradingMatchFirst,
       );
       return;
     }
@@ -290,7 +297,10 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
         return;
       }
       setState(() => _saving = false);
-      messenger.showStatusSnack(kind: AppStatusBannerKind.error, title: '保存失败');
+      messenger.showStatusSnack(
+        kind: AppStatusBannerKind.error,
+        title: l10n.colorGradingSaveFailed,
+      );
       return;
     }
 
@@ -316,7 +326,7 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
     setState(() => _saving = false);
     messenger.showStatusSnack(
       kind: AppStatusBannerKind.success,
-      title: '已保存调色结果',
+      title: l10n.colorGradingSaved,
     );
     Navigator.of(context).pop(updated);
   }
@@ -335,9 +345,9 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
   Future<void> _confirmReset() async {
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '重置调色',
-      message: '将清除当前调色，恢复为原图。',
-      confirmLabel: '重置',
+      title: l10n.colorGradingResetTitle,
+      message: l10n.colorGradingResetMessage,
+      confirmLabel: l10n.colorGradingReset,
     );
     if (!confirmed || !mounted) {
       return;
@@ -350,10 +360,10 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: appBackButtonIfCanPop(context),
-        title: const Text('自动调色'),
+        title: Text(l10n.colorGradingTitle),
         actions: [
           IconButton(
-            tooltip: '重置',
+            tooltip: l10n.colorGradingReset,
             onPressed: _confirmReset,
             icon: const Icon(LucideIcons.rotateCcw),
           ),
@@ -426,7 +436,9 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
                   ),
                 )
               : const Icon(LucideIcons.wandSparkles, size: 18),
-          label: Text(_matching ? '匹配中...' : '自动匹配色调'),
+          label: Text(
+            _matching ? l10n.colorGradingMatching : l10n.colorGradingAutoMatch,
+          ),
         ),
         if (_targetParams != null) ...[
           const SizedBox(height: 12),
@@ -472,16 +484,18 @@ class _StackedPreview extends StatelessWidget {
       child: Column(
         children: [
           _PreviewPane(
-            label: '参考图',
+            label: l10n.colorGradingReference,
             child: referenceBytes == null
                 ? referenceError == null
-                      ? const Center(child: Text('没有参考图'))
+                      ? Center(child: Text(l10n.colorGradingNoReference))
                       : BoundedImageError(error: referenceError!)
                 : BoundedImage(bytes: referenceBytes!),
           ),
           const SizedBox(height: 8),
           _PreviewPane(
-            label: showOriginal ? '原图' : '调色后',
+            label: showOriginal
+                ? l10n.colorGradingOriginal
+                : l10n.colorGradingGraded,
             child: showOriginal
                 ? BoundedImage(bytes: capturedBytes)
                 : _GradedPhotoPreview(
@@ -673,7 +687,11 @@ class _OriginalHoldButton extends StatelessWidget {
       child: OutlinedButton.icon(
         onPressed: enabled ? () {} : null,
         icon: Icon(showOriginal ? LucideIcons.eye : LucideIcons.eye),
-        label: Text(showOriginal ? '正在显示原图' : '按住显示原图'),
+        label: Text(
+          showOriginal
+              ? l10n.colorGradingShowingOriginal
+              : l10n.colorGradingHoldForOriginal,
+        ),
       ),
     );
   }
@@ -702,9 +720,9 @@ class _ModeSelector extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            '匹配模式',
-            style: TextStyle(
+          Text(
+            l10n.colorGradingMatchMode,
+            style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w800,
               letterSpacing: 0,
@@ -749,7 +767,9 @@ class _ModeSelector extends StatelessWidget {
               const SizedBox(width: 6),
               Expanded(
                 child: Text(
-                  hasSavedParams ? '已恢复或生成调色参数，可保存结果' : '自动匹配后可保存调色结果',
+                  hasSavedParams
+                      ? l10n.colorGradingParamsReady
+                      : l10n.colorGradingMatchToSave,
                   style: TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 13,
@@ -787,9 +807,9 @@ class _ScorePanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            '色调匹配',
-            style: TextStyle(
+          Text(
+            l10n.colorGradingToneMatch,
+            style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w800,
               letterSpacing: 0,
@@ -798,13 +818,16 @@ class _ScorePanel extends StatelessWidget {
           const SizedBox(height: 8),
           Row(
             children: [
-              _ScoreValue(label: '原图', score: beforeScore),
+              _ScoreValue(label: l10n.colorGradingOriginal, score: beforeScore),
               Icon(
                 LucideIcons.arrowRight,
                 size: 18,
                 color: AppColors.textSecondary,
               ),
-              _ScoreValue(label: '当前', score: currentToneScore),
+              _ScoreValue(
+                label: l10n.colorGradingCurrent,
+                score: currentToneScore,
+              ),
               Icon(
                 LucideIcons.arrowRight,
                 size: 18,
@@ -872,9 +895,9 @@ class _SavePanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            '保存结果',
-            style: TextStyle(
+          Text(
+            l10n.colorGradingSaveResult,
+            style: const TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.w800,
               letterSpacing: 0,
@@ -882,7 +905,7 @@ class _SavePanel extends StatelessWidget {
           ),
           const SizedBox(height: 6),
           Text(
-            '保存后记录详情和导出会使用调色后的图片，原图和调色参数会保留。',
+            l10n.colorGradingSaveDescription,
             style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 13,
@@ -902,7 +925,11 @@ class _SavePanel extends StatelessWidget {
                     ),
                   )
                 : const Icon(LucideIcons.save, size: 18),
-            label: Text(saving ? '保存中...' : '保存调色结果'),
+            label: Text(
+              saving
+                  ? l10n.colorGradingSaving
+                  : l10n.colorGradingSaveColorMatch,
+            ),
           ),
         ],
       ),

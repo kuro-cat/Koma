@@ -11,6 +11,7 @@ import '../plan_transfer/plan_export_delivery_result.dart';
 import 'comparison_export_budget.dart';
 import 'comparison_export_encoding.dart';
 import 'comparison_export_result.dart';
+import '../l10n/l10n.dart';
 
 class ComparisonSourceUnavailable implements Exception {
   const ComparisonSourceUnavailable(this.reason);
@@ -108,8 +109,8 @@ Future<ComparisonExportImageResult> downloadComparisonImage(
       fileName: comparisonFileName(image),
       mimeType: image.mimeType,
       extension: image.extension,
-      shareSubject: 'MiriaGo 对比图',
-      shareText: 'MiriaGo 对比图',
+      shareSubject: l10n.comparisonExportSupportShareText,
+      shareText: l10n.comparisonExportSupportShareText,
     );
     return result.action == PlanExportDeliveryAction.canceled
         ? const ComparisonExportImageResult.canceled()

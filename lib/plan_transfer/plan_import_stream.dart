@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+import '../l10n/l10n.dart';
 import 'plan_import_package.dart';
 
 Future<Uint8List> readBoundedPlanImportStream(
@@ -10,7 +11,11 @@ Future<Uint8List> readBoundedPlanImportStream(
   await for (final chunk in stream) {
     final size = bytes.length + chunk.length;
     if (size > limits.maxCompressedBytes) {
-      throw PlanImportLimitException('压缩包字节数', size, limits.maxCompressedBytes);
+      throw PlanImportLimitException(
+        l10n.planImportPackageResourceArchiveBytes,
+        size,
+        limits.maxCompressedBytes,
+      );
     }
     bytes.add(chunk);
   }

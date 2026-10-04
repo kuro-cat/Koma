@@ -37,6 +37,7 @@ import 'records/comparison_export_config_migration.dart';
 import 'settings/app_settings_updater.dart';
 import 'settings/settings_screen.dart';
 import 'widgets/app_scaled_route.dart';
+import 'l10n/l10n.dart';
 
 class AppShell extends StatefulWidget {
   AppShell({
@@ -279,8 +280,8 @@ class _AppShellState extends State<AppShell> {
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
-          title: '设置保存失败',
-          subtitle: '修改未能保存，请稍后重试',
+          title: l10n.appShellSettingsSaveFailed,
+          subtitle: l10n.appShellSettingsSaveFailedHint,
         );
       }
       return false;
@@ -385,7 +386,7 @@ class _AppShellState extends State<AppShell> {
     final reading = mounted
         ? ScaffoldMessenger.of(context).showStatusSnack(
             kind: AppStatusBannerKind.running,
-            title: '正在读取计划文件…',
+            title: l10n.appShellReadingPlanFile,
             duration: const Duration(minutes: 5),
           )
         : null;
@@ -431,7 +432,9 @@ class _AppShellState extends State<AppShell> {
       }
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.error,
-        title: error is PlanImportLimitException ? error.message : '计划文件导入失败',
+        title: error is PlanImportLimitException
+            ? error.message
+            : l10n.appShellPlanImportFailed,
       );
     }
   }
@@ -548,29 +551,29 @@ class _AppShellState extends State<AppShell> {
                           _selectedIndex = index;
                         });
                       },
-                      destinations: const [
+                      destinations: [
                         NavigationDestination(
                           icon: Icon(LucideIcons.listTodo),
                           selectedIcon: Icon(LucideIcons.listTodo),
-                          label: '计划',
+                          label: l10n.appShellNavPlan,
                           tooltip: '',
                         ),
                         NavigationDestination(
                           icon: Icon(LucideIcons.map),
                           selectedIcon: Icon(LucideIcons.map),
-                          label: '地图',
+                          label: l10n.appShellNavMap,
                           tooltip: '',
                         ),
                         NavigationDestination(
                           icon: Icon(LucideIcons.images),
                           selectedIcon: Icon(LucideIcons.images),
-                          label: '记录',
+                          label: l10n.appShellNavRecords,
                           tooltip: '',
                         ),
                         NavigationDestination(
                           icon: Icon(LucideIcons.settings),
                           selectedIcon: Icon(LucideIcons.settings),
-                          label: '设置',
+                          label: l10n.appShellNavSettings,
                           tooltip: '',
                         ),
                       ],
@@ -610,7 +613,7 @@ class _PlanLoadState extends StatelessWidget {
               ),
               const SizedBox(height: 12),
               Text(
-                hasError ? '计划加载失败' : '正在加载巡礼计划',
+                hasError ? l10n.appShellLoadFailed : l10n.appShellLoading,
                 style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
@@ -619,7 +622,9 @@ class _PlanLoadState extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                hasError ? '请稍后重试。' : '准备今日点位和当前目标。',
+                hasError
+                    ? l10n.appShellLoadFailedHint
+                    : l10n.appShellLoadingHint,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: AppColors.textSecondary,
@@ -644,7 +649,7 @@ class _PlanLoadState extends StatelessWidget {
                 OutlinedButton.icon(
                   onPressed: onRetry,
                   icon: const Icon(LucideIcons.refreshCw, size: 18),
-                  label: const Text('重试'),
+                  label: Text(l10n.commonRetry),
                 )
               else
                 const SizedBox(

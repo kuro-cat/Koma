@@ -23,6 +23,7 @@ export 'tauri_bridge_stub.dart'
         DesktopAssetFileResult,
         DesktopRestoreImportAssetsResult,
         DesktopStateResult;
+import '../l10n/l10n.dart';
 
 @JS('window')
 external JSObject get _window;
@@ -263,7 +264,10 @@ Future<DesktopAssetResult> readDesktopAsset({
     if (error.toString().contains('ASSET_BYTE_LIMIT:')) {
       throw ImageBudgetException(
         ImageBudgetFailure.encodedBytes,
-        '图片超过读取预算 ${maxBytes ?? 64 * 1024 * 1024} 字节；原件未更改（$error）',
+        l10n.tauriBridgeWebAssetTooLarge(
+          maxBytes ?? 64 * 1024 * 1024,
+          error.toString(),
+        ),
       );
     }
     rethrow;

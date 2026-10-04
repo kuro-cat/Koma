@@ -13,6 +13,7 @@ import '../map/map_marker_scale.dart';
 import '../utils/selected_item_order.dart';
 import 'coordinate_input_dialog.dart';
 import 'pilgrimage_models.dart';
+import '../l10n/l10n.dart';
 
 class GroupAnchorSelection {
   const GroupAnchorSelection({
@@ -86,7 +87,7 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: appBackButtonIfCanPop(context),
-        title: const Text('选择关键点'),
+        title: Text(l10n.groupAnchorPickerTitle),
         actions: [
           ClearAnchorSelectionButton(
             onPressed: _selectedPoint == null && _manualPosition == null
@@ -173,7 +174,9 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
               child: Column(
                 children: [
                   _MapToolButton(
-                    tooltip: _manualPickMode ? '关闭地图点选' : '在地图上选点',
+                    tooltip: _manualPickMode
+                        ? l10n.groupAnchorPickerExitMapPick
+                        : l10n.groupAnchorPickerStartMapPick,
                     selected: _manualPickMode,
                     onTap: () {
                       setState(() {
@@ -184,7 +187,7 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
                   ),
                   const SizedBox(height: 8),
                   _MapToolButton(
-                    tooltip: '输入经纬度',
+                    tooltip: l10n.groupAnchorPickerEnterCoordinates,
                     selected: false,
                     onTap: _showCoordinateInput,
                     icon: LucideIcons.mapPinPen,
@@ -231,9 +234,9 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
   Future<void> _confirmClearSelection() async {
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '清除选点',
-      message: '将清除当前选择的关键点，可继续在本页重新选择。',
-      confirmLabel: '清除选点',
+      title: l10n.groupAnchorPickerClearSelection,
+      message: l10n.groupAnchorPickerClearMessage,
+      confirmLabel: l10n.groupAnchorPickerClearSelection,
     );
     if (!confirmed || !mounted) {
       return;
@@ -290,7 +293,7 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
     }
     Navigator.of(context).pop(
       GroupAnchorSelection(
-        name: '手动关键点',
+        name: l10n.groupAnchorPickerManualAnchor,
         position: manualPosition,
         pointId: null,
       ),
@@ -307,7 +310,7 @@ class _AnchorPointMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      tooltip: '选择点位',
+      tooltip: l10n.groupAnchorPickerSelectPoint,
       onPressed: onTap,
       style: IconButton.styleFrom(
         backgroundColor: selected ? MapColors.accent : MapColors.surface,
@@ -386,9 +389,15 @@ class _AnchorSelectionCard extends StatelessWidget {
     final bottomInset = MediaQuery.paddingOf(context).bottom;
     final point = selectedPoint;
     final position = point?.position ?? manualPosition;
-    final title = point?.name ?? (position == null ? '尚未选择关键点' : '手动关键点');
+    final title =
+        point?.name ??
+        (position == null
+            ? l10n.groupAnchorPickerNoneSelected
+            : l10n.groupAnchorPickerManualAnchor);
     final subtitle = point == null
-        ? (manualPickMode ? '点击地图任意位置设置关键点' : '可点选点位、地图或输入经纬度')
+        ? (manualPickMode
+              ? l10n.groupAnchorPickerMapPickHint
+              : l10n.groupAnchorPickerIdleHint)
         : '${groupNameForPoint(point)} / ${point.subtitle}';
 
     return Container(
@@ -435,7 +444,7 @@ class _AnchorSelectionCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          FilledButton(onPressed: onSave, child: const Text('保存')),
+          FilledButton(onPressed: onSave, child: Text(l10n.commonSave)),
         ],
       ),
     );

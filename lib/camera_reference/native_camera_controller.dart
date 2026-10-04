@@ -6,6 +6,7 @@ import 'package:flutter/widgets.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'photo_location.dart';
+import '../l10n/l10n.dart';
 
 typedef NativeCameraChannelFactory = MethodChannel Function(int viewId);
 typedef NativeCameraPermissionRequest = Future<bool> Function();
@@ -158,7 +159,7 @@ class NativeCameraController extends ChangeNotifier {
       granted = await _requestCameraPermission();
     } catch (error) {
       if (isStale()) return;
-      _error = '相机权限请求失败：$error';
+      _error = l10n.nativeCameraControllerPermissionRequestFailed('$error');
       _notify();
       return;
     }
@@ -166,7 +167,7 @@ class NativeCameraController extends ChangeNotifier {
       return;
     }
     if (!granted) {
-      _error = '需要相机权限';
+      _error = l10n.nativeCameraControllerPermissionRequired;
       _permissionDenied = true;
       _notify();
       return;
@@ -189,14 +190,14 @@ class NativeCameraController extends ChangeNotifier {
     } on PlatformException catch (error) {
       if (isStale()) return;
       if (error.code == nativeCameraPermissionDeniedErrorCode) {
-        _error = '需要相机权限';
+        _error = l10n.nativeCameraControllerPermissionRequired;
         _permissionDenied = true;
       } else {
-        _error = error.message ?? '原生相机初始化失败';
+        _error = error.message ?? l10n.nativeCameraControllerInitFailed;
       }
     } catch (error) {
       if (isStale()) return;
-      _error = '原生相机初始化失败：$error';
+      _error = l10n.nativeCameraControllerInitFailedWithError('$error');
     }
     _notify();
   }

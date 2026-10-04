@@ -11,6 +11,7 @@ import 'anitabi_image_url.dart';
 import 'anitabi_service_config.dart';
 import 'anitabi_static_data_reader.dart';
 import 'public_http.dart';
+import '../l10n/l10n.dart';
 
 class AnitabiClient {
   AnitabiClient({
@@ -462,7 +463,7 @@ class AnitabiBangumiLite {
           ? json['cn'] as String
           : json['title'] as String? ?? 'Anitabi',
       subtitle: json['title'] as String? ?? '',
-      city: json['city'] as String? ?? '未设置地区',
+      city: json['city'] as String? ?? l10n.anitabiClientNoRegion,
       center: LatLng((geo[0] as num).toDouble(), (geo[1] as num).toDouble()),
       zoom: (json['zoom'] as num?)?.toDouble() ?? 12,
       pointsLength: json['pointsLength'] as int? ?? 0,
@@ -513,7 +514,9 @@ class AnitabiMapWorkLite {
       bangumiId: (json[0] as num).toInt(),
       title: _preferredString(json[1], json[3]) ?? 'Anitabi',
       subtitle: _compactStringValue(json[3]) ?? '',
-      city: _compactStringValue(json[4]) ?? '未设置地区',
+      // ponytail: parsed in a compute isolate for big indexes, where l10n is
+      // still the Chinese default; pass the locale in if this fallback matters.
+      city: _compactStringValue(json[4]) ?? l10n.anitabiClientNoRegion,
       center: LatLng(centerLat, centerLng),
       zoom: (json[11] as num?)?.toDouble() ?? 12,
       points: _compactLitePoints(json[12]),
@@ -595,7 +598,8 @@ class AnitabiPoint {
   }) {
     final geo = json['geo'] as List<Object?>;
     final cn = _stringValue(json['cn']);
-    final name = _stringValue(json['name']) ?? 'Anitabi 点位';
+    final name =
+        _stringValue(json['name']) ?? l10n.anitabiClientDefaultSpotName;
     final ep = json['ep'];
     final second = json['s'];
 
@@ -621,7 +625,8 @@ class AnitabiPoint {
     required LatLng position,
   }) {
     final cn = _compactStringValue(json[2]);
-    final name = _compactStringValue(json[1]) ?? 'Anitabi 点位';
+    final name =
+        _compactStringValue(json[1]) ?? l10n.anitabiClientDefaultSpotName;
     final ep = json[8];
     final second = json[9];
 
@@ -750,7 +755,7 @@ class AnitabiPointNotFoundException implements Exception {
 
   @override
   String toString() {
-    return '没有找到对应的 Anitabi 点位';
+    return l10n.anitabiClientPointNotFound;
   }
 }
 

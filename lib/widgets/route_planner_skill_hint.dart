@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../l10n/l10n.dart';
 import '../app_theme.dart';
 import '../data/pilgrimage_repository.dart';
 import '../settings/app_settings_updater.dart';
@@ -12,12 +13,10 @@ import 'snackbar_helper.dart';
 const routePlannerSkillUrl =
     'https://github.com/BilyHurington/miriago-route-planner-skill';
 
-const routePlannerSkillTitle = '用 AI 一键规划巡礼行程';
+String get routePlannerSkillTitle => l10n.routePlannerSkillHintTitle;
 
-const routePlannerSkillDescription =
-    '让 ChatGPT、Claude Code、Codex 等 AI 助手调用 MiriaGo 路线规划 Skill。\n'
-    '它会从 Anitabi、Google My Maps 等来源收集作品点位，自动划分区域、规划路线并生成行程备注；'
-    '关键步骤会先向你确认，最终导出可直接使用的 .sjhplan 计划包。';
+String get routePlannerSkillDescription =>
+    l10n.routePlannerSkillHintDescription;
 
 Future<void> _saveRoutePlannerSkillDismissal(
   PilgrimageRepository repository,
@@ -43,7 +42,7 @@ Future<void> openRoutePlannerSkillGuide(BuildContext context) async {
   if (!opened) {
     messenger?.showStatusSnack(
       kind: AppStatusBannerKind.error,
-      title: '无法打开链接',
+      title: l10n.routePlannerSkillHintOpenFailed,
       subtitle: routePlannerSkillUrl,
     );
   }
@@ -55,8 +54,8 @@ Future<void> showRoutePlannerSkillIntroDialog(BuildContext context) async {
     context,
     title: routePlannerSkillTitle,
     message: routePlannerSkillDescription,
-    confirmLabel: '查看使用说明',
-    cancelLabel: '知道了',
+    confirmLabel: l10n.routePlannerSkillHintViewGuide,
+    cancelLabel: l10n.confirmActionGotIt,
   );
   if (open && context.mounted) {
     await openRoutePlannerSkillGuide(context);
@@ -105,7 +104,7 @@ class _RoutePlannerSkillCardState extends State<RoutePlannerSkillCard> {
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
-          title: '关闭提示失败，请重试。',
+          title: l10n.routePlannerSkillHintDismissFailed,
         );
       }
     } finally {
@@ -152,7 +151,7 @@ class _RoutePlannerSkillCardState extends State<RoutePlannerSkillCard> {
                 ),
                 IconButton(
                   key: const ValueKey('route-planner-skill-dismiss'),
-                  tooltip: '关闭',
+                  tooltip: l10n.commonClose,
                   visualDensity: VisualDensity.compact,
                   onPressed: _saving ? null : _dismiss,
                   icon: const Icon(LucideIcons.x, size: 18),
@@ -172,7 +171,7 @@ class _RoutePlannerSkillCardState extends State<RoutePlannerSkillCard> {
             const SizedBox(height: 10),
             Center(
               child: Text(
-                '点击查看使用说明',
+                l10n.routePlannerSkillHintTapForGuide,
                 key: const ValueKey('route-planner-skill-open'),
                 style: TextStyle(
                   color: AppColors.accentDark,
@@ -237,7 +236,7 @@ class _RoutePlannerSkillLinkState extends State<RoutePlannerSkillLink> {
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
-          title: '关闭提示失败，请重试。',
+          title: l10n.routePlannerSkillHintDismissFailed,
         );
       }
     } finally {
@@ -280,7 +279,7 @@ class _RoutePlannerSkillLinkState extends State<RoutePlannerSkillLink> {
                   children: [
                     TextSpan(text: widget.lead),
                     TextSpan(
-                      text: '用 AI 一键规划行程并生成计划包',
+                      text: l10n.routePlannerSkillHintLinkText,
                       style: TextStyle(
                         color: AppColors.accentDark,
                         fontWeight: FontWeight.w700,
@@ -294,7 +293,7 @@ class _RoutePlannerSkillLinkState extends State<RoutePlannerSkillLink> {
             ),
             IconButton(
               key: const ValueKey('route-planner-skill-link-dismiss'),
-              tooltip: '关闭',
+              tooltip: l10n.commonClose,
               padding: EdgeInsets.zero,
               constraints: const BoxConstraints.tightFor(width: 28, height: 28),
               onPressed: _saving ? null : _dismiss,

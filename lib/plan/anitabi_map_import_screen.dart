@@ -9,6 +9,7 @@ import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 
 import '../app_theme.dart';
+import '../l10n/l10n.dart';
 import '../map/map_colors.dart';
 import '../map/map_layers_panel.dart';
 import '../map/map_marker_clustering.dart';
@@ -211,8 +212,8 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
         }
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
-          title: '设置保存失败',
-          subtitle: '请稍后重试',
+          title: l10n.anitabiMapImportSettingsSaveFailed,
+          subtitle: l10n.anitabiMapImportTryLater,
         );
       }
       return false;
@@ -233,7 +234,7 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
     _anitabiClient.clearStaticCache();
     ScaffoldMessenger.of(context).showStatusSnack(
       kind: AppStatusBannerKind.running,
-      title: '正在清除缓存并重新加载 Anitabi 点位...',
+      title: l10n.anitabiMapImportClearingCache,
       icon: LucideIcons.brushCleaning,
     );
 
@@ -357,7 +358,7 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
   void _showManualWorkMessage() {
     ScaffoldMessenger.of(context).showStatusSnack(
       kind: AppStatusBannerKind.warning,
-      title: '手动添加的作品没有 Bangumi ID，无法从 Anitabi 地图导入点位。',
+      title: l10n.anitabiMapImportManualWorkNoId,
     );
   }
 
@@ -889,17 +890,17 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
 
     await _importPoints(
       [point],
-      successMessage: '已加入计划，可继续选择点位。',
-      failureMessage: '点位导入失败，请稍后重试。',
+      successMessage: l10n.anitabiMapImportAddedContinue,
+      failureMessage: l10n.anitabiMapImportSpotImportFailed,
     );
   }
 
   Future<void> _importAllAvailablePoints() async {
     final points = _availablePoints;
     final confirmed = await _confirmBulkImport(
-      title: '添加所有点位',
-      message: '将把当前作品中 ${points.length} 个还不在计划里的点位加入计划，并暂时放在未分组。',
-      confirmLabel: '添加全部',
+      title: l10n.anitabiMapImportAddAll,
+      message: l10n.anitabiMapImportAddAllMessage(points.length),
+      confirmLabel: l10n.anitabiMapImportAddAllConfirm,
     );
     if (!confirmed) {
       return;
@@ -907,8 +908,8 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
 
     await _importPoints(
       points,
-      successMessage: '已添加所有未加入的点位。',
-      failureMessage: '批量导入失败，请稍后重试。',
+      successMessage: l10n.anitabiMapImportAddedAll,
+      failureMessage: l10n.anitabiMapImportBulkFailed,
     );
   }
 
@@ -917,15 +918,15 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
     if (points.isEmpty) {
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.warning,
-        title: '框选范围内没有可添加点位',
+        title: l10n.anitabiMapImportBoxEmpty,
       );
       return;
     }
 
     final confirmed = await _confirmBulkImport(
-      title: '添加框选点位',
-      message: '将把框选范围内 ${points.length} 个还不在计划里的点位加入计划，并暂时放在未分组。',
-      confirmLabel: '添加框选',
+      title: l10n.anitabiMapImportAddBoxTitle,
+      message: l10n.anitabiMapImportAddBoxMessage(points.length),
+      confirmLabel: l10n.anitabiMapImportAddBoxConfirm,
     );
     if (!confirmed) {
       return;
@@ -933,8 +934,8 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
 
     await _importPoints(
       points,
-      successMessage: '已添加框选点位。',
-      failureMessage: '框选点位导入失败，请稍后重试。',
+      successMessage: l10n.anitabiMapImportAddedBox,
+      failureMessage: l10n.anitabiMapImportBoxFailed,
       exitBoxSelectionOnSuccess: true,
     );
   }
@@ -972,7 +973,7 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
       final messenger = ScaffoldMessenger.of(context);
       messenger.showStatusSnack(
         kind: AppStatusBannerKind.running,
-        title: '正在导入 ${pilgrimagePoints.length} 个点位...',
+        title: l10n.anitabiMapImportImporting(pilgrimagePoints.length),
         icon: LucideIcons.mapPinPlus,
       );
       var importedPlan = pilgrimagePoints.length == 1
@@ -1063,7 +1064,11 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
             lastProgressSnackBarAt = now;
             messenger.showStatusSnack(
               kind: AppStatusBannerKind.running,
-              title: '正在缓存缩略图 $processed/${pilgrimagePoints.length}，成功 $cached',
+              title: l10n.anitabiMapImportCachingThumbnails(
+                processed,
+                pilgrimagePoints.length,
+                cached,
+              ),
               icon: LucideIcons.images,
               duration: const Duration(milliseconds: 1200),
             );
@@ -1099,7 +1104,10 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
             : AppStatusBannerKind.warning,
         title: cacheFailed == 0
             ? successMessage
-            : '已导入 ${pilgrimagePoints.length} 个点位，缩略图缓存 $cached/${pilgrimagePoints.length}，其余稍后会自动补齐。',
+            : l10n.anitabiMapImportImportedPartialCache(
+                pilgrimagePoints.length,
+                cached,
+              ),
       );
       shouldShowOrganizeGuide = pilgrimagePoints.length > 1;
     } catch (error, stackTrace) {
@@ -1133,7 +1141,7 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.warning,
-          title: '点位已导入，但整理流程打开失败，可以稍后在计划中调整片区。',
+          title: l10n.anitabiMapImportOrganizeOpenFailed,
         );
       }
     }
@@ -1187,11 +1195,14 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
     final groups = sortGroupsByPlanOrder(_importedPlan.groups);
     final selectedGroupId = await showPlanGroupSelectionSheet(
       context: context,
-      title: '分配到片区',
-      subtitle: '选择一个片区作为刚导入点位的所属片区',
+      title: l10n.anitabiMapImportAssignToArea,
+      subtitle: l10n.anitabiMapImportAssignToAreaSubtitle,
       selectedOptionId: ungroupedOptionId,
       options: [
-        const PlanGroupSelectionOption(id: ungroupedOptionId, title: '未分入片区'),
+        PlanGroupSelectionOption(
+          id: ungroupedOptionId,
+          title: l10n.anitabiMapImportNotInArea,
+        ),
         for (final group in groups)
           PlanGroupSelectionOption(id: group.id, title: group.name),
       ],
@@ -1223,21 +1234,21 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
         _didUpdatePlan = true;
       });
       final groupName = groupId == null
-          ? '未分入片区'
+          ? l10n.anitabiMapImportNotInArea
           : updatedPlan.groups
                     .where((group) => group.id == groupId)
                     .map((group) => group.name)
                     .firstOrNull ??
-                '所选片区';
+                l10n.anitabiMapImportSelectedArea;
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.success,
-        title: '已将 ${pointIds.length} 个点位分配到「$groupName」',
+        title: l10n.anitabiMapImportAssigned(pointIds.length, groupName),
       );
     } catch (_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
-          title: '点位分配失败，请稍后重试。',
+          title: l10n.anitabiMapImportAssignFailed,
         );
       }
     }
@@ -1285,7 +1296,7 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
-          title: '片区创建失败，请稍后重试。',
+          title: l10n.anitabiMapImportCreateAreaFailed,
         );
       }
       return null;
@@ -1430,7 +1441,7 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
         toggles: [
           MapLayerToggle(
             id: 'thumbnails',
-            label: '缩略图标记',
+            label: l10n.anitabiMapImportThumbnailMarkers,
             icon: LucideIcons.image,
             value: settings.importMapShowThumbnailMarkers,
             onChanged: (value) => _updateSettings(
@@ -1439,8 +1450,8 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
           ),
           MapLayerToggle(
             id: 'hide-imported',
-            label: '只看未加入',
-            description: '隐藏已加入计划的点位',
+            label: l10n.anitabiMapImportOnlyNotAdded,
+            description: l10n.anitabiMapImportOnlyNotAddedDesc,
             icon: LucideIcons.eyeOff,
             value: settings.hideImportedPointsOnImportMap,
             onChanged: (value) => _updateSettings(
@@ -1449,8 +1460,8 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
           ),
           MapLayerToggle(
             id: 'group-areas',
-            label: '片区范围',
-            description: '显示计划中已有的片区',
+            label: l10n.anitabiMapImportAreaBounds,
+            description: l10n.anitabiMapImportAreaBoundsDesc,
             icon: LucideIcons.pentagon,
             value: settings.importMapShowGroupAreas,
             onChanged: (value) => _updateSettings(
@@ -1459,7 +1470,7 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
           ),
           MapLayerToggle(
             id: 'clustering',
-            label: '自动聚合密集点位',
+            label: l10n.anitabiMapImportClustering,
             icon: LucideIcons.group,
             value: settings.mapMarkerClusteringEnabled,
             onChanged: (value) => _updateSettings(
@@ -1515,7 +1526,7 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
                 localPath: _importedPointFor(point)?.referenceThumbnailPath,
                 imageUrl: _anitabiThumbnailUrl(point.referenceImageUrl),
                 imageSource: _settings.anitabiImageSource,
-                tooltip: 'Anitabi 点位',
+                tooltip: l10n.anitabiMapImportAnitabiSpot,
                 onTap: _isImporting ? null : () => _selectPoint(point),
               )
             : _ImportMarker(
@@ -1578,18 +1589,18 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
                   },
                 )
               : null,
-          title: const Text('从作品地图导入'),
+          title: Text(l10n.anitabiMapImportTitle),
           actions: [
             Builder(
               builder: (buttonContext) => IconButton(
                 key: const ValueKey('map-layers-button'),
-                tooltip: '图层',
+                tooltip: l10n.anitabiMapImportLayers,
                 onPressed: () => _openLayers(buttonContext),
                 icon: const Icon(LucideIcons.layers),
               ),
             ),
             Tooltip(
-              message: '清除缓存并重新加载 Anitabi 点位',
+              message: l10n.anitabiMapImportClearCacheReload,
               child: IconButton(
                 onPressed: _isLoading || _isImporting
                     ? null
@@ -1803,7 +1814,8 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
                                                       ),
                                                 )
                                                 .length,
-                                            doneLabel: '已加入',
+                                            doneLabel: l10n
+                                                .anitabiMapImportClusterAdded,
                                             opensPointBrowser: atMaximumZoom,
                                             onTap: atMaximumZoom
                                                 ? () =>
@@ -1946,61 +1958,64 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
 
   String _errorMessageFor(Object? error) {
     if (error is AnitabiStaticDataUnavailableException) {
-      return 'Anitabi 地图数据无法加载';
+      return l10n.anitabiMapImportErrorDataUnavailable;
     }
 
     if (error is AnitabiWorkNotFoundException) {
-      return 'Anitabi 中没有找到这个作品';
+      return l10n.anitabiMapImportErrorWorkNotFound;
     }
 
     if (error is AnitabiNoPointsException) {
-      return '当前作品暂无 Anitabi 点位';
+      return l10n.anitabiMapImportErrorNoPoints;
     }
 
     if (error is AnitabiPartialPointsException) {
-      return 'Anitabi 点位只加载到一部分';
+      return l10n.anitabiMapImportErrorPartial;
     }
 
     if (error is AnitabiException && error.statusCode == 404) {
-      return '这个 Bangumi 条目暂无 Anitabi 地图数据';
+      return l10n.anitabiMapImportError404;
     }
 
     if (error is AnitabiPointNotFoundException) {
-      return '没有找到这个 Anitabi 点位';
+      return l10n.anitabiMapImportErrorPointNotFound;
     }
 
-    return 'Anitabi 点位加载失败';
+    return l10n.anitabiMapImportErrorGeneric;
   }
 
   String _errorDetailFor(Object? error) {
     if (error is AnitabiStaticDataUnavailableException) {
       if (kIsWeb) {
-        return '可能是 Anitabi 地图数据缓存版本不一致，或当前预览服务网络请求被拦截。请清除缓存并重新加载 Anitabi 点位。';
+        return l10n.anitabiMapImportDetailDataUnavailableWeb;
       }
-      return '无法读取 Anitabi 地图索引。请检查网络连接，或清除缓存并重新加载 Anitabi 点位。';
+      return l10n.anitabiMapImportDetailDataUnavailable;
     }
 
     if (error is AnitabiWorkNotFoundException) {
-      return '这个 Bangumi 条目在 Anitabi 地图数据中没有对应作品。可以尝试添加同名动画、原作或其它关联条目。';
+      return l10n.anitabiMapImportDetailWorkNotFound;
     }
 
     if (error is AnitabiNoPointsException) {
-      return 'Anitabi 中能找到这个作品，但当前还没有可导入的地图点位。';
+      return l10n.anitabiMapImportDetailNoPoints;
     }
 
     if (error is AnitabiPartialPointsException) {
-      return '当前只取得 ${error.loadedCount} / 共 ${error.expectedCount} 个点位。请重新加载，或检查网络是否能访问 Anitabi 地图数据。';
+      return l10n.anitabiMapImportDetailPartial(
+        error.loadedCount,
+        error.expectedCount,
+      );
     }
 
     if (error is AnitabiException && error.statusCode == 404) {
-      return '可以尝试在作品管理中添加同名的原作、游戏或其他关联条目。';
+      return l10n.anitabiMapImportDetail404;
     }
 
     if (error is AnitabiPointNotFoundException) {
-      return '链接里的点位 ID 可能已失效，或 Anitabi 地图数据尚未同步。';
+      return l10n.anitabiMapImportDetailPointNotFound;
     }
 
-    return '请检查网络后重试，或稍后再重新加载。';
+    return l10n.anitabiMapImportDetailGeneric;
   }
 }
 
@@ -2025,8 +2040,12 @@ class _ImportProgress {
 
   String get label {
     return switch (stage) {
-      _ImportProgressStage.importing => '正在导入 $total 个点位...',
-      _ImportProgressStage.caching => '正在缓存缩略图 $processed/$total，成功 $succeeded',
+      _ImportProgressStage.importing => l10n.anitabiMapImportImporting(total),
+      _ImportProgressStage.caching => l10n.anitabiMapImportCachingThumbnails(
+        processed,
+        total,
+        succeeded,
+      ),
     };
   }
 }
@@ -2059,7 +2078,7 @@ class _ImportOrganizeDialog extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                '整理刚导入的点位',
+                l10n.anitabiMapImportOrganizeTitle,
                 style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 18,
@@ -2070,16 +2089,16 @@ class _ImportOrganizeDialog extends StatelessWidget {
               const SizedBox(height: 12),
               Text.rich(
                 TextSpan(
-                  text: '已导入 ',
+                  text: l10n.anitabiMapImportOrganizeLead,
                   children: [
                     TextSpan(
-                      text: '$importedCount 个点位',
+                      text: l10n.anitabiMapImportSpotCount(importedCount),
                       style: TextStyle(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w800,
                       ),
                     ),
-                    const TextSpan(text: '，并暂时放在未分组。可以直接分配到片区，或按最近关键点快速分配。'),
+                    TextSpan(text: l10n.anitabiMapImportOrganizeTail),
                   ],
                 ),
                 style: TextStyle(
@@ -2092,15 +2111,18 @@ class _ImportOrganizeDialog extends StatelessWidget {
               const SizedBox(height: 18),
               FilledButton(
                 onPressed: onNearestAssign,
-                child: const Text('最近分配'),
+                child: Text(l10n.anitabiMapImportNearestAssign),
               ),
               const SizedBox(height: 8),
               OutlinedButton(
                 onPressed: onAssignToGroup,
-                child: const Text('分配到片区'),
+                child: Text(l10n.anitabiMapImportAssignToArea),
               ),
               const SizedBox(height: 8),
-              TextButton(onPressed: onLater, child: const Text('稍后')),
+              TextButton(
+                onPressed: onLater,
+                child: Text(l10n.anitabiMapImportLater),
+              ),
             ],
           ),
         ),
@@ -2131,7 +2153,7 @@ class _ImportedPointsCreateGroupDialogState
   void _submit() {
     final name = _controller.text.trim();
     if (name.isEmpty) {
-      setState(() => _errorText = '片区名不能为空');
+      setState(() => _errorText = l10n.anitabiMapImportAreaNameEmpty);
       return;
     }
     Navigator.of(context).pop(name);
@@ -2140,9 +2162,9 @@ class _ImportedPointsCreateGroupDialogState
   @override
   Widget build(BuildContext context) {
     return AppInputDialog(
-      title: '新建片区',
+      title: l10n.anitabiMapImportNewArea,
       content: AppDialogField(
-        label: '片区名称',
+        label: l10n.anitabiMapImportAreaName,
         child: TextField(
           onTapOutside: dismissKeyboardOnTapOutside,
           key: const ValueKey('anitabi-import-group-name-field'),
@@ -2158,7 +2180,7 @@ class _ImportedPointsCreateGroupDialogState
           onSubmitted: (_) => _submit(),
         ),
       ),
-      confirmLabel: '创建',
+      confirmLabel: l10n.anitabiMapImportCreate,
       onConfirm: _submit,
     );
   }
@@ -2207,7 +2229,9 @@ class _ImportMarker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      tooltip: imported ? '已导入点位' : '可导入点位',
+      tooltip: imported
+          ? l10n.anitabiMapImportImportedSpot
+          : l10n.anitabiMapImportImportableSpot,
       onPressed: onTap,
       style: IconButton.styleFrom(
         backgroundColor: imported ? MapColors.surfaceMuted : MapColors.surface,
@@ -2281,9 +2305,18 @@ class _ImportSummary extends StatelessWidget {
                   revision: (isLoading, isImporting),
                   child: Text(
                     isLoading
-                        ? '正在加载 Anitabi 点位'
+                        ? l10n.anitabiMapImportLoadingSpots
                         : importProgress?.label ??
-                              '已导入 $importedCount / 当前显示 $totalCount${expected == null ? '' : ' / 共 $expected'}',
+                              (expected == null
+                                  ? l10n.anitabiMapImportShownCount(
+                                      importedCount,
+                                      totalCount,
+                                    )
+                                  : l10n.anitabiMapImportShownCountOfTotal(
+                                      importedCount,
+                                      totalCount,
+                                      expected,
+                                    )),
                     style: TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 13,
@@ -2303,7 +2336,7 @@ class _ImportSummary extends StatelessWidget {
                   width: 44,
                   height: 36,
                   child: IconButton.outlined(
-                    tooltip: '添加所有点位',
+                    tooltip: l10n.anitabiMapImportAddAll,
                     onPressed: isImporting || availableCount == 0
                         ? null
                         : onImportAll,
@@ -2316,7 +2349,9 @@ class _ImportSummary extends StatelessWidget {
                   width: 44,
                   height: 36,
                   child: IconButton.outlined(
-                    tooltip: boxSelectionEnabled ? '退出框选' : '框选点位',
+                    tooltip: boxSelectionEnabled
+                        ? l10n.anitabiMapImportExitBox
+                        : l10n.anitabiMapImportBoxSelect,
                     isSelected: boxSelectionEnabled,
                     onPressed: isImporting ? null : onToggleBoxSelection,
                     icon: const Icon(LucideIcons.scan, size: 18),
@@ -2348,10 +2383,12 @@ class _ImportSummary extends StatelessWidget {
                         icon: LucideIcons.mapPinPlus,
                         iconSize: 16,
                         label: selectedBoxCount == 0
-                            ? '导入框选结果'
-                            : '导入 $selectedBoxCount 个',
-                        shortLabel: '导入',
-                        semanticLabel: '导入框选结果',
+                            ? l10n.anitabiMapImportImportSelection
+                            : l10n.anitabiMapImportImportCount(
+                                selectedBoxCount,
+                              ),
+                        shortLabel: l10n.anitabiMapImportImport,
+                        semanticLabel: l10n.anitabiMapImportImportSelection,
                       ),
                     ),
                   ),
@@ -2497,7 +2534,7 @@ class _AnitabiPointCard extends StatelessWidget {
       if (!opened && context.mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
-          title: '无法打开${navigationApp.label}。',
+          title: l10n.anitabiMapImportOpenAppFailed(navigationApp.label),
         );
       }
     }
@@ -2588,7 +2625,7 @@ class _AnitabiPointCard extends StatelessWidget {
                               children: [
                                 CopyableText(
                                   text: point.name,
-                                  copyLabel: '点位名称',
+                                  copyLabel: l10n.anitabiMapImportSpotName,
                                   onTap: openDetail,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -2603,7 +2640,7 @@ class _AnitabiPointCard extends StatelessWidget {
                                   text:
                                       '${point.subtitle} / ${point.episodeLabel}',
                                   copyText: _copySummary,
-                                  copyLabel: '点位信息',
+                                  copyLabel: l10n.anitabiMapImportSpotInfo,
                                   onTap: openDetail,
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -2616,7 +2653,7 @@ class _AnitabiPointCard extends StatelessWidget {
                                 const SizedBox(height: 3),
                                 CopyableText(
                                   text: point.origin,
-                                  copyLabel: '来源',
+                                  copyLabel: l10n.anitabiMapImportSource,
                                   onTap: openDetail,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
@@ -2642,11 +2679,11 @@ class _AnitabiPointCard extends StatelessWidget {
                           style: OutlinedButton.styleFrom(
                             padding: const EdgeInsets.symmetric(horizontal: 20),
                           ),
-                          child: const ResponsiveButtonContent(
+                          child: ResponsiveButtonContent(
                             icon: LucideIcons.navigation,
                             iconSize: 17,
-                            label: '导航',
-                            semanticLabel: '打开导航',
+                            label: l10n.anitabiMapImportNavigate,
+                            semanticLabel: l10n.anitabiMapImportOpenNavigation,
                           ),
                         ),
                       ),
@@ -2662,9 +2699,15 @@ class _AnitabiPointCard extends StatelessWidget {
                             icon: imported
                                 ? LucideIcons.check
                                 : LucideIcons.mapPinPlus,
-                            label: imported ? '已加入计划' : '加入计划',
-                            shortLabel: imported ? '已加入' : '加入',
-                            semanticLabel: imported ? '已加入计划' : '加入计划',
+                            label: imported
+                                ? l10n.anitabiMapImportInPlan
+                                : l10n.anitabiMapImportAddToPlan,
+                            shortLabel: imported
+                                ? l10n.anitabiMapImportAdded
+                                : l10n.anitabiMapImportAddShort,
+                            semanticLabel: imported
+                                ? l10n.anitabiMapImportInPlan
+                                : l10n.anitabiMapImportAddToPlan,
                           ),
                         ),
                       ),
@@ -2791,7 +2834,7 @@ class _AnitabiPointDetailSheet extends StatelessWidget {
                       children: [
                         CopyableText(
                           text: point.name,
-                          copyLabel: '点位名称',
+                          copyLabel: l10n.anitabiMapImportSpotName,
                           maxLines: 3,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
@@ -2803,27 +2846,27 @@ class _AnitabiPointDetailSheet extends StatelessWidget {
                         const SizedBox(height: 8),
                         _AnitabiDetailInfoLine(
                           icon: LucideIcons.film,
-                          label: '场景',
+                          label: l10n.anitabiMapImportScene,
                           value: '${point.subtitle} / ${point.episodeLabel}',
                         ),
                         if (point.note?.trim().isNotEmpty == true) ...[
                           const SizedBox(height: 6),
                           _AnitabiDetailInfoLine(
                             icon: LucideIcons.stickyNote,
-                            label: '备注',
+                            label: l10n.anitabiMapImportNote,
                             value: point.note!,
                           ),
                         ],
                         const SizedBox(height: 6),
                         _AnitabiDetailInfoLine(
                           icon: LucideIcons.fileCode,
-                          label: '来源',
+                          label: l10n.anitabiMapImportSource,
                           value: point.origin,
                         ),
                         const SizedBox(height: 6),
                         _AnitabiDetailInfoLine(
                           icon: LucideIcons.mapPin,
-                          label: '坐标',
+                          label: l10n.anitabiMapImportCoordinates,
                           value:
                               '${point.position.latitude.toStringAsFixed(5)}, ${point.position.longitude.toStringAsFixed(5)}',
                         ),
@@ -2845,9 +2888,15 @@ class _AnitabiPointDetailSheet extends StatelessWidget {
                         },
                   child: ResponsiveButtonContent(
                     icon: imported ? LucideIcons.check : LucideIcons.mapPinPlus,
-                    label: imported ? '已加入计划' : '加入计划',
-                    shortLabel: imported ? '已加入' : '加入',
-                    semanticLabel: imported ? '已加入计划' : '加入计划',
+                    label: imported
+                        ? l10n.anitabiMapImportInPlan
+                        : l10n.anitabiMapImportAddToPlan,
+                    shortLabel: imported
+                        ? l10n.anitabiMapImportAdded
+                        : l10n.anitabiMapImportAddShort,
+                    semanticLabel: imported
+                        ? l10n.anitabiMapImportInPlan
+                        : l10n.anitabiMapImportAddToPlan,
                   ),
                 ),
               ),
@@ -2919,10 +2968,10 @@ class _NoPointSelectedCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final bottomInset = MediaQuery.paddingOf(context).bottom;
     final message = hasPoints
-        ? '点击地图上的点位查看缩略图和详情。'
+        ? l10n.anitabiMapImportTapSpotHint
         : expectedCount == null || expectedCount == 0
-        ? '当前作品没有可导入的 Anitabi 点位。'
-        : '当前作品共有 $expectedCount 个点位，但没有可导入的带图参考点位。';
+        ? l10n.anitabiMapImportNoImportableSpots
+        : l10n.anitabiMapImportNoImageSpots(expectedCount ?? 0);
 
     return Container(
       margin: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomInset),
@@ -2993,7 +3042,7 @@ class _EmptyImportState extends StatelessWidget {
                   Icon(LucideIcons.clapperboard, color: AppColors.accent),
                   const SizedBox(width: 8),
                   Text(
-                    '还没有作品',
+                    l10n.anitabiMapImportNoWorks,
                     style: TextStyle(
                       color: AppColors.accentDark,
                       fontSize: 18,
@@ -3015,7 +3064,7 @@ class _EmptyImportState extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                   ),
                   icon: const Icon(LucideIcons.clapperboard, size: 20),
-                  label: const Text('作品管理'),
+                  label: Text(l10n.anitabiMapImportManageWorks),
                 ),
               ),
             ],
@@ -3031,11 +3080,11 @@ class _ImportWorkGuideTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
         _ImportWorkGuideStep(
-          title: '从Bangumi导入',
-          body: '点击作品管理中的Bangumi按钮，搜索你想导入的作品并导入。之后你可以在这里直接查看对应作品在Anitabi上的点位。',
+          title: l10n.anitabiMapImportFromBangumiTitle,
+          body: l10n.anitabiMapImportFromBangumiBody,
           isLast: true,
         ),
       ],
@@ -3131,7 +3180,7 @@ class _ManualWorkImportState extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(24),
         child: Text(
-          '手动添加的作品没有 Bangumi ID，无法从 Anitabi 地图导入点位。\n\n请通过 Bangumi/Anitabi 搜索添加作品，或使用手动添加点位。',
+          l10n.anitabiMapImportManualWorkState,
           textAlign: TextAlign.center,
           style: TextStyle(
             color: AppColors.textSecondary,
@@ -3156,7 +3205,7 @@ class _NoAnitabiPointsState extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Text(
-          '「$workTitle」暂无可导入的 Anitabi 点位。',
+          l10n.anitabiMapImportWorkNoSpots(workTitle),
           textAlign: TextAlign.center,
           style: TextStyle(
             color: AppColors.textSecondary,
@@ -3184,7 +3233,7 @@ class _ImportLoadingState extends StatelessWidget {
             CircularProgressIndicator(),
             SizedBox(height: 16),
             Text(
-              '正在加载 Anitabi 作品和点位',
+              l10n.anitabiMapImportLoadingWorks,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: AppColors.textSecondary,
@@ -3243,7 +3292,7 @@ class _ImportErrorState extends StatelessWidget {
             OutlinedButton.icon(
               onPressed: onRetry,
               icon: const Icon(LucideIcons.refreshCw),
-              label: const Text('清除缓存并重新加载 Anitabi 点位'),
+              label: Text(l10n.anitabiMapImportClearCacheReload),
             ),
           ],
         ),

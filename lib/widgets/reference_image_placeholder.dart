@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../l10n/l10n.dart';
 import '../app_theme.dart';
 
 enum ReferenceImagePlaceholderState { loading, unavailable, empty }
@@ -20,9 +21,12 @@ class ReferenceImagePlaceholder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final label = switch (state) {
-      ReferenceImagePlaceholderState.loading => '参考图加载中',
-      ReferenceImagePlaceholderState.unavailable => '参考图暂不可用',
-      ReferenceImagePlaceholderState.empty => '暂无参考图',
+      ReferenceImagePlaceholderState.loading =>
+        l10n.referenceImagePlaceholderLoading,
+      ReferenceImagePlaceholderState.unavailable =>
+        l10n.referenceImagePlaceholderUnavailable,
+      ReferenceImagePlaceholderState.empty =>
+        l10n.referenceImagePlaceholderEmpty,
     };
 
     return ColoredBox(

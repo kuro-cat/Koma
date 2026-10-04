@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../l10n/l10n.dart';
 
 class AppBackButton extends StatelessWidget {
   const AppBackButton({this.onPressed, super.key});
@@ -18,7 +19,10 @@ class AppBackButton extends StatelessWidget {
           style: IconButton.styleFrom(
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          icon: const Icon(LucideIcons.arrowLeft, semanticLabel: '返回'),
+          icon: Icon(
+            LucideIcons.arrowLeft,
+            semanticLabel: l10n.appBackButtonLabel,
+          ),
         ),
       ),
     );

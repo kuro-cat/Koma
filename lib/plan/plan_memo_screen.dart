@@ -5,6 +5,7 @@ import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../app_theme.dart';
+import '../l10n/l10n.dart';
 import '../widgets/confirm_action_dialog.dart';
 import '../widgets/snackbar_helper.dart';
 import '../widgets/app_back_button.dart';
@@ -74,12 +75,12 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
     }
     final discard = await showConfirmActionDialog(
       context,
-      title: '放弃未保存内容？',
-      message: '当前备忘录还有未保存的修改。',
-      confirmLabel: '放弃',
-      cancelLabel: '继续编辑',
-      notice: '未保存的修改不会被保留',
-      emphasizedValues: const ['未保存的修改'],
+      title: l10n.planMemoDiscardTitle,
+      message: l10n.planMemoDiscardMessage,
+      confirmLabel: l10n.planMemoDiscard,
+      cancelLabel: l10n.planMemoKeepEditing,
+      notice: l10n.planMemoDiscardNotice,
+      emphasizedValues: [l10n.planMemoUnsavedChanges],
     );
     return discard;
   }
@@ -87,8 +88,9 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
   Future<void> _handleBack() async {
     if (_isSaving || _isTogglingTask) {
       ScaffoldMessenger.of(context).showStatusSnack(
+        icon: LucideIcons.save,
         kind: AppStatusBannerKind.running,
-        title: '正在保存备忘录，请稍候',
+        title: l10n.planMemoSavingWait,
       );
       return;
     }
@@ -125,13 +127,14 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
       });
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.success,
-        title: _isEditing ? '已保存，后续输入仍待保存' : '计划备忘录已保存',
+        title: _isEditing ? l10n.planMemoSavedEditsPending : l10n.planMemoSaved,
       );
     } catch (_) {
       if (mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showStatusSnack(kind: AppStatusBannerKind.error, title: '计划备忘录保存失败');
+        ScaffoldMessenger.of(context).showStatusSnack(
+          kind: AppStatusBannerKind.error,
+          title: l10n.planMemoSaveFailed,
+        );
       }
     } finally {
       if (mounted) {
@@ -164,9 +167,10 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
       setState(() {
         _setMemoText(currentMemo);
       });
-      ScaffoldMessenger.of(
-        context,
-      ).showStatusSnack(kind: AppStatusBannerKind.error, title: '待办状态保存失败');
+      ScaffoldMessenger.of(context).showStatusSnack(
+        kind: AppStatusBannerKind.error,
+        title: l10n.planMemoTaskSaveFailed,
+      );
     } finally {
       if (mounted) {
         setState(() {
@@ -179,15 +183,15 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
   void _applyMarkdownAction(_MarkdownAction action) {
     switch (action) {
       case _MarkdownAction.heading:
-        _applyLinePrefix('## ', placeholder: '标题');
+        _applyLinePrefix('## ', placeholder: l10n.planMemoHeading);
       case _MarkdownAction.bold:
-        _wrapSelection('**', '**', placeholder: '加粗文字');
+        _wrapSelection('**', '**', placeholder: l10n.planMemoBoldPlaceholder);
       case _MarkdownAction.list:
-        _applyLinePrefix('- ', placeholder: '列表项');
+        _applyLinePrefix('- ', placeholder: l10n.planMemoListPlaceholder);
       case _MarkdownAction.task:
-        _applyLinePrefix('- [ ] ', placeholder: '待办事项');
+        _applyLinePrefix('- [ ] ', placeholder: l10n.planMemoTaskPlaceholder);
       case _MarkdownAction.quote:
-        _applyLinePrefix('> ', placeholder: '引用内容');
+        _applyLinePrefix('> ', placeholder: l10n.planMemoQuotePlaceholder);
       case _MarkdownAction.divider:
         _insertDivider();
       case _MarkdownAction.link:
@@ -295,7 +299,7 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
       selection.start,
       selection.end,
     );
-    final label = selected.isEmpty ? '链接文字' : selected;
+    final label = selected.isEmpty ? l10n.planMemoLinkPlaceholder : selected;
     final replacement = '[$label](https://example.com)';
     final urlStart = label.length + 3;
     _replaceSelection(
@@ -317,7 +321,7 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
       _replaceSelection('```\n$selected\n```');
       return;
     }
-    _wrapSelection('`', '`', placeholder: '代码');
+    _wrapSelection('`', '`', placeholder: l10n.planMemoCode);
   }
 
   Future<void> _openMarkdownLink(String? href) async {
@@ -326,18 +330,20 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
     }
     final uri = Uri.tryParse(href.trim());
     if (uri == null || !uri.hasScheme) {
-      ScaffoldMessenger.of(
-        context,
-      ).showStatusSnack(kind: AppStatusBannerKind.warning, title: '链接格式不正确');
+      ScaffoldMessenger.of(context).showStatusSnack(
+        kind: AppStatusBannerKind.warning,
+        title: l10n.planMemoInvalidLink,
+      );
       return;
     }
     final opened = await launchUrl(uri, mode: LaunchMode.externalApplication);
     if (!mounted || opened) {
       return;
     }
-    ScaffoldMessenger.of(
-      context,
-    ).showStatusSnack(kind: AppStatusBannerKind.error, title: '无法打开链接');
+    ScaffoldMessenger.of(context).showStatusSnack(
+      kind: AppStatusBannerKind.error,
+      title: l10n.planMemoOpenLinkFailed,
+    );
   }
 
   @override
@@ -357,7 +363,7 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
       child: Scaffold(
         appBar: AppBar(
           leading: AppBackButton(onPressed: _handleBack),
-          title: const Text('计划备忘录'),
+          title: Text(l10n.planMemoTitle),
           actions: [
             AppContentFade(
               revision: (_isEditing, _isSaving),
@@ -375,11 +381,11 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
                                 ),
                               )
                             : const Icon(LucideIcons.save),
-                        label: const Text('保存'),
+                        label: Text(l10n.commonSave),
                       ),
                     )
                   : IconButton(
-                      tooltip: '编辑',
+                      tooltip: l10n.planMemoEdit,
                       onPressed: _isTogglingTask ? null : _startEditing,
                       icon: const Icon(LucideIcons.edit),
                     ),
@@ -400,7 +406,7 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                '备忘录内容',
+                                l10n.planMemoContent,
                                 style: TextStyle(
                                   color: AppColors.textPrimary,
                                   fontSize: 16,
@@ -427,7 +433,7 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
                                     letterSpacing: 0,
                                   ),
                                   decoration: InputDecoration(
-                                    hintText: '可以记录交通、预约、补拍事项、同行安排等。',
+                                    hintText: l10n.planMemoHint,
                                     hintStyle: TextStyle(
                                       color: AppColors.textSecondary,
                                       fontSize: 14,
@@ -494,46 +500,46 @@ class _MarkdownToolbar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const tools = [
+    final tools = [
       _MarkdownToolSpec(
         action: _MarkdownAction.heading,
         icon: LucideIcons.heading,
-        tooltip: '标题',
+        tooltip: l10n.planMemoHeading,
       ),
       _MarkdownToolSpec(
         action: _MarkdownAction.bold,
         icon: LucideIcons.bold,
-        tooltip: '加粗',
+        tooltip: l10n.planMemoBold,
       ),
       _MarkdownToolSpec(
         action: _MarkdownAction.list,
         icon: LucideIcons.list,
-        tooltip: '列表',
+        tooltip: l10n.planMemoList,
       ),
       _MarkdownToolSpec(
         action: _MarkdownAction.task,
         icon: LucideIcons.squareCheckBig,
-        tooltip: '待办',
+        tooltip: l10n.planMemoTask,
       ),
       _MarkdownToolSpec(
         action: _MarkdownAction.quote,
         icon: LucideIcons.quote,
-        tooltip: '引用',
+        tooltip: l10n.planMemoQuote,
       ),
       _MarkdownToolSpec(
         action: _MarkdownAction.divider,
         icon: LucideIcons.minus,
-        tooltip: '分割线',
+        tooltip: l10n.planMemoDivider,
       ),
       _MarkdownToolSpec(
         action: _MarkdownAction.link,
         icon: LucideIcons.link,
-        tooltip: '链接',
+        tooltip: l10n.planMemoLink,
       ),
       _MarkdownToolSpec(
         action: _MarkdownAction.code,
         icon: LucideIcons.code,
-        tooltip: '代码',
+        tooltip: l10n.planMemoCode,
       ),
     ];
 
@@ -711,7 +717,7 @@ class _TaskCheckboxBuilder {
     return Transform.translate(
       offset: Offset.zero,
       child: Tooltip(
-        message: value ? '取消勾选' : '标记完成',
+        message: value ? l10n.planMemoUncheck : l10n.planMemoMarkDone,
         child: InkWell(
           borderRadius: BorderRadius.circular(6),
           onTap: () => onToggleTask(taskIndex),
@@ -793,7 +799,7 @@ class _UnsupportedMarkdownImage extends StatelessWidget {
           const SizedBox(width: 8),
           Expanded(
             child: Text(
-              '备忘录不支持图片：$label',
+              l10n.planMemoImageUnsupported(label),
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
@@ -815,12 +821,33 @@ class _EmptyPlanMemo extends StatelessWidget {
 
   final VoidCallback onStart;
 
-  static const _suggestions = [
-    (icon: LucideIcons.trainFront, label: '交通安排', detail: '如车次、换乘方案、出发时间等'),
-    (icon: LucideIcons.hotel, label: '酒店预约', detail: '酒店地址、入住时间、联系方式等'),
-    (icon: LucideIcons.ticket, label: '活动门票', detail: '活动门票、预约时间、注意事项等'),
-    (icon: LucideIcons.camera, label: '拍摄计划', detail: '拍摄地点、时间、天气备选方案等'),
-    (icon: LucideIcons.bell, label: '注意事项', detail: '携带物品、预算、当地注意事项等'),
+  static List<({IconData icon, String label, String detail})>
+  get _suggestions => [
+    (
+      icon: LucideIcons.trainFront,
+      label: l10n.planMemoSuggestTransport,
+      detail: l10n.planMemoSuggestTransportDetail,
+    ),
+    (
+      icon: LucideIcons.hotel,
+      label: l10n.planMemoSuggestHotel,
+      detail: l10n.planMemoSuggestHotelDetail,
+    ),
+    (
+      icon: LucideIcons.ticket,
+      label: l10n.planMemoSuggestTickets,
+      detail: l10n.planMemoSuggestTicketsDetail,
+    ),
+    (
+      icon: LucideIcons.camera,
+      label: l10n.planMemoSuggestShooting,
+      detail: l10n.planMemoSuggestShootingDetail,
+    ),
+    (
+      icon: LucideIcons.bell,
+      label: l10n.planMemoSuggestNotes,
+      detail: l10n.planMemoSuggestNotesDetail,
+    ),
   ];
 
   @override
@@ -850,7 +877,7 @@ class _EmptyPlanMemo extends StatelessWidget {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  '还没有计划备忘',
+                  l10n.planMemoEmptyTitle,
                   style: TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 18,
@@ -860,7 +887,7 @@ class _EmptyPlanMemo extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '记录本次巡礼的重要事项',
+                  l10n.planMemoEmptyBody,
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: AppColors.textSecondary,
@@ -892,7 +919,7 @@ class _EmptyPlanMemo extends StatelessWidget {
                             ),
                             const SizedBox(width: 7),
                             Text(
-                              '可记录内容',
+                              l10n.planMemoSuggestionsTitle,
                               style: TextStyle(
                                 color: AppColors.accentDark,
                                 fontSize: 13,
@@ -932,7 +959,7 @@ class _EmptyPlanMemo extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 16),
                       ),
                       icon: const Icon(LucideIcons.notebookPen, size: 20),
-                      label: const Text('开始记录'),
+                      label: Text(l10n.planMemoStart),
                     ),
                   ),
                 ),

@@ -9,6 +9,7 @@ import 'comparison_export_config.dart';
 import 'comparison_export_budget.dart';
 import 'comparison_export_encoding.dart';
 import '../data/bounded_image_decoder.dart';
+import '../l10n/l10n.dart';
 
 class ComparisonRenderInputs {
   const ComparisonRenderInputs({
@@ -202,7 +203,7 @@ class ComparisonExportRenderer {
           y,
           contentWidth,
           refHeight,
-          config.showLabels ? '参考' : '',
+          config.showLabels ? l10n.comparisonExportRendererReference : '',
         );
         y += refHeight + effectiveImageGap;
       }
@@ -214,7 +215,7 @@ class ComparisonExportRenderer {
         y,
         contentWidth,
         capHeight,
-        config.showLabels ? '巡礼' : '',
+        config.showLabels ? l10n.comparisonExportRendererPilgrimage : '',
       );
       y += capHeight + metaGap;
 
@@ -432,7 +433,7 @@ class ComparisonExportRenderer {
     if (layout.pilgrimName.isNotEmpty) {
       final labelPainter = TextPainter(
         text: TextSpan(
-          text: '巡礼者',
+          text: l10n.comparisonExportRendererPilgrim,
           style: TextStyle(
             color: const Color(0xFF8A9099),
             fontSize: layout.pilgrimLabelFontSize,

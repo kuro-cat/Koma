@@ -11,6 +11,7 @@ import '../widgets/input_dialog.dart';
 import 'group_anchor_picker_screen.dart';
 import 'pilgrimage_models.dart';
 import 'plan_order.dart';
+import '../l10n/l10n.dart';
 
 const Object _unsetGroupField = Object();
 
@@ -76,7 +77,7 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
           leading: AppBackButton(
             onPressed: () => Navigator.of(context).pop<String?>(null),
           ),
-          title: const Text('片区管理'),
+          title: Text(l10n.planGroupManagerTitle),
           actions: [
             if (_isSaving)
               const Padding(
@@ -154,9 +155,9 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
   Future<void> _createGroup() async {
     final name = await showDialog<String>(
       context: context,
-      builder: (context) => const _PlanGroupNameDialog(
-        title: '新建片区',
-        confirmLabel: '创建',
+      builder: (context) => _PlanGroupNameDialog(
+        title: l10n.planGroupManagerNewArea,
+        confirmLabel: l10n.planGroupManagerCreate,
       ),
     );
     final trimmedName = name?.trim();
@@ -181,7 +182,7 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
           createdAt: now,
         ),
       ),
-      failureMessage: '片区创建失败',
+      failureMessage: l10n.planGroupManagerCreateFailed,
     );
   }
 
@@ -191,8 +192,8 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
     final name = await showDialog<String>(
       context: context,
       builder: (context) => _PlanGroupNameDialog(
-        title: '重命名片区',
-        confirmLabel: '保存',
+        title: l10n.planGroupManagerRenameTitle,
+        confirmLabel: l10n.commonSave,
         initialName: group.name,
       ),
     );
@@ -210,7 +211,7 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
         groupId: group.id,
         name: trimmedName,
       ),
-      failureMessage: '片区改名失败',
+      failureMessage: l10n.planGroupManagerRenameFailed,
     );
   }
 
@@ -223,7 +224,7 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
         planId: _plan.id,
         group: _copyGroup(group, orderMode: nextMode),
       ),
-      failureMessage: '排序方式保存失败',
+      failureMessage: l10n.planGroupManagerOrderModeSaveFailed,
     );
   }
 
@@ -257,7 +258,7 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
           anchorPointId: selection.pointId,
         ),
       ),
-      failureMessage: '关键点保存失败',
+      failureMessage: l10n.planGroupManagerAnchorSaveFailed,
     );
   }
 
@@ -267,9 +268,9 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
   ) async {
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '删除片区',
-      message: '将删除「${group.name}」，其中 $pointCount 个点位会移入未分配点位。',
-      confirmLabel: '删除',
+      title: l10n.planGroupManagerDeleteArea,
+      message: l10n.planGroupManagerDeleteMessage(group.name, pointCount),
+      confirmLabel: l10n.commonDelete,
       destructive: true,
       emphasizedValues: [group.name],
     );
@@ -282,7 +283,7 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
         planId: _plan.id,
         groupId: group.id,
       ),
-      failureMessage: '片区删除失败',
+      failureMessage: l10n.planGroupManagerDeleteFailed,
     );
   }
 
@@ -305,7 +306,7 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
         planId: _plan.id,
         orderedGroupIds: [for (final group in groups) group.id],
       ),
-      failureMessage: '片区顺序保存失败',
+      failureMessage: l10n.planGroupManagerReorderFailed,
     );
   }
 
@@ -388,14 +389,14 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
   String _groupNameForPoint(PilgrimagePoint point) {
     final groupId = point.groupId;
     if (groupId == null) {
-      return '未分配点位';
+      return l10n.planGroupManagerUngroupedSpots;
     }
     return _plan.groups
         .firstWhere(
           (group) => group.id == groupId,
           orElse: () => PilgrimagePlanGroup(
             id: groupId,
-            name: '未知片区',
+            name: l10n.planGroupManagerUnknownArea,
             orderIndex: 0,
             createdAt: DateTime.fromMillisecondsSinceEpoch(0),
           ),
@@ -433,7 +434,7 @@ class _PlanGroupNameDialogState extends State<_PlanGroupNameDialog> {
     final trimmedName = _controller.text.trim();
     if (trimmedName.isEmpty) {
       setState(() {
-        _errorText = '片区名不能为空';
+        _errorText = l10n.planGroupManagerNameRequired;
       });
       return;
     }
@@ -445,7 +446,7 @@ class _PlanGroupNameDialogState extends State<_PlanGroupNameDialog> {
     return AppInputDialog(
       title: widget.title,
       content: AppDialogField(
-        label: '片区名称',
+        label: l10n.planGroupManagerNameLabel,
         child: TextField(
           onTapOutside: dismissKeyboardOnTapOutside,
           key: const ValueKey('plan-group-name-field'),
@@ -487,14 +488,14 @@ class _CreateGroupFab extends StatelessWidget {
       child: FloatingActionButton(
         key: const ValueKey('plan-group-create-fab'),
         onPressed: onPressed,
-        tooltip: '新建片区',
-        child: const Column(
+        tooltip: l10n.planGroupManagerNewArea,
+        child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(LucideIcons.plus, size: 24),
             SizedBox(height: 2),
             Text(
-              '新建',
+              l10n.planGroupManagerNewShort,
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w700,
@@ -536,7 +537,7 @@ class _PlanGroupManagerHeader extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           Text(
-            '$groupCount 个片区 · ${plan.points.length} 个点位',
+            l10n.planGroupManagerSummary(groupCount, plan.points.length),
             style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 13,
@@ -576,8 +577,8 @@ class _PlanGroupCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final isEmpty = pointCount == 0;
     final orderLabel = group.orderMode == PlanGroupOrderMode.manual
-        ? '手动排序'
-        : '无序';
+        ? l10n.planGroupManagerManualOrder
+        : l10n.planGroupManagerUnordered;
     final hasAnchor =
         group.anchorName != null && group.anchorName!.trim().isNotEmpty;
     final surface = isEmpty ? AppColors.surfaceMuted : AppColors.surface;
@@ -630,7 +631,10 @@ class _PlanGroupCard extends StatelessWidget {
                         ),
                         if (isEmpty) ...[
                           const SizedBox(width: 6),
-                          const _GroupMetaChip(label: '空', muted: true),
+                          _GroupMetaChip(
+                            label: l10n.planGroupManagerEmpty,
+                            muted: true,
+                          ),
                         ],
                       ],
                     ),
@@ -639,7 +643,11 @@ class _PlanGroupCard extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            hasAnchor ? '关键点 · ${group.anchorName}' : '未设置关键点',
+                            hasAnchor
+                                ? l10n.planGroupManagerAnchorLabel(
+                                    group.anchorName!,
+                                  )
+                                : l10n.planGroupManagerNoAnchor,
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -661,7 +669,7 @@ class _PlanGroupCard extends StatelessWidget {
               ),
               PopupMenuButton<String>(
                 key: ValueKey('plan-group-actions-${group.id}'),
-                tooltip: '片区操作',
+                tooltip: l10n.planGroupManagerAreaActions,
                 enabled: !isBusy,
                 icon: const Icon(LucideIcons.ellipsisVertical),
                 position: PopupMenuPosition.under,
@@ -688,22 +696,22 @@ class _PlanGroupCard extends StatelessWidget {
                   }
                 },
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'rename',
                     height: 42,
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: _GroupActionRow(
                       icon: LucideIcons.edit,
-                      label: '重命名',
+                      label: l10n.planGroupManagerRename,
                     ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'anchor',
                     height: 42,
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: _GroupActionRow(
                       icon: LucideIcons.flag,
-                      label: '设置关键点',
+                      label: l10n.planGroupManagerSetAnchor,
                     ),
                   ),
                   PopupMenuItem(
@@ -713,18 +721,18 @@ class _PlanGroupCard extends StatelessWidget {
                     child: _GroupActionRow(
                       icon: LucideIcons.arrowUpDown,
                       label: group.orderMode == PlanGroupOrderMode.manual
-                          ? '切换为无序'
-                          : '切换为手动排序',
+                          ? l10n.planGroupManagerSwitchToUnordered
+                          : l10n.planGroupManagerSwitchToManualOrder,
                     ),
                   ),
                   const PopupMenuDivider(),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'delete',
                     height: 42,
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: _GroupActionRow(
                       icon: LucideIcons.trash2,
-                      label: '删除片区',
+                      label: l10n.planGroupManagerDeleteArea,
                       destructive: true,
                     ),
                   ),
@@ -838,8 +846,8 @@ class _UngroupedGroupCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      '未分配点位',
+                    Text(
+                      l10n.planGroupManagerUngroupedSpots,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w800,
@@ -848,7 +856,7 @@ class _UngroupedGroupCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '$pointCount 个点位等待整理',
+                      l10n.planGroupManagerUngroupedWaiting(pointCount),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(

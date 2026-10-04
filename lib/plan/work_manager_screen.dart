@@ -13,6 +13,7 @@ import '../widgets/app_back_button.dart';
 import 'add_points_screen.dart';
 import 'pilgrimage_models.dart';
 import 'pilgrimage_work_cover.dart';
+import '../l10n/l10n.dart';
 
 class WorkManagerScreen extends StatefulWidget {
   WorkManagerScreen({
@@ -116,7 +117,7 @@ class _WorkManagerScreenState extends State<WorkManagerScreen> {
           leading: AppBackButton(
             onPressed: () => Navigator.of(context).pop(_didUpdate),
           ),
-          title: const Text('作品管理'),
+          title: Text(l10n.workManagerTitle),
         ),
         body: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
@@ -185,11 +186,11 @@ class _WorkManagerScreenState extends State<WorkManagerScreen> {
         .length;
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '删除作品',
+      title: l10n.workManagerDeleteWork,
       message: pointCount == 0
-          ? '将删除「${work.title}」。'
-          : '将删除「${work.title}」，并同时移除 $pointCount 个相关点位和对应记录。',
-      confirmLabel: '删除',
+          ? l10n.workManagerDeleteMessage(work.title)
+          : l10n.workManagerDeleteMessageWithPoints(work.title, pointCount),
+      confirmLabel: l10n.commonDelete,
       destructive: true,
       emphasizedValues: [work.title],
     );
@@ -219,9 +220,10 @@ class _WorkManagerScreenState extends State<WorkManagerScreen> {
       }
 
       setState(() => _isSaving = false);
-      ScaffoldMessenger.of(
-        context,
-      ).showStatusSnack(kind: AppStatusBannerKind.error, title: '作品删除失败');
+      ScaffoldMessenger.of(context).showStatusSnack(
+        kind: AppStatusBannerKind.error,
+        title: l10n.workManagerDeleteFailed,
+      );
       return false;
     }
   }
@@ -278,8 +280,8 @@ class _AddWorkPanel extends StatelessWidget {
               child: _AddWorkAction(
                 key: const ValueKey('work-manager-bangumi-work'),
                 icon: LucideIcons.search,
-                title: '从Bangumi添加',
-                subtitle: '自动获取信息',
+                title: l10n.workManagerAddFromBangumi,
+                subtitle: l10n.workManagerAddFromBangumiHint,
                 onTap: onBangumi,
               ),
             ),
@@ -293,8 +295,8 @@ class _AddWorkPanel extends StatelessWidget {
               child: _AddWorkAction(
                 key: const ValueKey('work-manager-manual-work'),
                 icon: LucideIcons.edit,
-                title: '手动添加作品',
-                subtitle: '未收录时使用',
+                title: l10n.workManagerAddManually,
+                subtitle: l10n.workManagerAddManuallyHint,
                 onTap: onManual,
               ),
             ),
@@ -406,7 +408,10 @@ class _WorkManageCardState extends State<_WorkManageCard> {
         subtitle != work.title.trim() &&
         !subtitle.startsWith('Bangumi #') &&
         subtitle != 'Manual Work' &&
-        subtitle != '暂无作品原名';
+        // The Chinese literal is the placeholder older versions stored as the
+        // subtitle; keep matching it in every locale.
+        subtitle != '暂无作品原名' &&
+        subtitle != l10n.workManagerNoOriginalTitle;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -425,7 +430,7 @@ class _WorkManageCardState extends State<_WorkManageCard> {
               children: [
                 CopyableText(
                   text: work.title,
-                  copyLabel: '作品名称',
+                  copyLabel: l10n.workManagerCopyTitle,
                   maxLines: _titleExpanded ? null : 1,
                   overflow: _titleExpanded
                       ? TextOverflow.visible
@@ -443,12 +448,14 @@ class _WorkManageCardState extends State<_WorkManageCard> {
                 ),
                 const SizedBox(height: 3),
                 CopyableText(
-                  text: showSubtitle ? subtitle : '暂无作品原名',
+                  text: showSubtitle
+                      ? subtitle
+                      : l10n.workManagerNoOriginalTitle,
                   copyText: [
                     work.title,
                     if (showSubtitle) subtitle,
                   ].where((value) => value.trim().isNotEmpty).join('\n'),
-                  copyLabel: '作品信息',
+                  copyLabel: l10n.workManagerCopyInfo,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -472,7 +479,7 @@ class _WorkManageCardState extends State<_WorkManageCard> {
           const SizedBox(width: 12),
           PopupMenuButton<String>(
             key: ValueKey('work-manage-more-${work.id}'),
-            tooltip: '更多操作',
+            tooltip: l10n.workManagerMoreActions,
             enabled: !widget.disabled,
             icon: const Icon(LucideIcons.ellipsis),
             iconSize: 20,
@@ -509,7 +516,7 @@ class _WorkManageCardState extends State<_WorkManageCard> {
                     Icon(LucideIcons.trash2, size: 18, color: AppColors.error),
                     const SizedBox(width: 9),
                     Text(
-                      '删除作品',
+                      l10n.workManagerDeleteWork,
                       style: TextStyle(
                         color: AppColors.error,
                         fontWeight: FontWeight.w700,
@@ -556,12 +563,12 @@ class _WorkBadges extends StatelessWidget {
   String get _pointLabel {
     final total = anitabiTotal.count;
     if (total != null) {
-      return '已加入 $pointCount · 共 $total 点位';
+      return l10n.workManagerPointsAddedOfTotal(pointCount, total);
     }
     if (anitabiTotal.loading) {
-      return '已加入 $pointCount · 共 … 点位';
+      return l10n.workManagerPointsAddedOfUnknown(pointCount);
     }
-    return '已加入 $pointCount 点位';
+    return l10n.workManagerPointsAdded(pointCount);
   }
 
   @override
@@ -576,7 +583,7 @@ class _WorkBadges extends StatelessWidget {
             const SizedBox(width: 6),
           ],
           _WorkManageBadge(
-            label: isBangumiWork ? 'Bangumi' : '手动添加',
+            label: isBangumiWork ? 'Bangumi' : l10n.workManagerManualBadge,
             emphasized: isBangumiWork,
           ),
           const SizedBox(width: 6),
@@ -650,7 +657,7 @@ class _EmptyWorkPanel extends StatelessWidget {
               Icon(LucideIcons.clapperboard, color: AppColors.accent),
               const SizedBox(width: 8),
               Text(
-                '还没有作品',
+                l10n.workManagerEmptyTitle,
                 style: TextStyle(
                   color: AppColors.accentDark,
                   fontSize: 18,
@@ -673,17 +680,15 @@ class _WorkOnboardingTimeline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
+    return Column(
       children: [
         _WorkOnboardingStep(
-          title: '从Bangumi导入',
-          body:
-              '点击上方按钮可从Bangumi搜索你想导入的作品并导入。之后你可以在“从作品地图导入点位”直接查看对应作品在Anitabi上的点位。',
+          title: l10n.workManagerOnboardingBangumiTitle,
+          body: l10n.workManagerOnboardingBangumiBody,
         ),
         _WorkOnboardingStep(
-          title: '手动添加作品',
-          body:
-              '若Bangumi未收录你想要添加到作品，你可以通过“手动添加”将作品加入到计划内。之后你可以通过“手动添加点位”自主上传想要巡礼的点位。',
+          title: l10n.workManagerAddManually,
+          body: l10n.workManagerOnboardingManualBody,
           isLast: true,
         ),
       ],

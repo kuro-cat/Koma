@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_theme.dart';
 import '../data/pilgrimage_repository.dart';
+import '../l10n/l10n.dart';
 import '../widgets/app_back_button.dart';
 import '../widgets/app_status_banner.dart';
 import 'plan_import_package.dart';
@@ -128,7 +129,7 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
       );
       if (!mounted || cancellation.isCancelled) return;
       if (release.assets.isEmpty) {
-        throw const PlanLinkException('这个发布中没有 .sjhplan 或 .zip 文件');
+        throw PlanLinkException(l10n.planLinkImportNoPlanFilesInRelease);
       }
       if (release.assets.length == 1) {
         final asset = release.assets.single;
@@ -261,7 +262,7 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 8),
               child: Text(
-                '压缩包里有多个计划，选择要导入的一个',
+                l10n.planLinkImportChooseArchiveEntry,
                 style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 16,
@@ -309,9 +310,9 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
   static String _messageFor(Object error) => switch (error) {
     PlanLinkException() => error.message,
     PlanImportLimitException() => error.message,
-    PlanArchiveHasNoPlanException() => '压缩包里没有 .sjhplan 计划文件',
-    FormatException() => '下载的文件不是 MiriaGo 计划包',
-    _ => '读取失败，请重试',
+    PlanArchiveHasNoPlanException() => l10n.planLinkImportArchiveHasNoPlan,
+    FormatException() => l10n.planLinkImportNotAPlanPackage,
+    _ => l10n.planLinkImportReadFailed,
   };
 
   @override
@@ -324,13 +325,13 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
       child: Scaffold(
         appBar: AppBar(
           leading: const AppBackButton(),
-          title: const Text('从链接导入'),
+          title: Text(l10n.planLinkImportTitle),
         ),
         body: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
             Text(
-              '粘贴 GitHub 发布页面或计划文件的下载链接，MiriaGo 会下载计划并打开导入预览。',
+              l10n.planLinkImportIntro,
               style: TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 13,
@@ -340,11 +341,10 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
             ),
             const SizedBox(height: 14),
             if (!available) ...[
-              const AppStatusBanner(
+              AppStatusBanner(
                 kind: AppStatusBannerKind.warning,
-                title: '网页版无法直接下载',
-                subtitle:
-                    '请先在浏览器中下载 .sjhplan 或 .zip，再回到“导入导出”，用“导入 MiriaGo 文件”导入。',
+                title: l10n.planLinkImportWebUnavailableTitle,
+                subtitle: l10n.planLinkImportWebUnavailableSubtitle,
               ),
               const SizedBox(height: 14),
             ],
@@ -358,12 +358,12 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
               textInputAction: TextInputAction.go,
               onSubmitted: (_) => _start(),
               decoration: InputDecoration(
-                labelText: '链接',
+                labelText: l10n.planLinkImportLinkLabel,
                 hintText: 'https://github.com/…/releases/…',
                 border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   key: const ValueKey('plan-link-paste'),
-                  tooltip: '粘贴',
+                  tooltip: l10n.planLinkImportPaste,
                   onPressed: available && !_busy ? _paste : null,
                   icon: const Icon(LucideIcons.clipboardPaste),
                 ),
@@ -376,19 +376,13 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
                   ? _start
                   : null,
               icon: const Icon(LucideIcons.download),
-              label: const Text('读取链接'),
+              label: Text(l10n.planLinkImportReadLink),
             ),
             const SizedBox(height: 16),
             ..._status(),
             const SizedBox(height: 16),
             Text(
-              '支持：\n'
-              '• GitHub 发布页面或仓库链接（自动列出最新发布中的计划文件）\n'
-              '• GitHub 发布中的文件下载链接\n'
-              '• 其他 https:// 开头的 .sjhplan 或 .zip 直链\n'
-              '.zip 中可以带说明等其他文件，MiriaGo 只读取其中的 .sjhplan。'
-              '下载会连接你输入的地址（以及它跳转到的下载服务器）；'
-              'GitHub 发布或仓库链接还会向 api.github.com 查询发布中的文件。',
+              l10n.planLinkImportHelp,
               style: TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 12,
@@ -418,8 +412,8 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
         return [
           AppStatusBanner(
             kind: AppStatusBannerKind.running,
-            title: '正在查找发布中的计划文件…',
-            actionLabel: '取消',
+            title: l10n.planLinkImportResolving,
+            actionLabel: l10n.commonCancel,
             actionKey: const ValueKey('plan-link-cancel'),
             onAction: _cancel,
           ),
@@ -427,7 +421,7 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
       case _Phase.choosingAsset:
         return [
           Text(
-            '选择要导入的文件',
+            l10n.planLinkImportChooseFile,
             style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 15,
@@ -459,7 +453,7 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
                 title: Text(_assets[i].name),
                 subtitle: Text(
                   '${formatPlanLinkBytes(_assets[i].size)}'
-                  '${_assets[i].isPlan ? '' : ' · 压缩包'}',
+                  '${_assets[i].isPlan ? '' : ' · ${l10n.planLinkImportArchiveTag}'}',
                 ),
                 trailing: const Icon(LucideIcons.download),
                 onTap: () => _downloadAsset(_assets[i]),
@@ -471,9 +465,9 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
         return [
           AppStatusBanner(
             kind: AppStatusBannerKind.running,
-            title: '正在下载 $_downloadName',
+            title: l10n.planLinkImportDownloading(_downloadName),
             subtitle: total == null || total <= 0
-                ? '已下载 ${formatPlanLinkBytes(_received)}'
+                ? l10n.planLinkImportDownloaded(formatPlanLinkBytes(_received))
                 : '${formatPlanLinkBytes(_received)} / '
                       '${formatPlanLinkBytes(total)}',
             footer: LinearProgressIndicator(
@@ -482,7 +476,7 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
                   ? null
                   : (_received / total).clamp(0.0, 1.0),
             ),
-            actionLabel: '取消',
+            actionLabel: l10n.commonCancel,
             actionKey: const ValueKey('plan-link-cancel'),
             onAction: _cancel,
           ),
@@ -491,9 +485,9 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
         return [
           AppStatusBanner(
             kind: AppStatusBannerKind.running,
-            title: '正在读取计划…',
+            title: l10n.planLinkImportReadingPlan,
             footer: const LinearProgressIndicator(),
-            actionLabel: '取消',
+            actionLabel: l10n.commonCancel,
             actionKey: const ValueKey('plan-link-cancel'),
             onAction: _cancel,
           ),

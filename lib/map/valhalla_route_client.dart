@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:latlong2/latlong.dart';
 
 import '../data/valhalla_service_config.dart';
+import '../l10n/l10n.dart';
 
 class NavigationRoute {
   const NavigationRoute({
@@ -101,7 +102,7 @@ class ValhallaRouteClient {
     required List<LatLng> locations,
   }) async {
     if (locations.length < 2) {
-      throw const ValhallaRouteException('路线至少需要起点和终点');
+      throw ValhallaRouteException(l10n.valhallaRouteClientNeedsTwoStops);
     }
     final normalizedBaseUrl = normalizeValhallaBaseUrl(baseUrl);
     final validationError = validateValhallaBaseUrl(normalizedBaseUrl);
@@ -145,21 +146,25 @@ class ValhallaRouteClient {
           )
           .timeout(timeout);
     } on TimeoutException {
-      throw const ValhallaRouteException('路径规划服务响应超时，请稍后重试');
+      throw ValhallaRouteException(l10n.valhallaRouteClientTimeout);
     } on Object catch (error) {
-      throw ValhallaRouteException('无法连接路径规划服务：$error');
+      throw ValhallaRouteException(
+        l10n.valhallaRouteClientConnectionFailed('$error'),
+      );
     }
 
     if (response.statusCode == 429) {
-      throw const ValhallaRouteException('路径规划服务请求过于频繁，请稍后重试');
+      throw ValhallaRouteException(l10n.valhallaRouteClientRateLimited);
     }
     if (response.statusCode < 200 || response.statusCode >= 300) {
       final known = valhallaErrorMessage(response.body);
       throw ValhallaRouteException(
         known ??
             (response.statusCode >= 500
-                ? '路径规划服务暂时不可用（${response.statusCode}）'
-                : '无法规划这条步行路线（${response.statusCode}）'),
+                ? l10n.valhallaRouteClientServiceUnavailable(
+                    response.statusCode,
+                  )
+                : l10n.valhallaRouteClientRouteFailed(response.statusCode)),
       );
     }
 
@@ -188,10 +193,12 @@ class ValhallaRouteClient {
           )
           .timeout(timeout);
       if (response.statusCode < 200 || response.statusCode >= 300) {
-        throw ValhallaRouteException('服务返回 ${response.statusCode}');
+        throw ValhallaRouteException(
+          l10n.valhallaRouteClientStatus(response.statusCode),
+        );
       }
     } on TimeoutException {
-      throw const ValhallaRouteException('连接测试超时');
+      throw ValhallaRouteException(l10n.valhallaRouteClientTestTimeout);
     }
   }
 
@@ -269,7 +276,7 @@ class ValhallaRouteClient {
         legs: List.unmodifiable(parsedLegs),
       );
     } on Object {
-      throw const ValhallaRouteException('路径规划服务返回了无法识别的数据');
+      throw ValhallaRouteException(l10n.valhallaRouteClientBadResponse);
     }
   }
 }
@@ -327,10 +334,10 @@ String? valhallaErrorMessage(String body) {
     _ => null,
   };
   return switch (code) {
-    170 => '起点和终点之间没有相连的步行道路',
-    171 => '起点或点位附近没有可步行的道路，请换个位置再试',
-    154 => '距离超过路径服务的步行路线上限',
-    442 => '找不到可步行的路线',
+    170 => l10n.valhallaRouteClientError170,
+    171 => l10n.valhallaRouteClientError171,
+    154 => l10n.valhallaRouteClientError154,
+    442 => l10n.valhallaRouteClientError442,
     _ => null,
   };
 }
@@ -341,54 +348,117 @@ String localizedManeuverInstruction(
   String? fallbackInstruction,
 }) {
   final road = streetNames.where((name) => name.trim().isNotEmpty).firstOrNull;
-  final ontoRoad = road == null ? '' : '进入$road';
-  final alongRoad = road == null ? '' : '沿$road';
   // Values follow Valhalla Directions Maneuver.Type.
   return switch (type) {
-    1 => alongRoad.isEmpty ? '开始步行' : '$alongRoad出发',
-    2 => ontoRoad.isEmpty ? '向右出发' : '向右出发，$ontoRoad',
-    3 => ontoRoad.isEmpty ? '向左出发' : '向左出发，$ontoRoad',
-    4 || 5 || 6 => road == null ? '到达终点' : '到达$road附近的终点',
-    7 => ontoRoad.isEmpty ? '继续前行' : '继续前行，$ontoRoad',
-    8 => alongRoad.isEmpty ? '继续直行' : '$alongRoad继续直行',
-    9 => ontoRoad.isEmpty ? '稍向右转' : '稍向右转，$ontoRoad',
-    10 => ontoRoad.isEmpty ? '向右转' : '向右转，$ontoRoad',
-    11 => ontoRoad.isEmpty ? '向右急转' : '向右急转，$ontoRoad',
-    12 || 13 => '请掉头',
-    14 => ontoRoad.isEmpty ? '向左急转' : '向左急转，$ontoRoad',
-    15 => ontoRoad.isEmpty ? '向左转' : '向左转，$ontoRoad',
-    16 => ontoRoad.isEmpty ? '稍向左转' : '稍向左转，$ontoRoad',
-    17 => alongRoad.isEmpty ? '沿匝道直行' : '$alongRoad沿匝道直行',
-    18 => ontoRoad.isEmpty ? '沿右侧匝道前行' : '沿右侧匝道$ontoRoad',
-    19 => ontoRoad.isEmpty ? '沿左侧匝道前行' : '沿左侧匝道$ontoRoad',
-    20 => '从右侧出口离开',
-    21 => '从左侧出口离开',
-    22 => alongRoad.isEmpty ? '保持直行' : '$alongRoad保持直行',
-    23 => alongRoad.isEmpty ? '靠右行走' : '$alongRoad靠右行走',
-    24 => alongRoad.isEmpty ? '靠左行走' : '$alongRoad靠左行走',
-    25 => ontoRoad.isEmpty ? '汇入道路' : '汇入道路，$ontoRoad',
-    26 => '进入环岛',
-    27 => '驶出环岛',
-    28 => '进入渡轮',
-    29 => '离开渡轮',
-    30 => '搭乘公共交通',
-    31 || 34 => '换乘',
-    32 => '继续乘坐当前线路',
-    33 => '前往公共交通连接点',
-    35 || 36 => '到达公共交通目的地',
-    37 => ontoRoad.isEmpty ? '向右汇入道路' : '向右汇入道路，$ontoRoad',
-    38 => ontoRoad.isEmpty ? '向左汇入道路' : '向左汇入道路，$ontoRoad',
-    39 => '乘坐电梯',
-    40 => '走楼梯',
-    41 => '乘坐自动扶梯',
-    42 => '进入建筑',
-    43 => '离开建筑',
-    44 => '前往其他楼层',
-    45 => '停放车辆后继续步行',
+    1 =>
+      road == null
+          ? l10n.valhallaRouteClientStartWalking
+          : l10n.valhallaRouteClientStartAlong(road),
+    2 =>
+      road == null
+          ? l10n.valhallaRouteClientHeadRight
+          : l10n.valhallaRouteClientHeadRightOnto(road),
+    3 =>
+      road == null
+          ? l10n.valhallaRouteClientHeadLeft
+          : l10n.valhallaRouteClientHeadLeftOnto(road),
+    4 || 5 || 6 =>
+      road == null
+          ? l10n.valhallaRouteClientArrive
+          : l10n.valhallaRouteClientArriveNear(road),
+    7 =>
+      road == null
+          ? l10n.valhallaRouteClientContinue
+          : l10n.valhallaRouteClientContinueOnto(road),
+    8 =>
+      road == null
+          ? l10n.valhallaRouteClientGoStraight
+          : l10n.valhallaRouteClientGoStraightAlong(road),
+    9 =>
+      road == null
+          ? l10n.valhallaRouteClientBearRight
+          : l10n.valhallaRouteClientBearRightOnto(road),
+    10 =>
+      road == null
+          ? l10n.valhallaRouteClientTurnRight
+          : l10n.valhallaRouteClientTurnRightOnto(road),
+    11 =>
+      road == null
+          ? l10n.valhallaRouteClientSharpRight
+          : l10n.valhallaRouteClientSharpRightOnto(road),
+    12 || 13 => l10n.valhallaRouteClientUTurn,
+    14 =>
+      road == null
+          ? l10n.valhallaRouteClientSharpLeft
+          : l10n.valhallaRouteClientSharpLeftOnto(road),
+    15 =>
+      road == null
+          ? l10n.valhallaRouteClientTurnLeft
+          : l10n.valhallaRouteClientTurnLeftOnto(road),
+    16 =>
+      road == null
+          ? l10n.valhallaRouteClientBearLeft
+          : l10n.valhallaRouteClientBearLeftOnto(road),
+    17 =>
+      road == null
+          ? l10n.valhallaRouteClientRampStraight
+          : l10n.valhallaRouteClientRampStraightAlong(road),
+    18 =>
+      road == null
+          ? l10n.valhallaRouteClientRampRight
+          : l10n.valhallaRouteClientRampRightOnto(road),
+    19 =>
+      road == null
+          ? l10n.valhallaRouteClientRampLeft
+          : l10n.valhallaRouteClientRampLeftOnto(road),
+    20 => l10n.valhallaRouteClientExitRight,
+    21 => l10n.valhallaRouteClientExitLeft,
+    22 =>
+      road == null
+          ? l10n.valhallaRouteClientStayStraight
+          : l10n.valhallaRouteClientStayStraightAlong(road),
+    23 =>
+      road == null
+          ? l10n.valhallaRouteClientKeepRight
+          : l10n.valhallaRouteClientKeepRightAlong(road),
+    24 =>
+      road == null
+          ? l10n.valhallaRouteClientKeepLeft
+          : l10n.valhallaRouteClientKeepLeftAlong(road),
+    25 =>
+      road == null
+          ? l10n.valhallaRouteClientMerge
+          : l10n.valhallaRouteClientMergeOnto(road),
+    26 => l10n.valhallaRouteClientEnterRoundabout,
+    27 => l10n.valhallaRouteClientExitRoundabout,
+    28 => l10n.valhallaRouteClientBoardFerry,
+    29 => l10n.valhallaRouteClientLeaveFerry,
+    30 => l10n.valhallaRouteClientTakeTransit,
+    31 || 34 => l10n.valhallaRouteClientTransfer,
+    32 => l10n.valhallaRouteClientStayOnLine,
+    33 => l10n.valhallaRouteClientToTransitConnection,
+    35 || 36 => l10n.valhallaRouteClientTransitArrive,
+    37 =>
+      road == null
+          ? l10n.valhallaRouteClientMergeRight
+          : l10n.valhallaRouteClientMergeRightOnto(road),
+    38 =>
+      road == null
+          ? l10n.valhallaRouteClientMergeLeft
+          : l10n.valhallaRouteClientMergeLeftOnto(road),
+    39 => l10n.valhallaRouteClientElevator,
+    40 => l10n.valhallaRouteClientStairs,
+    41 => l10n.valhallaRouteClientEscalator,
+    42 => l10n.valhallaRouteClientEnterBuilding,
+    43 => l10n.valhallaRouteClientExitBuilding,
+    44 => l10n.valhallaRouteClientOtherFloor,
+    45 => l10n.valhallaRouteClientParkAndWalk,
     _ =>
       fallbackInstruction?.trim().isNotEmpty == true
           ? fallbackInstruction!.trim()
-          : (alongRoad.isEmpty ? '继续前行' : '$alongRoad继续前行'),
+          : (road == null
+                ? l10n.valhallaRouteClientContinue
+                : l10n.valhallaRouteClientContinueAlong(road)),
   };
 }
 

@@ -7,6 +7,7 @@ import '../app_theme.dart';
 import '../widgets/app_status_banner.dart';
 import 'reference_full_cache_runner.dart';
 import 'pilgrimage_models.dart';
+import '../l10n/l10n.dart';
 
 typedef ReferenceCacheRun =
     Future<void> Function(ValueChangedProgress onProgress);
@@ -171,8 +172,8 @@ class _CacheBannerCard extends StatelessWidget {
       _CacheDialogStatus.failed => AppStatusBannerKind.error,
     };
     final retryLabel = switch (status) {
-      _CacheDialogStatus.failed => '重试全部',
-      _CacheDialogStatus.partial => '重试失败',
+      _CacheDialogStatus.failed => l10n.referenceCacheProgressRetryAll,
+      _CacheDialogStatus.partial => l10n.referenceCacheProgressRetryFailed,
       _ => null,
     };
 
@@ -182,7 +183,7 @@ class _CacheBannerCard extends StatelessWidget {
       icon: status == _CacheDialogStatus.running ? LucideIcons.refreshCw : null,
       title: _titleFor(status),
       subtitle: interrupted
-          ? '缓存中断，请重试；已保存的图片不会删除。'
+          ? l10n.referenceCacheProgressInterrupted
           : status == _CacheDialogStatus.running
           ? null
           : _subtitleFor(
@@ -216,7 +217,7 @@ class _CacheBannerCard extends StatelessWidget {
                 const SizedBox(width: 6),
                 Expanded(
                   child: Text(
-                    '提示：缓存过程中请保持网络连接，避免切换页面或锁屏。',
+                    l10n.referenceCacheProgressTip,
                     style: TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 11,
@@ -234,10 +235,10 @@ class _CacheBannerCard extends StatelessWidget {
 
 String _titleFor(_CacheDialogStatus status) {
   return switch (status) {
-    _CacheDialogStatus.running => '正在缓存参考图...',
-    _CacheDialogStatus.success => '参考图缓存完成',
-    _CacheDialogStatus.partial => '参考图缓存完成',
-    _CacheDialogStatus.failed => '参考图缓存失败',
+    _CacheDialogStatus.running => l10n.referenceCacheProgressRunning,
+    _CacheDialogStatus.success => l10n.referenceCacheProgressDone,
+    _CacheDialogStatus.partial => l10n.referenceCacheProgressDone,
+    _CacheDialogStatus.failed => l10n.referenceCacheProgressFailedTitle,
   };
 }
 
@@ -249,8 +250,11 @@ String _subtitleFor({
 }) {
   return switch (status) {
     _CacheDialogStatus.running => '$succeeded / $total',
-    _CacheDialogStatus.success => '$succeeded / $total 张成功，已保存到本地',
-    _CacheDialogStatus.partial ||
-    _CacheDialogStatus.failed => '$succeeded / $total 张成功 · $failed 张失败',
+    _CacheDialogStatus.success => l10n.referenceCacheProgressSuccessSummary(
+      succeeded,
+      total,
+    ),
+    _CacheDialogStatus.partial || _CacheDialogStatus.failed =>
+      l10n.referenceCacheProgressPartialSummary(succeeded, total, failed),
   };
 }

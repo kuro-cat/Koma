@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_theme.dart';
+import '../l10n/l10n.dart';
 import '../data/app_file_reclamation.dart';
 import '../data/pilgrimage_repository.dart';
 import '../plan_transfer/import_export_screen.dart';
@@ -99,7 +100,7 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
           kind: AppStatusBannerKind.error,
-          title: '切换计划失败，请稍后重试。',
+          title: l10n.planManagerSwitchFailed,
         );
       }
     }
@@ -116,8 +117,8 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
   Future<void> _createEmptyPlan() async {
     final planNumber = (_plans?.length ?? 0) + 1;
     await widget.repository.createPlan(
-      name: '新巡礼计划 $planNumber',
-      area: '未设置区域',
+      name: l10n.planManagerNewPlanName(planNumber),
+      area: l10n.planManagerAreaNotSet,
     );
     await _loadPlans();
   }
@@ -125,20 +126,18 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
   Future<void> _deletePlan(PilgrimagePlan plan) async {
     final plans = _plans;
     if (plans == null || plans.length <= 1) {
-      ScaffoldMessenger.of(
-        context,
-      ).showStatusSnack(kind: AppStatusBannerKind.warning, title: '至少需要保留一个计划');
+      ScaffoldMessenger.of(context).showStatusSnack(
+        kind: AppStatusBannerKind.warning,
+        title: l10n.planManagerKeepOnePlan,
+      );
       return;
     }
 
     final confirmed = await showConfirmActionDialog(
       context,
-      title: '删除计划',
-      message:
-          '将删除「${plan.name}」及其中的点位、片区、作品和巡礼记录。'
-          '只属于这个计划的巡礼照片、调色图和参考图文件也会一并删除；'
-          '其他计划或记录仍在使用的文件会保留。',
-      confirmLabel: '删除',
+      title: l10n.planManagerDeletePlan,
+      message: l10n.planManagerDeleteMessage(plan.name),
+      confirmLabel: l10n.commonDelete,
       destructive: true,
       emphasizedValues: [plan.name],
     );
@@ -163,7 +162,7 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
       return;
     }
 
-    final area = result.area.isEmpty ? '未设置区域' : result.area;
+    final area = result.area.isEmpty ? l10n.planManagerAreaNotSet : result.area;
     if (result.name == plan.name && area == plan.area) {
       return;
     }
@@ -192,7 +191,7 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
     try {
       final visitRecords = await widget.repository.loadVisitRecords(plan.id);
       final duplicatedPlan = await widget.repository.importPlanPackage(
-        plan: plan.copyWith(name: '${plan.name} 副本'),
+        plan: plan.copyWith(name: l10n.planManagerCopyName(plan.name)),
         visitRecords: visitRecords,
       );
       await _loadPlans();
@@ -201,7 +200,7 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
       }
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.success,
-        title: '已复制「${duplicatedPlan.name}」',
+        title: l10n.planManagerCopied(duplicatedPlan.name),
       );
     } catch (_) {
       if (!mounted) {
@@ -209,7 +208,7 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
       }
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.error,
-        title: '复制计划失败，请稍后重试。',
+        title: l10n.planManagerCopyFailed,
       );
     }
   }
@@ -246,7 +245,7 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
       setState(() => _plans = previousPlans);
       ScaffoldMessenger.of(context).showStatusSnack(
         kind: AppStatusBannerKind.error,
-        title: '保存计划顺序失败，已恢复原来的顺序。',
+        title: l10n.planManagerSaveOrderFailed,
       );
     } finally {
       if (mounted) {
@@ -262,12 +261,16 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: appBackButtonIfCanPop(context),
-        title: Text(_sorting ? '调整计划顺序' : '切换计划'),
+        title: Text(
+          _sorting ? l10n.planManagerReorderTitle : l10n.planManagerTitle,
+        ),
         actions: [
           if (plans != null && plans.length > 1)
             IconButton(
               key: const ValueKey('plan-order-toggle'),
-              tooltip: _sorting ? '完成排序' : '计划排序',
+              tooltip: _sorting
+                  ? l10n.planManagerDoneSorting
+                  : l10n.planManagerSortPlans,
               onPressed: _savingOrder
                   ? null
                   : () => setState(() => _sorting = !_sorting),
@@ -303,7 +306,7 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
               ),
               const SizedBox(height: 4),
               RoutePlannerSkillLink(
-                lead: '不想手动整理点位？',
+                lead: l10n.planManagerSkillLead,
                 repository: widget.repository,
               ),
               const SizedBox(height: 10),
@@ -325,9 +328,9 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
                 const SizedBox(height: 10),
               ],
               if (plans.isNotEmpty) ...[
-                const _PlanSectionLabel(
+                _PlanSectionLabel(
                   key: ValueKey('all-plans-section'),
-                  label: '全部计划',
+                  label: l10n.planManagerAllPlans,
                 ),
                 ReorderableListView.builder(
                   key: const ValueKey('reorderable-plan-list'),
@@ -402,12 +405,12 @@ class _PlanInfoDialogState extends State<_PlanInfoDialog> {
   @override
   Widget build(BuildContext context) {
     return AppInputDialog(
-      title: '编辑计划信息',
+      title: l10n.planManagerEditInfo,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           AppDialogField(
-            label: '计划名称',
+            label: l10n.planManagerPlanName,
             child: TextField(
               onTapOutside: dismissKeyboardOnTapOutside,
               controller: _nameController,
@@ -418,7 +421,7 @@ class _PlanInfoDialogState extends State<_PlanInfoDialog> {
           ),
           const SizedBox(height: 14),
           AppDialogField(
-            label: '地区 / 区域',
+            label: l10n.planManagerAreaLabel,
             child: TextField(
               onTapOutside: dismissKeyboardOnTapOutside,
               controller: _areaController,
@@ -429,7 +432,7 @@ class _PlanInfoDialogState extends State<_PlanInfoDialog> {
           ),
         ],
       ),
-      confirmLabel: '保存',
+      confirmLabel: l10n.commonSave,
       onConfirm: _submit,
     );
   }
@@ -459,7 +462,7 @@ class _CreatePlanButton extends StatelessWidget {
         minimumSize: const Size.fromHeight(46),
       ),
       icon: const Icon(LucideIcons.plus, size: 19),
-      label: const Text('新建计划'),
+      label: Text(l10n.planManagerNewPlan),
     );
   }
 }
@@ -598,7 +601,7 @@ class _PlanCardState extends State<_PlanCard> {
                       child: CopyableText(
                         key: ValueKey('plan-card-title-${plan.id}'),
                         text: plan.name,
-                        copyLabel: '计划名称',
+                        copyLabel: l10n.planManagerPlanName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         onTap: selected ? null : widget.onSwitch,
@@ -616,11 +619,18 @@ class _PlanCardState extends State<_PlanCard> {
                       padding: const EdgeInsets.only(right: 48),
                       child: CopyableText(
                         key: ValueKey('plan-card-summary-${plan.id}'),
-                        text:
-                            '${plan.area}  /  ${plan.points.length} 个点位  /  ${works.length} 部作品',
-                        copyText:
-                            '${plan.name}\n${plan.area}\n${plan.points.length} 个点位\n${works.length} 部作品',
-                        copyLabel: '计划信息',
+                        text: l10n.planManagerPlanSummary(
+                          plan.area,
+                          plan.points.length,
+                          works.length,
+                        ),
+                        copyText: l10n.planManagerPlanCopyText(
+                          plan.name,
+                          plan.area,
+                          plan.points.length,
+                          works.length,
+                        ),
+                        copyLabel: l10n.planManagerPlanInfo,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         onTap: selected ? null : widget.onSwitch,
@@ -643,7 +653,7 @@ class _PlanCardState extends State<_PlanCard> {
                             ? Align(
                                 alignment: Alignment.centerLeft,
                                 child: Text(
-                                  '暂无作品',
+                                  l10n.planManagerNoWorks,
                                   style: TextStyle(
                                     color: AppColors.textSecondary,
                                     fontSize: 11,
@@ -683,10 +693,10 @@ class _PlanCardState extends State<_PlanCard> {
                           const SizedBox(width: 6),
                           Text(
                             widget.reorderIndex != null
-                                ? '拖动调整顺序'
+                                ? l10n.planManagerDragToReorder
                                 : selected
-                                ? '当前计划'
-                                : '可切换',
+                                ? l10n.planManagerCurrentPlan
+                                : l10n.planManagerSwitchable,
                             key: ValueKey(
                               selected
                                   ? 'plan-status-current'
@@ -722,7 +732,7 @@ class _PlanCardState extends State<_PlanCard> {
                       key: ValueKey('plan-card-drag-handle-${plan.id}'),
                       width: 44,
                       child: Tooltip(
-                        message: '拖动排序',
+                        message: l10n.planManagerDragSort,
                         child: Center(
                           child: Icon(
                             LucideIcons.gripVertical,
@@ -748,7 +758,7 @@ class _PlanCardState extends State<_PlanCard> {
                     children: [
                       _PlanActionButton(
                         key: ValueKey('plan-card-edit-${plan.id}'),
-                        tooltip: '编辑计划信息',
+                        tooltip: l10n.planManagerEditInfo,
                         onPressed: widget.onRename,
                         icon: LucideIcons.edit,
                         iconSize: 21,
@@ -868,7 +878,7 @@ class _PlanMoreButtonState extends State<_PlanMoreButton> {
       ],
       child: _PlanActionButton(
         key: ValueKey('plan-card-transfer-${widget.plan.id}'),
-        tooltip: '更多计划操作',
+        tooltip: l10n.planManagerMoreActions,
         onPressed: () {
           if (_controller.isOpen) {
             _controller.close();
@@ -919,21 +929,21 @@ class _PlanActionsMenuPanel extends StatelessWidget {
                   children: [
                     _PlanMenuActionItem(
                       actionKey: const ValueKey('plan-menu-action-transfer'),
-                      label: '导入导出',
+                      label: l10n.planManagerImportExport,
                       icon: LucideIcons.import,
                       onPressed: onExport,
                     ),
                     const SizedBox(height: 6),
                     _PlanMenuActionItem(
                       actionKey: const ValueKey('plan-menu-action-copy'),
-                      label: '复制计划',
+                      label: l10n.planManagerCopyPlan,
                       icon: LucideIcons.copy,
                       onPressed: onDuplicate,
                     ),
                     Divider(height: 17, color: AppColors.border),
                     _PlanMenuActionItem(
                       actionKey: const ValueKey('plan-menu-action-delete'),
-                      label: '删除计划',
+                      label: l10n.planManagerDeletePlan,
                       icon: LucideIcons.trash2,
                       onPressed: canDelete ? onDelete : null,
                       isDangerous: true,
@@ -1243,7 +1253,7 @@ class _ErrorState extends StatelessWidget {
       child: OutlinedButton.icon(
         onPressed: onRetry,
         icon: const Icon(LucideIcons.refreshCw),
-        label: const Text('重新加载计划'),
+        label: Text(l10n.planManagerReload),
       ),
     );
   }

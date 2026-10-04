@@ -9,6 +9,7 @@ import '../plan/pilgrimage_models.dart';
 import 'map_colors.dart';
 import 'localized_map_style.dart';
 import 'synced_maplibre_layer.dart';
+import '../l10n/l10n.dart';
 
 const openFreeMapStyleUrl = 'https://tiles.openfreemap.org/styles/liberty';
 const readableDarkMapStyleAsset = 'assets/maps/readable_dark.json';
@@ -24,82 +25,79 @@ class OpenFreeMapStyleOption {
   const OpenFreeMapStyleOption({
     required this.style,
     required this.label,
-    required this.description,
     required this.styleUrl,
   });
 
   final OpenFreeMapStyle style;
   final String label;
-  final String description;
   final String styleUrl;
+
+  String get description => switch (style) {
+    OpenFreeMapStyle.liberty => l10n.mapTileConfigLibertyDescription,
+    OpenFreeMapStyle.bright => l10n.mapTileConfigBrightDescription,
+    OpenFreeMapStyle.positron => l10n.mapTileConfigPositronDescription,
+    OpenFreeMapStyle.dark => l10n.mapTileConfigDarkDescription,
+    OpenFreeMapStyle.fiord => l10n.mapTileConfigFiordDescription,
+  };
 }
 
 class MapTileProviderOption {
-  const MapTileProviderOption({
-    required this.provider,
-    required this.label,
-    required this.description,
-  });
+  const MapTileProviderOption({required this.provider});
 
   final MapTileProvider provider;
-  final String label;
-  final String description;
+
+  String get label => switch (provider) {
+    MapTileProvider.openFreeMap => 'OpenFreeMap',
+    MapTileProvider.openStreetMap => 'OpenStreetMap',
+    MapTileProvider.customXyz => l10n.mapTileConfigCustomXyzLabel,
+    MapTileProvider.customMapLibreStyle =>
+      l10n.mapTileConfigCustomMapLibreLabel,
+  };
+
+  String get description => switch (provider) {
+    MapTileProvider.openFreeMap => l10n.mapTileConfigOpenFreeMapDescription,
+    MapTileProvider.openStreetMap => l10n.mapTileConfigOpenStreetMapDescription,
+    MapTileProvider.customXyz => l10n.mapTileConfigCustomXyzDescription(
+      '{z}/{x}/{y}',
+    ),
+    MapTileProvider.customMapLibreStyle =>
+      l10n.mapTileConfigCustomMapLibreDescription,
+  };
 }
 
 const openFreeMapStyleOptions = [
   OpenFreeMapStyleOption(
     style: OpenFreeMapStyle.liberty,
     label: 'Liberty',
-    description: '默认样式，信息密度较高。',
     styleUrl: 'https://tiles.openfreemap.org/styles/liberty',
   ),
   OpenFreeMapStyleOption(
     style: OpenFreeMapStyle.bright,
     label: 'Bright',
-    description: '明亮标准样式。',
     styleUrl: 'https://tiles.openfreemap.org/styles/bright',
   ),
   OpenFreeMapStyleOption(
     style: OpenFreeMapStyle.positron,
     label: 'Positron',
-    description: '浅色低干扰样式。',
     styleUrl: 'https://tiles.openfreemap.org/styles/positron',
   ),
   OpenFreeMapStyleOption(
     style: OpenFreeMapStyle.dark,
     label: 'Dark',
-    description: '深色地图样式。',
     styleUrl: 'https://tiles.openfreemap.org/styles/dark',
   ),
   OpenFreeMapStyleOption(
     style: OpenFreeMapStyle.fiord,
     label: 'Fiord',
-    description: '柔和地形风格。',
     styleUrl: 'https://tiles.openfreemap.org/styles/fiord',
   ),
 ];
 
 const mapTileProviderOptions = [
-  MapTileProviderOption(
-    provider: MapTileProvider.openFreeMap,
-    label: 'OpenFreeMap',
-    description: '默认地图，使用 MapLibre style。',
-  ),
-  MapTileProviderOption(
-    provider: MapTileProvider.openStreetMap,
-    label: 'OpenStreetMap',
-    description: '使用 OpenStreetMap 标准 XYZ 瓦片。',
-  ),
-  MapTileProviderOption(
-    provider: MapTileProvider.customXyz,
-    label: '自定义 XYZ',
-    description: '使用包含 {z}/{x}/{y} 的栅格瓦片 URL。',
-  ),
-  MapTileProviderOption(
-    provider: MapTileProvider.customMapLibreStyle,
-    label: '自定义 MapLibre',
-    description: '使用自定义 MapLibre style URL。',
-  ),
+  MapTileProviderOption(provider: MapTileProvider.openFreeMap),
+  MapTileProviderOption(provider: MapTileProvider.openStreetMap),
+  MapTileProviderOption(provider: MapTileProvider.customXyz),
+  MapTileProviderOption(provider: MapTileProvider.customMapLibreStyle),
 ];
 
 OpenFreeMapStyleOption openFreeMapStyleOption(OpenFreeMapStyle style) {
@@ -274,11 +272,11 @@ String? validateMapTileSettings(AppSettings settings) {
     MapTileProvider.customXyz =>
       isValidXyzTileUrl(settings.customXyzTileUrl.trim())
           ? null
-          : '自定义 XYZ URL 需要包含 {z}、{x}、{y}，并使用 http/https。',
+          : l10n.mapTileConfigCustomXyzInvalid('{z}', '{x}', '{y}'),
     MapTileProvider.customMapLibreStyle =>
       _isHttpUrl(settings.customMapLibreStyleUrl.trim())
           ? null
-          : '自定义 MapLibre style URL 需要使用 http/https。',
+          : l10n.mapTileConfigCustomMapLibreInvalid,
     _ => null,
   };
 }

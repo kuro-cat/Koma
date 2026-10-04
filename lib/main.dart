@@ -164,9 +164,9 @@ class _DesktopStartupError extends StatelessWidget {
       if (!context.mounted) {
         return;
       }
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('无法打开目录：$openError')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.mainOpenDirectoryFailed('$openError'))),
+      );
     }
   }
 
@@ -191,20 +191,17 @@ class _DesktopStartupError extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                'MiriaGo 启动失败',
+                l10n.mainStartupFailed,
                 style: Theme.of(context).textTheme.headlineSmall,
               ),
               const SizedBox(height: 8),
-              const Text(
-                '用户数据没有被删除。请重试，或打开日志目录查看 startup.log。',
-                textAlign: TextAlign.center,
-              ),
+              Text(l10n.mainStartupFailedHint, textAlign: TextAlign.center),
               const SizedBox(height: 20),
               FilledButton.icon(
                 key: const ValueKey('desktop-startup-retry'),
                 onPressed: onRetry,
                 icon: const Icon(LucideIcons.refreshCw),
-                label: const Text('重试'),
+                label: Text(l10n.commonRetry),
               ),
               if (launcherInfo != null) ...[
                 const SizedBox(height: 12),
@@ -216,12 +213,12 @@ class _DesktopStartupError extends StatelessWidget {
                     OutlinedButton.icon(
                       onPressed: () => _openDirectory(context, 'logs'),
                       icon: const Icon(LucideIcons.fileText),
-                      label: const Text('打开日志目录'),
+                      label: Text(l10n.mainOpenLogFolder),
                     ),
                     OutlinedButton.icon(
                       onPressed: () => _openDirectory(context, 'data'),
                       icon: const Icon(LucideIcons.folderOpen),
-                      label: const Text('打开数据目录'),
+                      label: Text(l10n.mainOpenDataFolder),
                     ),
                   ],
                 ),
@@ -230,7 +227,7 @@ class _DesktopStartupError extends StatelessWidget {
                 const SizedBox(height: 20),
                 ExpansionTile(
                   tilePadding: EdgeInsets.zero,
-                  title: const Text('错误详情'),
+                  title: Text(l10n.mainErrorDetails),
                   children: [
                     Container(
                       width: double.infinity,

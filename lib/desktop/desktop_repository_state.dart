@@ -7,6 +7,7 @@ import '../data/sample_pilgrimage_repository.dart';
 import '../data/anitabi_service_config.dart';
 import '../data/valhalla_service_config.dart';
 import '../plan/pilgrimage_models.dart';
+import '../l10n/l10n.dart';
 
 const desktopRepositoryStateSchemaVersion = 1;
 
@@ -296,7 +297,10 @@ PilgrimagePlan _planFromJson(Map<String, Object?> json) {
   final workById = {for (final work in works) work.id: work};
   return PilgrimagePlan(
     id: _stringValue(json['id'], fallback: 'desktop-plan'),
-    name: _stringValue(json['name'], fallback: '桌面端计划'),
+    name: _stringValue(
+      json['name'],
+      fallback: l10n.desktopRepositoryStateDefaultPlan,
+    ),
     area: _stringValue(json['area'], fallback: ''),
     memo: _stringValue(json['memo'], fallback: ''),
     works: works,
@@ -334,7 +338,10 @@ PilgrimageWork _workFromJson(Map<String, Object?> json) {
       json['bangumiSubjectType'],
     ),
     coverImageUrl: json['coverImageUrl'] as String?,
-    title: _stringValue(json['title'], fallback: '作品'),
+    title: _stringValue(
+      json['title'],
+      fallback: l10n.desktopRepositoryStateDefaultWork,
+    ),
     subtitle: _stringValue(json['subtitle'], fallback: ''),
     city: _stringValue(json['city'], fallback: ''),
     source: _enumByName(WorkSource.values, json['source']) ?? WorkSource.manual,
@@ -359,7 +366,10 @@ Map<String, Object?> _groupJson(PilgrimagePlanGroup group) {
 PilgrimagePlanGroup _groupFromJson(Map<String, Object?> json) {
   return PilgrimagePlanGroup(
     id: _stringValue(json['id'], fallback: 'desktop-group'),
-    name: _stringValue(json['name'], fallback: '分组'),
+    name: _stringValue(
+      json['name'],
+      fallback: l10n.desktopRepositoryStateDefaultGroup,
+    ),
     orderIndex: (json['orderIndex'] as num?)?.toInt() ?? 0,
     orderMode:
         _enumByName(PlanGroupOrderMode.values, json['orderMode']) ??
@@ -402,7 +412,7 @@ PilgrimagePoint _pointFromJson(
   final workId = json['workId'] as String?;
   final fallbackWork = PilgrimageWork(
     id: workId == null || workId.isEmpty ? 'desktop-work' : workId,
-    title: '未知作品',
+    title: l10n.desktopRepositoryStateUnknownWork,
     subtitle: 'Unknown Work',
     city: '',
     source: WorkSource.manual,
@@ -410,7 +420,10 @@ PilgrimagePoint _pointFromJson(
   return PilgrimagePoint(
     id: _stringValue(json['id'], fallback: 'desktop-point'),
     work: workById[workId] ?? fallbackWork,
-    name: _stringValue(json['name'], fallback: '点位'),
+    name: _stringValue(
+      json['name'],
+      fallback: l10n.desktopRepositoryStateDefaultSpot,
+    ),
     subtitle: _stringValue(json['subtitle'], fallback: ''),
     position: LatLng(
       _doubleValue(json['latitude']) ?? 0,

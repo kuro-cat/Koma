@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../l10n/l10n.dart';
 import '../data/anitabi_image_fetcher.dart';
 import '../data/bounded_image_decoder.dart';
 import '../data/image_bytes.dart';
@@ -87,7 +88,7 @@ class ImageViewerScreen extends StatelessWidget {
             right: 8,
             top: MediaQuery.paddingOf(context).top + 8,
             child: IconButton(
-              tooltip: '保存或分享原件',
+              tooltip: l10n.imageViewerSaveOrShare,
               onPressed: () => _showSaveSheet(context),
               icon: const Icon(LucideIcons.download, color: Colors.white),
             ),
@@ -135,7 +136,7 @@ class ImageViewerScreen extends StatelessWidget {
                 if (savePath == null) {
                   _showSnackBar(
                     messenger,
-                    '图片读取失败',
+                    l10n.imageViewerReadFailed,
                     kind: AppStatusBannerKind.error,
                   );
                   return;
@@ -146,7 +147,7 @@ class ImageViewerScreen extends StatelessWidget {
                   ], sharePositionOrigin: origin);
                 } on Object catch (error) {
                   debugPrint('Image share failed: $error');
-                  _showSnackBar(messenger, '无法打开分享');
+                  _showSnackBar(messenger, l10n.imageViewerShareFailed);
                 }
               },
               onSaveToGallery: () async {
@@ -155,13 +156,17 @@ class ImageViewerScreen extends StatelessWidget {
                 if (savePath == null) {
                   _showSnackBar(
                     messenger,
-                    '图片读取失败',
+                    l10n.imageViewerReadFailed,
                     kind: AppStatusBannerKind.error,
                   );
                   return;
                 }
                 final result = await saveImageToGalleryWithResult(savePath);
-                showGallerySaveResult(messenger, result, failedTitle: '保存失败');
+                showGallerySaveResult(
+                  messenger,
+                  result,
+                  failedTitle: l10n.imageViewerSaveFailed,
+                );
               },
             ),
       backgroundColor: const Color(0xFF2C2C2E),
@@ -176,7 +181,11 @@ class ImageViewerScreen extends StatelessWidget {
     try {
       final imageBytes = await _resolveImageBytes(sheetContext);
       if (imageBytes == null || imageBytes.isEmpty) {
-        _showSnackBar(messenger, '图片读取失败', kind: AppStatusBannerKind.error);
+        _showSnackBar(
+          messenger,
+          l10n.imageViewerReadFailed,
+          kind: AppStatusBannerKind.error,
+        );
         return;
       }
       final extension = _preferredExtension(imageBytes);
@@ -185,22 +194,30 @@ class ImageViewerScreen extends StatelessWidget {
         fileName:
             'miriago_image_${DateTime.now().microsecondsSinceEpoch}.$extension',
         mimeType: _mimeTypeForExtension(extension),
-        shareSubject: 'MiriaGo 图片',
-        shareText: 'MiriaGo 图片',
+        shareSubject: l10n.imageViewerShareText,
+        shareText: l10n.imageViewerShareText,
         extension: extension,
       );
       if (result.action == PlanExportDeliveryAction.canceled) {
         _showSnackBar(
           messenger,
-          '已取消保存',
+          l10n.imageViewerSaveCanceled,
           kind: AppStatusBannerKind.running,
           icon: LucideIcons.circleX,
         );
         return;
       }
-      _showSnackBar(messenger, '图片已保存', kind: AppStatusBannerKind.success);
+      _showSnackBar(
+        messenger,
+        l10n.imageViewerSaved,
+        kind: AppStatusBannerKind.success,
+      );
     } catch (_) {
-      _showSnackBar(messenger, '保存失败', kind: AppStatusBannerKind.error);
+      _showSnackBar(
+        messenger,
+        l10n.imageViewerSaveFailed,
+        kind: AppStatusBannerKind.error,
+      );
     }
   }
 
@@ -491,9 +508,9 @@ class _ImageViewerPlaceholder extends StatelessWidget {
       _ImageViewerPlaceholderState.unavailable => LucideIcons.imageOff,
     };
     final label = switch (state) {
-      _ImageViewerPlaceholderState.loading => '图片加载中',
-      _ImageViewerPlaceholderState.empty => '暂无图片',
-      _ImageViewerPlaceholderState.unavailable => '图片暂不可用',
+      _ImageViewerPlaceholderState.loading => l10n.imageViewerLoading,
+      _ImageViewerPlaceholderState.empty => l10n.imageViewerEmpty,
+      _ImageViewerPlaceholderState.unavailable => l10n.imageViewerUnavailable,
     };
 
     return Center(
@@ -541,7 +558,10 @@ class _WebSaveSheet extends StatelessWidget {
           const SizedBox(height: 12),
           ListTile(
             leading: const Icon(LucideIcons.download, color: Colors.white),
-            title: const Text('保存图片', style: TextStyle(color: Colors.white)),
+            title: Text(
+              l10n.imageViewerSaveImage,
+              style: const TextStyle(color: Colors.white),
+            ),
             onTap: onSave,
           ),
           const SizedBox(height: 12),
@@ -569,12 +589,18 @@ class _MobileSaveSheet extends StatelessWidget {
           const SizedBox(height: 12),
           ListTile(
             leading: const Icon(LucideIcons.share, color: Colors.white),
-            title: const Text('分享', style: TextStyle(color: Colors.white)),
+            title: Text(
+              l10n.imageViewerShare,
+              style: const TextStyle(color: Colors.white),
+            ),
             onTap: onShare,
           ),
           ListTile(
             leading: const Icon(LucideIcons.download, color: Colors.white),
-            title: const Text('保存到相册', style: TextStyle(color: Colors.white)),
+            title: Text(
+              l10n.imageViewerSaveToPhotos,
+              style: const TextStyle(color: Colors.white),
+            ),
             onTap: onSaveToGallery,
           ),
           const SizedBox(height: 12),

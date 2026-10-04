@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../l10n/l10n.dart';
 import '../widgets/app_motion.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -62,14 +63,16 @@ class _RecordsScreenState extends State<RecordsScreen> {
       appBar: AppBar(
         key: const ValueKey('records-app-bar'),
         toolbarHeight: AppTheme.appBarHeight,
-        title: const Text(
-          '记录',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+        title: Text(
+          l10n.recordsTitle,
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
         ),
         actions: [
           IconButton(
             key: const ValueKey('records-toggle-all-sections'),
-            tooltip: allSectionsExpanded ? '收起全部片区' : '展开全部片区',
+            tooltip: allSectionsExpanded
+                ? l10n.recordsCollapseAll
+                : l10n.recordsExpandAll,
             onPressed: sections.isEmpty
                 ? null
                 : () {
@@ -327,8 +330,8 @@ class _RecordsScreenState extends State<RecordsScreen> {
       groups.add(
         _RecordGroup(
           id: _ungroupedRecordFilterId,
-          title: '未分组',
-          subtitle: '还没有放入片区的记录',
+          title: l10n.recordsUngrouped,
+          subtitle: l10n.recordsUngroupedSubtitle,
           icon: LucideIcons.package,
           entries: _sortEntries(ungroupedEntries),
         ),
@@ -339,8 +342,8 @@ class _RecordsScreenState extends State<RecordsScreen> {
       groups.add(
         _RecordGroup(
           id: _orphanRecordFilterId,
-          title: '孤立记录',
-          subtitle: '对应点位已不在当前计划中',
+          title: l10n.recordsOrphan,
+          subtitle: l10n.recordsOrphanSubtitle,
           icon: LucideIcons.link2Off,
           entries: _sortEntries(orphanRecords),
         ),
@@ -423,7 +426,7 @@ class _RecordsScreenState extends State<RecordsScreen> {
           point.position.latitude.toStringAsFixed(6),
           point.position.longitude.toStringAsFixed(6),
         ] else
-          '坐标待补充',
+          l10n.recordsNoCoordinates,
         point.work.id,
         point.work.title,
         point.work.subtitle,
@@ -438,19 +441,19 @@ class _RecordsScreenState extends State<RecordsScreen> {
   String _groupNameFor(PilgrimagePoint point) {
     final groupId = point.groupId;
     if (groupId == null) {
-      return '未分组';
+      return l10n.recordsUngrouped;
     }
     return widget.controller.plan.groups
             .where((group) => group.id == groupId)
             .firstOrNull
             ?.name ??
-        '未知片区';
+        l10n.recordsUnknownArea;
   }
 
   String _groupAnchorLabel(PilgrimagePlanGroup group) {
     final anchorName = group.anchorName;
     if (anchorName == null || anchorName.trim().isEmpty) {
-      return '未设置关键点';
+      return l10n.recordsNoAnchor;
     }
     return anchorName;
   }
@@ -505,7 +508,7 @@ class _RecordFilters extends StatelessWidget {
             label: Text('$activeScopeFilterCount'),
             child: IconButton.outlined(
               key: const ValueKey('records-scope-filter-button'),
-              tooltip: '按作品和片区筛选',
+              tooltip: l10n.recordsScopeFilterTooltip,
               onPressed: onOpenScopeFilters,
               style: IconButton.styleFrom(
                 backgroundColor: AppColors.surface,
@@ -561,7 +564,6 @@ class _RecordScopeFilterSheetState extends State<_RecordScopeFilterSheet> {
       backgroundColor: AppColors.surface,
       builder: (context) => _RecordScopeOptionSheet(
         kind: 'work',
-        title: '作品',
         options: [
           for (final work in widget.works)
             _RecordScopeOption(id: work.id, label: work.title),
@@ -584,12 +586,17 @@ class _RecordScopeFilterSheetState extends State<_RecordScopeFilterSheet> {
       backgroundColor: AppColors.surface,
       builder: (context) => _RecordScopeOptionSheet(
         kind: 'group',
-        title: '片区',
         options: [
           for (final group in groups)
             _RecordScopeOption(id: group.id, label: group.name),
-          const _RecordScopeOption(id: _ungroupedRecordFilterId, label: '未分组'),
-          const _RecordScopeOption(id: _orphanRecordFilterId, label: '孤立记录'),
+          _RecordScopeOption(
+            id: _ungroupedRecordFilterId,
+            label: l10n.recordsUngrouped,
+          ),
+          _RecordScopeOption(
+            id: _orphanRecordFilterId,
+            label: l10n.recordsOrphan,
+          ),
         ],
         selectedIds: _groupIds ?? const {},
       ),
@@ -616,10 +623,10 @@ class _RecordScopeFilterSheetState extends State<_RecordScopeFilterSheet> {
             children: [
               Row(
                 children: [
-                  const Expanded(
+                  Expanded(
                     child: Text(
-                      '筛选记录',
-                      style: TextStyle(
+                      l10n.recordsFilterTitle,
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
                         letterSpacing: 0,
@@ -632,12 +639,15 @@ class _RecordScopeFilterSheetState extends State<_RecordScopeFilterSheet> {
                       _workIds = null;
                       _groupIds = null;
                     }),
-                    child: const Text('清除'),
+                    child: Text(l10n.recordsClear),
                   ),
                 ],
               ),
               Text(
-                '已选：作品 ${_workIds?.length ?? 0} · 片区 ${_groupIds?.length ?? 0}',
+                l10n.recordsScopeSummary(
+                  _workIds?.length ?? 0,
+                  _groupIds?.length ?? 0,
+                ),
                 key: const ValueKey('records-scope-summary'),
                 style: TextStyle(
                   color: AppColors.textSecondary,
@@ -647,19 +657,29 @@ class _RecordScopeFilterSheetState extends State<_RecordScopeFilterSheet> {
                 ),
               ),
               const SizedBox(height: 18),
-              const Text('作品', style: TextStyle(fontWeight: FontWeight.w800)),
+              Text(
+                l10n.recordsWorks,
+                style: const TextStyle(fontWeight: FontWeight.w800),
+              ),
               const SizedBox(height: 8),
               _RecordScopeEntry(
                 key: const ValueKey('records-scope-work-entry'),
-                label: _scopeLabel(_workIds, allLabel: '全部作品', noun: '作品'),
+                label: _workIds == null
+                    ? l10n.recordsAllWorks
+                    : l10n.recordsWorksPicked(_workIds!.length),
                 onTap: _openWorkFilters,
               ),
               const SizedBox(height: 16),
-              const Text('片区', style: TextStyle(fontWeight: FontWeight.w800)),
+              Text(
+                l10n.recordsAreas,
+                style: const TextStyle(fontWeight: FontWeight.w800),
+              ),
               const SizedBox(height: 8),
               _RecordScopeEntry(
                 key: const ValueKey('records-scope-group-entry'),
-                label: _scopeLabel(_groupIds, allLabel: '全部片区', noun: '片区'),
+                label: _groupIds == null
+                    ? l10n.recordsAllAreas
+                    : l10n.recordsAreasPicked(_groupIds!.length),
                 onTap: _openGroupFilters,
               ),
               const SizedBox(height: 28),
@@ -672,7 +692,9 @@ class _RecordScopeFilterSheetState extends State<_RecordScopeFilterSheet> {
                   ),
                 ),
                 child: Text(
-                  '应用筛选（${_workIds == null && _groupIds == null ? '全部点位' : '已选择'}）',
+                  _workIds == null && _groupIds == null
+                      ? l10n.recordsApplyAll
+                      : l10n.recordsApplySelected,
                 ),
               ),
             ],
@@ -680,14 +702,6 @@ class _RecordScopeFilterSheetState extends State<_RecordScopeFilterSheet> {
         ),
       ),
     );
-  }
-
-  String _scopeLabel(
-    Set<String>? ids, {
-    required String allLabel,
-    required String noun,
-  }) {
-    return ids == null ? allLabel : '已选 ${ids.length} 个$noun';
   }
 }
 
@@ -756,13 +770,11 @@ class _RecordScopeOption {
 class _RecordScopeOptionSheet extends StatefulWidget {
   const _RecordScopeOptionSheet({
     required this.kind,
-    required this.title,
     required this.options,
     required this.selectedIds,
   });
 
   final String kind;
-  final String title;
   final List<_RecordScopeOption> options;
   final Set<String> selectedIds;
 
@@ -805,7 +817,7 @@ class _RecordScopeOptionSheetState extends State<_RecordScopeOptionSheet> {
     final sheetHeight = desiredHeight
         .clamp(190.0, maxHeight > 560 ? 560.0 : maxHeight)
         .toDouble();
-    final noun = widget.kind == 'work' ? '作品' : '片区';
+    final isWork = widget.kind == 'work';
     return SafeArea(
       top: false,
       child: SizedBox(
@@ -825,7 +837,7 @@ class _RecordScopeOptionSheetState extends State<_RecordScopeOptionSheet> {
                         alignment: Alignment.centerLeft,
                         child: IconButton(
                           key: ValueKey('records-scope-back-${widget.kind}'),
-                          tooltip: '返回筛选记录',
+                          tooltip: l10n.recordsBackToFilter,
                           onPressed: () => Navigator.of(context).pop(),
                           icon: const Icon(LucideIcons.chevronLeft),
                         ),
@@ -834,7 +846,9 @@ class _RecordScopeOptionSheetState extends State<_RecordScopeOptionSheet> {
                   ),
                   Expanded(
                     child: Text(
-                      '选择${widget.title}',
+                      isWork
+                          ? l10n.recordsSelectWorks
+                          : l10n.recordsSelectAreas,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
                         fontSize: 18,
@@ -850,7 +864,7 @@ class _RecordScopeOptionSheetState extends State<_RecordScopeOptionSheet> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
               child: Text(
-                '全部${widget.title}',
+                isWork ? l10n.recordsAllWorks : l10n.recordsAllAreas,
                 style: const TextStyle(
                   fontSize: 13,
                   fontWeight: FontWeight.w700,
@@ -862,7 +876,7 @@ class _RecordScopeOptionSheetState extends State<_RecordScopeOptionSheet> {
               child: widget.options.isEmpty
                   ? Center(
                       child: Text(
-                        '暂无可筛选项',
+                        l10n.recordsNoOptions,
                         style: TextStyle(color: AppColors.textSecondary),
                       ),
                     )
@@ -882,7 +896,9 @@ class _RecordScopeOptionSheetState extends State<_RecordScopeOptionSheet> {
                               'records-scope-option-decoration-${widget.kind}-${option.id}',
                             ),
                             option: option,
-                            badgeLabel: noun,
+                            badgeLabel: isWork
+                                ? l10n.recordsWorkBadge
+                                : l10n.recordsAreaBadge,
                             selected: selected,
                             hoverEnabled: !_scrolling,
                             onChanged: (value) =>
@@ -900,7 +916,9 @@ class _RecordScopeOptionSheetState extends State<_RecordScopeOptionSheet> {
                   children: [
                     Expanded(
                       child: Text(
-                        '已选择 ${_selectedIds.length} 个$noun',
+                        isWork
+                            ? l10n.recordsWorksChosen(_selectedIds.length)
+                            : l10n.recordsAreasChosen(_selectedIds.length),
                         key: ValueKey(
                           'records-scope-secondary-count-${widget.kind}',
                         ),
@@ -920,8 +938,8 @@ class _RecordScopeOptionSheetState extends State<_RecordScopeOptionSheet> {
                         onPressed: _confirm,
                         child: Text(
                           _selectedIds.isEmpty
-                              ? '确定'
-                              : '确定（${_selectedIds.length}）',
+                              ? l10n.commonConfirm
+                              : l10n.recordsConfirmCount(_selectedIds.length),
                         ),
                       ),
                     ),
@@ -1094,10 +1112,10 @@ class _RecordStatusPicker extends StatefulWidget {
 class _RecordStatusPickerState extends State<_RecordStatusPicker> {
   var _isOpen = false;
 
-  static const _options = [
-    (_RecordStatusFilter.all, '全部', 'all'),
-    (_RecordStatusFilter.completed, '已完成', 'completed'),
-    (_RecordStatusFilter.pending, '未完成', 'pending'),
+  static List<(_RecordStatusFilter, String, String)> get _options => [
+    (_RecordStatusFilter.all, l10n.recordsStatusAll, 'all'),
+    (_RecordStatusFilter.completed, l10n.recordsStatusCompleted, 'completed'),
+    (_RecordStatusFilter.pending, l10n.recordsStatusPending, 'pending'),
   ];
 
   @override
@@ -1127,7 +1145,7 @@ class _RecordStatusPickerState extends State<_RecordStatusPicker> {
       ),
       builder: (context, controller, child) {
         return Tooltip(
-          message: '按状态筛选',
+          message: l10n.recordsStatusTooltip,
           child: Material(
             key: const ValueKey('records-status-filter-surface'),
             color: AppColors.surface,
@@ -1189,11 +1207,11 @@ class _RecordStatusPickerState extends State<_RecordStatusPicker> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Padding(
-                  padding: EdgeInsets.fromLTRB(8, 14, 8, 10),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(8, 14, 8, 10),
                   child: Text(
-                    '选择状态',
-                    style: TextStyle(
+                    l10n.recordsSelectStatus,
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0,
@@ -1316,7 +1334,7 @@ class _ExpandedRecordFiltersState extends State<_ExpandedRecordFilters> {
         key: const ValueKey('records-search-field'),
         controller: _searchController,
         decoration: InputDecoration(
-          hintText: '搜索点位、作品、场景',
+          hintText: l10n.recordsSearchHint,
           hintStyle: TextStyle(
             color: AppColors.textSecondary.withValues(alpha: 0.42),
             letterSpacing: 0,
@@ -1348,7 +1366,7 @@ class _ExpandedRecordFiltersState extends State<_ExpandedRecordFilters> {
                 ? const SizedBox.shrink()
                 : IconButton(
                     key: const ValueKey('records-search-clear-button'),
-                    tooltip: '清空搜索',
+                    tooltip: l10n.recordsClearSearchTooltip,
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints.tightFor(
                       width: 40,
@@ -1412,10 +1430,10 @@ class _RecordsSectionHeader extends StatelessWidget {
         : '$visibleCount/$totalCount';
     return Row(
       children: [
-        const Expanded(
+        Expanded(
           child: Text(
-            '巡礼照片',
-            style: TextStyle(
+            l10n.recordsPhotos,
+            style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.w800,
               letterSpacing: 0,
@@ -1645,7 +1663,9 @@ class _RecordsSummary extends StatelessWidget {
                       text: '${controller.visitRecords.length}',
                       style: TextStyle(color: AppColors.accentForeground),
                     ),
-                    label: '条巡礼记录',
+                    label: l10n.recordsRecordCountLabel(
+                      controller.visitRecords.length,
+                    ),
                   ),
                 ),
                 Container(width: 1, height: 42, color: AppColors.border),
@@ -1665,7 +1685,7 @@ class _RecordsSummary extends StatelessWidget {
                         ),
                       ],
                     ),
-                    label: '已完成',
+                    label: l10n.recordsCompleted,
                   ),
                 ),
               ],
@@ -1901,17 +1921,17 @@ class _EmptyRecords extends StatelessWidget {
         ? LucideIcons.listFilter
         : LucideIcons.images;
     final title = hasSearchQuery
-        ? '没有找到相关记录'
+        ? l10n.recordsEmptySearchTitle
         : hasFilterResult
-        ? '没有符合筛选条件的记录'
-        : '还没有巡礼记录';
+        ? l10n.recordsEmptyFilterTitle
+        : l10n.recordsEmptyTitle;
     final description = hasSearchQuery
         ? hasActiveFilters
-              ? '没有与当前关键词和筛选条件同时匹配的点位、作品或场景。试试更换关键词，或重置筛选条件。'
-              : '没有与当前关键词匹配的点位、作品或场景。试试更换关键词，或清除搜索查看全部记录。'
+              ? l10n.recordsEmptySearchFilterBody
+              : l10n.recordsEmptySearchBody
         : hasFilterResult
-        ? '调整状态、作品或片区筛选条件后再试。'
-        : '完成一次点位拍摄后，记录会自动汇总到这里。';
+        ? l10n.recordsEmptyFilterBody
+        : l10n.recordsEmptyBody;
 
     return Semantics(
       liveRegion: true,
@@ -1961,14 +1981,14 @@ class _EmptyRecords extends StatelessWidget {
                           key: const ValueKey('records-empty-clear-search'),
                           onPressed: onClearSearch,
                           icon: const Icon(LucideIcons.x, size: 18),
-                          label: const Text('清除搜索'),
+                          label: Text(l10n.recordsClearSearch),
                         ),
                       if (hasActiveFilters)
                         TextButton.icon(
                           key: const ValueKey('records-empty-reset-filters'),
                           onPressed: onResetFilters,
                           icon: const Icon(LucideIcons.listFilter, size: 18),
-                          label: const Text('重置筛选'),
+                          label: Text(l10n.recordsResetFilters),
                         ),
                     ],
                   ),
@@ -1997,9 +2017,9 @@ class _GradedBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: '已调色',
+      message: l10n.recordsColorMatched,
       child: Semantics(
-        label: '已调色',
+        label: l10n.recordsColorMatched,
         child: Container(
           width: 26,
           height: 26,

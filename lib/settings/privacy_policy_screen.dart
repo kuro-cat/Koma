@@ -3,6 +3,7 @@ import 'package:flutter_markdown_plus/flutter_markdown_plus.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_theme.dart';
+import '../l10n/l10n.dart';
 import '../widgets/app_back_button.dart';
 
 class PrivacyPolicyScreen extends StatefulWidget {
@@ -37,20 +38,20 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
       backgroundColor: AppColors.background,
       appBar: AppBar(
         leading: appBackButtonIfCanPop(context),
-        title: const Text('隐私政策'),
+        title: Text(l10n.privacyPolicyTitle),
       ),
       body: SafeArea(
         child: FutureBuilder<String>(
           future: _policy,
           builder: (context, snapshot) {
             if (snapshot.connectionState != ConnectionState.done) {
-              return const Center(
+              return Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    CircularProgressIndicator(),
-                    SizedBox(height: 16),
-                    Text('正在读取隐私政策...'),
+                    const CircularProgressIndicator(),
+                    const SizedBox(height: 16),
+                    Text(l10n.privacyPolicyLoading),
                   ],
                 ),
               );
@@ -62,14 +63,17 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      const Text('隐私政策读取失败', textAlign: TextAlign.center),
+                      Text(
+                        l10n.privacyPolicyLoadFailed,
+                        textAlign: TextAlign.center,
+                      ),
                       const SizedBox(height: 12),
                       TextButton.icon(
                         onPressed: () => setState(() {
                           _policy = _loadPolicy();
                         }),
                         icon: const Icon(LucideIcons.refreshCw),
-                        label: const Text('重试'),
+                        label: Text(l10n.commonRetry),
                       ),
                     ],
                   ),

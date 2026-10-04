@@ -4,6 +4,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../app_theme.dart';
 import 'pilgrimage_models.dart';
 import 'plan_group_utils.dart';
+import '../l10n/l10n.dart';
 
 Future<void> showPlanGroupPickerSheet({
   required BuildContext context,
@@ -41,8 +42,8 @@ Future<void> showPlanGroupPickerSheet({
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              '选择区域',
+                            Text(
+                              l10n.planGroupPickerTitle,
                               style: TextStyle(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w800,
@@ -51,7 +52,7 @@ Future<void> showPlanGroupPickerSheet({
                             ),
                             const SizedBox(height: 3),
                             Text(
-                              '共 ${pickerGroups.length} 个区域',
+                              l10n.planGroupPickerCount(pickerGroups.length),
                               style: TextStyle(
                                 color: AppColors.textSecondary,
                                 fontSize: 12,
@@ -65,7 +66,7 @@ Future<void> showPlanGroupPickerSheet({
                       if (onCreateGroup != null)
                         IconButton(
                           key: const ValueKey('plan-group-picker-create'),
-                          tooltip: '新建片区',
+                          tooltip: l10n.planGroupPickerNewGroup,
                           onPressed: () async {
                             final created = await onCreateGroup();
                             if (created == null || !context.mounted) {
@@ -462,7 +463,7 @@ Future<String?> showPlanGroupSelectionSheet({
                                 Icon(LucideIcons.plus, color: AppColors.accent),
                                 const SizedBox(width: 12),
                                 Text(
-                                  '新建片区',
+                                  l10n.planGroupPickerNewGroup,
                                   style: TextStyle(
                                     color: AppColors.accentDark,
                                     fontSize: 14,

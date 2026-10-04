@@ -36,6 +36,7 @@ import 'map_location_tracker.dart';
 import '../widgets/reference_thumbnail_stub.dart'
     if (dart.library.io) '../widgets/reference_thumbnail_io.dart';
 import '../settings/app_settings_updater.dart';
+import '../l10n/l10n.dart';
 
 class PilgrimageMapScreen extends StatefulWidget {
   const PilgrimageMapScreen({
@@ -182,7 +183,7 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
         toggles: [
           MapLayerToggle(
             id: 'thumbnails',
-            label: '缩略图标记',
+            label: l10n.pilgrimageMapLayerThumbnails,
             icon: LucideIcons.image,
             value: settings.mapShowThumbnailMarkers,
             onChanged: (value) => _updateSettings(
@@ -191,7 +192,7 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
           ),
           MapLayerToggle(
             id: 'group-areas',
-            label: '片区范围',
+            label: l10n.pilgrimageMapLayerAreas,
             icon: LucideIcons.pentagon,
             value: settings.mapShowGroupAreas,
             onChanged: (value) =>
@@ -199,7 +200,7 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
           ),
           MapLayerToggle(
             id: 'hide-completed',
-            label: '隐藏已完成点位',
+            label: l10n.pilgrimageMapLayerHideCompleted,
             icon: LucideIcons.circleCheck,
             value: settings.hideCompletedPointsOnMap,
             onChanged: (value) => _updateSettings(
@@ -208,7 +209,7 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
           ),
           MapLayerToggle(
             id: 'clustering',
-            label: '自动聚合密集点位',
+            label: l10n.pilgrimageMapLayerClustering,
             icon: LucideIcons.group,
             value: settings.mapMarkerClusteringEnabled,
             onChanged: (value) => _updateSettings(
@@ -217,8 +218,8 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
           ),
           MapLayerToggle(
             id: 'continuous-location',
-            label: '持续更新当前位置',
-            description: '关闭后只在点定位时获取一次位置，更省电',
+            label: l10n.pilgrimageMapLayerContinuousLocation,
+            description: l10n.pilgrimageMapLayerContinuousLocationHint,
             icon: LucideIcons.locateFixed,
             value: settings.continuousMapLocation,
             onChanged: (value) => _updateSettings(
@@ -253,7 +254,7 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
     final app = widget.settings.navigationApp;
     final opened = await _navigationLauncher.openWalking(point, app);
     if (!opened) {
-      _showSnackBar('无法打开${app.label}。');
+      _showSnackBar(l10n.pilgrimageMapOpenAppFailed(app.label));
     }
   }
 
@@ -472,7 +473,10 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
   void _moveToCurrentTarget() {
     final currentPoint = _controller.currentPoint;
     if (currentPoint == null) {
-      _showSnackBar('当前计划还没有点位。', kind: AppStatusBannerKind.warning);
+      _showSnackBar(
+        l10n.pilgrimageMapNoSpotsSnack,
+        kind: AppStatusBannerKind.warning,
+      );
       return;
     }
 
@@ -529,7 +533,10 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
   Future<void> _editPoint(PilgrimagePoint point) async {
     final repository = _controller.repository;
     if (repository == null) {
-      _showSnackBar('当前环境无法编辑点位。', kind: AppStatusBannerKind.warning);
+      _showSnackBar(
+        l10n.pilgrimageMapCannotEdit,
+        kind: AppStatusBannerKind.warning,
+      );
       return;
     }
     final updated = await EditPointScreen.open(
@@ -829,7 +836,7 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
                                             VisitStatus.completed,
                                       )
                                       .length,
-                                  doneLabel: '已打卡',
+                                  doneLabel: l10n.pilgrimageMapVisitedLabel,
                                   opensPointBrowser: atMaximumZoom,
                                   onTap: atMaximumZoom
                                       ? () => _openOverlapPointBrowser(
@@ -874,7 +881,9 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
                             baseHeight: 44,
                             scale: widget.settings.mapMarkerScale,
                             child: Tooltip(
-                              message: _locationError ?? '当前位置',
+                              message:
+                                  _locationError ??
+                                  l10n.pilgrimageMapCurrentLocation,
                               child: Opacity(
                                 opacity: _locationError == null ? 1 : 0.4,
                                 child: const _CurrentLocationMarker(),
@@ -910,7 +919,7 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
               child: Column(
                 children: [
                   _MapFloatingIconButton(
-                    tooltip: '定位',
+                    tooltip: l10n.pilgrimageMapLocate,
                     onTap: _isLocating ? null : _locateUser,
                     child: _isLocating
                         ? const SizedBox(
@@ -922,7 +931,7 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
                   ),
                   const SizedBox(height: 8),
                   _MapFloatingIconButton(
-                    tooltip: '当前目标',
+                    tooltip: l10n.pilgrimageMapCurrentTarget,
                     onTap: _moveToCurrentTarget,
                     child: const Icon(LucideIcons.flag, size: 20),
                   ),
@@ -930,7 +939,7 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
                   Builder(
                     builder: (buttonContext) => _MapFloatingIconButton(
                       key: const ValueKey('map-layers-button'),
-                      tooltip: '图层',
+                      tooltip: l10n.pilgrimageMapLayers,
                       onTap: () => _openLayers(buttonContext),
                       child: const Icon(LucideIcons.layers, size: 20),
                     ),
@@ -1106,7 +1115,7 @@ class _PointMarker extends StatelessWidget {
     };
 
     return IconButton(
-      tooltip: '巡礼点',
+      tooltip: l10n.pilgrimageMapPointMarker,
       onPressed: onTap,
       style: IconButton.styleFrom(
         backgroundColor: markerColors.$1,
@@ -1251,7 +1260,7 @@ class _PointCard extends StatelessWidget {
                                   'map-point-card-content-${point.id}',
                                 ),
                                 text: point.name,
-                                copyLabel: '点位名称',
+                                copyLabel: l10n.pilgrimageMapCopySpotName,
                                 onTap: onOpenDetail,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
@@ -1268,7 +1277,7 @@ class _PointCard extends StatelessWidget {
                         CopyableText(
                           text: _metaText,
                           copyText: _copySummary,
-                          copyLabel: '点位信息',
+                          copyLabel: l10n.pilgrimageMapCopySpotInfo,
                           onTap: onOpenDetail,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
@@ -1289,7 +1298,9 @@ class _PointCard extends StatelessWidget {
           LayoutBuilder(
             builder: (context, constraints) {
               final navigation = SplitNavigationButton(
-                inAppLabel: point.hasCoordinate ? '导航' : '坐标待补充',
+                inAppLabel: point.hasCoordinate
+                    ? l10n.pilgrimageMapNavigate
+                    : l10n.pilgrimageMapCoordinatesMissing,
                 onOpenInAppNavigation: onOpenInAppNavigation,
                 onOpenExternalNavigation: onOpenExternalNavigation,
                 height: _mapPointActionExtent,
@@ -1303,7 +1314,7 @@ class _PointCard extends StatelessWidget {
                   width: _mapPointPrimaryActionWidth,
                   height: _mapPointActionExtent,
                   child: IconButton.outlined(
-                    tooltip: '拍摄参考',
+                    tooltip: l10n.pilgrimageMapCamera,
                     onPressed: onOpenCamera,
                     style: _mapPointIconButtonStyle(
                       _mapPointPrimaryActionWidth,
@@ -1331,7 +1342,9 @@ class _PointCard extends StatelessWidget {
                   width: _mapPointPrimaryActionWidth,
                   height: _mapPointActionExtent,
                   child: IconButton.outlined(
-                    tooltip: status == VisitStatus.completed ? '撤回打卡' : '标记完成',
+                    tooltip: status == VisitStatus.completed
+                        ? l10n.pilgrimageMapUndoVisit
+                        : l10n.pilgrimageMapMarkComplete,
                     onPressed: onComplete,
                     style: _mapPointIconButtonStyle(
                       _mapPointPrimaryActionWidth,
@@ -1349,7 +1362,7 @@ class _PointCard extends StatelessWidget {
                     width: _mapPointActionExtent,
                     height: _mapPointActionExtent,
                     child: IconButton.outlined(
-                      tooltip: '设为当前目标',
+                      tooltip: l10n.pilgrimageMapSetCurrent,
                       onPressed: onSetCurrent,
                       style: _mapPointIconButtonStyle(_mapPointActionExtent),
                       icon: const Icon(LucideIcons.flag),
@@ -1407,7 +1420,7 @@ class _PointCard extends StatelessWidget {
       point.displayEpisodeLabel,
       point.hasCoordinate
           ? '${point.position.latitude.toStringAsFixed(5)},${point.position.longitude.toStringAsFixed(5)}'
-          : '坐标待补充',
+          : l10n.pilgrimageMapCoordinatesMissing,
     ].where((value) => value.trim().isNotEmpty).join('\n');
   }
 }
@@ -1521,7 +1534,7 @@ class _EmptyMapCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  '当前计划还没有点位',
+                  l10n.pilgrimageMapEmptyTitle,
                   style: TextStyle(
                     color: MapColors.accentDark,
                     fontSize: 16,
@@ -1531,7 +1544,7 @@ class _EmptyMapCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  '添加点位后会在地图上显示标记。',
+                  l10n.pilgrimageMapEmptyBody,
                   style: TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 13,
@@ -1556,9 +1569,9 @@ class _StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final text = switch (status) {
-      VisitStatus.current => '当前',
-      VisitStatus.completed => '完成',
-      VisitStatus.pending => '待访',
+      VisitStatus.current => l10n.pilgrimageMapStatusCurrent,
+      VisitStatus.completed => l10n.pilgrimageMapStatusCompleted,
+      VisitStatus.pending => l10n.pilgrimageMapStatusPending,
     };
 
     final color = switch (status) {

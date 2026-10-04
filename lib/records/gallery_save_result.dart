@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../widgets/snackbar_helper.dart';
+import '../l10n/l10n.dart';
 
 enum GallerySaveResult { saved, permissionDenied, failed }
 
@@ -17,20 +18,20 @@ const galleryPermissionDeniedCodes = {
 void showGallerySaveResult(
   ScaffoldMessengerState messenger,
   GallerySaveResult result, {
-  String failedTitle = '保存失败，请稍后重试。',
+  String? failedTitle,
 }) {
   switch (result) {
     case GallerySaveResult.saved:
       messenger.showStatusSnack(
         kind: AppStatusBannerKind.success,
-        title: '已保存到相册',
+        title: l10n.gallerySaveResultSaved,
       );
     case GallerySaveResult.permissionDenied:
       messenger.showStatusSnack(
         kind: AppStatusBannerKind.error,
-        title: '需要相册权限',
-        subtitle: '请在系统设置中允许 MiriaGo 添加照片。',
-        actionLabel: '设置',
+        title: l10n.gallerySaveResultPermissionTitle,
+        subtitle: l10n.gallerySaveResultPermissionSubtitle,
+        actionLabel: l10n.gallerySaveResultSettings,
         onAction: () {
           messenger.hideCurrentSnackBar();
           openAppSettings().catchError((Object _) => false);
@@ -44,7 +45,7 @@ void showGallerySaveResult(
     case GallerySaveResult.failed:
       messenger.showStatusSnack(
         kind: AppStatusBannerKind.error,
-        title: failedTitle,
+        title: failedTitle ?? l10n.gallerySaveResultFailed,
       );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
+import '../l10n/l10n.dart';
 import '../app_theme.dart';
 import 'confirm_action_dialog.dart';
 
@@ -10,7 +11,7 @@ class AppInputDialog extends StatelessWidget {
     required this.content,
     required this.confirmLabel,
     required this.onConfirm,
-    this.cancelLabel = '取消',
+    this.cancelLabel,
     this.titleTrailing,
     this.errorText,
     super.key,
@@ -20,7 +21,7 @@ class AppInputDialog extends StatelessWidget {
   final Widget content;
   final String confirmLabel;
   final VoidCallback onConfirm;
-  final String cancelLabel;
+  final String? cancelLabel;
   final Widget? titleTrailing;
   final String? errorText;
 
@@ -81,7 +82,7 @@ class AppInputDialog extends StatelessWidget {
               ],
               const SizedBox(height: 16),
               AppDialogActionRow(
-                cancelLabel: cancelLabel,
+                cancelLabel: cancelLabel ?? l10n.commonCancel,
                 confirmLabel: confirmLabel,
                 onCancel: () => Navigator.of(context).pop(),
                 onConfirm: onConfirm,
@@ -105,7 +106,7 @@ class AppDialogPasteButton extends StatelessWidget {
       key: const ValueKey('dialog-paste-button'),
       onPressed: onPressed,
       icon: const Icon(LucideIcons.clipboardPaste, size: 16),
-      label: const Text('粘贴'),
+      label: Text(l10n.inputPaste),
       style: OutlinedButton.styleFrom(
         visualDensity: VisualDensity.compact,
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,

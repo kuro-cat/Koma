@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:http/http.dart' as http;
 
 import '../desktop/tauri_bridge.dart';
+import '../l10n/l10n.dart';
 import 'plan_import_package.dart';
 import 'plan_link.dart';
 import 'plan_transfer_background.dart';
@@ -27,7 +28,7 @@ class _WebPlanLinkService implements PlanLinkService {
           )
           .timeout(const Duration(seconds: 15));
     } on Object {
-      throw const PlanLinkException('无法连接 GitHub，请检查网络后重试');
+      throw PlanLinkException(l10n.planLinkCannotReachGitHub);
     }
     if (response.statusCode != 200) {
       throw gitHubReleaseError(response.statusCode);
@@ -43,7 +44,7 @@ class _WebPlanLinkService implements PlanLinkService {
     PlanTransferCancellation? cancellation,
   }) async {
     if (!available) {
-      throw const PlanLinkException('网页版无法直接下载，请先下载文件，再用“导入 MiriaGo 文件”导入');
+      throw PlanLinkException(l10n.planLinkServiceWebUnavailable);
     }
     final downloadId =
         '${DateTime.now().microsecondsSinceEpoch}-${Random().nextInt(1 << 30)}';
@@ -119,5 +120,5 @@ Exception _launcherError(String message) {
   if (message.contains('non-public') || message.contains('not allowed')) {
     return planLinkNotPublic;
   }
-  return const PlanLinkException('下载失败，请检查网络后重试');
+  return PlanLinkException(l10n.planLinkDownloadFailed);
 }

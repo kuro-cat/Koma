@@ -6,6 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:image/image.dart' as img;
 
 import 'image_bytes.dart';
+import '../l10n/l10n.dart';
 
 const maxImageEncodedBytes = 32 * 1024 * 1024;
 const maxImageSourcePixels = 16000000;
@@ -76,7 +77,7 @@ void checkImageEncodedLength(
   if (length > maxBytes) {
     throw ImageBudgetException(
       ImageBudgetFailure.encodedBytes,
-      '图片文件 $length 字节超过读取预算 $maxBytes 字节；原件未更改，可保存或导出原件',
+      l10n.boundedImageDecoderEncodedTooLarge(length, maxBytes),
     );
   }
 }
@@ -101,9 +102,9 @@ Future<Uint8List> readImageStreamBounded(
 
 BoundedImageInfo _checked(int width, int height) {
   if (width <= 0 || height <= 0) {
-    throw const ImageBudgetException(
+    throw ImageBudgetException(
       ImageBudgetFailure.invalidData,
-      '无法读取图片尺寸',
+      l10n.boundedImageDecoderSizeUnreadable,
     );
   }
   if (width > maxImageSourceEdge ||
@@ -111,7 +112,7 @@ BoundedImageInfo _checked(int width, int height) {
       width > maxImageSourcePixels ~/ height) {
     throw ImageBudgetException(
       ImageBudgetFailure.sourcePixels,
-      '图片 $width x $height 超过来源预算（16000000 像素，单边 16384）；原件未更改，可保存或导出原件',
+      l10n.boundedImageDecoderSourceTooLarge(width, height),
     );
   }
   return BoundedImageInfo(width, height);
@@ -121,9 +122,9 @@ BoundedImageInfo _checked(int width, int height) {
 // startDecode/readInfo allocates DCT blocks and must not be used here.
 BoundedImageInfo? _header(Uint8List bytes) {
   final data = ByteData.sublistView(bytes);
-  Never invalid() => throw const ImageBudgetException(
+  Never invalid() => throw ImageBudgetException(
     ImageBudgetFailure.invalidData,
-    '图片尺寸元数据无效或不一致；原件未更改',
+    l10n.boundedImageDecoderInvalidMetadata,
   );
   int le24(int n) => bytes[n] | bytes[n + 1] << 8 | bytes[n + 2] << 16;
   if (isPngBytes(bytes)) {
@@ -356,9 +357,9 @@ Future<BoundedImageInfo> probeBoundedImage(Uint8List bytes) async {
         'msf1',
       ].contains(String.fromCharCodes(bytes.sublist(8, 12)));
   if (!apple || !heif) {
-    throw const ImageBudgetException(
+    throw ImageBudgetException(
       ImageBudgetFailure.unsupported,
-      '此平台暂不能安全预览此图片格式；原件未更改',
+      l10n.boundedImageDecoderUnsupportedFormat,
     );
   }
   final buffer = await ui.ImmutableBuffer.fromUint8List(bytes);
@@ -391,9 +392,9 @@ Future<ui.Image> decodeBoundedImage(
         : _checked(descriptor.width, descriptor.height);
     if (!((actual.width == info.width && actual.height == info.height) ||
         (actual.width == info.height && actual.height == info.width))) {
-      throw const ImageBudgetException(
+      throw ImageBudgetException(
         ImageBudgetFailure.invalidData,
-        '图片尺寸元数据不一致；原件未更改',
+        l10n.boundedImageDecoderMetadataMismatch,
       );
     }
     // Header dimensions already include EXIF display orientation. A descriptor
@@ -408,9 +409,9 @@ Future<ui.Image> decodeBoundedImage(
     // first raster frame rather than decoding a full canvas then resizing it.
     if (codec.frameCount > 1 &&
         (actual.width > size.width || actual.height > size.height)) {
-      throw const ImageBudgetException(
+      throw ImageBudgetException(
         ImageBudgetFailure.targetPixels,
-        '动画首帧尺寸超过此处理预算；原件未更改',
+        l10n.boundedImageDecoderAnimatedFrameTooLarge,
       );
     }
     assert(() {
@@ -422,9 +423,9 @@ Future<ui.Image> decodeBoundedImage(
         frame.image.height > target.maxEdge ||
         frame.image.width * frame.image.height > target.maxPixels) {
       frame.image.dispose();
-      throw const ImageBudgetException(
+      throw ImageBudgetException(
         ImageBudgetFailure.targetPixels,
-        '平台无法满足图片处理尺寸预算',
+        l10n.boundedImageDecoderTargetUnsupported,
       );
     }
     return frame.image;

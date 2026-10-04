@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'current_location_resolver.dart';
+import '../l10n/l10n.dart';
 
 /// A visible ordinary map owns its subscription, never the photo resolver.
 class MapLocationTracker extends ChangeNotifier {
@@ -172,7 +173,7 @@ class MapLocationTracker extends ChangeNotifier {
         },
         onDone: () {
           if (_disposed || session != _session) return;
-          error = '定位更新已停止，请点击定位重试。';
+          error = l10n.mapLocationTrackerStopped;
           notifyListeners();
         },
       );
@@ -188,7 +189,7 @@ class MapLocationTracker extends ChangeNotifier {
     _freshness?.cancel();
     _freshness = Timer(staleAfter, () {
       if (_disposed || session != _session) return;
-      error = '暂未收到新的定位，当前位置可能已过期。';
+      error = l10n.mapLocationTrackerStale;
       notifyListeners();
     });
   }
@@ -212,9 +213,13 @@ String locationUpdateError(Object exception) {
   if (exception is CurrentLocationException) {
     return currentLocationFailureMessage(exception);
   }
-  if (exception is LocationServiceDisabledException) return '定位服务未开启，请开启后重试。';
-  if (exception is PermissionDeniedException) return '定位权限不可用，请检查权限后重试。';
-  return '定位更新失败，请检查权限和定位服务后重试。';
+  if (exception is LocationServiceDisabledException) {
+    return l10n.mapLocationTrackerServiceDisabled;
+  }
+  if (exception is PermissionDeniedException) {
+    return l10n.mapLocationTrackerPermissionDenied;
+  }
+  return l10n.mapLocationTrackerFailed;
 }
 
 /// IndexedStack visibility is explicit; route coverage and app state are observed.

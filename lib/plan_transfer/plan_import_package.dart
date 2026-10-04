@@ -6,6 +6,7 @@ import 'package:archive/archive.dart';
 
 import '../data/anitabi_image_url.dart';
 import '../data/image_bytes.dart';
+import '../l10n/l10n.dart';
 import '../data/reference_asset_paths.dart';
 import '../plan/pilgrimage_models.dart';
 import '../plan/reference_image_status.dart';
@@ -35,7 +36,7 @@ class PlanImportLimits {
 
 class PlanImportLimitException extends FormatException {
   PlanImportLimitException(this.resource, this.actual, this.limit)
-    : super('导入超限：$resource 为 $actual，上限 $limit。请拆分计划或减少打包图片后重试。');
+    : super(l10n.planImportPackageLimitExceeded(resource, '$actual', '$limit'));
 
   final String resource;
   final num actual;
@@ -49,14 +50,22 @@ void _checkExpandedBudget(
   PlanImportLimits limits,
 ) {
   if (size > limits.maxEntryBytes) {
-    throw PlanImportLimitException('单文件解压字节数', size, limits.maxEntryBytes);
+    throw PlanImportLimitException(
+      l10n.planImportPackageResourceEntryBytes,
+      size,
+      limits.maxEntryBytes,
+    );
   }
   if (isJson && size > limits.maxJsonBytes) {
-    throw PlanImportLimitException('JSON 字节数', size, limits.maxJsonBytes);
+    throw PlanImportLimitException(
+      l10n.planImportPackageResourceJsonBytes,
+      size,
+      limits.maxJsonBytes,
+    );
   }
   if (size + previous > limits.maxExpandedBytes) {
     throw PlanImportLimitException(
-      '总解压字节数',
+      l10n.planImportPackageResourceExpandedBytes,
       size + previous,
       limits.maxExpandedBytes,
     );
@@ -159,7 +168,7 @@ class PlanImportPackage {
 
   String get versionLabel => switch (kind) {
     PlanImportPackageKind.legacyJson => 'v1.0 JSON',
-    PlanImportPackageKind.miriagoZip => 'v2 数据包',
+    PlanImportPackageKind.miriagoZip => l10n.planImportPackageV2Label,
   };
 }
 
@@ -275,7 +284,7 @@ PlanImportPackage readPlanImportPackageFromBytes(
 }) {
   if (bytes.length > limits.maxCompressedBytes) {
     throw PlanImportLimitException(
-      '压缩包字节数',
+      l10n.planImportPackageResourceArchiveBytes,
       bytes.length,
       limits.maxCompressedBytes,
     );
@@ -296,7 +305,7 @@ PlanImportPackage readPlanImportPackageFromBytes(
   }
   if (bytes.length > limits.maxJsonBytes) {
     throw PlanImportLimitException(
-      'JSON 字节数',
+      l10n.planImportPackageResourceJsonBytes,
       bytes.length,
       limits.maxJsonBytes,
     );
@@ -368,7 +377,7 @@ PlanImportPackage readPlanImportPackageFromDownload(
 }) {
   if (bytes.length > limits.maxCompressedBytes) {
     throw PlanImportLimitException(
-      '压缩包字节数',
+      l10n.planImportPackageResourceArchiveBytes,
       bytes.length,
       limits.maxCompressedBytes,
     );
@@ -398,7 +407,9 @@ PlanImportPackage readPlanImportPackageFromDownload(
   }
   final names = <String>{};
   for (final header in headers) {
-    if (!names.add(normalizeAssetPathSeparators(header.filename).toLowerCase())) {
+    if (!names.add(
+      normalizeAssetPathSeparators(header.filename).toLowerCase(),
+    )) {
       throw const FormatException('Ambiguous or unsupported ZIP entry.');
     }
   }
@@ -473,7 +484,7 @@ Uint8List _readSinglePlanEntry(
   }
   if (header.uncompressedSize > limits.maxCompressedBytes) {
     throw PlanImportLimitException(
-      '计划文件字节数',
+      l10n.planImportPackageResourcePlanFileBytes,
       header.uncompressedSize,
       limits.maxCompressedBytes,
     );
@@ -509,7 +520,11 @@ class _CappedOutput extends OutputMemoryStream {
   void _reserve(int count) {
     check();
     if (length + count > limit) {
-      throw PlanImportLimitException('计划文件字节数', length + count, limit);
+      throw PlanImportLimitException(
+        l10n.planImportPackageResourcePlanFileBytes,
+        length + count,
+        limit,
+      );
     }
   }
 
@@ -672,7 +687,11 @@ class _LimitedZipHeaders extends ListBase<ZipFileHeader> {
   void add(ZipFileHeader value) {
     check();
     if (length >= limit) {
-      throw PlanImportLimitException('ZIP 条目数', length + 1, limit);
+      throw PlanImportLimitException(
+        l10n.planImportPackageResourceZipEntries,
+        length + 1,
+        limit,
+      );
     }
     _values.add(value);
   }
@@ -721,7 +740,11 @@ bool _imageWithinLimit(Uint8List bytes, int maxPixels) {
     if (width <= 0 || height <= 0 || frames <= 0) return false;
     if (width > maxPixels ~/ height || frames > maxPixels ~/ (width * height)) {
       throw PlanImportLimitException(
-        '图片像素（$width x $height x $frames 帧）',
+        l10n.planImportPackageResourceImagePixels(
+          '$width',
+          '$height',
+          '$frames',
+        ),
         width.toDouble() * height * frames,
         maxPixels,
       );
@@ -857,7 +880,9 @@ PlanImportPackage _readV2ZipPackage(
     recordAssetRefsById: _recordAssetRefsById(visitRecordJsons),
     warnings: [
       if (invalidCoordinatePointIds.isNotEmpty)
-        '${invalidCoordinatePointIds.length} 个点位坐标无效，已改为待补充坐标',
+        l10n.planImportPackageInvalidCoordinates(
+          invalidCoordinatePointIds.length,
+        ),
       ...manifestWarnings,
     ],
     exportedAt: _nullableDateValue(manifest['exportedAt']),
@@ -1131,8 +1156,8 @@ PilgrimagePlan _planFromV2Json(
 
   return PilgrimagePlan(
     id: _stringValue(json['id'], fallback: 'imported-plan'),
-    name: _stringValue(json['name'], fallback: '导入的巡礼计划'),
-    area: _stringValue(json['area'], fallback: '未设置区域'),
+    name: _stringValue(json['name'], fallback: l10n.planPackageDefaultPlanName),
+    area: _stringValue(json['area'], fallback: l10n.planPackageNoArea),
     memo: _optionalStringValue(json['memo']) ?? '',
     works: works,
     groups: groups,
@@ -1156,9 +1181,9 @@ PilgrimageWork _workFromV2Json(Map<String, Object?> json) {
       json['bangumiSubjectType'],
     ),
     coverImageUrl: json['coverImageUrl'] as String?,
-    title: _stringValue(json['title'], fallback: '未知作品'),
+    title: _stringValue(json['title'], fallback: l10n.planPackageUnknownWork),
     subtitle: _stringValue(json['subtitle'], fallback: ''),
-    city: _stringValue(json['city'], fallback: '未设置地区'),
+    city: _stringValue(json['city'], fallback: l10n.planPackageNoRegion),
     source: _enumValue(WorkSource.values, json['source']) ?? WorkSource.manual,
   );
 }
@@ -1170,7 +1195,10 @@ PilgrimagePlanGroup _groupFromV2Json(Map<String, Object?> json) {
   );
   return PilgrimagePlanGroup(
     id: _stringValue(json['id'], fallback: 'group-${json.hashCode}'),
-    name: _stringValue(json['name'], fallback: '未命名片区'),
+    name: _stringValue(
+      json['name'],
+      fallback: l10n.planImportPackageUnnamedArea,
+    ),
     orderIndex: (json['orderIndex'] as num?)?.toInt() ?? 0,
     orderMode:
         _enumValue(PlanGroupOrderMode.values, json['orderMode']) ??
@@ -1194,9 +1222,9 @@ PilgrimagePoint _pointFromV2Json(
       works[workId] ??
       PilgrimageWork(
         id: workId,
-        title: '未知作品',
+        title: l10n.planPackageUnknownWork,
         subtitle: '',
-        city: '未设置地区',
+        city: l10n.planPackageNoRegion,
         source: WorkSource.manual,
       );
 
@@ -1209,7 +1237,7 @@ PilgrimagePoint _pointFromV2Json(
   return PilgrimagePoint(
     id: id,
     work: work,
-    name: _stringValue(json['name'], fallback: '未命名点位'),
+    name: _stringValue(json['name'], fallback: l10n.planPackageUnnamedSpot),
     subtitle: _stringValue(json['subtitle'], fallback: ''),
     position: position ?? PilgrimagePoint.pendingPosition,
     episodeLabel: _stringValue(json['episodeLabel'], fallback: ''),
@@ -1244,7 +1272,10 @@ PilgrimageVisitRecord _visitRecordFromV2Json(Map<String, Object?> json) {
     colorGradingParamsJson: json['colorGradingParamsJson'] as String?,
     colorGradingIntensity: (json['colorGradingIntensity'] as num?)?.toDouble(),
     referenceImageUrl: _canonicalReferenceUrl(json['referenceImageUrl']),
-    referenceMode: _stringValue(json['referenceMode'], fallback: '未知'),
+    referenceMode: _stringValue(
+      json['referenceMode'],
+      fallback: l10n.planPackageUnknownReferenceMode,
+    ),
     capturedAt: _dateValue(json['capturedAt']),
   );
 }

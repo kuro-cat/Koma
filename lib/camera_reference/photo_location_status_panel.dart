@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_theme.dart';
 import '../widgets/app_motion.dart';
+import '../l10n/l10n.dart';
 
 class PhotoLocationStatusPanel extends StatelessWidget {
   const PhotoLocationStatusPanel({
@@ -54,7 +55,7 @@ class PhotoLocationStatusPanel extends StatelessWidget {
             OutlinedButton(
               onPressed: onSkip,
               style: AppButtonStyles.compactOutlinedButton(),
-              child: const Text('跳过'),
+              child: Text(l10n.photoLocationStatusPanelSkip),
             ),
         ],
       ),

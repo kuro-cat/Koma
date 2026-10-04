@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import '../l10n/l10n.dart';
 import '../plan/pilgrimage_models.dart';
 
 const myMapsCsvMimeType = 'text/csv';
@@ -48,7 +49,7 @@ MyMapsCsvExportResult buildMyMapsCsvExport({
       continue;
     }
     final group = point.groupId == null ? null : groupsById[point.groupId];
-    final groupName = group?.name ?? '未分组';
+    final groupName = group?.name ?? l10n.myMapsCsvExportUngrouped;
     rows.add([
       point.name,
       point.position.latitude.toStringAsFixed(7),

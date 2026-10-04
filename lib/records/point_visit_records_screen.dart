@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_theme.dart';
+import '../l10n/l10n.dart';
 import '../plan/pilgrimage_models.dart';
 import '../plan/pilgrimage_plan_controller.dart';
 import '../widgets/app_back_button.dart';
 import 'visit_record_detail_screen.dart';
+import '../camera_reference/camerawesome_reference_screen.dart'
+    show referenceModeDisplayLabel;
 import 'visit_record_photo_stub.dart'
     if (dart.library.io) 'visit_record_photo_io.dart';
 
@@ -38,7 +41,7 @@ class PointVisitRecordsScreen extends StatelessWidget {
             return Scaffold(
               appBar: AppBar(
                 leading: appBackButtonIfCanPop(context),
-                title: const Text('点位拍摄记录'),
+                title: Text(l10n.pointVisitRecordsTitle),
               ),
               body: ListView(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
@@ -162,7 +165,7 @@ class _PointRecordsHeader extends StatelessWidget {
               ),
               const SizedBox(width: 2),
               Text(
-                '条',
+                l10n.pointVisitRecordsCountUnit(count),
                 style: TextStyle(
                   color: AppColors.accentDark,
                   fontSize: 13,
@@ -195,7 +198,7 @@ class _EmptyPointRecords extends StatelessWidget {
           Icon(LucideIcons.images, color: AppColors.textSecondary, size: 34),
           SizedBox(height: 10),
           Text(
-            '这个点位还没有拍摄记录',
+            l10n.pointVisitRecordsEmpty,
             style: TextStyle(
               color: AppColors.textSecondary,
               fontWeight: FontWeight.w700,
@@ -220,7 +223,7 @@ class _PointRecordsListLabel extends StatelessWidget {
           Icon(LucideIcons.calendarClock, color: AppColors.accent, size: 15),
           const SizedBox(width: 6),
           Text(
-            '拍摄记录',
+            l10n.pointVisitRecordsListLabel,
             style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 13,
@@ -319,12 +322,14 @@ class _PointVisitRecordCard extends StatelessWidget {
                         children: [
                           _RecordMetaChip(
                             icon: LucideIcons.layers,
-                            label: record.referenceMode,
+                            label: referenceModeDisplayLabel(
+                              record.referenceMode,
+                            ),
                           ),
                           if (record.hasColorGrading)
-                            const _RecordMetaChip(
+                            _RecordMetaChip(
                               icon: LucideIcons.wandSparkles,
-                              label: '已调色',
+                              label: l10n.pointVisitRecordsColorMatched,
                             ),
                         ],
                       ),

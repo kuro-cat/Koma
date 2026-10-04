@@ -16,6 +16,7 @@ import 'in_app_navigation_screen.dart';
 import 'map_navigation_launcher.dart';
 import 'map_tile_config.dart';
 import 'valhalla_route_client.dart';
+import '../l10n/l10n.dart';
 
 const _endRouteRed = Color(0xFFFF3B30);
 
@@ -195,7 +196,7 @@ class _NavigationRouteConfirmScreenState
       return currentLocationFailureMessage(error);
     }
     if (error is ValhallaRouteException) return error.message;
-    return '路线加载失败，请检查定位和路径服务设置';
+    return l10n.navigationRouteConfirmLoadFailed;
   }
 
   @override
@@ -220,7 +221,10 @@ class _NavigationRouteConfirmScreenState
     return Scaffold(
       key: const ValueKey('navigation-route-confirm-screen'),
       backgroundColor: AppColors.background,
-      appBar: AppBar(leading: const AppBackButton(), title: const Text('确认路线')),
+      appBar: AppBar(
+        leading: const AppBackButton(),
+        title: Text(l10n.navigationRouteConfirmTitle),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -249,7 +253,9 @@ class _NavigationRouteConfirmScreenState
                       const SizedBox(height: 12),
                     ],
                     Text(
-                      canChainZone ? '串联整个片区' : '导航到选中点',
+                      canChainZone
+                          ? l10n.navigationRouteConfirmChainArea
+                          : l10n.navigationRouteConfirmToSelected,
                       style: TextStyle(
                         color: AppColors.textPrimary,
                         fontSize: 20,
@@ -260,8 +266,13 @@ class _NavigationRouteConfirmScreenState
                     const SizedBox(height: 6),
                     Text(
                       canChainZone
-                          ? '按顺序连接 ${remainingStops.length} 个点位：${_stopChainLabel(remainingStops)}'
-                          : '终点：${widget.point.name}',
+                          ? l10n.navigationRouteConfirmChainSummary(
+                              remainingStops.length,
+                              _stopChainLabel(remainingStops),
+                            )
+                          : l10n.navigationRouteConfirmDestination(
+                              widget.point.name,
+                            ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -277,7 +288,7 @@ class _NavigationRouteConfirmScreenState
                       const LinearProgressIndicator(minHeight: 3),
                       const SizedBox(height: 8),
                       Text(
-                        '正在获取当前位置并规划步行路线…',
+                        l10n.navigationRouteConfirmLoading,
                         style: TextStyle(color: AppColors.textSecondary),
                       ),
                     ] else if (_error != null) ...[
@@ -293,10 +304,10 @@ class _NavigationRouteConfirmScreenState
                         stackBelowWidth: 220,
                         first: OutlinedButton(
                           onPressed: () => _loadRoute(remainingStops),
-                          child: const ResponsiveButtonContent(
+                          child: ResponsiveButtonContent(
                             icon: LucideIcons.refreshCw,
-                            label: '重试',
-                            semanticLabel: '重新规划路线',
+                            label: l10n.commonRetry,
+                            semanticLabel: l10n.navigationRouteConfirmReplan,
                           ),
                         ),
                         second: OutlinedButton(
@@ -307,9 +318,12 @@ class _NavigationRouteConfirmScreenState
                           child: ResponsiveButtonContent(
                             icon: LucideIcons.externalLink,
                             label: widget.settings.navigationApp.label,
-                            shortLabel: '外部导航',
-                            semanticLabel:
-                                '使用 ${widget.settings.navigationApp.label} 导航',
+                            shortLabel:
+                                l10n.navigationRouteConfirmExternalShort,
+                            semanticLabel: l10n
+                                .navigationRouteConfirmExternalWith(
+                                  widget.settings.navigationApp.label,
+                                ),
                           ),
                         ),
                       ),
@@ -399,9 +413,9 @@ class _NavigationRouteConfirmScreenState
       widget.settings.navigationApp,
     );
     if (!opened && mounted) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('无法打开外部地图')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.navigationRouteConfirmExternalFailed)),
+      );
     }
   }
 }
@@ -428,9 +442,13 @@ class _PrimaryZoneButton extends StatelessWidget {
       child: ResponsiveButtonContent(
         icon: singlePoint ? LucideIcons.navigation : LucideIcons.route,
         iconSize: 20,
-        label: singlePoint ? '开始导航' : '串联整个片区导航',
-        shortLabel: '开始导航',
-        semanticLabel: singlePoint ? '开始导航' : '串联整个片区导航',
+        label: singlePoint
+            ? l10n.navigationRouteConfirmStart
+            : l10n.navigationRouteConfirmStartArea,
+        shortLabel: l10n.navigationRouteConfirmStart,
+        semanticLabel: singlePoint
+            ? l10n.navigationRouteConfirmStart
+            : l10n.navigationRouteConfirmStartArea,
       ),
     );
   }
@@ -450,12 +468,12 @@ class _SecondaryPointButton extends StatelessWidget {
         minimumSize: const Size.fromHeight(46),
         padding: const EdgeInsets.symmetric(horizontal: 16),
       ),
-      child: const ResponsiveButtonContent(
+      child: ResponsiveButtonContent(
         icon: LucideIcons.mapPin,
         iconSize: 20,
-        label: '仅导航到选中点',
-        shortLabel: '仅导航到点位',
-        semanticLabel: '仅导航到选中点',
+        label: l10n.navigationRouteConfirmOnlySelected,
+        shortLabel: l10n.navigationRouteConfirmOnlySelectedShort,
+        semanticLabel: l10n.navigationRouteConfirmOnlySelected,
       ),
     );
   }
@@ -478,7 +496,7 @@ class _GroupNameRow extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
           ),
           child: Text(
-            '片区',
+            l10n.navigationRouteConfirmAreaBadge,
             style: TextStyle(
               color: AppColors.accent,
               fontSize: 11,

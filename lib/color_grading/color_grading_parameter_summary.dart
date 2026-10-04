@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_theme.dart';
+import '../l10n/l10n.dart';
 import 'color_grading_params.dart';
 
 class ColorGradingParameterSummary extends StatelessWidget {
@@ -30,10 +31,13 @@ class ColorGradingParameterSummary extends StatelessWidget {
         children: [
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
-                  '调色强度',
-                  style: TextStyle(fontSize: 15, fontWeight: FontWeight.w800),
+                  l10n.colorGradingParameterSummaryIntensity,
+                  style: const TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ),
               Text(
@@ -57,10 +61,10 @@ class ColorGradingParameterSummary extends StatelessWidget {
           const SizedBox(height: 8),
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: Text(
-                  '调色参数',
-                  style: TextStyle(
+                  l10n.colorGradingParameterSummaryParameters,
+                  style: const TextStyle(
                     fontSize: 15,
                     fontWeight: FontWeight.w800,
                     letterSpacing: 0,
@@ -71,13 +75,13 @@ class ColorGradingParameterSummary extends StatelessWidget {
                 onPressed: () => _showParameterSheet(context),
                 style: AppButtonStyles.compactOutlinedButton(),
                 icon: const Icon(LucideIcons.slidersHorizontal, size: 18),
-                label: const Text('查看'),
+                label: Text(l10n.colorGradingParameterSummaryView),
               ),
             ],
           ),
           const SizedBox(height: 4),
           Text(
-            '显示当前调色强度下实际生效的参数。',
+            l10n.colorGradingParameterSummaryDescription,
             style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 13,
@@ -109,23 +113,108 @@ class _ColorGradingParameterSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final items = <_ParameterItem>[
-      _ParameterItem('亮度', activeParams.brightness, -0.25, 0.25),
-      _ParameterItem('曝光', activeParams.exposure, -1.0, 1.0),
-      _ParameterItem('对比度', activeParams.contrast, 0.7, 1.4),
-      _ParameterItem('饱和度', activeParams.saturation, 0.5, 1.6),
-      _ParameterItem('色温', activeParams.temperature, -1.0, 1.0),
-      _ParameterItem('色调', activeParams.tint, -1.0, 1.0),
-      _ParameterItem('高光', activeParams.highlights, -1.0, 1.0),
-      _ParameterItem('阴影', activeParams.shadows, -1.0, 1.0),
-      _ParameterItem('红暗部曲线', activeParams.redShadowCurve, -1.0, 1.0),
-      _ParameterItem('红中间调曲线', activeParams.redMidCurve, -1.0, 1.0),
-      _ParameterItem('红高光曲线', activeParams.redHighlightCurve, -1.0, 1.0),
-      _ParameterItem('绿暗部曲线', activeParams.greenShadowCurve, -1.0, 1.0),
-      _ParameterItem('绿中间调曲线', activeParams.greenMidCurve, -1.0, 1.0),
-      _ParameterItem('绿高光曲线', activeParams.greenHighlightCurve, -1.0, 1.0),
-      _ParameterItem('蓝暗部曲线', activeParams.blueShadowCurve, -1.0, 1.0),
-      _ParameterItem('蓝中间调曲线', activeParams.blueMidCurve, -1.0, 1.0),
-      _ParameterItem('蓝高光曲线', activeParams.blueHighlightCurve, -1.0, 1.0),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryBrightness,
+        activeParams.brightness,
+        -0.25,
+        0.25,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryExposure,
+        activeParams.exposure,
+        -1.0,
+        1.0,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryContrast,
+        activeParams.contrast,
+        0.7,
+        1.4,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummarySaturation,
+        activeParams.saturation,
+        0.5,
+        1.6,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryTemperature,
+        activeParams.temperature,
+        -1.0,
+        1.0,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryTint,
+        activeParams.tint,
+        -1.0,
+        1.0,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryHighlights,
+        activeParams.highlights,
+        -1.0,
+        1.0,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryShadows,
+        activeParams.shadows,
+        -1.0,
+        1.0,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryRedShadowCurve,
+        activeParams.redShadowCurve,
+        -1.0,
+        1.0,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryRedMidCurve,
+        activeParams.redMidCurve,
+        -1.0,
+        1.0,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryRedHighlightCurve,
+        activeParams.redHighlightCurve,
+        -1.0,
+        1.0,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryGreenShadowCurve,
+        activeParams.greenShadowCurve,
+        -1.0,
+        1.0,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryGreenMidCurve,
+        activeParams.greenMidCurve,
+        -1.0,
+        1.0,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryGreenHighlightCurve,
+        activeParams.greenHighlightCurve,
+        -1.0,
+        1.0,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryBlueShadowCurve,
+        activeParams.blueShadowCurve,
+        -1.0,
+        1.0,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryBlueMidCurve,
+        activeParams.blueMidCurve,
+        -1.0,
+        1.0,
+      ),
+      _ParameterItem(
+        l10n.colorGradingParameterSummaryBlueHighlightCurve,
+        activeParams.blueHighlightCurve,
+        -1.0,
+        1.0,
+      ),
     ];
 
     return SafeArea(
@@ -140,9 +229,9 @@ class _ColorGradingParameterSheet extends StatelessWidget {
               : const SizedBox(height: 18),
           itemBuilder: (context, index) {
             if (index == 0) {
-              return const Text(
-                '调色参数',
-                style: TextStyle(
+              return Text(
+                l10n.colorGradingParameterSummaryParameters,
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w900,
                   letterSpacing: 0,
