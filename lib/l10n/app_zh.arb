@@ -1,0 +1,10 @@
+{
+  "@@locale": "zh",
+  "commonCancel": "取消",
+  "commonConfirm": "确认",
+  "commonSave": "保存",
+  "commonDelete": "删除",
+  "commonRetry": "重试",
+  "commonClose": "关闭",
+  "appLoading": "正在加载 MiriaGo..."
+}

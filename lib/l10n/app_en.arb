@@ -1,0 +1,10 @@
+{
+  "@@locale": "en",
+  "commonCancel": "Cancel",
+  "commonConfirm": "Confirm",
+  "commonSave": "Save",
+  "commonDelete": "Delete",
+  "commonRetry": "Retry",
+  "commonClose": "Close",
+  "appLoading": "Loading MiriaGo..."
+}

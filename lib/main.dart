@@ -13,6 +13,7 @@ import 'data/pilgrimage_repository.dart';
 import 'data/sample_pilgrimage_repository.dart';
 import 'desktop/desktop_pilgrimage_repository.dart';
 import 'desktop/tauri_bridge.dart';
+import 'l10n/l10n.dart';
 import 'plan/pilgrimage_models.dart';
 import 'widgets/copyable_text.dart';
 import 'widgets/app_motion.dart';
@@ -103,6 +104,12 @@ class _MiriaGoBootstrapState extends State<MiriaGoBootstrap> {
       title: 'MiriaGo',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      builder: (context, child) {
+        l10n = AppLocalizations.of(context);
+        return child!;
+      },
       home: Scaffold(
         body: SafeArea(
           child: _loading
@@ -124,13 +131,13 @@ class _DesktopStartupLoading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
+    return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CircularProgressIndicator(),
-          SizedBox(height: 20),
-          Text('正在加载 MiriaGo...'),
+          const CircularProgressIndicator(),
+          const SizedBox(height: 20),
+          Text(l10n.appLoading),
         ],
       ),
     );
@@ -310,7 +317,12 @@ class _MiriaGoAppState extends State<MiriaGoApp> with WidgetsBindingObserver {
       themeAnimationDuration: Duration.zero,
       themeAnimationStyle: AnimationStyle.noAnimation,
       navigatorObservers: [copyOverlayNavigatorObserver],
-      builder: (context, child) => AppMotionScope(child: child!),
+      localizationsDelegates: AppLocalizations.localizationsDelegates,
+      supportedLocales: AppLocalizations.supportedLocales,
+      builder: (context, child) {
+        l10n = AppLocalizations.of(context);
+        return AppMotionScope(child: child!);
+      },
       home: AppShell(
         repository:
             widget.repository ??
