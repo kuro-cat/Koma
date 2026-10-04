@@ -152,6 +152,12 @@ abstract class AppLocalizations {
   /// **'对齐裁剪'**
   String get alignPhotoAction;
 
+  /// No description provided for @alignPhotoActionSubtitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'与参考图对齐'**
+  String get alignPhotoActionSubtitle;
+
   /// No description provided for @alignPhotoHint.
   ///
   /// In zh, this message translates to:

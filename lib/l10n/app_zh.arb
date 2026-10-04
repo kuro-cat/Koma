@@ -9,6 +9,7 @@
   "appLoading": "正在加载 MiriaGo...",
   "alignPhotoTitle": "对齐裁剪",
   "alignPhotoAction": "对齐裁剪",
+  "alignPhotoActionSubtitle": "与参考图对齐",
   "alignPhotoHint": "双指缩放、拖动照片，让它与参考图重合",
   "alignPhotoFrameOpacity": "参考图",
   "alignPhotoRotation": "旋转",

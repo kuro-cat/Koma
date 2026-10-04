@@ -36,6 +36,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get alignPhotoAction => 'Align & crop';
 
   @override
+  String get alignPhotoActionSubtitle => 'Line up with the frame';
+
+  @override
   String get alignPhotoHint =>
       'Pinch and drag the photo until it lines up with the frame';
 

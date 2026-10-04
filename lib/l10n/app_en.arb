@@ -9,6 +9,7 @@
   "appLoading": "Loading MiriaGo...",
   "alignPhotoTitle": "Align & crop",
   "alignPhotoAction": "Align & crop",
+  "alignPhotoActionSubtitle": "Line up with the frame",
   "alignPhotoHint": "Pinch and drag the photo until it lines up with the frame",
   "alignPhotoFrameOpacity": "Frame",
   "alignPhotoRotation": "Rotate",

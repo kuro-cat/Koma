@@ -9,6 +9,7 @@ import '../app_theme.dart';
 import '../data/anitabi_image_source_scope.dart';
 import '../desktop/desktop_asset_image.dart';
 import '../color_grading/color_grading_params.dart';
+import '../align/align_photo_screen.dart';
 import '../color_grading/color_grading_screen.dart';
 import '../plan/pilgrimage_models.dart';
 import '../plan/pilgrimage_plan_controller.dart';
@@ -129,6 +130,7 @@ class _VisitRecordDetailScreenState extends State<VisitRecordDetailScreen> {
           ),
           const SizedBox(height: 12),
           _RecordActionPanel(
+            onAlign: () => _openAlignment(context),
             onColorGrading: () => _openColorGrading(context),
             onExportComparison: () => _exportComparison(context, resolvedPoint),
           ),
@@ -197,19 +199,36 @@ class _VisitRecordDetailScreenState extends State<VisitRecordDetailScreen> {
     );
   }
 
-  Future<void> _openColorGrading(BuildContext context) async {
+  Future<void> _openAlignment(BuildContext context) {
     final resolvedPoint = widget.point;
-    final updated = await Navigator.of(context).push<PilgrimageVisitRecord>(
-      MaterialPageRoute<PilgrimageVisitRecord>(
-        builder: (_) => ColorGradingScreen(
-          record: _record,
-          controller: widget.controller,
-          fallbackReferenceImagePath: _resolvedReferenceImagePath(
-            resolvedPoint,
-          ),
-          fallbackReferenceImageUrl: _resolvedReferenceImageUrl(resolvedPoint),
-        ),
+    return _openEditor(
+      context,
+      (_) => AlignPhotoScreen(
+        record: _record,
+        controller: widget.controller,
+        fallbackReferenceImagePath: _resolvedReferenceImagePath(resolvedPoint),
+        fallbackReferenceImageUrl: _resolvedReferenceImageUrl(resolvedPoint),
       ),
+    );
+  }
+
+  Future<void> _openColorGrading(BuildContext context) {
+    final resolvedPoint = widget.point;
+    return _openEditor(
+      context,
+      (_) => ColorGradingScreen(
+        record: _record,
+        controller: widget.controller,
+        fallbackReferenceImagePath: _resolvedReferenceImagePath(resolvedPoint),
+        fallbackReferenceImageUrl: _resolvedReferenceImageUrl(resolvedPoint),
+      ),
+    );
+  }
+
+  /// Opens a photo editor that pops the updated record when it saves.
+  Future<void> _openEditor(BuildContext context, WidgetBuilder builder) async {
+    final updated = await Navigator.of(context).push<PilgrimageVisitRecord>(
+      MaterialPageRoute<PilgrimageVisitRecord>(builder: builder),
     );
     if (updated == null || !mounted) {
       return;
@@ -890,10 +909,12 @@ class _DashboardBorder extends StatelessWidget {
 
 class _RecordActionPanel extends StatelessWidget {
   const _RecordActionPanel({
+    required this.onAlign,
     required this.onColorGrading,
     required this.onExportComparison,
   });
 
+  final VoidCallback onAlign;
   final VoidCallback onColorGrading;
   final VoidCallback onExportComparison;
 
@@ -906,35 +927,46 @@ class _RecordActionPanel extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         border: Border.all(color: AppColors.border),
       ),
-      child: SizedBox(
-        height: 56,
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Expanded(
-              child: _RecordAction(
-                icon: LucideIcons.wandSparkles,
-                title: l10n.visitRecordDetailColorMatchTitle,
-                subtitle: l10n.visitRecordDetailColorMatchSubtitle,
-                onTap: onColorGrading,
-              ),
+      child: Column(
+        children: [
+          SizedBox(
+            height: 56,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: _RecordAction(
+                    icon: LucideIcons.crop,
+                    title: l10n.alignPhotoAction,
+                    subtitle: l10n.alignPhotoActionSubtitle,
+                    onTap: onAlign,
+                  ),
+                ),
+                VerticalDivider(
+                  width: 9,
+                  indent: 8,
+                  endIndent: 8,
+                  color: AppColors.border,
+                ),
+                Expanded(
+                  child: _RecordAction(
+                    icon: LucideIcons.wandSparkles,
+                    title: l10n.visitRecordDetailColorMatchTitle,
+                    subtitle: l10n.visitRecordDetailColorMatchSubtitle,
+                    onTap: onColorGrading,
+                  ),
+                ),
+              ],
             ),
-            VerticalDivider(
-              width: 9,
-              indent: 8,
-              endIndent: 8,
-              color: AppColors.border,
-            ),
-            Expanded(
-              child: _RecordAction(
-                icon: LucideIcons.share2,
-                title: l10n.visitRecordDetailExportTitle,
-                subtitle: l10n.visitRecordDetailExportSubtitle,
-                onTap: onExportComparison,
-              ),
-            ),
-          ],
-        ),
+          ),
+          Divider(height: 9, indent: 8, endIndent: 8, color: AppColors.border),
+          _RecordAction(
+            icon: LucideIcons.share2,
+            title: l10n.visitRecordDetailExportTitle,
+            subtitle: l10n.visitRecordDetailExportSubtitle,
+            onTap: onExportComparison,
+          ),
+        ],
       ),
     );
   }

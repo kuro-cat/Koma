@@ -2598,6 +2598,66 @@ void main() {
     expect(clearedRecords.single.colorGradingIntensity, isNull);
   });
 
+  test(
+    'layers aligned crop under color grading and keeps the original',
+    () async {
+      final database = AppDatabase(NativeDatabase.memory());
+      addTearDown(database.close);
+
+      final repository = SqlitePilgrimageRepository(database: database);
+      final plan = await repository.loadActivePlan();
+      final point = plan.points.first;
+      final record = await repository.createVisitRecord(
+        planId: plan.id,
+        pointId: point.id,
+        workId: point.work.id,
+        photoPath: '/tmp/original.jpg',
+        referenceMode: '叠影',
+      );
+      Future<PilgrimageVisitRecord> load() async =>
+          (await repository.loadVisitRecords(plan.id)).single;
+
+      await repository.updateVisitRecordAlignment(
+        planId: plan.id,
+        recordId: record.id,
+        alignedPhotoPath: '/tmp/aligned.jpg',
+        alignmentJson: '{"scale":1.2}',
+        gradedPhotoPath: null,
+      );
+      expect((await load()).displayPhotoPath, '/tmp/aligned.jpg');
+      expect((await load()).alignmentJson, '{"scale":1.2}');
+
+      await repository.updateVisitRecordColorGrading(
+        planId: plan.id,
+        recordId: record.id,
+        originalPhotoPath: '/tmp/original.jpg',
+        gradedPhotoPath: '/tmp/graded.jpg',
+        colorGradingMode: 'strong',
+        colorGradingParamsJson: '{"exposure":0.2}',
+        colorGradingIntensity: 1,
+      );
+      expect((await load()).displayPhotoPath, '/tmp/graded.jpg');
+
+      await repository.clearVisitRecordColorGrading(
+        planId: plan.id,
+        recordId: record.id,
+      );
+      expect((await load()).displayPhotoPath, '/tmp/aligned.jpg');
+
+      await repository.updateVisitRecordAlignment(
+        planId: plan.id,
+        recordId: record.id,
+        alignedPhotoPath: null,
+        alignmentJson: null,
+        gradedPhotoPath: null,
+      );
+      final cleared = await load();
+      expect(cleared.displayPhotoPath, '/tmp/original.jpg');
+      expect(cleared.sourcePhotoPath, '/tmp/original.jpg');
+      expect(cleared.alignmentJson, isNull);
+    },
+  );
+
   test('uses explicit captured time when creating visit records', () async {
     final database = AppDatabase(NativeDatabase.memory());
     addTearDown(database.close);

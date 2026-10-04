@@ -36,6 +36,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get alignPhotoAction => '对齐裁剪';
 
   @override
+  String get alignPhotoActionSubtitle => '与参考图对齐';
+
+  @override
   String get alignPhotoHint => '双指缩放、拖动照片，让它与参考图重合';
 
   @override

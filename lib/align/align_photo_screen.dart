@@ -378,7 +378,10 @@ class _AlignPhotoScreenState extends State<AlignPhotoScreen> {
                 Text(
                   l10n.alignPhotoHint,
                   textAlign: TextAlign.center,
-                  style: TextStyle(color: AppColors.textSecondary, fontSize: 13),
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 13,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 _LabeledSlider(
@@ -456,10 +459,7 @@ class _LabeledSlider extends StatelessWidget {
         Expanded(
           child: Slider(value: value, min: min, max: max, onChanged: onChanged),
         ),
-        SizedBox(
-          width: 52,
-          child: Text(valueLabel, textAlign: TextAlign.end),
-        ),
+        SizedBox(width: 52, child: Text(valueLabel, textAlign: TextAlign.end)),
       ],
     );
   }
