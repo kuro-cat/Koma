@@ -377,7 +377,10 @@ class PointDetailSheet extends StatelessWidget {
                 _InfoRow(
                   icon: LucideIcons.clapperboard,
                   label: l10n.pointDetailWorkLabel,
-                  value: '${point.work.title} / ${point.work.subtitle}',
+                  value: joinLabels([
+                    point.work.title,
+                    point.work.displaySubtitle,
+                  ]),
                 ),
                 if (point.displayEpisodeLabel.isNotEmpty) ...[
                   const SizedBox(height: 8),

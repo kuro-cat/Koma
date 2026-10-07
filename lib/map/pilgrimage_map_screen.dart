@@ -1418,7 +1418,7 @@ class _PointCard extends StatelessWidget {
   String get _copySummary {
     return [
       point.name,
-      '${point.work.title} / ${point.work.subtitle}',
+      joinLabels([point.work.title, point.work.displaySubtitle]),
       point.subtitle,
       point.displayEpisodeLabel,
       point.hasCoordinate

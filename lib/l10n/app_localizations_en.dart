@@ -1085,9 +1085,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addPointsLinkExampleSpotIdNote => 'Anitabi spot ID (optional)';
 
   @override
-  String get addPointsNoOriginalTitle => 'No original title';
-
-  @override
   String get addPointsWorkSaveFailed =>
       'Couldn\'t save the work. Please try again later.';
 
@@ -1866,9 +1863,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planManagerAreaNotSet => 'Area not set';
 
   @override
-  String get planManagerKeepOnePlan => 'At least one plan must remain';
-
-  @override
   String get planManagerDeletePlan => 'Delete plan';
 
   @override
@@ -1883,7 +1877,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planManagerReorderTitle => 'Reorder plans';
 
   @override
-  String get planManagerTitle => 'Switch plan';
+  String get planManagerTitle => 'All plans';
 
   @override
   String get planManagerDoneSorting => 'Done sorting';
@@ -2419,7 +2413,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planCreate => 'Create';
 
   @override
-  String get planSwitchPlan => 'Switch plan';
+  String get planSwitchPlan => 'All plans';
 
   @override
   String get planManagePlan => 'Manage plan';
@@ -3042,9 +3036,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get workManagerAddManuallyHint => 'If it\'s not listed';
-
-  @override
-  String get workManagerNoOriginalTitle => 'No original title';
 
   @override
   String get workManagerCopyTitle => 'Work title';
@@ -6227,4 +6218,21 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pointManagerAreasShort => 'Areas';
+
+  @override
+  String get appShellNoPlansTitle => 'No plans yet';
+
+  @override
+  String get appShellNoPlansBody =>
+      'Create a plan, then add the anime spots you want to visit.';
+
+  @override
+  String get appShellCreatePlan => 'Create plan';
+
+  @override
+  String get appShellCreatePlanFailed =>
+      'Couldn\'t create the plan. Please try again.';
+
+  @override
+  String get appShellNewPlan => 'New plan';
 }

@@ -40,6 +40,7 @@ class PlanScreen extends StatefulWidget {
     required this.onOpenAddPoints,
     required this.onOpenPointManager,
     required this.onOpenImportExport,
+    this.onPickPlan,
     this.isActive = true,
     this.locationTracker,
     super.key,
@@ -53,6 +54,9 @@ class PlanScreen extends StatefulWidget {
   final VoidCallback onOpenAddPoints;
   final VoidCallback onOpenPointManager;
   final VoidCallback onOpenImportExport;
+
+  /// Opens the plan list from the title; the title is plain text without it.
+  final VoidCallback? onPickPlan;
   final bool isActive;
   final MapLocationTracker? locationTracker;
 
@@ -359,11 +363,30 @@ class _PlanScreenState extends State<PlanScreen>
       appBar: AppBar(
         toolbarHeight: kToolbarHeight,
         actionsPadding: EdgeInsets.zero,
-        title: Text(
-          plan.name,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
+        title: InkWell(
+          key: const ValueKey('plan-title-picker'),
+          onTap: widget.onPickPlan,
+          borderRadius: BorderRadius.circular(8),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Flexible(
+                child: Text(
+                  plan.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+              if (widget.onPickPlan != null) ...[
+                const SizedBox(width: 4),
+                const Icon(LucideIcons.chevronsUpDown, size: 18),
+              ],
+            ],
+          ),
         ),
         actions: [
           IconButton(
@@ -826,7 +849,7 @@ class _PlanActionsPanel extends StatelessWidget {
     final items = [
       _PlanActionItem(
         key: const ValueKey('plan-action-switch-plan'),
-        icon: const Icon(LucideIcons.arrowLeftRight, size: 20),
+        icon: const Icon(LucideIcons.list, size: 20),
         title: l10n.planSwitchPlan,
         onTap: onSwitchPlan,
       ),

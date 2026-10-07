@@ -688,6 +688,24 @@ class PilgrimageWork {
   final String? coverImageUrl;
   final String title;
   final String subtitle;
+
+  /// The subtitle worth showing: '' when it repeats the title or is a
+  /// placeholder older versions stored ("暂无作品原名", "Bangumi #id").
+  String get displaySubtitle {
+    final text = subtitle.trim();
+    if (text == title.trim() ||
+        text.startsWith('Bangumi #') ||
+        _subtitlePlaceholders.contains(text)) {
+      return '';
+    }
+    return text;
+  }
+
+  static const _subtitlePlaceholders = {
+    '暂无作品原名',
+    'No original title',
+    'Manual Work',
+  };
   final String city;
   final WorkSource source;
 

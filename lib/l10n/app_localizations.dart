@@ -1914,12 +1914,6 @@ abstract class AppLocalizations {
   /// **'Anitabi 点位 ID（可选）'**
   String get addPointsLinkExampleSpotIdNote;
 
-  /// No description provided for @addPointsNoOriginalTitle.
-  ///
-  /// In zh, this message translates to:
-  /// **'暂无作品原名'**
-  String get addPointsNoOriginalTitle;
-
   /// No description provided for @addPointsWorkSaveFailed.
   ///
   /// In zh, this message translates to:
@@ -3240,12 +3234,6 @@ abstract class AppLocalizations {
   /// **'未设置区域'**
   String get planManagerAreaNotSet;
 
-  /// No description provided for @planManagerKeepOnePlan.
-  ///
-  /// In zh, this message translates to:
-  /// **'至少需要保留一个计划'**
-  String get planManagerKeepOnePlan;
-
   /// No description provided for @planManagerDeletePlan.
   ///
   /// In zh, this message translates to:
@@ -3273,7 +3261,7 @@ abstract class AppLocalizations {
   /// No description provided for @planManagerTitle.
   ///
   /// In zh, this message translates to:
-  /// **'切换计划'**
+  /// **'计划列表'**
   String get planManagerTitle;
 
   /// No description provided for @planManagerDoneSorting.
@@ -4081,7 +4069,7 @@ abstract class AppLocalizations {
   /// No description provided for @planSwitchPlan.
   ///
   /// In zh, this message translates to:
-  /// **'切换计划'**
+  /// **'计划列表'**
   String get planSwitchPlan;
 
   /// No description provided for @planManagePlan.
@@ -5029,12 +5017,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'未收录时使用'**
   String get workManagerAddManuallyHint;
-
-  /// No description provided for @workManagerNoOriginalTitle.
-  ///
-  /// In zh, this message translates to:
-  /// **'暂无作品原名'**
-  String get workManagerNoOriginalTitle;
 
   /// No description provided for @workManagerCopyTitle.
   ///
@@ -10115,6 +10097,36 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'片区'**
   String get pointManagerAreasShort;
+
+  /// No description provided for @appShellNoPlansTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'还没有计划'**
+  String get appShellNoPlansTitle;
+
+  /// No description provided for @appShellNoPlansBody.
+  ///
+  /// In zh, this message translates to:
+  /// **'创建一个巡礼计划，把想去的作品点位加进来。'**
+  String get appShellNoPlansBody;
+
+  /// No description provided for @appShellCreatePlan.
+  ///
+  /// In zh, this message translates to:
+  /// **'创建计划'**
+  String get appShellCreatePlan;
+
+  /// No description provided for @appShellCreatePlanFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'计划创建失败，请重试'**
+  String get appShellCreatePlanFailed;
+
+  /// No description provided for @appShellNewPlan.
+  ///
+  /// In zh, this message translates to:
+  /// **'新建计划'**
+  String get appShellNewPlan;
 }
 
 class _AppLocalizationsDelegate

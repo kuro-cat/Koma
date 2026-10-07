@@ -402,16 +402,8 @@ class _WorkManageCardState extends State<_WorkManageCard> {
   Widget build(BuildContext context) {
     final work = widget.work;
     final pointCount = widget.pointCount;
-    final subtitle = work.subtitle.trim();
-    final showSubtitle =
-        subtitle.isNotEmpty &&
-        subtitle != work.title.trim() &&
-        !subtitle.startsWith('Bangumi #') &&
-        subtitle != 'Manual Work' &&
-        // The Chinese literal is the placeholder older versions stored as the
-        // subtitle; keep matching it in every locale.
-        subtitle != '暂无作品原名' &&
-        subtitle != l10n.workManagerNoOriginalTitle;
+    final subtitle = work.displaySubtitle;
+    final showSubtitle = subtitle.isNotEmpty;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -446,26 +438,21 @@ class _WorkManageCardState extends State<_WorkManageCard> {
                     letterSpacing: 0,
                   ),
                 ),
-                const SizedBox(height: 3),
-                CopyableText(
-                  text: showSubtitle
-                      ? subtitle
-                      : l10n.workManagerNoOriginalTitle,
-                  copyText: [
-                    work.title,
-                    if (showSubtitle) subtitle,
-                  ].where((value) => value.trim().isNotEmpty).join('\n'),
-                  copyLabel: l10n.workManagerCopyInfo,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: showSubtitle
-                        ? AppColors.textSecondary
-                        : AppColors.textSecondary.withValues(alpha: 0.55),
-                    fontSize: 12,
-                    letterSpacing: 0,
+                if (showSubtitle) ...[
+                  const SizedBox(height: 3),
+                  CopyableText(
+                    text: subtitle,
+                    copyText: '${work.title}\n$subtitle',
+                    copyLabel: l10n.workManagerCopyInfo,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 12,
+                      letterSpacing: 0,
+                    ),
                   ),
-                ),
+                ],
                 const SizedBox(height: 6),
                 _WorkBadges(
                   key: ValueKey('work-manage-badges-${work.id}'),

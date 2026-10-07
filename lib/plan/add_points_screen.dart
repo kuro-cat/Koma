@@ -1462,7 +1462,7 @@ class ManualWorkFormScreenState extends State<ManualWorkFormScreen> {
       final work = PilgrimageWork(
         id: 'manual-work-${now.microsecondsSinceEpoch}',
         title: title,
-        subtitle: subtitle.isEmpty ? l10n.addPointsNoOriginalTitle : subtitle,
+        subtitle: subtitle,
         city: city.isEmpty ? widget.plan.area : city,
         source: WorkSource.manual,
         bangumiSubjectType: _selectedSubjectType,
@@ -2951,7 +2951,7 @@ class _ManualPointFormScreenState extends State<_ManualPointFormScreen> {
     return PilgrimageWork(
       id: 'manual-work-${now.microsecondsSinceEpoch}',
       title: title,
-      subtitle: subtitle.isEmpty ? l10n.addPointsNoOriginalTitle : subtitle,
+      subtitle: subtitle,
       city: city.isEmpty ? widget.plan.area : city,
       source: WorkSource.manual,
     );
@@ -4360,11 +4360,8 @@ class _WorkResultCardState extends State<_WorkResultCard> {
   @override
   Widget build(BuildContext context) {
     final work = widget.work;
-    final subtitle = work.subtitle.trim();
-    final showSubtitle =
-        subtitle.isNotEmpty &&
-        subtitle != work.title.trim() &&
-        !subtitle.startsWith('Bangumi #');
+    final subtitle = work.displaySubtitle;
+    final showSubtitle = subtitle.isNotEmpty;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
@@ -4404,33 +4401,26 @@ class _WorkResultCardState extends State<_WorkResultCard> {
                     ),
                   ),
                 ),
-                InkWell(
-                  onTap: showSubtitle
-                      ? () {
-                          setState(() {
-                            _expanded = !_expanded;
-                          });
-                        }
-                      : null,
-                  borderRadius: BorderRadius.circular(4),
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 1),
-                    child: Text(
-                      showSubtitle ? subtitle : l10n.addPointsNoOriginalTitle,
-                      maxLines: showSubtitle && _expanded ? null : 1,
-                      overflow: showSubtitle && _expanded
-                          ? TextOverflow.visible
-                          : TextOverflow.ellipsis,
-                      style: TextStyle(
-                        color: showSubtitle
-                            ? AppColors.textSecondary
-                            : AppColors.textSecondary.withValues(alpha: 0.55),
-                        fontSize: 12,
-                        letterSpacing: 0,
+                if (showSubtitle)
+                  InkWell(
+                    onTap: () => setState(() => _expanded = !_expanded),
+                    borderRadius: BorderRadius.circular(4),
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 1),
+                      child: Text(
+                        subtitle,
+                        maxLines: _expanded ? null : 1,
+                        overflow: _expanded
+                            ? TextOverflow.visible
+                            : TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                          letterSpacing: 0,
+                        ),
                       ),
                     ),
                   ),
-                ),
                 if (work.displayBangumiSubjectType != null) ...[
                   const SizedBox(height: 6),
                   _SubjectTypePill(type: work.displayBangumiSubjectType!),

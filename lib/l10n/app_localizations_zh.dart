@@ -995,9 +995,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addPointsLinkExampleSpotIdNote => 'Anitabi 点位 ID（可选）';
 
   @override
-  String get addPointsNoOriginalTitle => '暂无作品原名';
-
-  @override
   String get addPointsWorkSaveFailed => '作品保存失败，请稍后重试。';
 
   @override
@@ -1699,9 +1696,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planManagerAreaNotSet => '未设置区域';
 
   @override
-  String get planManagerKeepOnePlan => '至少需要保留一个计划';
-
-  @override
   String get planManagerDeletePlan => '删除计划';
 
   @override
@@ -1714,7 +1708,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planManagerReorderTitle => '调整计划顺序';
 
   @override
-  String get planManagerTitle => '切换计划';
+  String get planManagerTitle => '计划列表';
 
   @override
   String get planManagerDoneSorting => '完成排序';
@@ -2169,7 +2163,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planCreate => '创建';
 
   @override
-  String get planSwitchPlan => '切换计划';
+  String get planSwitchPlan => '计划列表';
 
   @override
   String get planManagePlan => '管理计划';
@@ -2694,9 +2688,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get workManagerAddManuallyHint => '未收录时使用';
-
-  @override
-  String get workManagerNoOriginalTitle => '暂无作品原名';
 
   @override
   String get workManagerCopyTitle => '作品名称';
@@ -5532,4 +5523,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get pointManagerAreasShort => '片区';
+
+  @override
+  String get appShellNoPlansTitle => '还没有计划';
+
+  @override
+  String get appShellNoPlansBody => '创建一个巡礼计划，把想去的作品点位加进来。';
+
+  @override
+  String get appShellCreatePlan => '创建计划';
+
+  @override
+  String get appShellCreatePlanFailed => '计划创建失败，请重试';
+
+  @override
+  String get appShellNewPlan => '新建计划';
 }

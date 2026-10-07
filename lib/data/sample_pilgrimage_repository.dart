@@ -571,13 +571,9 @@ class SamplePilgrimageRepository implements PilgrimageRepository {
 
   @override
   Future<void> deletePlan(String id) async {
-    if (_plans.length == 1) {
-      throw StateError('At least one plan is required.');
-    }
-
     _plans.removeWhere((plan) => plan.id == id);
     _visitRecords.removeWhere((record) => record.planId == id);
-    if (_activePlanId == id) {
+    if (_activePlanId == id && _plans.isNotEmpty) {
       _activePlanId = _plans.first.id;
     }
   }

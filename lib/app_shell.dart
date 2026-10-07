@@ -55,6 +55,10 @@ class AppShell extends StatefulWidget {
 
 class _AppShellState extends State<AppShell> {
   PilgrimagePlanController? _planController;
+
+  /// Every plan was deleted (or none was ever made): the plan tabs ask the
+  /// user to create one.
+  var _hasNoPlans = false;
   AppSettings _settings = const AppSettings();
   var _settingsLoaded = false;
   late final AnitabiEndpointSync _anitabiSync;
@@ -104,7 +108,10 @@ class _AppShellState extends State<AppShell> {
     });
 
     try {
-      final plan = await widget.repository.loadActivePlan();
+      final plans = await widget.repository.loadPlans();
+      final plan = plans.isEmpty
+          ? null
+          : await widget.repository.loadActivePlan();
       // Reloading after a page closed: the shell's settings are the newest,
       // since every change goes through it, while the repository may still
       // be storing the latest one (the desktop store answers with the last
@@ -133,10 +140,13 @@ class _AppShellState extends State<AppShell> {
       );
       _planController?.dispose();
       setState(() {
-        _planController = PilgrimagePlanController(
-          plan: plan,
-          visitRepository: widget.repository,
-        );
+        _hasNoPlans = plan == null;
+        _planController = plan == null
+            ? null
+            : PilgrimagePlanController(
+                plan: plan,
+                visitRepository: widget.repository,
+              );
         if (!reloading) {
           _settings = settings;
           _storedSettings = settings;
@@ -189,6 +199,24 @@ class _AppShellState extends State<AppShell> {
     }
   }
 
+  Future<void> _createFirstPlan() async {
+    try {
+      await widget.repository.createPlan(
+        name: l10n.planManagerNewPlanName(1),
+        area: l10n.planManagerAreaNotSet,
+      );
+    } on Object {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showStatusSnack(
+          kind: AppStatusBannerKind.error,
+          title: l10n.appShellCreatePlanFailed,
+        );
+      }
+      return;
+    }
+    await _loadActivePlan();
+  }
+
   void _openMap() {
     setState(() {
       _selectedIndex = 1;
@@ -203,6 +231,96 @@ class _AppShellState extends State<AppShell> {
     );
     await _loadActivePlan();
     _scheduleWorkCoverBackfill();
+  }
+
+  /// Lists the plans from the Plan page title: switch, add or manage.
+  Future<void> _showPlanPicker() async {
+    final List<PilgrimagePlan> plans;
+    try {
+      plans = await widget.repository.loadPlans();
+    } on Object {
+      return;
+    }
+    if (!mounted) {
+      return;
+    }
+    final currentId = _planController?.plan.id;
+    final choice = await showModalBottomSheet<_PlanPick>(
+      context: context,
+      showDragHandle: true,
+      isScrollControlled: true,
+      builder: (context) => SafeArea(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.sizeOf(context).height * 0.7,
+          ),
+          child: ListView(
+            shrinkWrap: true,
+            children: [
+              for (final plan in plans)
+                ListTile(
+                  leading: Icon(
+                    plan.id == currentId
+                        ? LucideIcons.circleCheck
+                        : LucideIcons.circle,
+                    color: plan.id == currentId ? AppColors.accent : null,
+                  ),
+                  title: Text(plan.name),
+                  subtitle: Text(
+                    l10n.planManagerPlanSummary(
+                      plan.area,
+                      plan.points.length,
+                      plan.works.length,
+                    ),
+                  ),
+                  onTap: () => Navigator.of(context).pop(_PlanPick(plan.id)),
+                ),
+              const Divider(),
+              ListTile(
+                leading: const Icon(LucideIcons.plus),
+                title: Text(l10n.appShellNewPlan),
+                onTap: () =>
+                    Navigator.of(context).pop(const _PlanPick.create()),
+              ),
+              ListTile(
+                leading: const Icon(LucideIcons.list),
+                title: Text(l10n.planSwitchPlan),
+                onTap: () =>
+                    Navigator.of(context).pop(const _PlanPick.manage()),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+    if (choice == null || !mounted) {
+      return;
+    }
+    if (choice.manage) {
+      await _openPlanManager();
+      return;
+    }
+    try {
+      if (choice.create) {
+        await widget.repository.createPlan(
+          name: l10n.planManagerNewPlanName(plans.length + 1),
+          area: l10n.planManagerAreaNotSet,
+        );
+      } else if (choice.planId != currentId) {
+        await widget.repository.setActivePlan(choice.planId!);
+      } else {
+        return;
+      }
+    } on Object {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showStatusSnack(
+          kind: AppStatusBannerKind.error,
+          title: l10n.planManagerSwitchFailed,
+        );
+      }
+      return;
+    }
+    await _loadActivePlan();
   }
 
   Future<void> _openAddPoints() async {
@@ -452,7 +570,7 @@ class _AppShellState extends State<AppShell> {
       platformBrightness: platformBrightness,
     );
 
-    if (controller == null) {
+    if (controller == null && !_hasNoPlans) {
       return Theme(
         data: appThemeFor(
           _settings,
@@ -462,8 +580,11 @@ class _AppShellState extends State<AppShell> {
       );
     }
 
+    final noPlan = controller == null
+        ? _NoPlanState(onCreate: _createFirstPlan)
+        : null;
     return ListenableBuilder(
-      listenable: controller,
+      listenable: Listenable.merge([controller]),
       builder: (context, _) {
         return MediaQuery(
           data: MediaQuery.of(context).copyWith(
@@ -484,30 +605,34 @@ class _AppShellState extends State<AppShell> {
                   body: IndexedStack(
                     index: _selectedIndex,
                     children: [
-                      PlanScreen(
-                        isActive: _selectedIndex == 0,
-                        controller: controller,
-                        settings: _settings,
-                        repository: widget.repository,
-                        onOpenMap: _openMap,
-                        onOpenPlanManager: _openPlanManager,
-                        onOpenAddPoints: _openAddPoints,
-                        onOpenPointManager: _openPointManager,
-                        onOpenImportExport: _openImportExport,
-                      ),
-                      TickerMode(
-                        enabled: _selectedIndex == 1,
-                        child: PilgrimageMapScreen(
-                          isActive: _selectedIndex == 1,
-                          controller: controller,
-                          settings: _settings,
-                          onSettingsChanged: _saveSettings,
-                        ),
-                      ),
-                      RecordsScreen(
-                        controller: controller,
-                        settings: _settings,
-                      ),
+                      noPlan ??
+                          PlanScreen(
+                            isActive: _selectedIndex == 0,
+                            controller: controller!,
+                            settings: _settings,
+                            repository: widget.repository,
+                            onOpenMap: _openMap,
+                            onOpenPlanManager: _openPlanManager,
+                            onOpenAddPoints: _openAddPoints,
+                            onOpenPointManager: _openPointManager,
+                            onOpenImportExport: _openImportExport,
+                            onPickPlan: _showPlanPicker,
+                          ),
+                      noPlan ??
+                          TickerMode(
+                            enabled: _selectedIndex == 1,
+                            child: PilgrimageMapScreen(
+                              isActive: _selectedIndex == 1,
+                              controller: controller!,
+                              settings: _settings,
+                              onSettingsChanged: _saveSettings,
+                            ),
+                          ),
+                      noPlan ??
+                          RecordsScreen(
+                            controller: controller!,
+                            settings: _settings,
+                          ),
                       SettingsScreen(
                         settings: _settings,
                         repository: widget.repository,
@@ -585,6 +710,65 @@ class _AppShellState extends State<AppShell> {
           ),
         );
       },
+    );
+  }
+}
+
+class _PlanPick {
+  const _PlanPick(this.planId) : create = false, manage = false;
+  const _PlanPick.create() : planId = null, create = true, manage = false;
+  const _PlanPick.manage() : planId = null, create = false, manage = true;
+
+  final String? planId;
+  final bool create;
+  final bool manage;
+}
+
+class _NoPlanState extends StatelessWidget {
+  const _NoPlanState({required this.onCreate});
+
+  final VoidCallback onCreate;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(LucideIcons.route, color: AppColors.accent, size: 40),
+              const SizedBox(height: 12),
+              Text(
+                l10n.appShellNoPlansTitle,
+                style: const TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  letterSpacing: 0,
+                ),
+              ),
+              const SizedBox(height: 8),
+              Text(
+                l10n.appShellNoPlansBody,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 14,
+                  letterSpacing: 0,
+                ),
+              ),
+              const SizedBox(height: 16),
+              FilledButton.icon(
+                key: const ValueKey('create-first-plan'),
+                onPressed: onCreate,
+                icon: const Icon(LucideIcons.plus, size: 18),
+                label: Text(l10n.appShellCreatePlan),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

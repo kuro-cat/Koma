@@ -334,7 +334,7 @@ void main() {
     expect(
       find.descendant(
         of: find.byKey(const ValueKey('plan-action-switch-plan')),
-        matching: find.byIcon(LucideIcons.arrowLeftRight),
+        matching: find.byIcon(LucideIcons.list),
       ),
       findsOneWidget,
     );
@@ -427,7 +427,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey('plan-actions-panel')), findsOneWidget);
-    expect(find.text('切换计划'), findsOneWidget);
+    expect(find.text('计划列表'), findsOneWidget);
     expect(find.text('计划备忘录'), findsOneWidget);
     expect(find.text('加入巡礼场景'), findsNothing);
     expect(find.text('整理片区点位'), findsNothing);
@@ -445,7 +445,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey('plan-actions-panel')), findsOneWidget);
-    expect(find.text('切换计划'), findsOneWidget);
+    expect(find.text('计划列表'), findsOneWidget);
     expect(find.text('加入巡礼场景'), findsNothing);
     expect(find.text('计划备忘录'), findsOneWidget);
     expect(find.text('记录行程要点'), findsNothing);
@@ -2933,6 +2933,23 @@ void main() {
     expect(hexField.controller!.text, '#FF0000');
   });
 
+  testWidgets('with no plans the plan tabs offer to create one', (
+    tester,
+  ) async {
+    final repository = SamplePilgrimageRepository(plans: const []);
+    await tester.pumpWidget(MiriaGoApp(repository: repository));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('create-first-plan')), findsOneWidget);
+
+    await tester.tap(find.byKey(const ValueKey('create-first-plan')));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('create-first-plan')), findsNothing);
+    expect(find.text('还没有点位'), findsOneWidget);
+    expect(await repository.loadPlans(), hasLength(1));
+  });
+
   testWidgets('creates empty plan and shows add-points shell', (tester) async {
     await _pumpAppWithEmptyPlan(tester);
 
@@ -3359,7 +3376,7 @@ void main() {
 
     await tester.tap(find.text('可切换').first);
     await tester.pumpAndSettle();
-    expect(find.text('切换计划'), findsNothing);
+    expect(find.text('计划列表'), findsNothing);
   });
 
   testWidgets('plan more menu hover does not leave the card highlighted', (
@@ -3478,7 +3495,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('切换计划'), findsNothing);
+    expect(find.text('计划列表'), findsNothing);
     expect((await repository.loadActivePlan()).id, 'sample-uji-hibike');
   });
 

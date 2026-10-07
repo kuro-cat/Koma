@@ -21,14 +21,14 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
   SqlitePilgrimageRepository({
     AppDatabase? database,
     this.managedPathRepairForTesting,
-    PilgrimagePlan Function()? firstPlan,
-  }) : _database = database ?? AppDatabase(openConnection()),
-       _firstPlan = firstPlan ?? (() => samplePilgrimagePlan);
+    this.seedSamplePlan = true,
+  }) : _database = database ?? AppDatabase(openConnection());
 
   final AppDatabase _database;
 
-  /// The plan a database with no plans starts with.
-  final PilgrimagePlan Function() _firstPlan;
+  /// Whether a database with no plans gets the demo plan. The app starts
+  /// empty instead and asks the user to create a plan.
+  final bool seedSamplePlan;
 
   /// Replaces the managed-path repair run in tests.
   @visibleForTesting
@@ -1331,11 +1331,6 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
   @override
   Future<void> deletePlan(String id) async {
     await _database.transaction(() async {
-      final count = await _database.plans.count().getSingle();
-      if (count <= 1) {
-        throw StateError('At least one plan is required.');
-      }
-
       await (_database.delete(
         _database.visitRecords,
       )..where((table) => table.planId.equals(id))).go();
@@ -1743,13 +1738,16 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
   }
 
   Future<void> _seedIfNeeded() async {
+    if (!seedSamplePlan) {
+      return;
+    }
     final count = await _database.plans.count().getSingle();
     if (count > 0) {
       return;
     }
 
     await _database.transaction(() async {
-      await _insertPlan(_firstPlan(), active: true);
+      await _insertPlan(samplePilgrimagePlan, active: true);
     });
   }
 

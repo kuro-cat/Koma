@@ -186,10 +186,9 @@ class BangumiApiException implements Exception {
   required String nameCn,
   Iterable<String> aliases = const [],
 }) {
-  final fallback = 'Bangumi #$bangumiId';
   if (l10n.localeName.startsWith('zh')) {
     return nameCn.isEmpty
-        ? (title: name, subtitle: fallback)
+        ? (title: name, subtitle: '')
         : (title: nameCn, subtitle: name);
   }
   final latinAlias = aliases
@@ -198,10 +197,7 @@ class BangumiApiException implements Exception {
         (alias) => _latinLetter.hasMatch(alias) && !_cjkOrKana.hasMatch(alias),
       )
       .firstOrNull;
-  return (
-    title: name.isEmpty ? nameCn : name,
-    subtitle: latinAlias ?? fallback,
-  );
+  return (title: name.isEmpty ? nameCn : name, subtitle: latinAlias ?? '');
 }
 
 final _latinLetter = RegExp('[A-Za-z]');

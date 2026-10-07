@@ -66,7 +66,9 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
 
     try {
       final plans = await widget.repository.loadPlans();
-      final activePlan = await widget.repository.loadActivePlan();
+      final activePlan = plans.isEmpty
+          ? null
+          : await widget.repository.loadActivePlan();
       if (!mounted) {
         return;
       }
@@ -124,15 +126,6 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
   }
 
   Future<void> _deletePlan(PilgrimagePlan plan) async {
-    final plans = _plans;
-    if (plans == null || plans.length <= 1) {
-      ScaffoldMessenger.of(context).showStatusSnack(
-        kind: AppStatusBannerKind.warning,
-        title: l10n.planManagerKeepOnePlan,
-      );
-      return;
-    }
-
     final confirmed = await showConfirmActionDialog(
       context,
       title: l10n.planManagerDeletePlan,
@@ -331,7 +324,6 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
                       child: _PlanCard(
                         plan: plan,
                         selected: plan.id == activePlan?.id,
-                        canDelete: plans.length > 1,
                         reorderIndex: _sorting ? index : null,
                         reorderEnabled: !_savingOrder,
                         onSwitch: _sorting ? null : () => _switchPlan(plan),
@@ -477,7 +469,6 @@ class _PlanCard extends StatefulWidget {
   const _PlanCard({
     required this.plan,
     required this.selected,
-    required this.canDelete,
     required this.onSwitch,
     required this.onRename,
     required this.onExport,
@@ -489,7 +480,6 @@ class _PlanCard extends StatefulWidget {
 
   final PilgrimagePlan plan;
   final bool selected;
-  final bool canDelete;
   final VoidCallback? onSwitch;
   final VoidCallback? onRename;
   final VoidCallback? onExport;
@@ -752,7 +742,6 @@ class _PlanCardState extends State<_PlanCard> {
                           widget.onDelete != null)
                         _PlanMoreButton(
                           plan: plan,
-                          canDelete: widget.canDelete,
                           onExport: widget.onExport!,
                           onDuplicate: widget.onDuplicate!,
                           onDelete: widget.onDelete!,
@@ -802,7 +791,6 @@ class _PlanCardState extends State<_PlanCard> {
 class _PlanMoreButton extends StatefulWidget {
   const _PlanMoreButton({
     required this.plan,
-    required this.canDelete,
     required this.onExport,
     required this.onDuplicate,
     required this.onDelete,
@@ -811,7 +799,6 @@ class _PlanMoreButton extends StatefulWidget {
   });
 
   final PilgrimagePlan plan;
-  final bool canDelete;
   final VoidCallback onExport;
   final VoidCallback onDuplicate;
   final VoidCallback onDelete;
@@ -852,7 +839,6 @@ class _PlanMoreButtonState extends State<_PlanMoreButton> {
       ),
       menuChildren: [
         _PlanActionsMenuPanel(
-          canDelete: widget.canDelete,
           onExport: widget.onExport,
           onDuplicate: widget.onDuplicate,
           onDelete: widget.onDelete,
@@ -878,14 +864,11 @@ class _PlanMoreButtonState extends State<_PlanMoreButton> {
 
 class _PlanActionsMenuPanel extends StatelessWidget {
   const _PlanActionsMenuPanel({
-    required this.canDelete,
     required this.onExport,
     required this.onDuplicate,
     required this.onDelete,
     required this.onHoverChanged,
   });
-
-  final bool canDelete;
   final VoidCallback onExport;
   final VoidCallback onDuplicate;
   final VoidCallback onDelete;
@@ -928,7 +911,7 @@ class _PlanActionsMenuPanel extends StatelessWidget {
                       actionKey: const ValueKey('plan-menu-action-delete'),
                       label: l10n.planManagerDeletePlan,
                       icon: LucideIcons.trash2,
-                      onPressed: canDelete ? onDelete : null,
+                      onPressed: onDelete,
                       isDangerous: true,
                     ),
                   ],
