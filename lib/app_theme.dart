@@ -492,12 +492,40 @@ void applyAppColorsFromSettings(
   AppSettings settings, {
   required Brightness platformBrightness,
 }) {
-  AppColors.brightness = resolvedAppBrightness(
+  final brightness = resolvedAppBrightness(
     settings,
     platformBrightness: platformBrightness,
   );
+  final changed =
+      AppColors.brightness != brightness ||
+      AppColors.palette != settings.themePalette ||
+      AppColors.customAccentValue != settings.customThemeColorValue;
+  AppColors.brightness = brightness;
   AppColors.palette = settings.themePalette;
   AppColors.customAccentValue = settings.customThemeColorValue;
+  if (changed) {
+    _scheduleColorRefresh();
+  }
+}
+
+var _colorRefreshScheduled = false;
+
+/// [AppColors] are globals, so widgets that don't depend on the Theme (const
+/// ones in particular) keep the old colors when they change, e.g. when the
+/// system switches to dark mode with the app open. Rebuild every element
+/// once after a change; their state is kept.
+void _scheduleColorRefresh() {
+  if (_colorRefreshScheduled) return;
+  _colorRefreshScheduled = true;
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    _colorRefreshScheduled = false;
+    void markForRebuild(Element element) {
+      element.markNeedsBuild();
+      element.visitChildren(markForRebuild);
+    }
+
+    WidgetsBinding.instance.rootElement?.visitChildren(markForRebuild);
+  });
 }
 
 Brightness currentPlatformBrightness() {
