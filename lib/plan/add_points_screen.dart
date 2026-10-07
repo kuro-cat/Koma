@@ -4578,36 +4578,39 @@ class _BangumiSearchHintContent extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(height: 8),
-        Padding(
-          padding: const EdgeInsets.only(left: 25),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 1),
-                child: Icon(
-                  LucideIcons.info,
-                  color: AppColors.accent,
-                  size: 16,
-                ),
-              ),
-              const SizedBox(width: 6),
-              Expanded(
-                child: Text(
-                  l10n.addPointsBangumiNetworkNote,
-                  style: TextStyle(
-                    color: AppColors.accentDark,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w700,
-                    height: 1.35,
-                    letterSpacing: 0,
+        // Bangumi needs a route out of mainland China; elsewhere it just works.
+        if (l10n.localeName.startsWith('zh')) ...[
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.only(left: 25),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 1),
+                  child: Icon(
+                    LucideIcons.info,
+                    color: AppColors.accent,
+                    size: 16,
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(width: 6),
+                Expanded(
+                  child: Text(
+                    l10n.addPointsBangumiNetworkNote,
+                    style: TextStyle(
+                      color: AppColors.accentDark,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w700,
+                      height: 1.35,
+                      letterSpacing: 0,
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
+        ],
       ],
     );
   }

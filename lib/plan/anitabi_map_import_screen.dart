@@ -2686,8 +2686,7 @@ class _AnitabiPointCard extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 3),
                                 CopyableText(
-                                  text:
-                                      '${point.subtitle} / ${point.episodeLabel}',
+                                  text: _anitabiPointCaption(point),
                                   copyText: _copySummary,
                                   copyLabel: l10n.anitabiMapImportSpotInfo,
                                   onTap: openDetail,
@@ -2896,7 +2895,7 @@ class _AnitabiPointDetailSheet extends StatelessWidget {
                         _AnitabiDetailInfoLine(
                           icon: LucideIcons.film,
                           label: l10n.anitabiMapImportScene,
-                          value: '${point.subtitle} / ${point.episodeLabel}',
+                          value: _anitabiPointCaption(point),
                         ),
                         if (point.note?.trim().isNotEmpty == true) ...[
                           const SizedBox(height: 6),
@@ -3364,3 +3363,9 @@ class _ImportErrorState extends StatelessWidget {
     );
   }
 }
+
+/// Location note (when it differs from the name) and known episode.
+String _anitabiPointCaption(AnitabiPoint point) => joinLabels([
+  if (point.subtitle.trim() != point.name.trim()) point.subtitle,
+  formatEpisodeLabelForDisplay(point.episodeLabel),
+]);

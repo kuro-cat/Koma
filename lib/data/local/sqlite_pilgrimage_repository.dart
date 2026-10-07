@@ -21,9 +21,14 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
   SqlitePilgrimageRepository({
     AppDatabase? database,
     this.managedPathRepairForTesting,
-  }) : _database = database ?? AppDatabase(openConnection());
+    PilgrimagePlan Function()? firstPlan,
+  }) : _database = database ?? AppDatabase(openConnection()),
+       _firstPlan = firstPlan ?? (() => samplePilgrimagePlan);
 
   final AppDatabase _database;
+
+  /// The plan a database with no plans starts with.
+  final PilgrimagePlan Function() _firstPlan;
 
   /// Replaces the managed-path repair run in tests.
   @visibleForTesting
@@ -1744,7 +1749,7 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
     }
 
     await _database.transaction(() async {
-      await _insertPlan(samplePilgrimagePlan, active: true);
+      await _insertPlan(_firstPlan(), active: true);
     });
   }
 

@@ -325,16 +325,30 @@ class _MiriaGoAppState extends State<MiriaGoApp> with WidgetsBindingObserver {
             widget.repository ??
             (kIsWeb
                 ? SamplePilgrimageRepository()
-                : SqlitePilgrimageRepository()),
+                : SqlitePilgrimageRepository(firstPlan: _starterPlan)),
         onSettingsChanged: _handleSettingsChanged,
       ),
     );
   }
 }
 
+/// A fresh install starts with an empty plan rather than the demo plan.
+PilgrimagePlan _starterPlan() {
+  final now = DateTime.now();
+  return PilgrimagePlan(
+    id: 'local-${now.microsecondsSinceEpoch}',
+    name: l10n.planManagerNewPlanName(1),
+    area: l10n.planManagerAreaNotSet,
+    works: const [],
+    points: const [],
+    createdAt: now,
+    updatedAt: now,
+  );
+}
+
 Future<PilgrimageRepository> _createDefaultRepository() async {
   if (!kIsWeb) {
-    return SqlitePilgrimageRepository();
+    return SqlitePilgrimageRepository(firstPlan: _starterPlan);
   }
   if (isTauriLauncherAvailable) {
     return DesktopPilgrimageRepository.create();

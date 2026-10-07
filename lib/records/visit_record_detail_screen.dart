@@ -104,7 +104,10 @@ class _VisitRecordDetailScreenState extends State<VisitRecordDetailScreen> {
             title: resolvedPoint?.name ?? _record.displayPointNameSnapshot,
             subtitle: resolvedPoint == null
                 ? _recordSnapshotSubtitle(_record)
-                : '${resolvedPoint.work.title} / ${resolvedPoint.subtitle}',
+                : joinLabels([
+                    resolvedPoint.work.title,
+                    resolvedPoint.displaySubtitle,
+                  ]),
             onHeaderTap: resolvedPoint == null
                 ? null
                 : () => _showPointDetail(resolvedPoint),

@@ -675,10 +675,15 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
         : (currentPoint?.hasCoordinate ?? false)
         ? currentPoint
         : positionedPoints.firstOrNull;
+    // With nothing to show yet, start where the user is, or on all of Japan.
+    final showsOverview =
+        initialFocusPoint == null &&
+        selectedGroup == null &&
+        _currentLocation == null;
     final initialCenter =
         initialFocusPoint?.position ??
         (selectedGroup == null
-            ? _fallbackCenter
+            ? _currentLocation ?? _japanCenter
             : groupMapCenter(selectedGroup));
     final selectedGroupId = selectedGroup?.id ?? '';
     final mapPoints = selectedItemsLast<PilgrimagePoint>(
@@ -706,7 +711,7 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
             mapController: _mapController,
             options: MapOptions(
               initialCenter: initialCenter,
-              initialZoom: 15,
+              initialZoom: showsOverview ? 5 : 15,
               minZoom: 4,
               maxZoom: widget.settings.mapMaxZoom.toDouble(),
               onMapEvent: _handleMapEvent,
@@ -994,9 +999,7 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
     );
   }
 
-  LatLng get _fallbackCenter {
-    return const LatLng(34.9671, 135.7727);
-  }
+  static const _japanCenter = LatLng(36.2, 138.25);
 
   Future<void> _showGroupPicker(
     BuildContext context,

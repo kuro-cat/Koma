@@ -2733,7 +2733,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get workManagerOnboardingBangumiBody =>
-      '点击上方按钮可从Bangumi搜索你想导入的作品并导入。之后你可以在“从作品地图导入点位”直接查看对应作品在Anitabi上的点位。';
+      '点击上方按钮可从Bangumi搜索你想导入的作品并导入。之后你可以在“查找作品点位”直接查看对应作品在Anitabi上的点位。';
 
   @override
   String get workManagerOnboardingManualBody =>
@@ -5517,4 +5517,19 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get planOnboardingShootBody => '到达点位后点相机按钮，对照动画画面取景。';
+
+  @override
+  String get pointDetailMarkDoneShort => '完成';
+
+  @override
+  String get pointDetailUndoShort => '撤销';
+
+  @override
+  String get splitNavigationRouteShort => '路线';
+
+  @override
+  String get splitNavigationMapsShort => '导航';
+
+  @override
+  String get pointManagerAreasShort => '片区';
 }

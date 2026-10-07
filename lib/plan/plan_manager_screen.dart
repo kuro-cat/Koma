@@ -310,23 +310,6 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
                 repository: widget.repository,
               ),
               const SizedBox(height: 10),
-              if (activePlan != null) ...[
-                _PlanCard(
-                  plan: activePlan,
-                  selected: true,
-                  canDelete: plans.length > 1,
-                  onSwitch: _sorting ? null : () => _switchPlan(activePlan),
-                  onRename: _sorting ? null : () => _editPlanInfo(activePlan),
-                  onExport: _sorting
-                      ? null
-                      : () => _openImportExport(activePlan),
-                  onDuplicate: _sorting
-                      ? null
-                      : () => _duplicatePlan(activePlan),
-                  onDelete: _sorting ? null : () => _deletePlan(activePlan),
-                ),
-                const SizedBox(height: 10),
-              ],
               if (plans.isNotEmpty) ...[
                 _PlanSectionLabel(
                   key: ValueKey('all-plans-section'),

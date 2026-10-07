@@ -1579,7 +1579,7 @@
   "workManagerManualBadge": "手动添加",
   "workManagerEmptyTitle": "还没有作品",
   "workManagerOnboardingBangumiTitle": "从Bangumi导入",
-  "workManagerOnboardingBangumiBody": "点击上方按钮可从Bangumi搜索你想导入的作品并导入。之后你可以在“从作品地图导入点位”直接查看对应作品在Anitabi上的点位。",
+  "workManagerOnboardingBangumiBody": "点击上方按钮可从Bangumi搜索你想导入的作品并导入。之后你可以在“查找作品点位”直接查看对应作品在Anitabi上的点位。",
   "workManagerOnboardingManualBody": "若Bangumi未收录你想要添加到作品，你可以通过“手动添加”将作品加入到计划内。之后你可以通过“手动添加点位”自主上传想要巡礼的点位。",
   "pilgrimageModelsSubjectBook": "书籍",
   "pilgrimageModelsSubjectAnime": "动画",
@@ -3339,5 +3339,10 @@
   "planOnboardingFindTitle": "找作品",
   "planOnboardingFindBody": "点击下方“添加点位”，选择“查找作品点位”，搜索作品或粘贴 Anitabi 链接。",
   "planOnboardingShootTitle": "现场拍摄",
-  "planOnboardingShootBody": "到达点位后点相机按钮，对照动画画面取景。"
+  "planOnboardingShootBody": "到达点位后点相机按钮，对照动画画面取景。",
+  "pointDetailMarkDoneShort": "完成",
+  "pointDetailUndoShort": "撤销",
+  "splitNavigationRouteShort": "路线",
+  "splitNavigationMapsShort": "导航",
+  "pointManagerAreasShort": "片区"
 }

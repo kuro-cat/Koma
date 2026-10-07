@@ -5093,7 +5093,7 @@ abstract class AppLocalizations {
   /// No description provided for @workManagerOnboardingBangumiBody.
   ///
   /// In zh, this message translates to:
-  /// **'点击上方按钮可从Bangumi搜索你想导入的作品并导入。之后你可以在“从作品地图导入点位”直接查看对应作品在Anitabi上的点位。'**
+  /// **'点击上方按钮可从Bangumi搜索你想导入的作品并导入。之后你可以在“查找作品点位”直接查看对应作品在Anitabi上的点位。'**
   String get workManagerOnboardingBangumiBody;
 
   /// No description provided for @workManagerOnboardingManualBody.
@@ -10085,6 +10085,36 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'到达点位后点相机按钮，对照动画画面取景。'**
   String get planOnboardingShootBody;
+
+  /// No description provided for @pointDetailMarkDoneShort.
+  ///
+  /// In zh, this message translates to:
+  /// **'完成'**
+  String get pointDetailMarkDoneShort;
+
+  /// No description provided for @pointDetailUndoShort.
+  ///
+  /// In zh, this message translates to:
+  /// **'撤销'**
+  String get pointDetailUndoShort;
+
+  /// No description provided for @splitNavigationRouteShort.
+  ///
+  /// In zh, this message translates to:
+  /// **'路线'**
+  String get splitNavigationRouteShort;
+
+  /// No description provided for @splitNavigationMapsShort.
+  ///
+  /// In zh, this message translates to:
+  /// **'导航'**
+  String get splitNavigationMapsShort;
+
+  /// No description provided for @pointManagerAreasShort.
+  ///
+  /// In zh, this message translates to:
+  /// **'片区'**
+  String get pointManagerAreasShort;
 }
 
 class _AppLocalizationsDelegate

@@ -159,10 +159,13 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
                 ),
               )
             else if (_plan.points.isNotEmpty)
-              IconButton(
-                tooltip: l10n.pointManagerGroupManagement,
-                onPressed: _openGroupManager,
-                icon: const Icon(LucideIcons.network),
+              Tooltip(
+                message: l10n.pointManagerGroupManagement,
+                child: TextButton.icon(
+                  onPressed: _openGroupManager,
+                  icon: const Icon(LucideIcons.network, size: 20),
+                  label: Text(l10n.pointManagerAreasShort),
+                ),
               ),
             if (!_isSaving && _plan.points.isNotEmpty)
               IconButton(
@@ -1822,7 +1825,7 @@ class _PointManagerTile extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '${point.work.title} / ${point.subtitle}',
+                      joinLabels([point.work.title, point.displaySubtitle]),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -1983,6 +1986,10 @@ class _CacheStatusPill extends StatelessWidget {
       point,
       fullCacheIsCurrent: fullCached,
     );
+    // Not being cached is the normal state; only flag what differs from it.
+    if (status == ReferenceImageStatus.remote) {
+      return const SizedBox.shrink();
+    }
     final label = switch (status) {
       ReferenceImageStatus.none => l10n.pointManagerReferenceNone,
       ReferenceImageStatus.localUpload => l10n.pointManagerReferenceLocal,
@@ -2582,7 +2589,7 @@ class _AnchorSelectionCard extends StatelessWidget {
         ? (manualPickMode
               ? l10n.groupAnchorPickerMapPickHint
               : l10n.groupAnchorPickerIdleHint)
-        : '${groupNameForPoint(point)} / ${point.subtitle}';
+        : joinLabels([groupNameForPoint(point), point.displaySubtitle]);
 
     return Container(
       margin: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomInset),

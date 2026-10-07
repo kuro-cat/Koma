@@ -590,7 +590,8 @@ class PilgrimageVisitRecord {
 
   String get sourcePhotoPath => originalPhotoPath ?? photoPath;
 
-  String get displayPhotoPath => gradedPhotoPath ?? alignedPhotoPath ?? photoPath;
+  String get displayPhotoPath =>
+      gradedPhotoPath ?? alignedPhotoPath ?? photoPath;
 
   String get displayWorkTitleSnapshot => _displaySnapshot(workTitle, workId);
 
@@ -763,6 +764,11 @@ class PilgrimagePoint {
 
   String get displayEpisodeLabel => formatEpisodeLabelForDisplay(episodeLabel);
 
+  /// The location note, or '' when it only repeats the name (Anitabi spots
+  /// without a separate Chinese name get the same text in both).
+  String get displaySubtitle =>
+      subtitle.trim() == name.trim() ? '' : subtitle.trim();
+
   PilgrimagePoint copyWith({
     String? id,
     PilgrimageWork? work,
@@ -897,7 +903,15 @@ PilgrimageWork fillMissingWorkFields(
   );
 }
 
+/// [parts] that aren't blank, joined with " / ".
+String joinLabels(Iterable<String> parts) => parts
+    .map((part) => part.trim())
+    .where((part) => part.isNotEmpty)
+    .join(' / ');
+
 String formatEpisodeLabelForDisplay(String label) {
+  // Anitabi labels spots with no known episode "EP ?"; show nothing instead.
+  label = label.replaceFirst(RegExp(r'^EP \?\s*(/\s*)?'), '');
   return label.replaceAllMapped(RegExp(r'\b(\d+)s\b'), (match) {
     final seconds = int.tryParse(match.group(1)!);
     return formatSceneSeconds(seconds) ?? match.group(0)!;

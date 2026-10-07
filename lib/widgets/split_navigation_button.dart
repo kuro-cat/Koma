@@ -67,7 +67,10 @@ class SplitNavigationButton extends StatelessWidget {
                 label: l10n.splitNavigationButtonInApp(inAppLabel),
                 onTap: onOpenInAppNavigation,
                 iconColor: foregroundColor,
-                child: Icon(Icons.directions_walk, size: walkIconSize),
+                child: _IconWithText(
+                  icon: Icon(Icons.directions_walk, size: walkIconSize),
+                  text: l10n.splitNavigationRouteShort,
+                ),
               ),
             ),
             Center(
@@ -85,7 +88,10 @@ class SplitNavigationButton extends StatelessWidget {
                 label: l10n.splitNavigationButtonExternal,
                 onTap: onOpenExternalNavigation,
                 iconColor: foregroundColor,
-                child: Icon(LucideIcons.navigation, size: 21),
+                child: _IconWithText(
+                  icon: const Icon(LucideIcons.navigation, size: 21),
+                  text: l10n.splitNavigationMapsShort,
+                ),
               ),
             ),
           ],
@@ -132,13 +138,44 @@ class _SplitNavHalf extends StatelessWidget {
             highlightColor: Colors.transparent,
             splashColor: Colors.transparent,
             child: Center(
-              child: IconTheme(
-                data: IconThemeData(color: iconColor),
-                child: child,
+              child: DefaultTextStyle.merge(
+                style: TextStyle(color: iconColor),
+                child: IconTheme(
+                  data: IconThemeData(color: iconColor),
+                  child: child,
+                ),
               ),
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _IconWithText extends StatelessWidget {
+  const _IconWithText({required this.icon, required this.text});
+
+  final Widget icon;
+  final String text;
+
+  @override
+  Widget build(BuildContext context) {
+    return FittedBox(
+      fit: BoxFit.scaleDown,
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          icon,
+          const SizedBox(width: 6),
+          Text(
+            text,
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              letterSpacing: 0,
+            ),
+          ),
+        ],
       ),
     );
   }

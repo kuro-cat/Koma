@@ -3128,17 +3128,18 @@ void main() {
     await tester.tap(find.widgetWithText(OutlinedButton, '新建计划'));
     await tester.pumpAndSettle();
 
-    expect(find.text('新巡礼计划 2'), findsNWidgets(2));
-    expect(find.textContaining('未设置区域  /  0 个点位  /  0 部作品'), findsNWidgets(2));
-    expect(find.byKey(const ValueKey('plan-status-current')), findsNWidgets(2));
+    // The current plan is listed once, marked as current.
+    expect(find.text('新巡礼计划 2'), findsOneWidget);
+    expect(find.textContaining('未设置区域  /  0 个点位  /  0 部作品'), findsOneWidget);
+    expect(find.byKey(const ValueKey('plan-status-current')), findsOneWidget);
     expect(find.text('可切换'), findsOneWidget);
     expect(find.byKey(const ValueKey('current-plan-section')), findsNothing);
     expect(find.byKey(const ValueKey('all-plans-section')), findsOneWidget);
     expect(find.text('全部计划'), findsOneWidget);
-    expect(find.byTooltip('更多计划操作'), findsNWidgets(3));
+    expect(find.byTooltip('更多计划操作'), findsNWidgets(2));
     expect(tester.getSize(find.byTooltip('更多计划操作').first), const Size(38, 34));
     expect(find.text('导入导出'), findsNothing);
-    expect(find.byTooltip('编辑计划信息'), findsNWidgets(3));
+    expect(find.byTooltip('编辑计划信息'), findsNWidgets(2));
     expect(find.byTooltip('计划排序'), findsOneWidget);
     expect(find.byTooltip('拖动排序'), findsNothing);
     expect(
@@ -3169,7 +3170,7 @@ void main() {
           widget.key is ValueKey<String> &&
           (widget.key! as ValueKey<String>).value.startsWith('plan-card-'),
     );
-    expect(planCards, findsNWidgets(3));
+    expect(planCards, findsNWidgets(2));
     expect(tester.getSize(planCards.first).height, lessThan(150));
     expect(tester.getSize(planCards.last).height, lessThan(150));
     expect(tester.getSize(planCards.first).height, greaterThanOrEqualTo(120));
@@ -3190,7 +3191,7 @@ void main() {
             'plan-card-selected-accent-',
           ),
     );
-    expect(selectedAccents, findsNWidgets(2));
+    expect(selectedAccents, findsOneWidget);
     final selectedAccentRect = tester.getRect(selectedAccents.first);
     final selectedCardRect = tester.getRect(planCards.first);
     expect(selectedAccentRect.width, 3);
@@ -3270,7 +3271,7 @@ void main() {
     }
 
     expect(find.byKey(const ValueKey('plan-work-tags')), findsOneWidget);
-    expect(find.text('暂无作品'), findsNWidgets(2));
+    expect(find.text('暂无作品'), findsOneWidget);
     expect(
       tester.widget<Text>(find.text('暂无作品').first).style?.color,
       AppColors.textSecondary,
@@ -3283,7 +3284,7 @@ void main() {
             'plan-card-work-row-',
           ),
     );
-    expect(workRows, findsNWidgets(3));
+    expect(workRows, findsNWidgets(2));
     for (final workRow in workRows.evaluate()) {
       expect(
         tester.getSize(find.byElementPredicate((e) => e == workRow)).height,

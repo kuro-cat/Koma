@@ -398,7 +398,7 @@ class _AnchorSelectionCard extends StatelessWidget {
         ? (manualPickMode
               ? l10n.groupAnchorPickerMapPickHint
               : l10n.groupAnchorPickerIdleHint)
-        : '${groupNameForPoint(point)} / ${point.subtitle}';
+        : joinLabels([groupNameForPoint(point), point.displaySubtitle]);
 
     return Container(
       margin: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomInset),

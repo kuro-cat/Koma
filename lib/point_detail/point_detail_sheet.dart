@@ -356,7 +356,10 @@ class PointDetailSheet extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            '${point.work.title} / ${point.subtitle}',
+                            joinLabels([
+                              point.work.title,
+                              point.displaySubtitle,
+                            ]),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -376,12 +379,14 @@ class PointDetailSheet extends StatelessWidget {
                   label: l10n.pointDetailWorkLabel,
                   value: '${point.work.title} / ${point.work.subtitle}',
                 ),
-                const SizedBox(height: 8),
-                _InfoRow(
-                  icon: LucideIcons.film,
-                  label: l10n.pointDetailSceneLabel,
-                  value: point.displayEpisodeLabel,
-                ),
+                if (point.displayEpisodeLabel.isNotEmpty) ...[
+                  const SizedBox(height: 8),
+                  _InfoRow(
+                    icon: LucideIcons.film,
+                    label: l10n.pointDetailSceneLabel,
+                    value: point.displayEpisodeLabel,
+                  ),
+                ],
                 const SizedBox(height: 8),
                 _InfoRow(
                   icon: LucideIcons.mapPin,
@@ -501,16 +506,19 @@ class PointDetailSheet extends StatelessWidget {
     return switch (status) {
       VisitStatus.completed => _PointStatusAction(
         label: l10n.pointDetailUndoCheckIn,
+        shortLabel: l10n.pointDetailUndoShort,
         icon: LucideIcons.undo2,
         onTap: onComplete!,
       ),
       VisitStatus.current => _PointStatusAction(
         label: l10n.pointDetailMarkDone,
+        shortLabel: l10n.pointDetailMarkDoneShort,
         icon: LucideIcons.circleCheckBig,
         onTap: onComplete!,
       ),
       VisitStatus.pending => _PointStatusAction(
         label: l10n.pointDetailMarkDone,
+        shortLabel: l10n.pointDetailMarkDoneShort,
         icon: LucideIcons.circleCheckBig,
         onTap: onComplete!,
       ),
@@ -726,6 +734,7 @@ class _PointDetailActions extends StatelessWidget {
           child: ResponsiveButtonContent(
             icon: statusAction!.icon,
             label: statusAction!.label,
+            shortLabel: statusAction!.shortLabel,
             semanticLabel: statusAction!.label,
           ),
         ),
@@ -767,11 +776,13 @@ class _PointDetailActions extends StatelessWidget {
 class _PointStatusAction {
   const _PointStatusAction({
     required this.label,
+    required this.shortLabel,
     required this.icon,
     required this.onTap,
   });
 
   final String label;
+  final String shortLabel;
   final IconData icon;
   final VoidCallback onTap;
 }

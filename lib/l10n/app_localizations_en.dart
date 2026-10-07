@@ -294,7 +294,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Photo ratio, reference image ratio and backup';
 
   @override
-  String get settingsCaptureAspectRatio => 'Photo aspect ratio';
+  String get settingsCaptureAspectRatio => 'Photo ratio';
 
   @override
   String get settingsCameraZoom => 'Camera zoom';
@@ -982,7 +982,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addPointsTitle => 'Add content';
 
   @override
-  String get addPointsRoutePlannerLead => 'Too many spots to sort one by one?';
+  String get addPointsRoutePlannerLead => 'Too many spots to sort one by one? ';
 
   @override
   String get addPointsManualEntryReference => 'Manual entry';
@@ -1092,7 +1092,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t save the work. Please try again later.';
 
   @override
-  String get addPointsManualAddWork => 'Add work manually';
+  String get addPointsManualAddWork => 'Manual';
 
   @override
   String get addPointsFillingGuide => 'Filling guide';
@@ -1423,13 +1423,13 @@ class AppLocalizationsEn extends AppLocalizations {
       'No linked works yet. Search Bangumi or add one manually.';
 
   @override
-  String get addPointsAddFromBangumi => 'Add from Bangumi';
+  String get addPointsAddFromBangumi => 'Bangumi';
 
   @override
-  String get addPointsAddFromBangumiSubtitle => 'Fetches details automatically';
+  String get addPointsAddFromBangumiSubtitle => 'Search and add';
 
   @override
-  String get addPointsManualAddWorkSubtitle => 'For works that aren\'t listed';
+  String get addPointsManualAddWorkSubtitle => 'If it\'s not listed';
 
   @override
   String get addPointsViewFullImage => 'View full image';
@@ -1641,7 +1641,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pointManagerCurrentTargetSaveFailed =>
-      'Couldn\'t save the current target';
+      'Couldn\'t save the next stop';
 
   @override
   String get pointManagerCompletionSaveFailed =>
@@ -1745,7 +1745,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pointManagerGroupOrder => 'Order within area';
 
   @override
-  String get pointManagerStatusCurrent => 'Current target';
+  String get pointManagerStatusCurrent => 'Next stop';
 
   @override
   String get pointManagerStatusCompleted => 'Completed';
@@ -1757,7 +1757,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pointManagerPointActions => 'Spot actions';
 
   @override
-  String get pointManagerSetCurrentTarget => 'Set as current target';
+  String get pointManagerSetCurrentTarget => 'Set as next stop';
 
   @override
   String get pointManagerUnmarkCompleted => 'Mark not completed';
@@ -1892,7 +1892,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planManagerSortPlans => 'Sort plans';
 
   @override
-  String get planManagerSkillLead => 'Don\'t want to organize spots by hand?';
+  String get planManagerSkillLead => 'Don\'t want to organize spots by hand? ';
 
   @override
   String get planManagerAllPlans => 'All plans';
@@ -2425,7 +2425,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planManagePlan => 'Manage plan';
 
   @override
-  String get planCacheReferences => 'Cache reference images';
+  String get planCacheReferences => 'Cache images';
 
   @override
   String get planActionMemo => 'Plan memo';
@@ -3032,16 +3032,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get workManagerDeleteFailed => 'Couldn\'t delete work';
 
   @override
-  String get workManagerAddFromBangumi => 'Add from Bangumi';
+  String get workManagerAddFromBangumi => 'Bangumi';
 
   @override
-  String get workManagerAddFromBangumiHint => 'Fetches details automatically';
+  String get workManagerAddFromBangumiHint => 'Search and add';
 
   @override
-  String get workManagerAddManually => 'Add work manually';
+  String get workManagerAddManually => 'Manual';
 
   @override
-  String get workManagerAddManuallyHint => 'For works not on Bangumi';
+  String get workManagerAddManuallyHint => 'If it\'s not listed';
 
   @override
   String get workManagerNoOriginalTitle => 'No original title';
@@ -3057,18 +3057,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String workManagerPointsAddedOfTotal(int added, int total) {
-    String _temp0 = intl.Intl.pluralLogic(
-      total,
-      locale: localeName,
-      other: '$added of $total spots added',
-      one: '$added of 1 spot added',
-    );
-    return '$_temp0';
+    return '$added/$total spots';
   }
 
   @override
   String workManagerPointsAddedOfUnknown(int added) {
-    return '$added of … spots added';
+    String _temp0 = intl.Intl.pluralLogic(
+      added,
+      locale: localeName,
+      other: '$added spots added',
+      one: '1 spot added',
+    );
+    return '$_temp0';
   }
 
   @override
@@ -3093,11 +3093,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get workManagerOnboardingBangumiBody =>
-      'Tap the button above to search Bangumi for a work and import it. Then use \"Import spots from work map\" to see its spots on Anitabi.';
+      'Tap the button above to search Bangumi for a work and add it. Then use \"Find anime spots\" to see its spots on Anitabi.';
 
   @override
   String get workManagerOnboardingManualBody =>
-      'If Bangumi doesn\'t list the work you want, use \"Add work manually\" to add it to the plan. Then use \"Add spot manually\" to add the spots you want to visit.';
+      'If Bangumi doesn\'t list the work you want, tap \"Manual\" to add it to the plan. Then use \"Add spot manually\" to add the spots you want to visit.';
 
   @override
   String get pilgrimageModelsSubjectBook => 'Book';
@@ -3112,7 +3112,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pilgrimageModelsSubjectGame => 'Game';
 
   @override
-  String get pilgrimageModelsSubjectReal => 'Live-action';
+  String get pilgrimageModelsSubjectReal => 'Live';
 
   @override
   String get pilgrimageModelsPaletteClassicGreen => 'Classic green';
@@ -3409,8 +3409,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appShellLoadFailedHint => 'Please try again later.';
 
   @override
-  String get appShellLoadingHint =>
-      'Preparing today\'s spots and current target.';
+  String get appShellLoadingHint => 'Preparing today\'s spots and next stop.';
 
   @override
   String mainOpenDirectoryFailed(String error) {
@@ -3498,7 +3497,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pointDetailUndoCheckIn => 'Undo check-in';
 
   @override
-  String get pointDetailMarkDone => 'Mark as done';
+  String get pointDetailMarkDone => 'Mark visited';
 
   @override
   String get pointDetailUnknownArea => 'Unknown area';
@@ -3537,13 +3536,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pointDetailShootShort => 'Shoot';
 
   @override
-  String get pointDetailSetCurrent => 'Set as current';
+  String get pointDetailSetCurrent => 'Set as next stop';
 
   @override
-  String get pointDetailSetCurrentShort => 'Current';
+  String get pointDetailSetCurrentShort => 'Next stop';
 
   @override
-  String get pointDetailSetCurrentTarget => 'Set as current target';
+  String get pointDetailSetCurrentTarget => 'Set as next stop';
 
   @override
   String get pointDetailEditSpot => 'Edit spot';
@@ -3561,7 +3560,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pointDetailChange => 'Change';
 
   @override
-  String get pointDetailStatusCurrent => 'Current target';
+  String get pointDetailStatusCurrent => 'Next stop';
 
   @override
   String get pointDetailStatusCompleted => 'Completed';
@@ -3910,7 +3909,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planImportPreviewPlanStructureSubtitle =>
-      'Works, areas, spots, completion status and current target.';
+      'Works, areas, spots, completion status and next stop.';
 
   @override
   String get planImportPreviewRecords => 'Records';
@@ -5010,7 +5009,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get recordsSelectStatus => 'Select status';
 
   @override
-  String get recordsSearchHint => 'Search spots, works, scenes';
+  String get recordsSearchHint => 'Search';
 
   @override
   String get recordsClearSearchTooltip => 'Clear search';
@@ -5906,7 +5905,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pilgrimageMapLocate => 'My location';
 
   @override
-  String get pilgrimageMapCurrentTarget => 'Current target';
+  String get pilgrimageMapCurrentTarget => 'Next stop';
 
   @override
   String get pilgrimageMapLayers => 'Layers';
@@ -5936,7 +5935,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pilgrimageMapMarkComplete => 'Mark complete';
 
   @override
-  String get pilgrimageMapSetCurrent => 'Set as current target';
+  String get pilgrimageMapSetCurrent => 'Set as next stop';
 
   @override
   String get pilgrimageMapEmptyTitle => 'This plan has no spots yet';
@@ -6213,4 +6212,19 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get planOnboardingShootBody =>
       'At each spot, tap the camera button and line your shot up with the anime frame.';
+
+  @override
+  String get pointDetailMarkDoneShort => 'Visited';
+
+  @override
+  String get pointDetailUndoShort => 'Undo';
+
+  @override
+  String get splitNavigationRouteShort => 'Route';
+
+  @override
+  String get splitNavigationMapsShort => 'Maps';
+
+  @override
+  String get pointManagerAreasShort => 'Areas';
 }
