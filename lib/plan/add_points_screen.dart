@@ -1264,7 +1264,7 @@ class _ExampleLinkText extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 6),
-        _ExampleNoteRow(normalStyle: normalStyle, linkPrefix: linkPrefix),
+        const _ExampleNoteRow(),
         const SizedBox(height: 6),
         Wrap(
           crossAxisAlignment: WrapCrossAlignment.start,
@@ -1305,67 +1305,18 @@ class _ExampleLinkText extends StatelessWidget {
 }
 
 class _ExampleNoteRow extends StatelessWidget {
-  const _ExampleNoteRow({required this.normalStyle, required this.linkPrefix});
-
-  final TextStyle normalStyle;
-  final String linkPrefix;
+  const _ExampleNoteRow();
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) {
-        final textDirection = Directionality.of(context);
-        final bangumiLeft = _measureTextWidth(
-          linkPrefix,
-          normalStyle,
-          textDirection,
-        );
-        final bangumiNoteWidth =
-            _measureTextWidth(
-              l10n.addPointsLinkExampleBangumiIdNote,
-              _ExampleNote.textStyle,
-              textDirection,
-            ) +
-            _ExampleNote.horizontalPadding;
-        final resolvedBangumiLeft = bangumiLeft.clamp(
-          0,
-          (constraints.maxWidth - bangumiNoteWidth).clamp(0, double.infinity),
-        );
-
-        return SizedBox(
-          height: 18,
-          child: Stack(
-            children: [
-              Positioned(
-                left: 0,
-                top: 0,
-                child: _ExampleNote(text: l10n.addPointsLinkExampleSpotIdNote),
-              ),
-              Positioned(
-                left: resolvedBangumiLeft.toDouble(),
-                top: 0,
-                child: _ExampleNote(
-                  text: l10n.addPointsLinkExampleBangumiIdNote,
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+    return Wrap(
+      spacing: 8,
+      runSpacing: 4,
+      children: [
+        _ExampleNote(text: l10n.addPointsLinkExampleBangumiIdNote),
+        _ExampleNote(text: l10n.addPointsLinkExampleSpotIdNote),
+      ],
     );
-  }
-
-  double _measureTextWidth(
-    String text,
-    TextStyle style,
-    TextDirection textDirection,
-  ) {
-    final painter = TextPainter(
-      text: TextSpan(text: text, style: style),
-      textDirection: textDirection,
-      maxLines: 1,
-    )..layout();
-    return painter.width;
   }
 }
 
@@ -1387,7 +1338,6 @@ class _ExamplePlainText extends StatelessWidget {
 class _ExampleNote extends StatelessWidget {
   const _ExampleNote({required this.text});
 
-  static const horizontalPadding = 16.0;
   static TextStyle get textStyle => TextStyle(
     color: AppColors.textSecondary,
     fontSize: 12,

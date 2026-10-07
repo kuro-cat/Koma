@@ -415,7 +415,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsFontLarge => 'Large';
 
   @override
-  String get settingsFontExtraLarge => 'Extra large';
+  String get settingsFontExtraLarge => 'Largest';
 
   @override
   String get settingsPersonalization => 'Personalization';
@@ -3121,7 +3121,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pilgrimageModelsPaletteMiriaYellow => 'Amber orange';
 
   @override
-  String get pilgrimageModelsPaletteGraphite => 'Graphite black';
+  String get pilgrimageModelsPaletteGraphite => 'Graphite';
 
   @override
   String get pilgrimageModelsPaletteCustom => 'Custom';

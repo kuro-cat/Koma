@@ -363,6 +363,14 @@ class AppTheme {
           ),
         ),
       ),
+      // A white knob on the accent track in both modes; the default uses the
+      // on-accent color, which is black on the dark-mode accent.
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith(
+          (states) =>
+              states.contains(WidgetState.selected) ? Colors.white : null,
+        ),
+      ),
       sliderTheme: base.sliderTheme.copyWith(
         activeTrackColor: AppColors.accent,
         inactiveTrackColor: AppColors.border,

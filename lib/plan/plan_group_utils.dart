@@ -190,6 +190,12 @@ LatLng? resolvedGroupAnchorPosition(
   return LatLng(latitude, longitude);
 }
 
+/// Whether [group] has an anchor or a spot with coordinates to center on.
+bool groupHasPosition(PlanGroupBucket group) =>
+    (group.group != null &&
+        resolvedGroupAnchorPosition(group.group!, group.points) != null) ||
+    group.points.any((point) => point.hasCoordinate);
+
 LatLng groupMapCenter(PlanGroupBucket group) {
   // Prefer the anchor point's current position over a stored copy that may
   // predate edits to that point.

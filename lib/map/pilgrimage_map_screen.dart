@@ -675,16 +675,19 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
         : (currentPoint?.hasCoordinate ?? false)
         ? currentPoint
         : positionedPoints.firstOrNull;
+    final groupCenter = selectedGroup != null && groupHasPosition(selectedGroup)
+        ? groupMapCenter(selectedGroup)
+        : null;
     // With nothing to show yet, start where the user is, or on all of Japan.
     final showsOverview =
         initialFocusPoint == null &&
-        selectedGroup == null &&
+        groupCenter == null &&
         _currentLocation == null;
     final initialCenter =
         initialFocusPoint?.position ??
-        (selectedGroup == null
-            ? _currentLocation ?? _japanCenter
-            : groupMapCenter(selectedGroup));
+        groupCenter ??
+        _currentLocation ??
+        _japanCenter;
     final selectedGroupId = selectedGroup?.id ?? '';
     final mapPoints = selectedItemsLast<PilgrimagePoint>(
       positionedPoints,
