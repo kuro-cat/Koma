@@ -21,7 +21,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text('MiriaGo 启动失败'), findsOneWidget);
+    expect(find.text('Koma 启动失败'), findsOneWidget);
     expect(find.textContaining('用户数据没有被删除'), findsOneWidget);
 
     final retry = tester.widget<FilledButton>(
@@ -31,7 +31,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(attempts, 2);
-    expect(find.text('MiriaGo 启动失败'), findsNothing);
+    expect(find.text('Koma 启动失败'), findsNothing);
     expect(find.byType(MiriaGoApp), findsOneWidget);
   });
 }

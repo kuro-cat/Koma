@@ -366,7 +366,7 @@ class _PlanScreenState extends State<PlanScreen>
         title: InkWell(
           key: const ValueKey('plan-title-picker'),
           onTap: widget.onPickPlan,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -377,7 +377,7 @@ class _PlanScreenState extends State<PlanScreen>
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 20,
-                    fontWeight: FontWeight.w900,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -518,6 +518,21 @@ class _PlanScreenState extends State<PlanScreen>
                   controller: _pointListController,
                   padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                   children: [
+                    // Rows hang from a 2px ink rule, as Tsumiki's lists do.
+                    if (displayPoints.isNotEmpty)
+                      Container(height: 2, color: AppColors.ink)
+                    else
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 32),
+                        child: Text(
+                          l10n.planAreaEmpty,
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 15,
+                          ),
+                        ),
+                      ),
                     for (final point in displayPoints) ...[
                       _PlanPointTile(
                         key: _pointTileKey(point.id),
@@ -535,7 +550,6 @@ class _PlanScreenState extends State<PlanScreen>
                         onComplete: () => controller.completePoint(point),
                         onReopen: () => controller.reopenPoint(point),
                       ),
-                      const SizedBox(height: 8),
                     ],
                   ],
                 ),
@@ -888,7 +902,7 @@ class _PlanActionsPanel extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: LayoutBuilder(
@@ -973,7 +987,7 @@ class _PlanActionItem extends StatelessWidget {
                   style: TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 11,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -1041,7 +1055,7 @@ class _GroupSwitcher extends StatelessWidget {
                 group.name,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontWeight: FontWeight.w800),
+                style: const TextStyle(fontWeight: FontWeight.w600),
               ),
             ),
           ),
@@ -1206,7 +1220,7 @@ class _SortOrderControl extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           border: Border.all(color: AppColors.border),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
         ),
         child: Row(
           children: [
@@ -1214,9 +1228,7 @@ class _SortOrderControl extends StatelessWidget {
               child: MenuAnchor(
                 builder: (context, controller, child) {
                   return InkWell(
-                    borderRadius: const BorderRadius.horizontal(
-                      left: Radius.circular(8),
-                    ),
+                    borderRadius: BorderRadius.zero,
                     onTap: () {
                       if (controller.isOpen) {
                         controller.close();
@@ -1237,7 +1249,7 @@ class _SortOrderControl extends StatelessWidget {
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
                                 fontSize: 13,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 letterSpacing: 0,
                               ),
                             ),
@@ -1269,9 +1281,7 @@ class _SortOrderControl extends StatelessWidget {
             Tooltip(
               message: _sortDirectionTooltip(mode, descending),
               child: InkWell(
-                borderRadius: const BorderRadius.horizontal(
-                  right: Radius.circular(8),
-                ),
+                borderRadius: BorderRadius.zero,
                 onTap: onToggleDirection,
                 child: SizedBox(
                   width: 40,
@@ -1394,10 +1404,10 @@ class _PlanInlineMapState extends State<_PlanInlineMap> {
         decoration: BoxDecoration(
           color: AppColors.surface,
           border: Border.all(color: AppColors.border),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
         ),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           child: Stack(
             children: [
               FlutterMap(
@@ -1520,7 +1530,7 @@ class _MapCompactSummary extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.92),
         border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.zero,
       ),
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -1536,7 +1546,7 @@ class _MapCompactSummary extends StatelessWidget {
           style: TextStyle(
             color: AppColors.textSecondary,
             fontSize: 12,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             letterSpacing: 0,
           ),
         ),
@@ -1566,7 +1576,7 @@ class _MapResizeHandle extends StatelessWidget {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: AppColors.border,
-                borderRadius: BorderRadius.circular(999),
+                borderRadius: BorderRadius.zero,
               ),
             ),
           ),
@@ -1613,13 +1623,6 @@ class _MapPointMarker extends StatelessWidget {
         color: markerColor,
         shape: BoxShape.circle,
         border: Border.all(color: Colors.white, width: selected ? 2.5 : 2),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.18),
-            blurRadius: selected ? 9 : 6,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: Icon(
         completed ? LucideIcons.check : LucideIcons.mapPin,
@@ -1671,9 +1674,9 @@ class _MapFloatingIconButton extends StatelessWidget {
       message: tooltip,
       child: Material(
         color: AppColors.surface.withValues(alpha: 0.94),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         child: InkWell(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           onTap: onTap,
           child: SizedBox(
             width: 38,
@@ -1705,7 +1708,7 @@ class _EmptyPlanCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Column(
@@ -1720,7 +1723,7 @@ class _EmptyPlanCard extends StatelessWidget {
                 style: TextStyle(
                   color: AppColors.accentStrongForeground,
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -1805,14 +1808,14 @@ class _OnboardingStep extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     color: AppColors.accent,
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.zero,
                   ),
                   child: Text(
                     '$number',
                     style: TextStyle(
                       color: AppColors.onAccent,
                       fontSize: 13,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -1838,7 +1841,7 @@ class _OnboardingStep extends StatelessWidget {
                         style: TextStyle(
                           color: AppColors.textPrimary,
                           fontSize: 16,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
@@ -1877,7 +1880,7 @@ class _WorkHeader extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
       ),
       child: Row(
         children: [
@@ -1887,7 +1890,7 @@ class _WorkHeader extends StatelessWidget {
             constraints: const BoxConstraints(minWidth: 52),
             decoration: BoxDecoration(
               color: AppColors.surfaceMuted,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.zero,
             ),
             child: Icon(
               LucideIcons.clapperboard,
@@ -1905,7 +1908,7 @@ class _WorkHeader extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 18,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -1965,26 +1968,31 @@ class _PlanPointTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = _statusColors(status);
+    final visited = status == VisitStatus.completed;
+    final keyStyle = IconButton.styleFrom(
+      side: BorderSide(color: AppColors.ink),
+      backgroundColor: AppColors.surface,
+      fixedSize: const Size(44, 44),
+      minimumSize: const Size(44, 44),
+    );
 
     return Material(
-      color: AppColors.surface,
-      borderRadius: BorderRadius.circular(8),
+      // The next stop sits on the accent wash; rows are split by rules.
+      color: status == VisitStatus.current
+          ? AppColors.accentWash
+          : AppColors.surface,
+      shape: Border(bottom: BorderSide(color: AppColors.divider)),
       child: InkWell(
-        borderRadius: BorderRadius.circular(8),
         onTap: onTap,
-        child: Container(
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: colors.border),
-          ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 10, 4, 10),
           child: Row(
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Container(
-                  width: 42,
-                  height: 42,
+              // The anime frame at its own 16:9, not cropped to a square.
+              SizedBox(
+                width: 72,
+                height: 41,
+                child: ColoredBox(
                   color: colors.background,
                   child: _PlanPointThumbnail(
                     controller: controller,
@@ -1992,7 +2000,7 @@ class _PlanPointTile extends StatelessWidget {
                     placeholder: Icon(
                       colors.icon,
                       color: colors.foreground,
-                      size: 22,
+                      size: 20,
                     ),
                   ),
                 ),
@@ -2004,55 +2012,60 @@ class _PlanPointTile extends StatelessWidget {
                   children: [
                     Text(
                       point.name,
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w800,
+                      style: TextStyle(
+                        fontSize: 16,
+                        height: 1.25,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0,
+                        color: visited
+                            ? AppColors.textSecondary
+                            : AppColors.textPrimary,
+                        decoration: visited ? TextDecoration.lineThrough : null,
+                        decorationColor: AppColors.textSecondary,
                       ),
                     ),
-                    const SizedBox(height: 3),
+                    const SizedBox(height: 2),
                     Text(
                       point.work.title,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: AppColors.textSecondary,
-                        fontSize: 12,
+                        fontSize: 13,
                         letterSpacing: 0,
                       ),
                     ),
                   ],
                 ),
               ),
+              const SizedBox(width: 8),
               IconButton(
-                tooltip: status == VisitStatus.completed
-                    ? l10n.planUndoCheckIn
-                    : l10n.planComplete,
-                onPressed: status == VisitStatus.completed
-                    ? onReopen
-                    : onComplete,
+                style: keyStyle,
+                tooltip: visited ? l10n.planUndoCheckIn : l10n.planComplete,
+                onPressed: visited ? onReopen : onComplete,
                 icon: Icon(
-                  status == VisitStatus.completed
-                      ? LucideIcons.rotateCcw
-                      : LucideIcons.check,
+                  visited ? LucideIcons.rotateCcw : LucideIcons.check,
+                  size: 20,
                 ),
               ),
+              const SizedBox(width: 8),
               IconButton(
+                style: keyStyle,
                 tooltip: l10n.planShootReference,
                 onPressed: onOpenCamera,
                 icon: SizedBox(
-                  width: 24,
-                  height: 24,
+                  width: 22,
+                  height: 22,
                   child: Stack(
                     clipBehavior: Clip.none,
                     children: [
-                      const Center(child: Icon(LucideIcons.camera)),
+                      const Center(child: Icon(LucideIcons.camera, size: 20)),
                       if (recordCount > 0)
                         Positioned(
-                          top: -5,
-                          right: -5,
+                          top: -6,
+                          right: -6,
                           child: _PointRecordBadge(stacked: recordCount > 1),
                         ),
                     ],
@@ -2138,15 +2151,8 @@ class _PointRecordBadge extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.accent.withValues(alpha: 0.42)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
-        ],
       ),
       child: Icon(
         stacked ? LucideIcons.images : LucideIcons.image,

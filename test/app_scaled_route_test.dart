@@ -11,7 +11,7 @@ void main() {
     const settings = AppSettings(
       uiScale: 0.8,
       fontScale: 1.2,
-      themePalette: AppThemePalette.deepBlue,
+      themePalette: AppThemePalette.lake,
     );
     late double scaledFontSize;
     late Color primaryColor;
@@ -35,7 +35,7 @@ void main() {
     );
     expect(scaleView.scale, settings.uiScale);
     expect(scaledFontSize, greaterThan(16));
-    expect(primaryColor, AppColors.deepBlue);
+    expect(primaryColor, AppColors.swatch(AppThemePalette.lake));
   });
 
   testWidgets('scaled overlay content matches page UI and font scale', (

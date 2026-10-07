@@ -94,25 +94,39 @@ class CustomThemeColor {
   }
 }
 
+/// The accent colour, chosen in Settings from Tsumiki's colours.
 enum AppThemePalette {
-  classicGreen,
-  deepBlue,
-  cherryPink,
-  twilightPurple,
-  miriaYellow,
-  graphite,
-  aurora;
+  fjord,
+  spruce,
+  moss,
+  lake,
+  bark,
+  ochre,
+  ink,
+  custom;
+
+  /// Reads a stored name, including the palettes of earlier versions.
+  static AppThemePalette? fromName(Object? name) => switch (name) {
+    'classicGreen' => fjord,
+    'deepBlue' => lake,
+    'cherryPink' => bark,
+    'twilightPurple' => spruce,
+    'miriaYellow' => ochre,
+    'graphite' => ink,
+    'aurora' => custom,
+    _ => values.where((palette) => palette.name == name).firstOrNull,
+  };
 
   String get label {
     return switch (this) {
-      AppThemePalette.classicGreen => l10n.pilgrimageModelsPaletteClassicGreen,
-      AppThemePalette.deepBlue => l10n.pilgrimageModelsPaletteDeepBlue,
-      AppThemePalette.cherryPink => l10n.pilgrimageModelsPaletteCherryPink,
-      AppThemePalette.twilightPurple =>
-        l10n.pilgrimageModelsPaletteTwilightPurple,
-      AppThemePalette.miriaYellow => l10n.pilgrimageModelsPaletteMiriaYellow,
-      AppThemePalette.graphite => l10n.pilgrimageModelsPaletteGraphite,
-      AppThemePalette.aurora => l10n.pilgrimageModelsPaletteCustom,
+      AppThemePalette.fjord => l10n.paletteFjord,
+      AppThemePalette.spruce => l10n.paletteSpruce,
+      AppThemePalette.moss => l10n.paletteMoss,
+      AppThemePalette.lake => l10n.paletteLake,
+      AppThemePalette.bark => l10n.paletteBark,
+      AppThemePalette.ochre => l10n.paletteOchre,
+      AppThemePalette.ink => l10n.paletteInk,
+      AppThemePalette.custom => l10n.pilgrimageModelsPaletteCustom,
     };
   }
 }
@@ -217,7 +231,7 @@ class AppSettings {
     this.referenceImageScale = 1,
     this.photoLocationStrategy = PhotoLocationStrategy.askOnFirstCapture,
     this.nearestAssignDistanceMeters = 350,
-    this.themePalette = AppThemePalette.classicGreen,
+    this.themePalette = AppThemePalette.fjord,
     this.mapTileProvider = MapTileProvider.openFreeMap,
     this.openFreeMapStyle = OpenFreeMapStyle.liberty,
     this.anitabiImageSource = AnitabiImageSource.auto,

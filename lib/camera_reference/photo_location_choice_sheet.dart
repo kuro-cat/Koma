@@ -23,7 +23,7 @@ class PhotoLocationChoiceSheet extends StatelessWidget {
               style: TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 20,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
                 height: 1.25,
               ),
@@ -104,12 +104,12 @@ class _PhotoLocationChoiceTile extends StatelessWidget {
     return Material(
       color: AppColors.surface,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.zero,
         side: BorderSide(color: AppColors.border.withValues(alpha: 0.9)),
       ),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.zero,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
           child: Row(
@@ -131,7 +131,7 @@ class _PhotoLocationChoiceTile extends StatelessWidget {
                             style: TextStyle(
                               color: AppColors.textPrimary,
                               fontSize: 16,
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               letterSpacing: 0,
                             ),
                           ),
@@ -148,14 +148,14 @@ class _PhotoLocationChoiceTile extends StatelessWidget {
                               border: Border.all(
                                 color: AppColors.accent.withValues(alpha: 0.42),
                               ),
-                              borderRadius: BorderRadius.circular(4),
+                              borderRadius: BorderRadius.zero,
                             ),
                             child: Text(
                               l10n.photoLocationChoiceRecommended,
                               style: TextStyle(
                                 color: AppColors.accentForeground,
                                 fontSize: 11,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 height: 1.15,
                                 letterSpacing: 0,
                               ),

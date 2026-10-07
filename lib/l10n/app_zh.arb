@@ -6,7 +6,7 @@
   "commonDelete": "删除",
   "commonRetry": "重试",
   "commonClose": "关闭",
-  "appLoading": "正在加载 MiriaGo...",
+  "appLoading": "正在加载 Koma...",
   "alignPhotoTitle": "对齐裁剪",
   "alignPhotoAction": "对齐裁剪",
   "alignPhotoActionSubtitle": "与参考图对齐",
@@ -305,7 +305,7 @@
   "settingsFullReferenceCache": "完整参考图缓存",
   "settingsDesktopTitle": "桌面端",
   "settingsDesktopSubtitle": "启动器、数据目录等",
-  "settingsAboutTitle": "关于 MiriaGo",
+  "settingsAboutTitle": "关于 Koma",
   "settingsAboutSubtitle": "版本信息、开源许可等",
   "settingsResetTarget": "所有外观、拍摄和地图设置",
   "settingsReset": "恢复",
@@ -719,8 +719,6 @@
   },
   "pointManagerTitle": "管理计划",
   "pointManagerGroupManagement": "片区管理",
-  "pointManagerCachingFullReferences": "正在缓存完整参考图",
-  "pointManagerCacheFullReferences": "缓存完整参考图",
   "pointManagerExitMultiSelect": "退出多选",
   "pointManagerMultiSelect": "多选",
   "pointManagerCreateGroupFailed": "片区创建失败，请稍后重试。",
@@ -772,25 +770,6 @@
   "pointManagerStatusSaveFailed": "点位状态保存失败",
   "pointManagerBatchCompleteFailed": "批量完成失败",
   "pointManagerBatchResetFailed": "批量重置失败",
-  "pointManagerNothingToCache": "当前计划没有需要缓存的参考图",
-  "pointManagerCacheMessage": "将缓存当前计划中 {countText}完整参考图，可能需要较长时间和网络流量。",
-  "@pointManagerCacheMessage": {
-    "placeholders": {
-      "countText": {
-        "type": "String"
-      }
-    }
-  },
-  "pointManagerImageCount": "{count} 张",
-  "@pointManagerImageCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "pointManagerStartCache": "开始缓存",
-  "pointManagerCacheWifiNotice": "建议在 Wi-Fi 环境下进行缓存",
   "pointManagerGroupNameEmpty": "片区名不能为空",
   "pointManagerNewGroup": "新建片区",
   "pointManagerGroupNameLabel": "片区名称",
@@ -807,7 +786,7 @@
   "pointManagerPreviousGroup": "上一个片区",
   "pointManagerNextGroup": "下一个片区",
   "pointManagerChange": "更改",
-  "pointManagerUnitSpots": "点位",
+  "pointManagerUnitSpots": "{count, plural, other{点位}}",
   "pointManagerUnitCompleted": "完成",
   "pointManagerUngroupedWaitSuffix": " 个点位等待整理",
   "@pointManagerUngroupedWaitSuffix": {
@@ -1480,7 +1459,6 @@
   "planGroupManagerUnknownArea": "未知片区",
   "planGroupManagerNameRequired": "片区名不能为空",
   "planGroupManagerNameLabel": "片区名称",
-  "planGroupManagerNewShort": "新建",
   "planGroupManagerSummary": "{groupCount} 个片区 · {pointCount} 个点位",
   "@planGroupManagerSummary": {
     "placeholders": {
@@ -1583,12 +1561,6 @@
   "pilgrimageModelsSubjectMusic": "音乐",
   "pilgrimageModelsSubjectGame": "游戏",
   "pilgrimageModelsSubjectReal": "三次元",
-  "pilgrimageModelsPaletteClassicGreen": "经典绿",
-  "pilgrimageModelsPaletteDeepBlue": "深邃蓝",
-  "pilgrimageModelsPaletteCherryPink": "樱花粉",
-  "pilgrimageModelsPaletteTwilightPurple": "暮光紫",
-  "pilgrimageModelsPaletteMiriaYellow": "琵珀橙",
-  "pilgrimageModelsPaletteGraphite": "石墨黑",
   "pilgrimageModelsPaletteCustom": "自定义",
   "pilgrimageModelsThemeLight": "浅色",
   "pilgrimageModelsThemeDark": "深色",
@@ -1769,7 +1741,7 @@
       }
     }
   },
-  "mainStartupFailed": "MiriaGo 启动失败",
+  "mainStartupFailed": "Koma 启动失败",
   "mainStartupFailedHint": "用户数据没有被删除。请重试，或打开日志目录查看 startup.log。",
   "mainOpenLogFolder": "打开日志目录",
   "mainOpenDataFolder": "打开数据目录",
@@ -1848,24 +1820,24 @@
   "pointDetailAll": "全部",
   "importExportTitle": "导入导出",
   "importExportImportSection": "导入",
-  "importExportImportSubtitleIos": "从文件、聊天、浏览器或网盘等位置用 MiriaGo 打开 .sjhplan。",
+  "importExportImportSubtitleIos": "从文件、聊天、浏览器或网盘等位置用 Koma 打开 .sjhplan。",
   "importExportImportSubtitle": "选择 .sjhplan 文件，先预览内容再导入。",
   "importExportReading": "读取中...",
   "importExportOpenFromOtherApp": "从其他 App 打开 .sjhplan",
-  "importExportImportFile": "导入 MiriaGo 文件",
-  "importExportOpenFromOtherAppSubtitle": "在文件、聊天、浏览器下载页或网盘中选择 .sjhplan，然后分享或用 MiriaGo 打开。",
+  "importExportImportFile": "导入 Koma 文件",
+  "importExportOpenFromOtherAppSubtitle": "在文件、聊天、浏览器下载页或网盘中选择 .sjhplan，然后分享或用 Koma 打开。",
   "importExportImportFileSubtitle": "支持 v2 数据包和旧版 v1 JSON 计划包。",
   "importExportImportFromLink": "从链接导入",
   "importExportImportFromLinkSubtitle": "粘贴 GitHub 发布或 .sjhplan / .zip 下载链接，下载后预览导入。",
-  "importExportPackageSection": "MiriaGo 数据包",
+  "importExportPackageSection": "Koma 数据包",
   "importExportPackageSubtitle": "新版 .sjhplan，内部为 zip，包含 manifest.json。",
   "importExportMyMapsSubtitle": "导出点位 CSV。图片写成链接，可按 Type 列设置样式。",
   "importExportMyMapsExport": "导出 My Maps CSV",
   "importExportMyMapsExportSubtitle": "前 6 列贴近示例格式，作品、集数、来源等拆成独立列。",
   "importExportExportCanceled": "已取消导出",
   "importExportReadFailed": "导入文件读取失败",
-  "importExportIosHelpMessage": "请在文件、聊天、浏览器下载页、网盘或其他保存位置找到 .sjhplan 文件，然后点开文件，或使用分享/更多菜单选择 MiriaGo。\n\nMiriaGo 收到文件后会自动进入导入预览页面。若列表里没有 MiriaGo，可以先把文件保存到“文件”App，再长按文件选择分享或打开方式。",
-  "importExportShareText": "MiriaGo数据包：{planName}",
+  "importExportIosHelpMessage": "请在文件、聊天、浏览器下载页、网盘或其他保存位置找到 .sjhplan 文件，然后点开文件，或使用分享/更多菜单选择 Koma。\n\nKoma 收到文件后会自动进入导入预览页面。若列表里没有 Koma，可以先把文件保存到“文件”App，再长按文件选择分享或打开方式。",
+  "importExportShareText": "Koma数据包：{planName}",
   "@importExportShareText": {
     "placeholders": {
       "planName": {
@@ -1877,7 +1849,7 @@
   "importExportMissingAssetsTitle": "部分本地资源缺失",
   "importExportContinueExport": "继续导出",
   "importExportMissingAssetsNotice": "缺失资源不会进入数据包，导入后对应图片可能无法显示",
-  "importExportMyMapsShareText": "MiriaGo My Maps CSV：{planName}",
+  "importExportMyMapsShareText": "Koma My Maps CSV：{planName}",
   "@importExportMyMapsShareText": {
     "placeholders": {
       "planName": {
@@ -1971,7 +1943,7 @@
   "importExportIncludeFullReference": "包含完整参考图缓存",
   "importExportIncludeFullReferenceSubtitle": "开启后才会把完整参考图写入数据包；默认仍会包含缩略图和用户自己添加的参考图。",
   "importExportExportingButton": "导出中...",
-  "importExportExportPackage": "导出 MiriaGo 数据包",
+  "importExportExportPackage": "导出 Koma 数据包",
   "importExportEstimating": "正在估算数据包大小...",
   "importExportEstimateUnavailable": "预计数据包大小：暂时无法估算",
   "planExportSizeEstimatorThumbnailsNotCached": "{count} 张缩略图未缓存，不会进入数据包",
@@ -2110,16 +2082,16 @@
   "planLinkImportNoPlanFilesInRelease": "这个发布中没有 .sjhplan 或 .zip 文件",
   "planLinkImportChooseArchiveEntry": "压缩包里有多个计划，选择要导入的一个",
   "planLinkImportArchiveHasNoPlan": "压缩包里没有 .sjhplan 计划文件",
-  "planLinkImportNotAPlanPackage": "下载的文件不是 MiriaGo 计划包",
+  "planLinkImportNotAPlanPackage": "下载的文件不是 Koma 计划包",
   "planLinkImportReadFailed": "读取失败，请重试",
   "planLinkImportTitle": "从链接导入",
-  "planLinkImportIntro": "粘贴 GitHub 发布页面或计划文件的下载链接，MiriaGo 会下载计划并打开导入预览。",
+  "planLinkImportIntro": "粘贴 GitHub 发布页面或计划文件的下载链接，Koma 会下载计划并打开导入预览。",
   "planLinkImportWebUnavailableTitle": "网页版无法直接下载",
-  "planLinkImportWebUnavailableSubtitle": "请先在浏览器中下载 .sjhplan 或 .zip，再回到“导入导出”，用“导入 MiriaGo 文件”导入。",
+  "planLinkImportWebUnavailableSubtitle": "请先在浏览器中下载 .sjhplan 或 .zip，再回到“导入导出”，用“导入 Koma 文件”导入。",
   "planLinkImportLinkLabel": "链接",
   "planLinkImportPaste": "粘贴",
   "planLinkImportReadLink": "读取链接",
-  "planLinkImportHelp": "支持：\n• GitHub 发布页面或仓库链接（自动列出最新发布中的计划文件）\n• GitHub 发布中的文件下载链接\n• 其他 https:// 开头的 .sjhplan 或 .zip 直链\n.zip 中可以带说明等其他文件，MiriaGo 只读取其中的 .sjhplan。下载会连接你输入的地址（以及它跳转到的下载服务器）；GitHub 发布或仓库链接还会向 api.github.com 查询发布中的文件。",
+  "planLinkImportHelp": "支持：\n• GitHub 发布页面或仓库链接（自动列出最新发布中的计划文件）\n• GitHub 发布中的文件下载链接\n• 其他 https:// 开头的 .sjhplan 或 .zip 直链\n.zip 中可以带说明等其他文件，Koma 只读取其中的 .sjhplan。下载会连接你输入的地址（以及它跳转到的下载服务器）；GitHub 发布或仓库链接还会向 api.github.com 查询发布中的文件。",
   "planLinkImportResolving": "正在查找发布中的计划文件…",
   "planLinkImportChooseFile": "选择要导入的文件",
   "planLinkImportArchiveTag": "压缩包",
@@ -2185,7 +2157,7 @@
   "planLinkDownloadFailed": "下载失败，请检查网络后重试",
   "planLinkServiceIoTempFileFailed": "无法创建临时文件，请检查存储空间",
   "planLinkServiceIoSaveFailed": "无法保存下载的文件，请检查存储空间",
-  "planLinkServiceWebUnavailable": "网页版无法直接下载，请先下载文件，再用“导入 MiriaGo 文件”导入",
+  "planLinkServiceWebUnavailable": "网页版无法直接下载，请先下载文件，再用“导入 Koma 文件”导入",
   "incomingPlanFileTooLarge": "导入超限：计划文件超过 {limit} MiB 上限。请拆分计划或减少打包图片后重试。",
   "@incomingPlanFileTooLarge": {
     "placeholders": {
@@ -2408,7 +2380,7 @@
       }
     }
   },
-  "comparisonExportSupportShareText": "MiriaGo 对比图",
+  "comparisonExportSupportShareText": "Koma 对比图",
   "comparisonExportLoadSettingsFailed": "读取导出设置失败，请重试。",
   "comparisonExportSaveSettingsFailed": "导出设置保存失败，导出时将重试。",
   "comparisonExportBrowserDownload": "对比图已交给浏览器下载",
@@ -2427,7 +2399,7 @@
   "gallerySaveResultFailed": "保存失败，请稍后重试。",
   "gallerySaveResultSaved": "已保存到相册",
   "gallerySaveResultPermissionTitle": "需要相册权限",
-  "gallerySaveResultPermissionSubtitle": "请在系统设置中允许 MiriaGo 添加照片。",
+  "gallerySaveResultPermissionSubtitle": "请在系统设置中允许 Koma 添加照片。",
   "gallerySaveResultSettings": "设置",
   "photoCompareSliderViewReference": "查看参考图",
   "photoCompareSliderViewPhoto": "查看巡礼图",
@@ -2622,7 +2594,7 @@
   "imageViewerReadFailed": "图片读取失败",
   "imageViewerShareFailed": "无法打开分享",
   "imageViewerSaveFailed": "保存失败",
-  "imageViewerShareText": "MiriaGo 图片",
+  "imageViewerShareText": "Koma 图片",
   "imageViewerSaveCanceled": "已取消保存",
   "imageViewerSaved": "图片已保存",
   "imageViewerLoading": "图片加载中",
@@ -3313,11 +3285,11 @@
   "camerawesomeReferenceImport": "导入",
   "camerawesomeReferenceWebPreview": "Web 预览不启动实时相机",
   "camerawesomeReferencePermissionTitle": "需要相机权限",
-  "camerawesomeReferencePermissionBody": "请在系统设置中允许 MiriaGo 使用相机，用于拍摄巡礼照片。",
+  "camerawesomeReferencePermissionBody": "请在系统设置中允许 Koma 使用相机，用于拍摄巡礼照片。",
   "camerawesomeReferenceOpenSettings": "打开设置",
   "camerawesomeReferencePickFromGallery": "从相册选择照片",
   "camerawesomeReferenceUnavailableTitle": "相机无法启动",
-  "camerawesomeReferenceUnavailableBody": "相机暂时无法使用，请稍后重试。如果问题持续，请重启 MiriaGo。",
+  "camerawesomeReferenceUnavailableBody": "相机暂时无法使用，请稍后重试。如果问题持续，请重启 Koma。",
   "addPointsPickWork": "查看点位",
   "addPointsFindSpots": "查找作品点位",
   "addPointsFindSpotsSubtitle": "搜索作品或粘贴 Anitabi 链接，在地图上挑选点位",
@@ -3347,5 +3319,20 @@
   "appShellCreatePlan": "创建计划",
   "appShellCreatePlanFailed": "计划创建失败，请重试",
   "appShellNewPlan": "新建计划",
-  "planManagerDeleteFailed": "删除计划失败，请重试"
+  "planManagerDeleteFailed": "删除计划失败，请重试",
+  "paletteFjord": "峡湾蓝",
+  "paletteSpruce": "云杉",
+  "paletteMoss": "苔绿",
+  "paletteLake": "湖蓝",
+  "paletteBark": "树皮",
+  "paletteOchre": "赭黄",
+  "paletteInk": "墨色",
+  "@pointManagerUnitSpots": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "planAreaEmpty": "这个片区还没有点位，左右切换查看其他片区。"
 }

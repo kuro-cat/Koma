@@ -189,7 +189,7 @@ class ComparisonExportRenderer {
       canvas.drawRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(0, 0, outputWidth, totalHeight),
-          Radius.circular(hasBorder ? 16.0 : 0),
+          Radius.zero,
         ),
         Paint()..color = Colors.white,
       );
@@ -238,7 +238,7 @@ class ComparisonExportRenderer {
               outputWidth - borderPx,
               totalHeight - borderPx,
             ),
-            const Radius.circular(16),
+            Radius.zero,
           ),
           Paint()
             ..color = config.borderColor
@@ -294,7 +294,7 @@ class ComparisonExportRenderer {
           style: TextStyle(
             color: Colors.white,
             fontSize: labelFontSize,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
           ),
         ),
         textDirection: TextDirection.ltr,
@@ -304,7 +304,7 @@ class ComparisonExportRenderer {
         style: const TextStyle(
           color: Colors.white,
           fontSize: labelFontSize,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
         ),
       );
       labelPainter.layout(maxWidth: width - 24);
@@ -317,7 +317,7 @@ class ComparisonExportRenderer {
       canvas.drawRRect(
         RRect.fromRectAndRadius(
           Rect.fromLTWH(x + 10, y + 8, pillW, pillH),
-          const Radius.circular(6),
+          Radius.zero,
         ),
         Paint()..color = const Color(0xAA000000),
       );
@@ -337,7 +337,7 @@ class ComparisonExportRenderer {
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromLTWH(x, y, width, layout.height),
-        Radius.circular(layout.radius),
+        Radius.zero,
       ),
       Paint()..color = const Color(0xFFF4F5F7),
     );
@@ -350,7 +350,7 @@ class ComparisonExportRenderer {
           style: TextStyle(
             color: const Color(0xFF1D1F23),
             fontSize: layout.titleFontSize,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             letterSpacing: 0,
             height: 1.12,
           ),
@@ -397,7 +397,7 @@ class ComparisonExportRenderer {
             style: TextStyle(
               color: const Color(0xFF6E747D),
               fontSize: layout.tagFontSize,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -414,7 +414,7 @@ class ComparisonExportRenderer {
         canvas.drawRRect(
           RRect.fromRectAndRadius(
             Rect.fromLTWH(tagX, tagY, tagWidth, tagHeight),
-            Radius.circular(layout.tagRadius),
+            Radius.zero,
           ),
           Paint()..color = Colors.white,
         );
@@ -437,7 +437,7 @@ class ComparisonExportRenderer {
           style: TextStyle(
             color: const Color(0xFF8A9099),
             fontSize: layout.pilgrimLabelFontSize,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             letterSpacing: 0,
           ),
         ),
@@ -451,7 +451,7 @@ class ComparisonExportRenderer {
           style: TextStyle(
             color: const Color(0xFF1D1F23),
             fontSize: layout.pilgrimNameFontSize,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w600,
             letterSpacing: 0,
             height: 1.1,
           ),
@@ -669,7 +669,7 @@ class _ComparisonMetaLayout {
       return height;
     }
 
-    final titleHeight = textHeight(title, titleFontSize, FontWeight.w800, 1.12);
+    final titleHeight = textHeight(title, titleFontSize, FontWeight.w600, 1.12);
     final subtitleHeight = textHeight(
       subtitle,
       subtitleFontSize,
@@ -687,7 +687,7 @@ class _ComparisonMetaLayout {
             text: tag,
             style: TextStyle(
               fontSize: tagFontSize,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
             ),
           ),
           textDirection: TextDirection.ltr,

@@ -79,7 +79,7 @@ class _PhotoCompareSliderState extends State<PhotoCompareSlider> {
     return AspectRatio(
       aspectRatio: widget.aspectRatio,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         child: LayoutBuilder(
           builder: (context, constraints) {
             final width = constraints.maxWidth;
@@ -150,7 +150,7 @@ class _PhotoCompareSliderState extends State<PhotoCompareSlider> {
                       if (_focused)
                         DecoratedBox(
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.zero,
                             border: Border.all(
                               color: AppColors.accent,
                               width: 2,
@@ -198,13 +198,6 @@ class _DividerHandle extends StatelessWidget {
           decoration: const BoxDecoration(
             color: Colors.white,
             shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Color(0x40000000),
-                blurRadius: 6,
-                offset: Offset(0, 2),
-              ),
-            ],
           ),
           child: const Icon(
             LucideIcons.chevronsLeftRight,
@@ -228,7 +221,7 @@ class _CornerLabel extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: Colors.black.withValues(alpha: 0.55),
-          borderRadius: BorderRadius.circular(999),
+          borderRadius: BorderRadius.zero,
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -237,7 +230,7 @@ class _CornerLabel extends StatelessWidget {
             style: const TextStyle(
               color: Colors.white,
               fontSize: 11,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),

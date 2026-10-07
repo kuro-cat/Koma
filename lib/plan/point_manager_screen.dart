@@ -31,7 +31,6 @@ import 'plan_group_manager_screen.dart';
 import 'plan_group_utils.dart';
 import 'coordinate_input_dialog.dart';
 import 'reference_cache_progress_dialog.dart';
-import 'reference_full_cache_runner.dart';
 import 'reference_image_status.dart';
 import '../l10n/l10n.dart';
 
@@ -46,7 +45,7 @@ Widget cleanReorderProxy(Widget child, int index, Animation<double> animation) {
         color: Colors.transparent,
         shadowColor: Colors.black.withValues(alpha: 0.18),
         elevation: elevation,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         child: child,
       );
     },
@@ -80,9 +79,6 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
   PilgrimagePlan? _seenCachedPlan;
   ReferenceCacheTask get _cacheTask =>
       ReferenceCacheTask.forPlan(widget.repository, _plan.id);
-  bool get _isCachingFullReferences => _cacheTask.isRunning;
-  ReferenceFullCacheProgress? get _fullReferenceCacheProgress =>
-      _cacheTask.progress;
 
   void _onCacheChanged() {
     final updated = _observedCacheTask?.updatedPlan;
@@ -169,23 +165,6 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
               ),
             if (!_isSaving && _plan.points.isNotEmpty)
               IconButton(
-                tooltip: _isCachingFullReferences
-                    ? _fullReferenceCacheProgress?.label ??
-                          l10n.pointManagerCachingFullReferences
-                    : l10n.pointManagerCacheFullReferences,
-                onPressed: _selectionMode && !_isCachingFullReferences
-                    ? null
-                    : _handleReferenceCachePressed,
-                icon: _isCachingFullReferences
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(LucideIcons.cloudDownload),
-              ),
-            if (!_isSaving && _plan.points.isNotEmpty)
-              IconButton(
                 tooltip: _selectionMode
                     ? l10n.pointManagerExitMultiSelect
                     : l10n.pointManagerMultiSelect,
@@ -253,6 +232,12 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
       return Column(
         children: [
           header,
+          // The list hangs from a 2px ink rule.
+          Container(
+            height: 2,
+            margin: const EdgeInsets.symmetric(horizontal: 16),
+            color: AppColors.ink,
+          ),
           Expanded(
             child: ReorderableListView.builder(
               padding: EdgeInsets.fromLTRB(16, 0, 16, bottomPadding),
@@ -264,7 +249,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
                 final point = group.points[index];
                 return Padding(
                   key: ValueKey(point.id),
-                  padding: const EdgeInsets.only(bottom: 8),
+                  padding: EdgeInsets.zero,
                   child: _PointManagerTile(
                     index: index,
                     point: point,
@@ -293,6 +278,11 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
     return Column(
       children: [
         header,
+        Container(
+          height: 2,
+          margin: const EdgeInsets.symmetric(horizontal: 16),
+          color: AppColors.ink,
+        ),
         Expanded(
           child: ListView.builder(
             padding: EdgeInsets.fromLTRB(16, 0, 16, bottomPadding),
@@ -300,7 +290,7 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
             itemBuilder: (context, index) {
               final point = group.points[index];
               return Padding(
-                padding: const EdgeInsets.only(bottom: 8),
+                padding: EdgeInsets.zero,
                 child: _PointManagerTile(
                   index: index,
                   point: point,
@@ -1090,57 +1080,6 @@ class _PointManagerScreenState extends State<PointManagerScreen> {
     }
   }
 
-  Future<void> _cacheFullReferenceImages({bool startOnOpen = true}) async {
-    final planId = _plan.id;
-    final task = _cacheTask;
-    final repository = widget.repository;
-    final imageSource = widget.settings.anitabiImageSource;
-    final maxConcurrent = widget.settings.mapThumbnailConcurrentLoads;
-    await showReferenceCacheProgressDialog(
-      context: context,
-      task: task,
-      startOnOpen: startOnOpen,
-      run: (onProgress) async {
-        final plan = (await repository.loadPlans()).firstWhere(
-          (plan) => plan.id == planId,
-        );
-        await cacheFullReferenceImages(
-          plan: plan,
-          repository: repository,
-          imageSource: imageSource,
-          maxConcurrent: maxConcurrent,
-          onPlanUpdated: (plan) {
-            task.updatedPlan = plan;
-          },
-          onProgress: onProgress,
-        );
-      },
-    );
-  }
-
-  Future<void> _handleReferenceCachePressed() async {
-    if (_isCachingFullReferences) {
-      await _cacheFullReferenceImages(startOnOpen: false);
-      return;
-    }
-    final points = pointsNeedingFullReferenceCache(_plan.points);
-    if (points.isEmpty) {
-      return _showInfo(l10n.pointManagerNothingToCache);
-    }
-    final countText = l10n.pointManagerImageCount(points.length);
-    final confirmed = await showConfirmActionDialog(
-      context,
-      title: l10n.pointManagerCacheFullReferences,
-      message: l10n.pointManagerCacheMessage(countText),
-      confirmLabel: l10n.pointManagerStartCache,
-      notice: l10n.pointManagerCacheWifiNotice,
-      emphasizedValues: [countText],
-    );
-    if (confirmed) {
-      await _cacheFullReferenceImages();
-    }
-  }
-
   Future<void> _showInfo(
     String message, {
     AppStatusBannerKind kind = AppStatusBannerKind.warning,
@@ -1264,7 +1203,7 @@ class _PlanManagerHeader extends StatelessWidget {
                     group.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(fontWeight: FontWeight.w800),
+                    style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -1279,7 +1218,7 @@ class _PlanManagerHeader extends StatelessWidget {
           Material(
             color: AppColors.surface,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.zero,
               side: BorderSide(color: AppColors.border),
             ),
             clipBehavior: Clip.antiAlias,
@@ -1310,7 +1249,7 @@ class _PlanManagerHeader extends StatelessWidget {
                                 style: TextStyle(
                                   color: AppColors.accentForeground,
                                   fontSize: 15,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w600,
                                   letterSpacing: 0,
                                 ),
                               ),
@@ -1320,7 +1259,7 @@ class _PlanManagerHeader extends StatelessWidget {
                               style: TextStyle(
                                 color: AppColors.textSecondary,
                                 fontSize: 13,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w600,
                                 letterSpacing: 0,
                               ),
                             ),
@@ -1344,7 +1283,7 @@ class _PlanManagerHeader extends StatelessWidget {
                             'point-manager-count-chip-points',
                           ),
                           count: group.points.length,
-                          unit: l10n.pointManagerUnitSpots,
+                          unit: l10n.pointManagerUnitSpots(group.points.length),
                         ),
                         const SizedBox(width: 6),
                         _HeaderCountChip(
@@ -1405,7 +1344,7 @@ class _UngroupedWaitLabel extends StatelessWidget {
           style: TextStyle(
             color: AppColors.textSecondary,
             fontSize: 16,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             letterSpacing: 0,
             height: 1,
           ),
@@ -1415,7 +1354,7 @@ class _UngroupedWaitLabel extends StatelessWidget {
           style: TextStyle(
             color: AppColors.textSecondary,
             fontSize: 13,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             letterSpacing: 0,
             height: 1,
           ),
@@ -1484,7 +1423,7 @@ class _HeaderCountChip extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: AppColors.surfaceMuted,
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.zero,
           border: Border.all(color: AppColors.border),
         ),
         child: Padding(
@@ -1509,7 +1448,7 @@ class _HeaderCountChip extends StatelessWidget {
                 style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 10,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                   height: 1,
                 ),
@@ -1601,9 +1540,7 @@ class _GroupOrderModeButtonState extends State<_GroupOrderModeButton> {
         minimumSize: const WidgetStatePropertyAll(Size.zero),
         maximumSize: const WidgetStatePropertyAll(Size(124, double.infinity)),
         shape: const WidgetStatePropertyAll(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(8)),
-          ),
+          RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         ),
       ),
       builder: (context, controller, child) {
@@ -1666,7 +1603,7 @@ class _GroupOrderModeButtonState extends State<_GroupOrderModeButton> {
                     l10n.pointManagerGroupOrder,
                     style: TextStyle(
                       fontSize: 14,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -1710,14 +1647,14 @@ class _GroupOrderModeButtonState extends State<_GroupOrderModeButton> {
                         }),
                         shape: WidgetStatePropertyAll(
                           RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(6),
+                            borderRadius: BorderRadius.zero,
                           ),
                         ),
                       ),
                       child: Text(
                         option.$2,
                         style: const TextStyle(
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
@@ -1780,25 +1717,19 @@ class _PointManagerTile extends StatelessWidget {
       VisitStatus.pending => l10n.pointManagerStatusPending,
     };
 
+    // A ruled row; selected rows sit on the accent wash.
     return Material(
-      color: AppColors.surface,
-      borderRadius: BorderRadius.circular(8),
+      color: selected ? AppColors.accentWash : AppColors.surface,
+      shape: Border(bottom: BorderSide(color: AppColors.divider)),
       child: InkWell(
-        borderRadius: BorderRadius.circular(8),
         onTap: isBusy
             ? null
             : selectionMode
             ? onToggleSelected
             : onOpenDetail,
         onLongPress: selectionMode || isBusy ? null : onLongPress,
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(12, 12, 10, 10),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: selected ? AppColors.accent : AppColors.border,
-            ),
-            borderRadius: BorderRadius.circular(8),
-          ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(4, 12, 4, 10),
           child: Row(
             children: [
               _PointLeadingControl(
@@ -1819,7 +1750,7 @@ class _PointManagerTile extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 17,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0,
                       ),
                     ),
@@ -1842,7 +1773,7 @@ class _PointManagerTile extends StatelessWidget {
                           style: TextStyle(
                             color: statusColor,
                             fontSize: 12,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             letterSpacing: 0,
                           ),
                         ),
@@ -1861,15 +1792,10 @@ class _PointManagerTile extends StatelessWidget {
                   icon: const Icon(LucideIcons.ellipsisVertical),
                   position: PopupMenuPosition.under,
                   offset: const Offset(0, 6),
-                  elevation: 8,
-                  shadowColor: Colors.black.withValues(alpha: 0.16),
-                  color: AppColors.surface,
-                  surfaceTintColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8),
-                    side: BorderSide(color: AppColors.border),
+                  constraints: const BoxConstraints(
+                    minWidth: 200,
+                    maxWidth: 320,
                   ),
-                  constraints: const BoxConstraints(minWidth: 0, maxWidth: 128),
                   onSelected: (value) {
                     switch (value) {
                       case 'move':
@@ -1962,7 +1888,7 @@ class _PointActionRow extends StatelessWidget {
           style: TextStyle(
             color: color,
             fontSize: 13,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             letterSpacing: 0,
           ),
         ),
@@ -2007,14 +1933,14 @@ class _CacheStatusPill extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.zero,
       ),
       child: Text(
         label,
         style: TextStyle(
           color: color,
           fontSize: 11,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           letterSpacing: 0,
         ),
       ),
@@ -2102,10 +2028,10 @@ class _BatchActionBar extends StatelessWidget {
         padding: const EdgeInsets.all(12),
         child: Material(
           color: AppColors.surface,
-          elevation: 8,
+          elevation: 0,
           shadowColor: Colors.black.withValues(alpha: 0.16),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.zero,
             side: BorderSide(color: AppColors.border),
           ),
           clipBehavior: Clip.antiAlias,
@@ -2130,7 +2056,7 @@ class _BatchActionBar extends StatelessWidget {
                 ),
                 Text(
                   '$selectedCount',
-                  style: const TextStyle(fontWeight: FontWeight.w800),
+                  style: const TextStyle(fontWeight: FontWeight.w600),
                 ),
                 const Spacer(),
                 _BatchActionButton(
@@ -2186,7 +2112,7 @@ class _BatchActionButton extends StatelessWidget {
       message: label,
       child: InkWell(
         onTap: onPressed,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
           child: Column(
@@ -2199,7 +2125,7 @@ class _BatchActionButton extends StatelessWidget {
                 style: TextStyle(
                   color: foreground,
                   fontSize: 11,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -2524,7 +2450,7 @@ class _ManualAnchorMarker extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.warning,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: Colors.white, width: 3),
       ),
       child: const Icon(LucideIcons.mapPinPlus, color: Colors.white),
@@ -2549,7 +2475,7 @@ class _MapToolButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: selected ? AppColors.accent : AppColors.surface,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       child: IconButton(
         tooltip: tooltip,
         onPressed: onTap,
@@ -2596,7 +2522,7 @@ class _AnchorSelectionCard extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
@@ -2614,7 +2540,7 @@ class _AnchorSelectionCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 17,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),

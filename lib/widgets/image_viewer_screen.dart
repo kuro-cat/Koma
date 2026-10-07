@@ -98,9 +98,9 @@ class ImageViewerScreen extends StatelessWidget {
             top: MediaQuery.paddingOf(context).top + 8,
             child: Material(
               color: Colors.black38,
-              borderRadius: BorderRadius.circular(24),
+              borderRadius: BorderRadius.zero,
               child: InkWell(
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.zero,
                 onTap: () => Navigator.of(context).pop(),
                 child: const Padding(
                   padding: EdgeInsets.all(10),
@@ -534,7 +534,7 @@ class _ImageViewerPlaceholder extends StatelessWidget {
             style: const TextStyle(
               color: Colors.white70,
               fontSize: 15,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),

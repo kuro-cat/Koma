@@ -225,7 +225,7 @@ void main() {
       find.descendant(of: find.byType(AppBar), matching: find.text('示例计划')),
     );
     expect(planTitle.style?.fontSize, 20);
-    expect(planTitle.style?.fontWeight, FontWeight.w900);
+    expect(planTitle.style?.fontWeight, FontWeight.w600);
     expect(
       tester.widget<AppBar>(find.byType(AppBar)).toolbarHeight,
       kToolbarHeight,
@@ -697,7 +697,7 @@ void main() {
     );
     expect(
       find.byKey(const ValueKey('plan-group-picker-selected-accent')),
-      findsOneWidget,
+      findsNothing,
     );
     expect(
       find.byKey(
@@ -1048,7 +1048,7 @@ void main() {
       find.descendant(of: find.byType(AppBar), matching: find.text('记录')),
     );
     expect(title.style?.fontSize, 24);
-    expect(title.style?.fontWeight, FontWeight.w900);
+    expect(title.style?.fontWeight, FontWeight.w600);
     expect(find.byTooltip('搜索记录（待接入）'), findsNothing);
     expect(
       tester.getSize(find.byKey(const ValueKey('records-status-filter'))),
@@ -1440,7 +1440,7 @@ void main() {
     final unselectedDecoration =
         workOptionDecoration.decoration! as BoxDecoration;
     expect(unselectedDecoration.border, isNull);
-    expect(unselectedDecoration.borderRadius, BorderRadius.circular(6));
+    expect(unselectedDecoration.borderRadius, BorderRadius.zero);
     expect(unselectedDecoration.color!.a, 0);
     expect(
       find.descendant(
@@ -1790,7 +1790,7 @@ void main() {
             find.byKey(const ValueKey('point-record-preview-photo')).first,
           )
           .borderRadius,
-      BorderRadius.circular(8),
+      BorderRadius.zero,
     );
   });
 
@@ -2129,7 +2129,7 @@ void main() {
     );
     expect(
       find.byKey(const ValueKey('plan-group-picker-selected-accent')),
-      findsOneWidget,
+      findsNothing,
     );
   });
 
@@ -2448,7 +2448,7 @@ void main() {
     );
     expect(
       find.byKey(const ValueKey('plan-group-picker-selected-accent')),
-      findsOneWidget,
+      findsNothing,
     );
     final managerGroupOption = find.byKey(
       const ValueKey('plan-group-picker-option-宇治站附近'),
@@ -3196,23 +3196,22 @@ void main() {
       tester.getSize(planCards.first).height,
       closeTo(tester.getSize(planCards.last).height, 0.1),
     );
+    // The current plan is marked by the accent wash, never a left bar.
     expect(
       tester.widgetList<Material>(planCards).map((card) => card.color).toSet(),
-      {AppColors.surface},
+      {AppColors.accentWash, AppColors.surface},
     );
-    final selectedAccents = find.byWidgetPredicate(
-      (widget) =>
-          widget is Positioned &&
-          widget.key is ValueKey<String> &&
-          (widget.key! as ValueKey<String>).value.startsWith(
-            'plan-card-selected-accent-',
-          ),
+    expect(
+      find.byWidgetPredicate(
+        (widget) =>
+            widget.key is ValueKey<String> &&
+            (widget.key! as ValueKey<String>).value.startsWith(
+              'plan-card-selected-accent-',
+            ),
+      ),
+      findsNothing,
     );
-    expect(selectedAccents, findsOneWidget);
-    final selectedAccentRect = tester.getRect(selectedAccents.first);
     final selectedCardRect = tester.getRect(planCards.first);
-    expect(selectedAccentRect.width, 3);
-    expect(selectedAccentRect.height, selectedCardRect.height - 18);
     final editRect = tester.getRect(find.byTooltip('编辑计划信息').first);
     final moreRect = tester.getRect(find.byTooltip('更多计划操作').first);
     final dividerRect = tester.getRect(
@@ -3357,8 +3356,8 @@ void main() {
         find.byKey(ValueKey(actionKey)),
       );
       final decoration = action.decoration! as BoxDecoration;
-      expect(decoration.borderRadius, BorderRadius.circular(8));
-      expect(decoration.boxShadow, isEmpty);
+      expect(decoration.borderRadius, BorderRadius.zero);
+      expect(decoration.boxShadow, anyOf(isNull, isEmpty));
     }
     final deleteMenuButton = tester
         .widgetList<MenuItemButton>(find.byType(MenuItemButton))
@@ -3397,6 +3396,7 @@ void main() {
         )
         .first;
 
+    final restingColor = tester.widget<Material>(planCard).color;
     final gesture = await tester.createGesture(kind: PointerDeviceKind.mouse);
     await gesture.addPointer(location: Offset.zero);
     addTearDown(gesture.removePointer);
@@ -3411,10 +3411,10 @@ void main() {
     await gesture.moveTo(const Offset(8, 8));
     await tester.pump();
 
-    expect(tester.widget<Material>(planCard).color, AppColors.surface);
+    expect(tester.widget<Material>(planCard).color, restingColor);
     await tester.tap(find.byTooltip('更多计划操作').first);
     await tester.pumpAndSettle();
-    expect(tester.widget<Material>(planCard).color, AppColors.surface);
+    expect(tester.widget<Material>(planCard).color, restingColor);
   });
 
   testWidgets('work manager opens a compact delete menu', (tester) async {

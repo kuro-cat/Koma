@@ -306,7 +306,7 @@ class _SheetHeader extends StatelessWidget {
                 l10n.comparisonExportTitle,
                 style: const TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),

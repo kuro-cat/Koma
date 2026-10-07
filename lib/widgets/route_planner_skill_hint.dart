@@ -118,13 +118,13 @@ class _RoutePlannerSkillCardState extends State<RoutePlannerSkillCard> {
 
     return InkWell(
       key: const ValueKey('route-planner-skill-card'),
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       onTap: () => openRoutePlannerSkillGuide(context),
       child: Container(
         padding: const EdgeInsets.fromLTRB(14, 8, 14, 14),
         decoration: BoxDecoration(
           color: AppColors.accent.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           border: Border.all(color: AppColors.accent.withValues(alpha: 0.35)),
         ),
         child: Column(
@@ -144,7 +144,7 @@ class _RoutePlannerSkillCardState extends State<RoutePlannerSkillCard> {
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 15,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -256,7 +256,7 @@ class _RoutePlannerSkillLinkState extends State<RoutePlannerSkillLink> {
     );
     return InkWell(
       key: const ValueKey('route-planner-skill-link'),
-      borderRadius: BorderRadius.circular(6),
+      borderRadius: BorderRadius.zero,
       onTap: () => openRoutePlannerSkillGuide(context),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 2),
@@ -282,7 +282,7 @@ class _RoutePlannerSkillLinkState extends State<RoutePlannerSkillLink> {
                       text: l10n.routePlannerSkillHintLinkText,
                       style: TextStyle(
                         color: AppColors.accentStrongForeground,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         decoration: TextDecoration.underline,
                         decorationColor: AppColors.accentStrongForeground,
                       ),

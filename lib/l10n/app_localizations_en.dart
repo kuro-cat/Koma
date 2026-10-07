@@ -27,7 +27,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get commonClose => 'Close';
 
   @override
-  String get appLoading => 'Loading MiriaGo...';
+  String get appLoading => 'Loading Koma...';
 
   @override
   String get alignPhotoTitle => 'Align & crop';
@@ -345,7 +345,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsDesktopSubtitle => 'Launcher, data directory and more';
 
   @override
-  String get settingsAboutTitle => 'About MiriaGo';
+  String get settingsAboutTitle => 'About Koma';
 
   @override
   String get settingsAboutSubtitle => 'Version, open source license and more';
@@ -1537,13 +1537,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pointManagerGroupManagement => 'Manage areas';
 
   @override
-  String get pointManagerCachingFullReferences =>
-      'Caching full reference images...';
-
-  @override
-  String get pointManagerCacheFullReferences => 'Cache full reference images';
-
-  @override
   String get pointManagerExitMultiSelect => 'Exit multi-select';
 
   @override
@@ -1655,32 +1648,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pointManagerBatchResetFailed => 'Couldn\'t reset the spots';
 
   @override
-  String get pointManagerNothingToCache =>
-      'This plan has no reference images to cache';
-
-  @override
-  String pointManagerCacheMessage(String countText) {
-    return 'This caches $countText in this plan. It may take a while and use a lot of data.';
-  }
-
-  @override
-  String pointManagerImageCount(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count full reference images',
-      one: '1 full reference image',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get pointManagerStartCache => 'Start caching';
-
-  @override
-  String get pointManagerCacheWifiNotice => 'Wi-Fi is recommended for caching';
-
-  @override
   String get pointManagerGroupNameEmpty => 'Area name can\'t be empty';
 
   @override
@@ -1710,7 +1677,15 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pointManagerChange => 'Change';
 
   @override
-  String get pointManagerUnitSpots => 'spots';
+  String pointManagerUnitSpots(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'spots',
+      one: 'spot',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get pointManagerUnitCompleted => 'done';
@@ -2936,9 +2911,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planGroupManagerNameLabel => 'Area name';
 
   @override
-  String get planGroupManagerNewShort => 'New';
-
-  @override
   String planGroupManagerSummary(int groupCount, int pointCount) {
     String _temp0 = intl.Intl.pluralLogic(
       groupCount,
@@ -3104,24 +3076,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pilgrimageModelsSubjectReal => 'Live';
-
-  @override
-  String get pilgrimageModelsPaletteClassicGreen => 'Classic green';
-
-  @override
-  String get pilgrimageModelsPaletteDeepBlue => 'Deep blue';
-
-  @override
-  String get pilgrimageModelsPaletteCherryPink => 'Cherry pink';
-
-  @override
-  String get pilgrimageModelsPaletteTwilightPurple => 'Twilight purple';
-
-  @override
-  String get pilgrimageModelsPaletteMiriaYellow => 'Amber orange';
-
-  @override
-  String get pilgrimageModelsPaletteGraphite => 'Graphite';
 
   @override
   String get pilgrimageModelsPaletteCustom => 'Custom';
@@ -3408,7 +3362,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get mainStartupFailed => 'MiriaGo failed to start';
+  String get mainStartupFailed => 'Koma failed to start';
 
   @override
   String get mainStartupFailedHint =>
@@ -3575,7 +3529,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importExportImportSubtitleIos =>
-      'Open a .sjhplan with MiriaGo from Files, a chat, a browser or a cloud drive.';
+      'Open a .sjhplan with Koma from Files, a chat, a browser or a cloud drive.';
 
   @override
   String get importExportImportSubtitle =>
@@ -3588,11 +3542,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get importExportOpenFromOtherApp => 'Open a .sjhplan from another app';
 
   @override
-  String get importExportImportFile => 'Import a MiriaGo file';
+  String get importExportImportFile => 'Import a Koma file';
 
   @override
   String get importExportOpenFromOtherAppSubtitle =>
-      'Find the .sjhplan in Files, a chat, a browser download page or a cloud drive, then share it to MiriaGo or open it with MiriaGo.';
+      'Find the .sjhplan in Files, a chat, a browser download page or a cloud drive, then share it to Koma or open it with Koma.';
 
   @override
   String get importExportImportFileSubtitle =>
@@ -3606,7 +3560,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Paste a GitHub release or a .sjhplan / .zip download link to download and preview it.';
 
   @override
-  String get importExportPackageSection => 'MiriaGo data package';
+  String get importExportPackageSection => 'Koma data package';
 
   @override
   String get importExportPackageSubtitle =>
@@ -3631,11 +3585,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get importExportIosHelpMessage =>
-      'Find the .sjhplan file in Files, a chat, a browser download page, a cloud drive or wherever it\'s saved, then tap it or choose MiriaGo from the Share or More menu.\n\nMiriaGo opens the import preview once it receives the file. If MiriaGo isn\'t listed, save the file to the Files app first, then long-press it and choose Share or Open with.';
+      'Find the .sjhplan file in Files, a chat, a browser download page, a cloud drive or wherever it\'s saved, then tap it or choose Koma from the Share or More menu.\n\nKoma opens the import preview once it receives the file. If Koma isn\'t listed, save the file to the Files app first, then long-press it and choose Share or Open with.';
 
   @override
   String importExportShareText(String planName) {
-    return 'MiriaGo data package: $planName';
+    return 'Koma data package: $planName';
   }
 
   @override
@@ -3653,7 +3607,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String importExportMyMapsShareText(String planName) {
-    return 'MiriaGo My Maps CSV: $planName';
+    return 'Koma My Maps CSV: $planName';
   }
 
   @override
@@ -3802,7 +3756,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get importExportExportingButton => 'Exporting...';
 
   @override
-  String get importExportExportPackage => 'Export MiriaGo data package';
+  String get importExportExportPackage => 'Export Koma data package';
 
   @override
   String get importExportEstimating => 'Estimating package size...';
@@ -4029,7 +3983,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planLinkImportNotAPlanPackage =>
-      'The downloaded file isn\'t a MiriaGo plan package';
+      'The downloaded file isn\'t a Koma plan package';
 
   @override
   String get planLinkImportReadFailed => 'Couldn\'t read it. Please try again';
@@ -4039,7 +3993,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planLinkImportIntro =>
-      'Paste a GitHub release page or a plan file download link. MiriaGo downloads the plan and opens the import preview.';
+      'Paste a GitHub release page or a plan file download link. Koma downloads the plan and opens the import preview.';
 
   @override
   String get planLinkImportWebUnavailableTitle =>
@@ -4047,7 +4001,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planLinkImportWebUnavailableSubtitle =>
-      'Download the .sjhplan or .zip in your browser first, then go back to \"Import & export\" and use \"Import a MiriaGo file\".';
+      'Download the .sjhplan or .zip in your browser first, then go back to \"Import & export\" and use \"Import a Koma file\".';
 
   @override
   String get planLinkImportLinkLabel => 'Link';
@@ -4060,7 +4014,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planLinkImportHelp =>
-      'Supported:\n• GitHub release pages or repository links (lists the plan files in the latest release)\n• File download links from a GitHub release\n• Other https:// direct links to a .sjhplan or .zip\nA .zip may also contain other files such as a readme; MiriaGo only reads the .sjhplan in it. Downloading connects to the address you enter (and any download server it redirects to). GitHub release or repository links also ask api.github.com for the files in the release.';
+      'Supported:\n• GitHub release pages or repository links (lists the plan files in the latest release)\n• File download links from a GitHub release\n• Other https:// direct links to a .sjhplan or .zip\nA .zip may also contain other files such as a readme; Koma only reads the .sjhplan in it. Downloading connects to the address you enter (and any download server it redirects to). GitHub release or repository links also ask api.github.com for the files in the release.';
 
   @override
   String get planLinkImportResolving =>
@@ -4156,7 +4110,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planLinkServiceWebUnavailable =>
-      'The web version can\'t download directly. Download the file first, then use \"Import a MiriaGo file\"';
+      'The web version can\'t download directly. Download the file first, then use \"Import a Koma file\"';
 
   @override
   String incomingPlanFileTooLarge(String limit) {
@@ -4625,7 +4579,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get comparisonExportSupportShareText => 'MiriaGo comparison image';
+  String get comparisonExportSupportShareText => 'Koma comparison image';
 
   @override
   String get comparisonExportLoadSettingsFailed =>
@@ -4692,7 +4646,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get gallerySaveResultPermissionSubtitle =>
-      'Allow MiriaGo to add photos in system settings.';
+      'Allow Koma to add photos in system settings.';
 
   @override
   String get gallerySaveResultSettings => 'Settings';
@@ -5087,7 +5041,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get imageViewerSaveFailed => 'Save failed';
 
   @override
-  String get imageViewerShareText => 'MiriaGo image';
+  String get imageViewerShareText => 'Koma image';
 
   @override
   String get imageViewerSaveCanceled => 'Save canceled';
@@ -6147,7 +6101,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get camerawesomeReferencePermissionBody =>
-      'Allow MiriaGo to use the camera in system settings to take pilgrimage photos.';
+      'Allow Koma to use the camera in system settings to take pilgrimage photos.';
 
   @override
   String get camerawesomeReferenceOpenSettings => 'Open settings';
@@ -6161,7 +6115,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get camerawesomeReferenceUnavailableBody =>
-      'The camera is unavailable right now. Try again later. If the problem continues, restart MiriaGo.';
+      'The camera is unavailable right now. Try again later. If the problem continues, restart Koma.';
 
   @override
   String get addPointsPickWork => 'View spots';
@@ -6239,4 +6193,29 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get planManagerDeleteFailed =>
       'Couldn\'t delete the plan. Please try again.';
+
+  @override
+  String get paletteFjord => 'Fjord';
+
+  @override
+  String get paletteSpruce => 'Spruce';
+
+  @override
+  String get paletteMoss => 'Moss';
+
+  @override
+  String get paletteLake => 'Lake';
+
+  @override
+  String get paletteBark => 'Bark';
+
+  @override
+  String get paletteOchre => 'Ochre';
+
+  @override
+  String get paletteInk => 'Ink';
+
+  @override
+  String get planAreaEmpty =>
+      'No spots in this area. Use the arrows to see the others.';
 }

@@ -237,7 +237,7 @@ class _NavigationRouteConfirmScreenState
           ),
           Material(
             color: AppColors.surface,
-            elevation: 8,
+            elevation: 0,
             shadowColor: Colors.black.withValues(alpha: 0.12),
             child: SafeArea(
               top: false,
@@ -259,7 +259,7 @@ class _NavigationRouteConfirmScreenState
                       style: TextStyle(
                         color: AppColors.textPrimary,
                         fontSize: 20,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0,
                       ),
                     ),
@@ -493,14 +493,14 @@ class _GroupNameRow extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.accent.withValues(alpha: 0.08),
             border: Border.all(color: AppColors.accent.withValues(alpha: 0.42)),
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.zero,
           ),
           child: Text(
             l10n.navigationRouteConfirmAreaBadge,
             style: TextStyle(
               color: AppColors.accentForeground,
               fontSize: 11,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               height: 1.15,
               letterSpacing: 0,
             ),
@@ -669,7 +669,7 @@ class _WaypointDot extends StatelessWidget {
           style: const TextStyle(
             color: Colors.white,
             fontSize: 11,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             height: 1,
           ),
         ),

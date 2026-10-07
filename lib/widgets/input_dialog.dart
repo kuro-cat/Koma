@@ -36,13 +36,13 @@ class AppInputDialog extends StatelessWidget {
     final titleStyle = TextStyle(
       color: AppColors.textPrimary,
       fontSize: 18,
-      fontWeight: FontWeight.w800,
+      fontWeight: FontWeight.w600,
       letterSpacing: 0,
     );
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       backgroundColor: AppColors.surface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 420, maxHeight: maxHeight),
         child: Padding(
@@ -114,10 +114,10 @@ class AppDialogPasteButton extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10),
         foregroundColor: AppColors.textPrimary,
         side: BorderSide(color: AppColors.border),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         textStyle: const TextStyle(
           fontSize: 13,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           letterSpacing: 0,
         ),
       ),
@@ -158,7 +158,7 @@ class _AppDialogFieldState extends State<AppDialogField> {
                   ? AppColors.accentStrongForeground
                   : AppColors.textSecondary,
               fontSize: 13,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -176,7 +176,7 @@ InputDecoration appDialogInputDecoration({
   String? errorText,
 }) {
   final border = OutlineInputBorder(
-    borderRadius: BorderRadius.circular(10),
+    borderRadius: BorderRadius.zero,
     borderSide: BorderSide(color: AppColors.border),
   );
   return InputDecoration(
@@ -190,15 +190,15 @@ InputDecoration appDialogInputDecoration({
     border: border,
     enabledBorder: border,
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.zero,
       borderSide: BorderSide(color: AppColors.accent, width: 1.25),
     ),
     errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.zero,
       borderSide: BorderSide(color: AppColors.error),
     ),
     focusedErrorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10),
+      borderRadius: BorderRadius.zero,
       borderSide: BorderSide(color: AppColors.error, width: 1.25),
     ),
   );

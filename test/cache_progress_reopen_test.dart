@@ -38,7 +38,8 @@ void main() {
     },
   );
 
-  for (final manager in [false, true]) {
+  // Only the plan menu caches references; Manage plan no longer has its own entry.
+  for (final manager in [false]) {
     testWidgets(
       '${manager ? 'manager' : 'plan'} cache entry reopens latest live progress',
       (tester) async {

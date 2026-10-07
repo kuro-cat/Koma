@@ -134,15 +134,25 @@ void main() {
           final button = theme.textButtonTheme.style!;
           expect(
             button.foregroundColor!.resolve({}),
-            AppColors.accentStrongForeground,
+            AppColors.accentForeground,
           );
           expect(
             button.foregroundColor!.resolve({WidgetState.disabled}),
-            isNot(AppColors.accentStrongForeground),
+            isNot(AppColors.accentForeground),
           );
+          // In light mode the readable variants may darken a custom colour
+          // until it reads; they always reach 4.5:1 on the light ground.
           AppTheme.light(palette: palette, customAccentValue: custom);
-          expect(AppColors.accentForeground, AppColors.accent);
-          expect(AppColors.accentStrongForeground, AppColors.accentDark);
+          for (final color in [
+            AppColors.accentForeground,
+            AppColors.accentStrongForeground,
+          ]) {
+            expect(
+              contrast(color, AppColors.background),
+              greaterThanOrEqualTo(4.5),
+              reason: 'light $palette/$custom',
+            );
+          }
         }
       }
     },

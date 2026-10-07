@@ -132,7 +132,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         toolbarHeight: AppTheme.appBarHeight,
         title: Text(
           l10n.settingsTitle,
-          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
         ),
         actions: [
           IconButton(
@@ -474,10 +474,13 @@ class _AppearanceSettingsPage extends StatefulWidget {
 class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
   late AppSettings _settings;
   static const _visibleThemePalettes = [
-    AppThemePalette.classicGreen,
-    AppThemePalette.deepBlue,
-    AppThemePalette.cherryPink,
-    AppThemePalette.graphite,
+    AppThemePalette.fjord,
+    AppThemePalette.spruce,
+    AppThemePalette.moss,
+    AppThemePalette.lake,
+    AppThemePalette.bark,
+    AppThemePalette.ochre,
+    AppThemePalette.ink,
   ];
 
   @override
@@ -524,7 +527,7 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
     ];
     _update(
       _settings.copyWith(
-        themePalette: AppThemePalette.aurora,
+        themePalette: AppThemePalette.custom,
         customThemeColorName: result.name,
         customThemeColorValue: result.value,
         customThemeColors: colors,
@@ -612,55 +615,50 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                   subtitle: l10n.settingsThemeColorSubtitle,
                 ),
                 const SizedBox(height: 16),
-                SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: [
-                      for (final palette in _visibleThemePalettes)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 18),
-                          child: _ThemeColorOption(
-                            palette: palette,
-                            selected:
-                                settings.themePalette == palette &&
-                                palette != AppThemePalette.aurora,
-                            onTap: () {
-                              _update(settings.copyWith(themePalette: palette));
-                            },
-                          ),
-                        ),
-                      for (final color in settings.customThemeColors)
-                        Padding(
-                          padding: const EdgeInsets.only(right: 18),
-                          child: _CustomThemeColorOption(
-                            color: color,
-                            selected:
-                                settings.themePalette ==
-                                    AppThemePalette.aurora &&
-                                settings.customThemeColorValue == color.value,
-                            onTap: () {
-                              _update(
-                                settings.copyWith(
-                                  themePalette: AppThemePalette.aurora,
-                                  customThemeColorName: color.name,
-                                  customThemeColorValue: color.value,
-                                ),
-                              );
-                            },
-                          ),
-                        ),
+                // Every colour in view at once: square swatches that wrap.
+                Wrap(
+                  spacing: 14,
+                  runSpacing: 14,
+                  children: [
+                    for (final palette in _visibleThemePalettes)
                       Padding(
-                        padding: const EdgeInsets.only(right: 4),
-                        child: _AddThemeColorOption(
+                        padding: EdgeInsets.zero,
+                        child: _ThemeColorOption(
+                          palette: palette,
                           selected:
-                              settings.themePalette == AppThemePalette.aurora,
-                          colorValue: settings.customThemeColorValue,
-                          label: settings.displayCustomThemeColorName,
-                          onTap: _showCustomThemeColorDialog,
+                              settings.themePalette == palette &&
+                              palette != AppThemePalette.custom,
+                          onTap: () {
+                            _update(settings.copyWith(themePalette: palette));
+                          },
                         ),
                       ),
-                    ],
-                  ),
+                    for (final color in settings.customThemeColors)
+                      Padding(
+                        padding: EdgeInsets.zero,
+                        child: _CustomThemeColorOption(
+                          color: color,
+                          selected:
+                              settings.themePalette == AppThemePalette.custom &&
+                              settings.customThemeColorValue == color.value,
+                          onTap: () {
+                            _update(
+                              settings.copyWith(
+                                themePalette: AppThemePalette.custom,
+                                customThemeColorName: color.name,
+                                customThemeColorValue: color.value,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    _AddThemeColorOption(
+                      selected: settings.themePalette == AppThemePalette.custom,
+                      colorValue: settings.customThemeColorValue,
+                      label: settings.displayCustomThemeColorName,
+                      onTap: _showCustomThemeColorDialog,
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -689,7 +687,7 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                       '${(uiScale * 100).round()}%',
                       style: const TextStyle(
                         fontSize: 15,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0,
                       ),
                     ),
@@ -1172,12 +1170,12 @@ class _PhotoLocationStrategyDropdown extends StatelessWidget {
       builder: (context, controller, child) => Material(
         color: AppColors.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           side: BorderSide(color: AppColors.border),
         ),
         child: InkWell(
           key: const ValueKey('photo-location-strategy-selector'),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           onTap: () =>
               controller.isOpen ? controller.close() : controller.open(),
           child: Padding(
@@ -2021,7 +2019,7 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 15,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -2272,7 +2270,7 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
                             style: TextStyle(
                               color: AppColors.accentForeground,
                               fontSize: 13,
-                              fontWeight: FontWeight.w900,
+                              fontWeight: FontWeight.w600,
                               letterSpacing: 0,
                             ),
                           ),
@@ -2843,7 +2841,7 @@ class _AboutSettingsPage extends StatelessWidget {
                         copyLabel: 'MiriaGo',
                         style: TextStyle(
                           fontSize: 18,
-                          fontWeight: FontWeight.w900,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
@@ -3034,7 +3032,7 @@ class _SettingsChrome extends StatelessWidget {
       surfaceTintColor: Colors.transparent,
       clipBehavior: Clip.antiAlias,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         side: BorderSide(color: scheme.outline),
       ),
       child: padding == null ? child : Padding(padding: padding!, child: child),
@@ -3286,7 +3284,7 @@ class _SettingsSection extends StatelessWidget {
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
                 fontSize: 15,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -3312,7 +3310,7 @@ class _SettingsSubheading extends StatelessWidget {
       style: TextStyle(
         color: AppColors.textPrimary,
         fontSize: 14,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w600,
         letterSpacing: 0,
       ),
     );
@@ -3389,7 +3387,7 @@ class _NumberStepperSetting extends StatelessWidget {
               margin: const EdgeInsets.symmetric(horizontal: 6),
               decoration: BoxDecoration(
                 color: AppColors.surfaceMuted,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.zero,
                 border: Border.all(color: AppColors.border),
               ),
               child: Text(
@@ -3399,7 +3397,7 @@ class _NumberStepperSetting extends StatelessWidget {
                 style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 13,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -3444,7 +3442,7 @@ class _NumberStepperIconButton extends StatelessWidget {
             alpha: 0.5,
           ),
           side: BorderSide(color: AppColors.border),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         ),
         icon: Icon(icon, size: 18),
       ),
@@ -3538,7 +3536,7 @@ class _CacheTargetCard extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.background,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
@@ -3549,7 +3547,7 @@ class _CacheTargetCard extends StatelessWidget {
             height: 38,
             decoration: BoxDecoration(
               color: AppColors.accent.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.zero,
             ),
             child: Icon(icon, color: AppColors.accentForeground, size: 21),
           ),
@@ -3579,7 +3577,7 @@ class _CustomAspectRatioOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 140),
@@ -3587,19 +3585,10 @@ class _CustomAspectRatioOption extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         decoration: BoxDecoration(
           color: selected ? AppColors.accent : AppColors.surface,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           border: Border.all(
             color: selected ? AppColors.accentForeground : AppColors.border,
           ),
-          boxShadow: selected
-              ? [
-                  BoxShadow(
-                    color: AppColors.accent.withValues(alpha: 0.16),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-              : null,
         ),
         child: Center(
           child: Text(
@@ -3609,7 +3598,7 @@ class _CustomAspectRatioOption extends StatelessWidget {
             style: TextStyle(
               color: selected ? AppColors.onAccent : AppColors.textPrimary,
               fontSize: 13,
-              fontWeight: FontWeight.w900,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -3692,7 +3681,7 @@ class _CustomAspectRatioDialogState extends State<_CustomAspectRatioDialog> {
             padding: EdgeInsets.symmetric(horizontal: 12),
             child: Text(
               ':',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w900),
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
             ),
           ),
           Expanded(
@@ -3743,7 +3732,7 @@ class _AspectRatioOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 140),
@@ -3751,19 +3740,10 @@ class _AspectRatioOption extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
         decoration: BoxDecoration(
           color: selected ? AppColors.accent : AppColors.surface,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           border: Border.all(
             color: selected ? AppColors.accentForeground : AppColors.border,
           ),
-          boxShadow: selected
-              ? [
-                  BoxShadow(
-                    color: AppColors.accent.withValues(alpha: 0.16),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ]
-              : null,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -3785,7 +3765,7 @@ class _AspectRatioOption extends StatelessWidget {
                           ? AppColors.onAccent
                           : AppColors.textPrimary,
                       fontSize: 13,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -3802,7 +3782,7 @@ class _AspectRatioOption extends StatelessWidget {
                     ? AppColors.onAccent.withValues(alpha: 0.86)
                     : AppColors.textSecondary,
                 fontSize: 10,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -3863,7 +3843,7 @@ class _ThemeColorOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(30),
+      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -3877,7 +3857,7 @@ class _ThemeColorOption extends StatelessWidget {
                   ? AppColors.accentForeground
                   : AppColors.textPrimary,
               fontSize: 12,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -3958,7 +3938,7 @@ class _ThemeColorButton extends StatelessWidget {
         ? AppColors.textPrimary
         : Colors.white;
     return InkWell(
-      borderRadius: BorderRadius.circular(30),
+      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -3968,14 +3948,13 @@ class _ThemeColorButton extends StatelessWidget {
             height: selected ? 42 : 38,
             padding: const EdgeInsets.all(4),
             decoration: BoxDecoration(
-              shape: BoxShape.circle,
               border: Border.all(
                 color: selected ? AppColors.accentForeground : AppColors.border,
                 width: selected ? 2 : 1,
               ),
             ),
             child: DecoratedBox(
-              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+              decoration: BoxDecoration(color: color),
               child: icon == null
                   ? null
                   : Icon(icon, color: foreground, size: 18),
@@ -3994,7 +3973,7 @@ class _ThemeColorButton extends StatelessWidget {
                     ? AppColors.accentForeground
                     : AppColors.textPrimary,
                 fontSize: 12,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -4079,7 +4058,7 @@ class _CustomThemeColorDialogState extends State<_CustomThemeColorDialog> {
             alignment: Alignment.center,
             decoration: BoxDecoration(
               color: _color,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.zero,
               border: Border.all(color: AppColors.border),
             ),
             child: Text(
@@ -4089,7 +4068,7 @@ class _CustomThemeColorDialogState extends State<_CustomThemeColorDialog> {
                     ? AppColors.textPrimary
                     : Colors.white,
                 fontSize: 14,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -4249,7 +4228,7 @@ class _HueSaturationPalettePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final rect = Offset.zero & size;
-    final shape = RRect.fromRectAndRadius(rect, const Radius.circular(6));
+    final shape = RRect.fromRectAndRadius(rect, Radius.zero);
     canvas.save();
     canvas.clipRRect(shape);
     canvas.drawRect(
@@ -4328,7 +4307,7 @@ class _ColorValuePainter extends CustomPainter {
       barWidth,
       size.height,
     );
-    final shape = RRect.fromRectAndRadius(rect, const Radius.circular(6));
+    final shape = RRect.fromRectAndRadius(rect, Radius.zero);
     canvas.drawRRect(
       shape,
       Paint()
@@ -4400,14 +4379,14 @@ class _ModeButton extends StatelessWidget {
         ? AppColors.accentForeground
         : scheme.onSurfaceVariant;
     return InkWell(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: selected
               ? AppColors.accent.withValues(alpha: 0.08)
               : scheme.surface,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           border: Border.all(color: border),
         ),
         child: SizedBox(
@@ -4425,7 +4404,7 @@ class _ModeButton extends StatelessWidget {
                   style: TextStyle(
                     color: foreground,
                     fontSize: 13,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -4454,7 +4433,7 @@ class _ScaleStepper extends StatelessWidget {
     return Container(
       height: 34,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(17),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
@@ -4473,7 +4452,7 @@ class _ScaleStepper extends StatelessWidget {
               '${(value * 100).round()}%',
               style: const TextStyle(
                 fontSize: 14,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -4565,7 +4544,7 @@ class _StepperIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: SizedBox(
         width: 34,
@@ -4591,7 +4570,7 @@ class _FontSizeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Expanded(
       child: InkWell(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.zero,
         onTap: onTap,
         child: Container(
           height: 32,
@@ -4600,7 +4579,7 @@ class _FontSizeButton extends StatelessWidget {
             color: selected
                 ? AppColors.accent.withValues(alpha: 0.08)
                 : AppColors.surface,
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.zero,
             border: Border.all(
               color: selected ? AppColors.accentForeground : AppColors.border,
             ),
@@ -4612,7 +4591,7 @@ class _FontSizeButton extends StatelessWidget {
                   ? AppColors.accentForeground
                   : AppColors.textPrimary,
               fontSize: 12,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -4679,7 +4658,7 @@ class _AnitabiServiceRow extends StatelessWidget {
                           style: TextStyle(
                             color: AppColors.textPrimary,
                             fontSize: 15,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             letterSpacing: 0,
                           ),
                         ),
@@ -4699,7 +4678,7 @@ class _AnitabiServiceRow extends StatelessWidget {
                               ? AppColors.textSecondary
                               : AppColors.accentForeground,
                           fontSize: 12,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
@@ -4734,7 +4713,7 @@ class _AnitabiServiceRow extends StatelessWidget {
                   style: TextStyle(
                     color: statusColor,
                     fontSize: 12,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -4768,7 +4747,7 @@ class _AnitabiServiceEntryRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6),
@@ -4787,7 +4766,7 @@ class _AnitabiServiceEntryRow extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 14,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -4828,7 +4807,7 @@ class _MapUrlRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 6),
@@ -4965,14 +4944,14 @@ class _CompactOptionChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 140),
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
         decoration: BoxDecoration(
           color: selected ? AppColors.accent : AppColors.surface,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           border: Border.all(
             color: selected ? AppColors.accentForeground : AppColors.border,
           ),
@@ -4991,7 +4970,7 @@ class _CompactOptionChip extends StatelessWidget {
               style: TextStyle(
                 color: selected ? AppColors.onAccent : AppColors.textPrimary,
                 fontSize: 13,
-                fontWeight: FontWeight.w900,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -5016,7 +4995,7 @@ class _MapSourceOptionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 140),
@@ -5024,7 +5003,7 @@ class _MapSourceOptionCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: selected ? AppColors.accent : AppColors.surface,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           border: Border.all(
             color: selected ? AppColors.accentForeground : AppColors.border,
           ),
@@ -5051,7 +5030,7 @@ class _MapSourceOptionCard extends StatelessWidget {
                           ? AppColors.onAccent
                           : AppColors.textPrimary,
                       fontSize: 13,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -5065,7 +5044,7 @@ class _MapSourceOptionCard extends StatelessWidget {
                           ? AppColors.onAccent.withValues(alpha: 0.82)
                           : AppColors.textSecondary,
                       fontSize: 11,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -5128,7 +5107,7 @@ class _NavigationAppOptionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 140),
@@ -5136,7 +5115,7 @@ class _NavigationAppOptionCard extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
         decoration: BoxDecoration(
           color: selected ? AppColors.accent : AppColors.surface,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           border: Border.all(
             color: selected ? AppColors.accentForeground : AppColors.border,
           ),
@@ -5163,7 +5142,7 @@ class _NavigationAppOptionCard extends StatelessWidget {
                           ? AppColors.onAccent
                           : AppColors.textPrimary,
                       fontSize: 13,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -5177,7 +5156,7 @@ class _NavigationAppOptionCard extends StatelessWidget {
                           ? AppColors.onAccent.withValues(alpha: 0.82)
                           : AppColors.textSecondary,
                       fontSize: 11,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -5301,7 +5280,7 @@ class _AboutInfoTile extends StatelessWidget {
       padding: const EdgeInsets.only(top: 10),
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         child: Row(
           children: [
             Icon(icon, color: AppColors.textSecondary, size: 20),
@@ -5388,15 +5367,8 @@ class _AppIconMark extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.surfaceMuted,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 12,
-            offset: const Offset(0, 5),
-          ),
-        ],
       ),
       child: Image.asset('icon.jpg', fit: BoxFit.cover),
     );
@@ -5416,30 +5388,19 @@ class _ThemeSwatch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = switch (palette) {
-      AppThemePalette.classicGreen => AppColors.classicGreen,
-      AppThemePalette.deepBlue => AppColors.deepBlue,
-      AppThemePalette.cherryPink => AppColors.cherryPink,
-      AppThemePalette.twilightPurple => AppColors.twilightPurple,
-      AppThemePalette.miriaYellow => AppColors.miriaYellow,
-      AppThemePalette.graphite => AppColors.graphite,
-      AppThemePalette.aurora => Color(
-        customColorValue ?? AppColors.customAccentValue,
-      ),
-    };
+    final color = AppColors.swatch(palette, customValue: customColorValue);
     return Container(
       width: selected ? 42 : 38,
       height: selected ? 42 : 38,
       padding: const EdgeInsets.all(4),
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
         border: Border.all(
           color: selected ? AppColors.accentForeground : AppColors.border,
           width: selected ? 2 : 1,
         ),
       ),
       child: DecoratedBox(
-        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        decoration: BoxDecoration(color: color),
         child: selected
             ? Icon(
                 LucideIcons.check,
@@ -5481,14 +5442,14 @@ class _InfoRow extends StatelessWidget {
 TextStyle get _cardTitleTextStyle => TextStyle(
   color: AppColors.textPrimary,
   fontSize: 16,
-  fontWeight: FontWeight.w900,
+  fontWeight: FontWeight.w600,
   letterSpacing: 0,
 );
 
 TextStyle get _titleTextStyle => TextStyle(
   color: AppColors.textPrimary,
   fontSize: 15,
-  fontWeight: FontWeight.w800,
+  fontWeight: FontWeight.w600,
   letterSpacing: 0,
 );
 
@@ -5498,7 +5459,7 @@ TextStyle get _secondaryTextStyle =>
 TextStyle get _captionTextStyle => TextStyle(
   color: AppColors.textSecondary,
   fontSize: 12,
-  fontWeight: FontWeight.w700,
+  fontWeight: FontWeight.w600,
   letterSpacing: 0,
 );
 

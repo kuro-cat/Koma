@@ -206,13 +206,6 @@ class MapMarkerClusterBadge extends StatelessWidget {
                       shape: BoxShape.circle,
                       color: coreColor,
                       border: Border.all(color: Colors.white, width: 2.5),
-                      boxShadow: const [
-                        BoxShadow(
-                          color: Color(0x33000000),
-                          blurRadius: 8,
-                          offset: Offset(0, 3),
-                        ),
-                      ],
                     ),
                     child: Text(
                       label,
@@ -224,7 +217,7 @@ class MapMarkerClusterBadge extends StatelessWidget {
                             ? Colors.white
                             : MapColors.onAccent,
                         fontSize: fontSize,
-                        fontWeight: FontWeight.w900,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0,
                       ),
                     ),
@@ -315,7 +308,7 @@ class MapOverlapPointPager extends StatelessWidget {
             style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 13,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),

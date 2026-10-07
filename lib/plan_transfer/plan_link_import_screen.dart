@@ -266,7 +266,7 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
                 style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 16,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -428,7 +428,7 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
             style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 15,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),

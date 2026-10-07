@@ -27,7 +27,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get commonClose => '关闭';
 
   @override
-  String get appLoading => '正在加载 MiriaGo...';
+  String get appLoading => '正在加载 Koma...';
 
   @override
   String get alignPhotoTitle => '对齐裁剪';
@@ -298,7 +298,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsDesktopSubtitle => '启动器、数据目录等';
 
   @override
-  String get settingsAboutTitle => '关于 MiriaGo';
+  String get settingsAboutTitle => '关于 Koma';
 
   @override
   String get settingsAboutSubtitle => '版本信息、开源许可等';
@@ -1408,12 +1408,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get pointManagerGroupManagement => '片区管理';
 
   @override
-  String get pointManagerCachingFullReferences => '正在缓存完整参考图';
-
-  @override
-  String get pointManagerCacheFullReferences => '缓存完整参考图';
-
-  @override
   String get pointManagerExitMultiSelect => '退出多选';
 
   @override
@@ -1510,25 +1504,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get pointManagerBatchResetFailed => '批量重置失败';
 
   @override
-  String get pointManagerNothingToCache => '当前计划没有需要缓存的参考图';
-
-  @override
-  String pointManagerCacheMessage(String countText) {
-    return '将缓存当前计划中 $countText完整参考图，可能需要较长时间和网络流量。';
-  }
-
-  @override
-  String pointManagerImageCount(int count) {
-    return '$count 张';
-  }
-
-  @override
-  String get pointManagerStartCache => '开始缓存';
-
-  @override
-  String get pointManagerCacheWifiNotice => '建议在 Wi-Fi 环境下进行缓存';
-
-  @override
   String get pointManagerGroupNameEmpty => '片区名不能为空';
 
   @override
@@ -1558,7 +1533,14 @@ class AppLocalizationsZh extends AppLocalizations {
   String get pointManagerChange => '更改';
 
   @override
-  String get pointManagerUnitSpots => '点位';
+  String pointManagerUnitSpots(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '点位',
+    );
+    return '$_temp0';
+  }
 
   @override
   String get pointManagerUnitCompleted => '完成';
@@ -2614,9 +2596,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planGroupManagerNameLabel => '片区名称';
 
   @override
-  String get planGroupManagerNewShort => '新建';
-
-  @override
   String planGroupManagerSummary(int groupCount, int pointCount) {
     return '$groupCount 个片区 · $pointCount 个点位';
   }
@@ -2744,24 +2723,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get pilgrimageModelsSubjectReal => '三次元';
-
-  @override
-  String get pilgrimageModelsPaletteClassicGreen => '经典绿';
-
-  @override
-  String get pilgrimageModelsPaletteDeepBlue => '深邃蓝';
-
-  @override
-  String get pilgrimageModelsPaletteCherryPink => '樱花粉';
-
-  @override
-  String get pilgrimageModelsPaletteTwilightPurple => '暮光紫';
-
-  @override
-  String get pilgrimageModelsPaletteMiriaYellow => '琵珀橙';
-
-  @override
-  String get pilgrimageModelsPaletteGraphite => '石墨黑';
 
   @override
   String get pilgrimageModelsPaletteCustom => '自定义';
@@ -3027,7 +2988,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get mainStartupFailed => 'MiriaGo 启动失败';
+  String get mainStartupFailed => 'Koma 启动失败';
 
   @override
   String get mainStartupFailedHint => '用户数据没有被删除。请重试，或打开日志目录查看 startup.log。';
@@ -3189,7 +3150,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get importExportImportSubtitleIos =>
-      '从文件、聊天、浏览器或网盘等位置用 MiriaGo 打开 .sjhplan。';
+      '从文件、聊天、浏览器或网盘等位置用 Koma 打开 .sjhplan。';
 
   @override
   String get importExportImportSubtitle => '选择 .sjhplan 文件，先预览内容再导入。';
@@ -3201,11 +3162,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get importExportOpenFromOtherApp => '从其他 App 打开 .sjhplan';
 
   @override
-  String get importExportImportFile => '导入 MiriaGo 文件';
+  String get importExportImportFile => '导入 Koma 文件';
 
   @override
   String get importExportOpenFromOtherAppSubtitle =>
-      '在文件、聊天、浏览器下载页或网盘中选择 .sjhplan，然后分享或用 MiriaGo 打开。';
+      '在文件、聊天、浏览器下载页或网盘中选择 .sjhplan，然后分享或用 Koma 打开。';
 
   @override
   String get importExportImportFileSubtitle => '支持 v2 数据包和旧版 v1 JSON 计划包。';
@@ -3218,7 +3179,7 @@ class AppLocalizationsZh extends AppLocalizations {
       '粘贴 GitHub 发布或 .sjhplan / .zip 下载链接，下载后预览导入。';
 
   @override
-  String get importExportPackageSection => 'MiriaGo 数据包';
+  String get importExportPackageSection => 'Koma 数据包';
 
   @override
   String get importExportPackageSubtitle =>
@@ -3241,11 +3202,11 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get importExportIosHelpMessage =>
-      '请在文件、聊天、浏览器下载页、网盘或其他保存位置找到 .sjhplan 文件，然后点开文件，或使用分享/更多菜单选择 MiriaGo。\n\nMiriaGo 收到文件后会自动进入导入预览页面。若列表里没有 MiriaGo，可以先把文件保存到“文件”App，再长按文件选择分享或打开方式。';
+      '请在文件、聊天、浏览器下载页、网盘或其他保存位置找到 .sjhplan 文件，然后点开文件，或使用分享/更多菜单选择 Koma。\n\nKoma 收到文件后会自动进入导入预览页面。若列表里没有 Koma，可以先把文件保存到“文件”App，再长按文件选择分享或打开方式。';
 
   @override
   String importExportShareText(String planName) {
-    return 'MiriaGo数据包：$planName';
+    return 'Koma数据包：$planName';
   }
 
   @override
@@ -3262,7 +3223,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String importExportMyMapsShareText(String planName) {
-    return 'MiriaGo My Maps CSV：$planName';
+    return 'Koma My Maps CSV：$planName';
   }
 
   @override
@@ -3354,7 +3315,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get importExportExportingButton => '导出中...';
 
   @override
-  String get importExportExportPackage => '导出 MiriaGo 数据包';
+  String get importExportExportPackage => '导出 Koma 数据包';
 
   @override
   String get importExportEstimating => '正在估算数据包大小...';
@@ -3515,7 +3476,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planLinkImportArchiveHasNoPlan => '压缩包里没有 .sjhplan 计划文件';
 
   @override
-  String get planLinkImportNotAPlanPackage => '下载的文件不是 MiriaGo 计划包';
+  String get planLinkImportNotAPlanPackage => '下载的文件不是 Koma 计划包';
 
   @override
   String get planLinkImportReadFailed => '读取失败，请重试';
@@ -3525,14 +3486,14 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get planLinkImportIntro =>
-      '粘贴 GitHub 发布页面或计划文件的下载链接，MiriaGo 会下载计划并打开导入预览。';
+      '粘贴 GitHub 发布页面或计划文件的下载链接，Koma 会下载计划并打开导入预览。';
 
   @override
   String get planLinkImportWebUnavailableTitle => '网页版无法直接下载';
 
   @override
   String get planLinkImportWebUnavailableSubtitle =>
-      '请先在浏览器中下载 .sjhplan 或 .zip，再回到“导入导出”，用“导入 MiriaGo 文件”导入。';
+      '请先在浏览器中下载 .sjhplan 或 .zip，再回到“导入导出”，用“导入 Koma 文件”导入。';
 
   @override
   String get planLinkImportLinkLabel => '链接';
@@ -3545,7 +3506,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get planLinkImportHelp =>
-      '支持：\n• GitHub 发布页面或仓库链接（自动列出最新发布中的计划文件）\n• GitHub 发布中的文件下载链接\n• 其他 https:// 开头的 .sjhplan 或 .zip 直链\n.zip 中可以带说明等其他文件，MiriaGo 只读取其中的 .sjhplan。下载会连接你输入的地址（以及它跳转到的下载服务器）；GitHub 发布或仓库链接还会向 api.github.com 查询发布中的文件。';
+      '支持：\n• GitHub 发布页面或仓库链接（自动列出最新发布中的计划文件）\n• GitHub 发布中的文件下载链接\n• 其他 https:// 开头的 .sjhplan 或 .zip 直链\n.zip 中可以带说明等其他文件，Koma 只读取其中的 .sjhplan。下载会连接你输入的地址（以及它跳转到的下载服务器）；GitHub 发布或仓库链接还会向 api.github.com 查询发布中的文件。';
 
   @override
   String get planLinkImportResolving => '正在查找发布中的计划文件…';
@@ -3631,7 +3592,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get planLinkServiceWebUnavailable =>
-      '网页版无法直接下载，请先下载文件，再用“导入 MiriaGo 文件”导入';
+      '网页版无法直接下载，请先下载文件，再用“导入 Koma 文件”导入';
 
   @override
   String incomingPlanFileTooLarge(String limit) {
@@ -4065,7 +4026,7 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get comparisonExportSupportShareText => 'MiriaGo 对比图';
+  String get comparisonExportSupportShareText => 'Koma 对比图';
 
   @override
   String get comparisonExportLoadSettingsFailed => '读取导出设置失败，请重试。';
@@ -4122,7 +4083,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get gallerySaveResultPermissionTitle => '需要相册权限';
 
   @override
-  String get gallerySaveResultPermissionSubtitle => '请在系统设置中允许 MiriaGo 添加照片。';
+  String get gallerySaveResultPermissionSubtitle => '请在系统设置中允许 Koma 添加照片。';
 
   @override
   String get gallerySaveResultSettings => '设置';
@@ -4482,7 +4443,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get imageViewerSaveFailed => '保存失败';
 
   @override
-  String get imageViewerShareText => 'MiriaGo 图片';
+  String get imageViewerShareText => 'Koma 图片';
 
   @override
   String get imageViewerSaveCanceled => '已取消保存';
@@ -5455,7 +5416,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get camerawesomeReferencePermissionBody =>
-      '请在系统设置中允许 MiriaGo 使用相机，用于拍摄巡礼照片。';
+      '请在系统设置中允许 Koma 使用相机，用于拍摄巡礼照片。';
 
   @override
   String get camerawesomeReferenceOpenSettings => '打开设置';
@@ -5468,7 +5429,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get camerawesomeReferenceUnavailableBody =>
-      '相机暂时无法使用，请稍后重试。如果问题持续，请重启 MiriaGo。';
+      '相机暂时无法使用，请稍后重试。如果问题持续，请重启 Koma。';
 
   @override
   String get addPointsPickWork => '查看点位';
@@ -5541,4 +5502,28 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get planManagerDeleteFailed => '删除计划失败，请重试';
+
+  @override
+  String get paletteFjord => '峡湾蓝';
+
+  @override
+  String get paletteSpruce => '云杉';
+
+  @override
+  String get paletteMoss => '苔绿';
+
+  @override
+  String get paletteLake => '湖蓝';
+
+  @override
+  String get paletteBark => '树皮';
+
+  @override
+  String get paletteOchre => '赭黄';
+
+  @override
+  String get paletteInk => '墨色';
+
+  @override
+  String get planAreaEmpty => '这个片区还没有点位，左右切换查看其他片区。';
 }

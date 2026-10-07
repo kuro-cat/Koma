@@ -34,7 +34,7 @@ class PilgrimageWorkCover extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         decoration: BoxDecoration(
           color: AppColors.surfaceMuted,
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.zero,
           border: Border.all(color: AppColors.border),
         ),
         child:

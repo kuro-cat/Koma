@@ -46,7 +46,7 @@ Future<void> showPlanGroupPickerSheet({
                               l10n.planGroupPickerTitle,
                               style: TextStyle(
                                 fontSize: 20,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w600,
                                 letterSpacing: 0,
                               ),
                             ),
@@ -155,7 +155,7 @@ class _PlanGroupPickerTile extends StatelessWidget {
         color: selected
             ? accentColor.withValues(alpha: 0.08)
             : Colors.transparent,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           key: ValueKey('plan-group-picker-option-${group.name}'),
@@ -177,24 +177,8 @@ class _PlanGroupPickerTile extends StatelessWidget {
                             color: accentColor.withValues(
                               alpha: selected ? 0.18 : 0.08,
                             ),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.zero,
                           ),
-                        ),
-                      ),
-                    ),
-                  ),
-                if (selected)
-                  Positioned(
-                    key: const ValueKey('plan-group-picker-selected-accent'),
-                    left: 0,
-                    top: 9,
-                    bottom: 9,
-                    child: Container(
-                      width: 4,
-                      decoration: BoxDecoration(
-                        color: accentColor,
-                        borderRadius: const BorderRadius.horizontal(
-                          right: Radius.circular(4),
                         ),
                       ),
                     ),
@@ -221,9 +205,7 @@ class _PlanGroupPickerTile extends StatelessWidget {
                                 child: DecoratedBox(
                                   decoration: BoxDecoration(
                                     color: accentColor,
-                                    borderRadius: const BorderRadius.vertical(
-                                      top: Radius.circular(2),
-                                    ),
+                                    borderRadius: BorderRadius.zero,
                                   ),
                                 ),
                               ),
@@ -238,7 +220,7 @@ class _PlanGroupPickerTile extends StatelessWidget {
                                   ),
                                   decoration: BoxDecoration(
                                     color: accentColor,
-                                    borderRadius: BorderRadius.circular(2),
+                                    borderRadius: BorderRadius.zero,
                                   ),
                                 ),
                               ),
@@ -288,7 +270,7 @@ class _PlanGroupPickerTile extends StatelessWidget {
                               style: TextStyle(
                                 color: AppColors.textPrimary,
                                 fontSize: 15,
-                                fontWeight: FontWeight.w700,
+                                fontWeight: FontWeight.w600,
                                 letterSpacing: 0,
                               ),
                             ),
@@ -318,7 +300,7 @@ class _PlanGroupPickerTile extends StatelessWidget {
                                 text: '/',
                                 style: const TextStyle(
                                   fontSize: 10,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w600,
                                   letterSpacing: 0,
                                 ),
                               ),
@@ -326,7 +308,7 @@ class _PlanGroupPickerTile extends StatelessWidget {
                                 text: '${group.points.length}',
                                 style: TextStyle(
                                   fontSize: emphasizeTotalCount ? 17 : 10,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w600,
                                   letterSpacing: 0,
                                 ),
                               ),
@@ -338,7 +320,7 @@ class _PlanGroupPickerTile extends StatelessWidget {
                                 ? AppColors.accentStrongForeground
                                 : AppColors.textSecondary,
                             fontSize: emphasizeTotalCount ? 10 : 17,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             letterSpacing: 0,
                           ),
                         ),
@@ -413,7 +395,7 @@ Future<String?> showPlanGroupSelectionSheet({
                           title,
                           style: const TextStyle(
                             fontSize: 18,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             letterSpacing: 0,
                           ),
                         ),
@@ -453,7 +435,7 @@ Future<String?> showPlanGroupSelectionSheet({
                         color: Colors.transparent,
                         child: InkWell(
                           key: const ValueKey('plan-point-group-create-entry'),
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.zero,
                           onTap: createOption,
                           child: SizedBox(
                             height: 46,
@@ -470,7 +452,7 @@ Future<String?> showPlanGroupSelectionSheet({
                                   style: TextStyle(
                                     color: AppColors.accentStrongForeground,
                                     fontSize: 14,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w600,
                                     letterSpacing: 0,
                                   ),
                                 ),
@@ -516,7 +498,7 @@ class _PlanGroupSelectionTileState extends State<_PlanGroupSelectionTile> {
       padding: const EdgeInsets.only(bottom: 2),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.zero,
         clipBehavior: Clip.antiAlias,
         child: MouseRegion(
           onEnter: (_) => setState(() => _hovered = true),
@@ -540,7 +522,7 @@ class _PlanGroupSelectionTileState extends State<_PlanGroupSelectionTile> {
                         : _hovered
                         ? AppColors.accent.withValues(alpha: 0.05)
                         : Colors.transparent,
-                    borderRadius: BorderRadius.circular(6),
+                    borderRadius: BorderRadius.zero,
                   ),
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8),

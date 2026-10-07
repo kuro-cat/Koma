@@ -1133,12 +1133,9 @@ class _AspectStageFrame extends StatelessWidget {
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: Colors.black,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.zero,
               ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: child,
-              ),
+              child: ClipRRect(borderRadius: BorderRadius.zero, child: child),
             ),
           ),
         );
@@ -2198,7 +2195,7 @@ class _ReferenceFrame extends StatelessWidget {
       margin: margin,
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.42),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: Colors.white24),
       ),
       clipBehavior: Clip.antiAlias,
@@ -2291,7 +2288,7 @@ class _LandscapeReferenceFrame extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.42),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: Colors.white24),
       ),
       clipBehavior: Clip.antiAlias,
@@ -2436,7 +2433,7 @@ class _LandscapeControlPanel extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.58),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: Colors.white12),
       ),
       child: Padding(
@@ -2480,7 +2477,7 @@ class _LandscapeCaptureRail extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: Colors.black.withValues(alpha: 0.58),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: Colors.white12),
       ),
       child: Padding(
@@ -2733,7 +2730,7 @@ class _ModeSelector extends StatelessWidget {
           padding: const EdgeInsets.all(2),
           decoration: BoxDecoration(
             color: Colors.white.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(compact ? 12 : 999),
+            borderRadius: BorderRadius.zero,
           ),
           child: Flex(
             direction: compact ? Axis.vertical : Axis.horizontal,
@@ -2812,9 +2809,7 @@ class _ModeIconButton extends StatelessWidget {
     return Tooltip(
       message: label,
       child: InkWell(
-        customBorder: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-        ),
+        customBorder: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         onTap: onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 140),
@@ -2824,7 +2819,7 @@ class _ModeIconButton extends StatelessWidget {
             color: selected
                 ? Colors.white
                 : Colors.white.withValues(alpha: 0.12),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.zero,
             border: Border.all(color: selected ? Colors.white : Colors.white24),
           ),
           child: Column(
@@ -2841,7 +2836,7 @@ class _ModeIconButton extends StatelessWidget {
                 style: TextStyle(
                   color: selected ? AppColors.textPrimary : Colors.white70,
                   fontSize: 10 * metrics.textScale,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -2872,7 +2867,7 @@ class _ModeChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       customBorder: compact
-          ? RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
+          ? RoundedRectangleBorder(borderRadius: BorderRadius.zero)
           : const StadiumBorder(),
       onTap: onTap,
       child: AnimatedContainer(
@@ -2881,7 +2876,7 @@ class _ModeChip extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: compact ? 6 : 12),
         decoration: BoxDecoration(
           color: selected ? Colors.white : Colors.transparent,
-          borderRadius: BorderRadius.circular(compact ? 10 : 999),
+          borderRadius: BorderRadius.zero,
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -2898,7 +2893,7 @@ class _ModeChip extends StatelessWidget {
               style: TextStyle(
                 color: selected ? AppColors.textPrimary : Colors.white70,
                 fontSize: 12,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -3187,7 +3182,7 @@ class _VerticalCameraSlider extends StatelessWidget {
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: 0.07),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.zero,
             ),
             child: Padding(
               padding: EdgeInsets.symmetric(
@@ -3204,7 +3199,7 @@ class _VerticalCameraSlider extends StatelessWidget {
                     style: const TextStyle(
                       color: Colors.white,
                       fontSize: 10,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -3393,7 +3388,7 @@ class _CameraButtonIcon extends StatelessWidget {
           style: const TextStyle(
             color: Colors.white,
             fontSize: 11,
-            fontWeight: FontWeight.w900,
+            fontWeight: FontWeight.w600,
             letterSpacing: 0,
           ),
         ),
@@ -3435,13 +3430,13 @@ class _GalleryImportButton extends StatelessWidget {
           backgroundColor: Colors.white.withValues(alpha: 0.12),
           minimumSize: Size(size + 34, size),
           padding: const EdgeInsets.symmetric(horizontal: 8),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         ),
         onPressed: onPressed,
         icon: Icon(LucideIcons.imagePlus, size: iconSize),
         label: Text(
           l10n.camerawesomeReferenceImport,
-          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w800),
+          style: const TextStyle(fontSize: 11, fontWeight: FontWeight.w600),
         ),
       ),
     );
@@ -3486,7 +3481,7 @@ class _SliderRow extends StatelessWidget {
             style: const TextStyle(
               color: Colors.white,
               fontSize: 12,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -3532,7 +3527,7 @@ class _WebCameraFallback extends StatelessWidget {
               margin: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: AppColors.surface,
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.zero,
                 border: Border.all(color: AppColors.border),
               ),
               clipBehavior: Clip.antiAlias,
@@ -3610,7 +3605,7 @@ class _FallbackTopBar extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
@@ -3629,7 +3624,7 @@ class _FallbackTopBar extends StatelessWidget {
               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -3709,7 +3704,7 @@ class _CameraPermissionDeniedMessage extends StatelessWidget {
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 17,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -3808,7 +3803,7 @@ class _NativeCameraUnavailableMessage extends StatelessWidget {
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 17,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),

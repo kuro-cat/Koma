@@ -268,7 +268,7 @@ class _AddWorkPanel extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: SizedBox(
@@ -325,10 +325,10 @@ class _AddWorkAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      borderRadius: BorderRadius.circular(6),
+      borderRadius: BorderRadius.zero,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.zero,
         child: SizedBox(
           height: 56,
           child: Padding(
@@ -349,7 +349,7 @@ class _AddWorkAction extends StatelessWidget {
                         style: TextStyle(
                           color: AppColors.textPrimary,
                           fontSize: 14,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
@@ -409,7 +409,7 @@ class _WorkManageCardState extends State<_WorkManageCard> {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
@@ -434,7 +434,7 @@ class _WorkManageCardState extends State<_WorkManageCard> {
                   },
                   style: const TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -473,23 +473,13 @@ class _WorkManageCardState extends State<_WorkManageCard> {
             padding: EdgeInsets.zero,
             position: PopupMenuPosition.under,
             offset: const Offset(0, 6),
-            elevation: 8,
-            shadowColor: Colors.black.withValues(alpha: 0.16),
-            color: AppColors.surface,
-            surfaceTintColor: Colors.transparent,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-              side: BorderSide(color: AppColors.border),
-            ),
-            constraints: const BoxConstraints(minWidth: 148, maxWidth: 180),
+            constraints: const BoxConstraints(minWidth: 200, maxWidth: 320),
             style: IconButton.styleFrom(
               minimumSize: const Size.square(34),
               maximumSize: const Size.square(34),
               padding: EdgeInsets.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(6),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
             onSelected: (_) => widget.onDelete(),
             itemBuilder: (context) => [
@@ -506,7 +496,7 @@ class _WorkManageCardState extends State<_WorkManageCard> {
                       l10n.workManagerDeleteWork,
                       style: TextStyle(
                         color: AppColors.error,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0,
                       ),
                     ),
@@ -602,7 +592,7 @@ class _WorkManageBadge extends StatelessWidget {
         color: emphasized
             ? AppColors.accent.withValues(alpha: 0.08)
             : AppColors.surfaceMuted,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.zero,
         border: Border.all(
           color: emphasized
               ? AppColors.accent.withValues(alpha: 0.42)
@@ -618,7 +608,7 @@ class _WorkManageBadge extends StatelessWidget {
               ? AppColors.accentStrongForeground
               : AppColors.textSecondary,
           fontSize: 11,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           letterSpacing: 0,
         ),
       ),
@@ -635,7 +625,7 @@ class _EmptyWorkPanel extends StatelessWidget {
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Column(
@@ -650,7 +640,7 @@ class _EmptyWorkPanel extends StatelessWidget {
                 style: TextStyle(
                   color: AppColors.accentStrongForeground,
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -721,7 +711,7 @@ class _WorkOnboardingStep extends StatelessWidget {
                     height: 10,
                     decoration: BoxDecoration(
                       color: AppColors.accent,
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.zero,
                     ),
                   ),
                 ),
@@ -740,7 +730,7 @@ class _WorkOnboardingStep extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 16,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),

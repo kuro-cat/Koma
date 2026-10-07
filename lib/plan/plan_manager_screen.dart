@@ -28,7 +28,7 @@ Widget _cleanPlanReorderProxy(
         color: Colors.transparent,
         shadowColor: Colors.black.withValues(alpha: 0.18),
         elevation: elevation,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         child: child,
       );
     },
@@ -329,7 +329,7 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
                     final plan = plans[index];
                     return Padding(
                       key: ValueKey('reorder-plan-${plan.id}'),
-                      padding: const EdgeInsets.only(bottom: 8),
+                      padding: EdgeInsets.zero,
                       child: _PlanCard(
                         plan: plan,
                         selected: plan.id == activePlan?.id,
@@ -458,18 +458,13 @@ class _PlanSectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 7),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: AppColors.textSecondary,
-          fontSize: 13,
-          height: 1.15,
-          fontWeight: FontWeight.w500,
-          letterSpacing: 0,
-        ),
+    // A caps name over the list's 2px ink top rule.
+    return Container(
+      padding: const EdgeInsets.only(bottom: 6),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.ink, width: 2)),
       ),
+      child: CapsLabel(label),
     );
   }
 }
@@ -537,14 +532,13 @@ class _PlanCardState extends State<_PlanCard> {
   Widget build(BuildContext context) {
     final plan = widget.plan;
     final selected = widget.selected;
-    final borderColor = selected ? AppColors.accent : AppColors.border;
     final works = _works(plan);
 
-    final cardColor = _cardHovered && !_actionHovered && !_menuOpen
-        ? Color.alphaBlend(
-            AppColors.accent.withValues(alpha: 0.035),
-            AppColors.surface,
-          )
+    // The current plan sits on the accent wash, as Tsumiki's current row.
+    final cardColor = selected
+        ? AppColors.accentWash
+        : _cardHovered && !_actionHovered && !_menuOpen
+        ? AppColors.surfaceMuted
         : AppColors.surface;
 
     return MouseRegion(
@@ -555,10 +549,7 @@ class _PlanCardState extends State<_PlanCard> {
         key: ValueKey('plan-card-${plan.id}'),
         color: cardColor,
         animationDuration: const Duration(milliseconds: 120),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: BorderSide(color: borderColor, width: selected ? 1.2 : 1),
-        ),
+        shape: Border(bottom: BorderSide(color: AppColors.divider)),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: selected ? null : widget.onSwitch,
@@ -591,7 +582,7 @@ class _PlanCardState extends State<_PlanCard> {
                           color: AppColors.textPrimary,
                           fontSize: 17,
                           height: 1.15,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
@@ -761,22 +752,6 @@ class _PlanCardState extends State<_PlanCard> {
                   ),
                 ),
               ),
-              if (selected)
-                Positioned(
-                  key: ValueKey('plan-card-selected-accent-${plan.id}'),
-                  left: 0,
-                  top: 9,
-                  bottom: 9,
-                  child: Container(
-                    width: 3,
-                    decoration: BoxDecoration(
-                      color: AppColors.accent,
-                      borderRadius: const BorderRadius.horizontal(
-                        right: Radius.circular(2),
-                      ),
-                    ),
-                  ),
-                ),
             ],
           ),
         ),
@@ -1031,8 +1006,7 @@ class _PlanMenuActionItemState extends State<_PlanMenuActionItem> {
         curve: Curves.easeOutCubic,
         decoration: BoxDecoration(
           color: _hovered ? AppColors.surfaceMuted : AppColors.surface,
-          borderRadius: BorderRadius.circular(8),
-          boxShadow: const [],
+          borderRadius: BorderRadius.zero,
         ),
         child: MenuItemButton(
           onPressed: widget.onPressed,
@@ -1043,7 +1017,7 @@ class _PlanMenuActionItemState extends State<_PlanMenuActionItem> {
               EdgeInsets.symmetric(horizontal: 14),
             ),
             shape: WidgetStatePropertyAll(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+              RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
             foregroundColor: WidgetStatePropertyAll(foregroundColor),
             iconColor: WidgetStatePropertyAll(foregroundColor),
@@ -1083,11 +1057,11 @@ class _PlanActionButton extends StatelessWidget {
           height: 34,
           child: Material(
             color: Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.zero,
             clipBehavior: Clip.antiAlias,
             child: InkWell(
               onTap: onPressed,
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.zero,
               hoverColor: AppColors.surfaceMuted,
               highlightColor: AppColors.surfaceMuted,
               splashColor: AppColors.accent.withValues(alpha: 0.08),
@@ -1183,7 +1157,7 @@ class _PlanWorkTag extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(6, 3, 7, 3),
       decoration: BoxDecoration(
         color: _backgroundColors[paletteIndex],
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.zero,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,

@@ -7,123 +7,133 @@ export 'widgets/keyboard_dismiss_on_tap.dart' show dismissKeyboardOnTapOutside;
 
 import 'plan/pilgrimage_models.dart';
 
+/// Koma's palette: Tsumiki's Fjord sea (light) and Night sea (dark) grounds,
+/// ink and rules, with one accent chosen in Settings from Tsumiki's colours.
 class AppColors {
   const AppColors._();
 
-  static AppThemePalette palette = AppThemePalette.classicGreen;
-  static int customAccentValue = 0xFF16C6A8;
+  static AppThemePalette palette = AppThemePalette.fjord;
+  static int customAccentValue = 0xFF2F6F80;
   static Brightness brightness = Brightness.light;
 
   static bool get isDark => brightness == Brightness.dark;
 
-  static const _lightBackground = Color(0xFFF7F8FA);
-  static const _darkBackground = Color(0xFF121417);
-  static const _lightSurface = Color(0xFFFFFFFF);
-  static const _darkSurface = Color(0xFF1C1C1E);
-  static const _lightSurfaceMuted = Color(0xFFEEF1F4);
-  static const _darkSurfaceMuted = Color(0xFF1C1C1E);
-  static const _lightTextPrimary = Color(0xFF111827);
-  static const _darkTextPrimary = Color(0xFFF3F4F6);
-  static const _lightTextSecondary = Color(0xFF5B6472);
-  static const _darkTextSecondary = Color(0xFF9CA3AF);
-  static const _lightBorder = Color(0xFFD8DEE6);
-  static const _darkBorder = Color(0xFF2C2C2E);
-  static const _lightWarning = Color(0xFFC87900);
-  static const _darkWarning = Color(0xFFE0A33A);
-  static const _lightError = Color(0xFFC2413A);
-  static const _darkError = Color(0xFFE56A64);
+  // Paper is the page ground, raise the ground of keys, fields and panels,
+  // paper-2 the pressed and quiet ground.
+  static const _lightPaper = Color(0xFFF2F5F5);
+  static const _darkPaper = Color(0xFF0F1A1C);
+  static const _lightRaise = Color(0xFFFBFCFC);
+  static const _darkRaise = Color(0xFF1C2D30);
+  static const _lightPaper2 = Color(0xFFE2E9EA);
+  static const _darkPaper2 = Color(0xFF172628);
+  static const _lightInk = Color(0xFF152022);
+  static const _darkInk = Color(0xFFE4ECEC);
+  static const _lightInk2 = Color(0xFF475759);
+  static const _darkInk2 = Color(0xFFA3B3B4);
+  static const _lightInk3 = Color(0xFF5D6D6F);
+  static const _darkInk3 = Color(0xFF8C9D9E);
+  static const _lightRule = Color(0xFFCBD5D7);
+  static const _darkRule = Color(0xFF2C4043);
+  static const _lightRule2 = Color(0xFFDDE5E6);
+  static const _darkRule2 = Color(0xFF223436);
+  static const _lightRed = Color(0xFFC24A3C);
+  static const _darkRed = Color(0xFFE07A6E);
+  static const _lightOchre = Color(0xFF855F0E);
+  static const _darkOchre = Color(0xFFD8AD4C);
 
-  static Color get background => isDark ? _darkBackground : _lightBackground;
-  static Color get surface => isDark ? _darkSurface : _lightSurface;
-  static Color get surfaceMuted =>
-      isDark ? _darkSurfaceMuted : _lightSurfaceMuted;
-  static Color get textPrimary => isDark ? _darkTextPrimary : _lightTextPrimary;
-  static Color get textSecondary =>
-      isDark ? _darkTextSecondary : _lightTextSecondary;
-  static Color get border => isDark ? _darkBorder : _lightBorder;
-  static Color get warning => isDark ? _darkWarning : _lightWarning;
-  static Color get error => isDark ? _darkError : _lightError;
+  static Color get background => isDark ? _darkPaper : _lightPaper;
+  static Color get surface => isDark ? _darkRaise : _lightRaise;
+  static Color get surfaceMuted => isDark ? _darkPaper2 : _lightPaper2;
+  static Color get textPrimary => isDark ? _darkInk : _lightInk;
+  static Color get textSecondary => isDark ? _darkInk2 : _lightInk2;
 
-  static const miriaYellow = Color(0xFFFFCE00);
-  static const miriaYellowDark = Color(0xFFB77C00);
-  static const classicGreen = Color(0xFF0F8B8D);
-  static const classicGreenDark = Color(0xFF0B6F72);
-  static const deepBlue = Color(0xFF1C2B78);
-  static const deepBlueDark = Color(0xFF111B52);
-  static const cherryPink = Color(0xFFF45B9A);
-  static const cherryPinkDark = Color(0xFFB72665);
-  static const twilightPurple = Color(0xFF8753C7);
-  static const twilightPurpleDark = Color(0xFF5D3495);
-  static const graphite = Color(0xFF0C0D10);
-  static const graphiteDark = Color(0xFF000000);
-  static const aurora = Color(0xFF16C6A8);
-  static const auroraDark = Color(0xFF0A7E83);
-  static const cameraDarkSurface = Color(0xFF101418);
-  static const cameraDarkOverlay = Color(0xFF171C21);
+  /// Placeholders, disabled text and drag grips.
+  static Color get textTertiary => isDark ? _darkInk3 : _lightInk3;
 
+  /// Field edges and the sides of lists.
+  static Color get border => isDark ? _darkRule : _lightRule;
+
+  /// Row dividers and column seams.
+  static Color get divider => isDark ? _darkRule2 : _lightRule2;
+
+  /// Structural lines: frames of keys and panels, rules over lists.
+  static Color get ink => textPrimary;
+  static Color get warning => isDark ? _darkOchre : _lightOchre;
+  static Color get error => isDark ? _darkRed : _lightRed;
+
+  /// The swatch shown for [palette] in Settings, in the current theme.
+  static Color swatch(AppThemePalette palette, {int? customValue}) {
+    if (palette == AppThemePalette.custom) {
+      return Color(customValue ?? customAccentValue);
+    }
+    final (light, dark) = _accents[palette]!;
+    return isDark ? dark : light;
+  }
+
+  static const _accents = {
+    AppThemePalette.fjord: (Color(0xFF2F6F80), Color(0xFF6FB3C4)),
+    AppThemePalette.spruce: (Color(0xFF2F6B5C), Color(0xFF7DBFAE)),
+    AppThemePalette.moss: (Color(0xFF4D6A2C), Color(0xFF9FC27F)),
+    AppThemePalette.lake: (Color(0xFF3A5F8F), Color(0xFF8FB3DE)),
+    AppThemePalette.bark: (Color(0xFF7A5536), Color(0xFFCFA47E)),
+    AppThemePalette.ochre: (Color(0xFF855F0E), Color(0xFFD8AD4C)),
+    AppThemePalette.ink: (_lightInk, _darkInk),
+  };
+
+  /// The one colour that acts: primary keys, text actions, selection,
+  /// progress. Every palette passes 4.5:1 as text on paper and raise.
   static Color get accent {
-    if (isDark && palette == AppThemePalette.graphite) {
-      return const Color(0xFFD1D5DB);
+    if (palette == AppThemePalette.custom) {
+      final custom = Color(customAccentValue);
+      return isDark ? _readableAccent(custom) : _deepenForText(custom);
     }
-    return switch (palette) {
-      AppThemePalette.classicGreen => classicGreen,
-      AppThemePalette.deepBlue => deepBlue,
-      AppThemePalette.cherryPink => cherryPink,
-      AppThemePalette.twilightPurple => twilightPurple,
-      AppThemePalette.miriaYellow => miriaYellow,
-      AppThemePalette.graphite => graphite,
-      AppThemePalette.aurora => Color(customAccentValue),
-    };
+    return swatch(palette);
   }
 
+  /// The pressed state of [accent].
   static Color get accentDark {
-    if (isDark && palette == AppThemePalette.graphite) {
-      return const Color(0xFF9CA3AF);
-    }
-    return switch (palette) {
-      AppThemePalette.classicGreen => classicGreenDark,
-      AppThemePalette.deepBlue => deepBlueDark,
-      AppThemePalette.cherryPink => cherryPinkDark,
-      AppThemePalette.twilightPurple => twilightPurpleDark,
-      AppThemePalette.miriaYellow => miriaYellowDark,
-      AppThemePalette.graphite => graphiteDark,
-      AppThemePalette.aurora => _darken(Color(customAccentValue)),
-    };
+    final hsl = HSLColor.fromColor(accent);
+    final lightness = isDark
+        ? (hsl.lightness + 0.08).clamp(0.0, 1.0)
+        : (hsl.lightness * 0.8).clamp(0.0, 1.0);
+    return hsl.withLightness(lightness).toColor();
   }
 
-  static Color get onAccent {
-    if (isDark) return foregroundOn(accent);
-    return switch (palette) {
-      AppThemePalette.classicGreen => Colors.white,
-      AppThemePalette.deepBlue => Colors.white,
-      AppThemePalette.cherryPink => Colors.white,
-      AppThemePalette.twilightPurple => Colors.white,
-      AppThemePalette.miriaYellow => _lightTextPrimary,
-      AppThemePalette.graphite => isDark ? _lightTextPrimary : Colors.white,
-      AppThemePalette.aurora => _foregroundFor(Color(customAccentValue)),
-    };
-  }
+  /// Text and icons on an [accent] fill.
+  static Color get onAccent => foregroundOn(accent);
+
+  /// The accent's quiet ground: checked chips, the current row, washes.
+  static Color get accentWash =>
+      Color.alphaBlend(accent.withValues(alpha: isDark ? 0.18 : 0.11), surface);
 
   /// Foregrounds on neutral or lightly tinted surfaces, not brand fills.
   static Color get accentForeground => _readableAccent(accent);
   static Color get accentStrongForeground => _readableAccent(accentDark);
 
   static Color _readableAccent(Color color) {
-    if (!isDark) return color;
-    final surfaces = [
-      background,
-      surface,
-      surfaceMuted,
-      Color.alphaBlend(accent.withValues(alpha: 0.16), surface),
-    ];
+    final surfaces = [background, surface, surfaceMuted, accentWashFor(color)];
     final opaque = color.withValues(alpha: 1);
+    final target = isDark ? Colors.white : Colors.black;
     for (var step = 0; step <= 20; step++) {
-      final candidate = Color.lerp(opaque, Colors.white, step / 20)!;
+      final candidate = Color.lerp(opaque, target, step / 20)!;
       if (surfaces.every((surface) => _contrast(candidate, surface) >= 4.5)) {
         return candidate;
       }
     }
-    return Colors.white;
+    return target;
+  }
+
+  static Color accentWashFor(Color color) =>
+      Color.alphaBlend(color.withValues(alpha: isDark ? 0.18 : 0.11), surface);
+
+  /// A custom colour darkened until it reads as text on the light ground.
+  static Color _deepenForText(Color color) {
+    final opaque = color.withValues(alpha: 1);
+    for (var step = 0; step <= 20; step++) {
+      final candidate = Color.lerp(opaque, _lightInk, step / 20)!;
+      if (_contrast(candidate, _lightPaper) >= 4.5) return candidate;
+    }
+    return _lightInk;
   }
 
   static double _contrast(Color a, Color b) {
@@ -133,19 +143,13 @@ class AppColors {
 
   static Color foregroundOn(Color fill) {
     final opaque = Color.alphaBlend(fill, surface);
-    return _contrast(Colors.white, opaque) >= _contrast(Colors.black, opaque)
+    return _contrast(Colors.white, opaque) >= _contrast(_darkPaper, opaque)
         ? Colors.white
-        : Colors.black;
+        : _darkPaper;
   }
 
-  static Color _darken(Color color) {
-    final hsl = HSLColor.fromColor(color);
-    return hsl.withLightness((hsl.lightness * 0.72).clamp(0.0, 1.0)).toColor();
-  }
-
-  static Color _foregroundFor(Color color) {
-    return color.computeLuminance() > 0.55 ? _lightTextPrimary : Colors.white;
-  }
+  static const cameraDarkSurface = Color(0xFF0F1A1C);
+  static const cameraDarkOverlay = Color(0xFF1C2D30);
 }
 
 /// Settings chrome uses a 1px *gap* over a filled [AppColors.border] parent
@@ -176,8 +180,8 @@ class AppTheme {
   static const double appBarHeight = kToolbarHeight;
 
   static ThemeData light({
-    AppThemePalette palette = AppThemePalette.classicGreen,
-    int customAccentValue = 0xFF16C6A8,
+    AppThemePalette palette = AppThemePalette.fjord,
+    int customAccentValue = 0xFF2F6F80,
   }) {
     return of(
       brightness: Brightness.light,
@@ -187,8 +191,8 @@ class AppTheme {
   }
 
   static ThemeData dark({
-    AppThemePalette palette = AppThemePalette.classicGreen,
-    int customAccentValue = 0xFF16C6A8,
+    AppThemePalette palette = AppThemePalette.fjord,
+    int customAccentValue = 0xFF2F6F80,
   }) {
     return of(
       brightness: Brightness.dark,
@@ -199,207 +203,518 @@ class AppTheme {
 
   static ThemeData of({
     required Brightness brightness,
-    AppThemePalette palette = AppThemePalette.classicGreen,
-    int customAccentValue = 0xFF16C6A8,
+    AppThemePalette palette = AppThemePalette.fjord,
+    int customAccentValue = 0xFF2F6F80,
   }) {
     AppColors.brightness = brightness;
     AppColors.palette = palette;
     AppColors.customAccentValue = customAccentValue;
+    final ink = AppColors.ink;
+    final paper = AppColors.background;
+    final raise = AppColors.surface;
+    final accent = AppColors.accent;
     final colorScheme = ColorScheme(
       brightness: brightness,
-      primary: AppColors.accent,
+      primary: accent,
       onPrimary: AppColors.onAccent,
-      secondary: AppColors.accentDark,
-      onSecondary: Colors.white,
+      primaryContainer: AppColors.accentWash,
+      onPrimaryContainer: ink,
+      secondary: accent,
+      onSecondary: AppColors.onAccent,
+      secondaryContainer: AppColors.accentWash,
+      onSecondaryContainer: ink,
       error: AppColors.error,
-      onError: Colors.white,
-      surface: AppColors.surface,
-      onSurface: AppColors.textPrimary,
+      onError: AppColors.foregroundOn(AppColors.error),
+      surface: raise,
+      onSurface: ink,
       onSurfaceVariant: AppColors.textSecondary,
       outline: AppColors.border,
-      outlineVariant: AppColors.border,
-      surfaceContainerLowest: AppColors.background,
-      surfaceContainerLow: AppColors.surface,
-      surfaceContainer: AppColors.surface,
-      surfaceContainerHigh: AppColors.surfaceMuted,
+      outlineVariant: AppColors.divider,
+      surfaceTint: Colors.transparent,
+      shadow: Colors.transparent,
+      surfaceContainerLowest: paper,
+      surfaceContainerLow: raise,
+      surfaceContainer: raise,
+      surfaceContainerHigh: raise,
       surfaceContainerHighest: AppColors.surfaceMuted,
-      inverseSurface: AppColors.textPrimary,
-      onInverseSurface: AppColors.background,
+      inverseSurface: ink,
+      onInverseSurface: paper,
       inversePrimary: AppColors.accentDark,
     );
 
+    final textTheme = _textTheme(ink);
     final base = ThemeData(
       useMaterial3: true,
       brightness: brightness,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: AppColors.background,
-      fontFamily: null,
+      scaffoldBackgroundColor: paper,
+      fontFamily: AppType.family,
+      textTheme: textTheme,
+      splashFactory: NoSplash.splashFactory,
+      shadowColor: Colors.transparent,
     );
+
+    // Keys: square, framed in ink on raise, inverting to ink when pressed.
+    final keyBackground = WidgetStateProperty.resolveWith<Color?>((states) {
+      if (states.contains(WidgetState.disabled)) return AppColors.surfaceMuted;
+      if (states.contains(WidgetState.pressed)) return ink;
+      return raise;
+    });
+    final keyForeground = WidgetStateProperty.resolveWith<Color?>((states) {
+      if (states.contains(WidgetState.disabled)) return AppColors.textTertiary;
+      if (states.contains(WidgetState.pressed)) return paper;
+      return ink;
+    });
+    final keySide = WidgetStateProperty.resolveWith<BorderSide?>((states) {
+      if (states.contains(WidgetState.disabled)) {
+        return BorderSide(color: AppColors.border);
+      }
+      return BorderSide(color: ink);
+    });
+    final primaryBackground = WidgetStateProperty.resolveWith<Color?>((states) {
+      if (states.contains(WidgetState.disabled)) return AppColors.surfaceMuted;
+      if (states.contains(WidgetState.pressed)) return ink;
+      return accent;
+    });
+    final primaryForeground = WidgetStateProperty.resolveWith<Color?>((states) {
+      if (states.contains(WidgetState.disabled)) return AppColors.textTertiary;
+      if (states.contains(WidgetState.pressed)) return paper;
+      return AppColors.onAccent;
+    });
+    const square = WidgetStatePropertyAll<OutlinedBorder>(
+      RoundedRectangleBorder(),
+    );
+    const noOverlay = WidgetStatePropertyAll<Color?>(Colors.transparent);
+    final controlText = WidgetStatePropertyAll<TextStyle?>(
+      textTheme.labelLarge,
+    );
+    const keySize = WidgetStatePropertyAll<Size?>(Size(48, 48));
+    const keyPadding = WidgetStatePropertyAll<EdgeInsetsGeometry?>(
+      EdgeInsets.symmetric(horizontal: 16),
+    );
+    const flat = WidgetStatePropertyAll<double?>(0);
+
+    final framed = BorderSide(color: ink);
+    final quietEdge = BorderSide(color: AppColors.border);
 
     return base.copyWith(
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.background,
-        foregroundColor: AppColors.textPrimary,
+        backgroundColor: paper,
+        foregroundColor: ink,
         elevation: 0,
+        scrolledUnderElevation: 0,
+        surfaceTintColor: Colors.transparent,
         toolbarHeight: AppTheme.appBarHeight,
         centerTitle: false,
+        shape: Border(bottom: BorderSide(color: ink)),
         systemOverlayStyle: brightness == Brightness.dark
             ? SystemUiOverlayStyle.light
             : SystemUiOverlayStyle.dark,
-        titleTextStyle: TextStyle(
-          color: AppColors.textPrimary,
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0,
-        ),
+        titleTextStyle: textTheme.titleLarge,
       ),
-      iconTheme: IconThemeData(color: AppColors.textPrimary),
+      iconTheme: IconThemeData(color: ink),
       listTileTheme: ListTileThemeData(
         iconColor: AppColors.textSecondary,
-        textColor: AppColors.textPrimary,
+        textColor: ink,
+        shape: const RoundedRectangleBorder(),
       ),
-      textTheme: base.textTheme.apply(
-        bodyColor: AppColors.textPrimary,
-        displayColor: AppColors.textPrimary,
-      ),
-      dividerColor: AppColors.border,
+      dividerColor: AppColors.divider,
       filledButtonTheme: FilledButtonThemeData(
-        style: FilledButton.styleFrom(
-          backgroundColor: AppColors.accent,
-          foregroundColor: AppColors.onAccent,
-          disabledBackgroundColor: AppColors.surfaceMuted,
-          disabledForegroundColor: AppColors.textSecondary,
-          minimumSize: const Size(44, 44),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          textStyle: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0,
-          ),
+        style: ButtonStyle(
+          backgroundColor: primaryBackground,
+          foregroundColor: primaryForeground,
+          overlayColor: noOverlay,
+          shape: square,
+          minimumSize: keySize,
+          padding: keyPadding,
+          textStyle: controlText,
+          elevation: flat,
         ),
       ),
       outlinedButtonTheme: OutlinedButtonThemeData(
-        style: OutlinedButton.styleFrom(
-          foregroundColor: AppColors.textPrimary,
-          minimumSize: const Size(44, 44),
-          side: BorderSide(color: AppColors.border),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          textStyle: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0,
-          ),
+        style: ButtonStyle(
+          backgroundColor: keyBackground,
+          foregroundColor: keyForeground,
+          side: keySide,
+          overlayColor: noOverlay,
+          shape: square,
+          minimumSize: keySize,
+          padding: keyPadding,
+          textStyle: controlText,
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: keyBackground,
+          foregroundColor: keyForeground,
+          side: keySide,
+          overlayColor: noOverlay,
+          shape: square,
+          minimumSize: keySize,
+          padding: keyPadding,
+          textStyle: controlText,
+          elevation: flat,
         ),
       ),
       textButtonTheme: TextButtonThemeData(
-        style: TextButton.styleFrom(
-          foregroundColor: AppColors.accentStrongForeground,
-          minimumSize: const Size(44, 44),
-          textStyle: const TextStyle(
-            fontSize: 15,
-            fontWeight: FontWeight.w700,
-            letterSpacing: 0,
+        style: ButtonStyle(
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) {
+              return AppColors.textTertiary;
+            }
+            return AppColors.accentForeground;
+          }),
+          overlayColor: WidgetStatePropertyAll(AppColors.accentWash),
+          shape: square,
+          minimumSize: keySize,
+          padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(horizontal: 10),
           ),
+          textStyle: controlText,
         ),
       ),
       iconButtonTheme: IconButtonThemeData(
-        style: IconButton.styleFrom(
-          foregroundColor: AppColors.textPrimary,
-          minimumSize: const Size(44, 44),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        ),
-      ),
-      popupMenuTheme: PopupMenuThemeData(
-        color: AppColors.surface,
-        surfaceTintColor: Colors.transparent,
-        elevation: 8,
-        shadowColor: Colors.black.withValues(alpha: 0.16),
-        menuPadding: const EdgeInsets.symmetric(vertical: 4),
-        position: PopupMenuPosition.under,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
-          side: BorderSide(color: AppColors.border),
-        ),
-        textStyle: TextStyle(
-          color: AppColors.textPrimary,
-          fontSize: 14,
-          fontWeight: FontWeight.w600,
-          letterSpacing: 0,
-        ),
-      ),
-      menuTheme: MenuThemeData(
-        style: MenuStyle(
-          backgroundColor: WidgetStatePropertyAll(AppColors.surface),
-          surfaceTintColor: const WidgetStatePropertyAll(Colors.transparent),
-          elevation: const WidgetStatePropertyAll(8),
-          shadowColor: WidgetStatePropertyAll(
-            Colors.black.withValues(alpha: 0.16),
-          ),
-          padding: const WidgetStatePropertyAll(
-            EdgeInsets.symmetric(vertical: 4),
-          ),
-          side: WidgetStatePropertyAll(BorderSide(color: AppColors.border)),
-          shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-          ),
-        ),
-      ),
-      menuButtonTheme: MenuButtonThemeData(
         style: ButtonStyle(
-          foregroundColor: WidgetStatePropertyAll(AppColors.textPrimary),
-          minimumSize: const WidgetStatePropertyAll(Size(0, 44)),
-          padding: const WidgetStatePropertyAll(
-            EdgeInsets.symmetric(horizontal: 12),
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.disabled)) {
+              return AppColors.textTertiary;
+            }
+            return ink;
+          }),
+          overlayColor: WidgetStatePropertyAll(AppColors.surfaceMuted),
+          shape: square,
+          minimumSize: keySize,
+        ),
+      ),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          backgroundColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected) ? ink : raise,
           ),
-          textStyle: const WidgetStatePropertyAll(
-            TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0,
-            ),
+          foregroundColor: WidgetStateProperty.resolveWith(
+            (states) => states.contains(WidgetState.selected)
+                ? paper
+                : AppColors.textSecondary,
           ),
-          shape: WidgetStatePropertyAll(
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-          ),
+          side: WidgetStatePropertyAll(framed),
+          overlayColor: noOverlay,
+          shape: square,
+          textStyle: controlText,
+        ),
+      ),
+      floatingActionButtonTheme: FloatingActionButtonThemeData(
+        backgroundColor: accent,
+        foregroundColor: AppColors.onAccent,
+        elevation: 0,
+        focusElevation: 0,
+        hoverElevation: 0,
+        highlightElevation: 0,
+        shape: const RoundedRectangleBorder(),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: raise,
+        selectedColor: AppColors.accentWash,
+        disabledColor: AppColors.surfaceMuted,
+        side: WidgetStateBorderSide.resolveWith(
+          (states) =>
+              states.contains(WidgetState.selected) ? framed : quietEdge,
+        ),
+        shape: const RoundedRectangleBorder(),
+        labelStyle: textTheme.labelLarge,
+        showCheckmark: false,
+        elevation: 0,
+        pressElevation: 0,
+      ),
+      inputDecorationTheme: InputDecorationTheme(
+        filled: true,
+        fillColor: raise,
+        hintStyle: textTheme.bodyLarge?.copyWith(color: AppColors.textTertiary),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.zero,
+          borderSide: quietEdge,
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.zero,
+          borderSide: quietEdge,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.zero,
+          borderSide: BorderSide(color: ink, width: 2),
+        ),
+        errorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.zero,
+          borderSide: BorderSide(color: AppColors.error),
+        ),
+        focusedErrorBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.zero,
+          borderSide: BorderSide(color: AppColors.error, width: 2),
+        ),
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: accent,
+        selectionColor: accent.withValues(alpha: 0.28),
+        selectionHandleColor: accent,
+      ),
+      checkboxTheme: CheckboxThemeData(
+        shape: const RoundedRectangleBorder(),
+        side: BorderSide(color: ink, width: 1.5),
+        fillColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? accent
+              : Colors.transparent,
+        ),
+        checkColor: WidgetStatePropertyAll(AppColors.onAccent),
+      ),
+      radioTheme: RadioThemeData(
+        fillColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected) ? accent : ink,
         ),
       ),
       // A white knob on the accent track in both modes; the default uses the
-      // on-accent color, which is black on the dark-mode accent.
+      // on-accent colour, which is near-black on the dark-mode accent.
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith(
           (states) =>
-              states.contains(WidgetState.selected) ? Colors.white : null,
+              states.contains(WidgetState.selected) ? Colors.white : ink,
+        ),
+        trackColor: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? accent
+              : AppColors.surfaceMuted,
+        ),
+        trackOutlineColor: WidgetStateProperty.resolveWith(
+          (states) =>
+              states.contains(WidgetState.selected) ? accent : AppColors.border,
         ),
       ),
       sliderTheme: base.sliderTheme.copyWith(
-        activeTrackColor: AppColors.accent,
-        inactiveTrackColor: AppColors.border,
-        thumbColor: AppColors.accent,
-        overlayColor: AppColors.accent.withValues(alpha: 0.12),
+        trackHeight: 4,
+        activeTrackColor: accent,
+        inactiveTrackColor: AppColors.surfaceMuted,
+        thumbColor: ink,
+        overlayColor: accent.withValues(alpha: 0.12),
+        thumbShape: const _SquareThumbShape(),
+        trackShape: const RectangularSliderTrackShape(),
+        tickMarkShape: SliderTickMarkShape.noTickMark,
+        valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
+        valueIndicatorColor: ink,
+        valueIndicatorTextStyle: textTheme.labelLarge?.copyWith(color: paper),
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: accent,
+        linearTrackColor: AppColors.surfaceMuted,
+        circularTrackColor: Colors.transparent,
       ),
       snackBarTheme: const SnackBarThemeData(
         backgroundColor: Colors.transparent,
         elevation: 0,
         behavior: SnackBarBehavior.floating,
       ),
+      tooltipTheme: TooltipThemeData(
+        decoration: BoxDecoration(color: ink),
+        textStyle: textTheme.labelMedium?.copyWith(color: paper),
+      ),
       dialogTheme: DialogThemeData(
-        backgroundColor: AppColors.surface,
+        backgroundColor: raise,
         surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        shape: RoundedRectangleBorder(side: framed),
+        titleTextStyle: textTheme.titleMedium,
+        contentTextStyle: textTheme.bodyMedium,
       ),
       bottomSheetTheme: BottomSheetThemeData(
-        backgroundColor: AppColors.surface,
+        backgroundColor: raise,
         surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        modalElevation: 0,
+        shape: Border(top: framed),
+        dragHandleColor: AppColors.border,
+        dragHandleSize: const Size(36, 4),
+      ),
+      cardTheme: CardThemeData(
+        color: raise,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        margin: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(side: quietEdge),
+      ),
+      popupMenuTheme: PopupMenuThemeData(
+        color: raise,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        menuPadding: EdgeInsets.zero,
+        position: PopupMenuPosition.under,
+        shape: RoundedRectangleBorder(side: framed),
+        textStyle: textTheme.labelLarge,
+      ),
+      menuTheme: MenuThemeData(
+        style: MenuStyle(
+          backgroundColor: WidgetStatePropertyAll(raise),
+          surfaceTintColor: const WidgetStatePropertyAll(Colors.transparent),
+          elevation: flat,
+          padding: const WidgetStatePropertyAll(EdgeInsets.zero),
+          side: WidgetStatePropertyAll(framed),
+          shape: square,
+        ),
+      ),
+      menuButtonTheme: MenuButtonThemeData(
+        style: ButtonStyle(
+          foregroundColor: WidgetStatePropertyAll(ink),
+          overlayColor: WidgetStatePropertyAll(AppColors.accentWash),
+          minimumSize: const WidgetStatePropertyAll(Size(0, 48)),
+          padding: const WidgetStatePropertyAll(
+            EdgeInsets.symmetric(horizontal: 14),
+          ),
+          textStyle: controlText,
+          shape: square,
+        ),
       ),
       navigationBarTheme: NavigationBarThemeData(
-        backgroundColor: AppColors.surface,
-        indicatorColor: AppColors.accent,
+        backgroundColor: raise,
         surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        indicatorColor: ink,
+        indicatorShape: const RoundedRectangleBorder(),
+        iconTheme: WidgetStateProperty.resolveWith(
+          (states) => IconThemeData(
+            color: states.contains(WidgetState.selected)
+                ? paper
+                : AppColors.textSecondary,
+          ),
+        ),
+        labelTextStyle: WidgetStateProperty.resolveWith(
+          (states) => states.contains(WidgetState.selected)
+              ? textTheme.labelMedium?.copyWith(
+                  color: ink,
+                  fontWeight: FontWeight.w600,
+                )
+              : textTheme.labelMedium?.copyWith(color: AppColors.textSecondary),
+        ),
+      ),
+      tabBarTheme: TabBarThemeData(
+        labelColor: ink,
+        unselectedLabelColor: AppColors.textSecondary,
+        labelStyle: textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w600),
+        unselectedLabelStyle: textTheme.labelLarge,
+        indicator: UnderlineTabIndicator(
+          borderSide: BorderSide(color: ink, width: 3),
+          borderRadius: BorderRadius.zero,
+        ),
+        dividerColor: ink,
+        dividerHeight: 1,
+        overlayColor: noOverlay,
+      ),
+      scrollbarTheme: ScrollbarThemeData(
+        radius: Radius.zero,
+        thumbColor: WidgetStatePropertyAll(AppColors.textTertiary),
       ),
       dividerTheme: DividerThemeData(
-        color: AppColors.border,
+        color: AppColors.divider,
         space: 1,
         thickness: 1,
       ),
+    );
+  }
+
+  /// Tsumiki's type scale on Material's roles, with tabular numbers.
+  static TextTheme _textTheme(Color ink) {
+    const tabular = [FontFeature.tabularFigures()];
+    TextStyle style(double size, FontWeight weight, {double tracking = 0}) =>
+        TextStyle(
+          fontFamily: AppType.family,
+          fontSize: size,
+          fontWeight: weight,
+          letterSpacing: tracking,
+          color: ink,
+          fontFeatures: tabular,
+        );
+    return TextTheme(
+      displayLarge: style(44, FontWeight.w600, tracking: -1.3),
+      displayMedium: style(38, FontWeight.w600, tracking: -1.1),
+      displaySmall: style(32, FontWeight.w600, tracking: -0.8),
+      headlineLarge: style(30, FontWeight.w600, tracking: -0.6),
+      headlineMedium: style(26, FontWeight.w600, tracking: -0.5),
+      headlineSmall: style(22, FontWeight.w600, tracking: -0.3),
+      titleLarge: style(20, FontWeight.w600, tracking: -0.2),
+      titleMedium: style(18, FontWeight.w600, tracking: -0.2),
+      titleSmall: style(15, FontWeight.w600),
+      bodyLarge: style(16, FontWeight.w400),
+      bodyMedium: style(15, FontWeight.w400),
+      bodySmall: style(13, FontWeight.w500),
+      labelLarge: style(14, FontWeight.w500),
+      labelMedium: style(13, FontWeight.w500),
+      labelSmall: style(12, FontWeight.w500),
+    );
+  }
+}
+
+/// Faces and the one special style the theme's roles do not cover.
+class AppType {
+  const AppType._();
+
+  static const family = 'Archivo';
+  static const condensed = 'ArchivoCondensed';
+
+  /// Condensed tracked caps: names of sections, readouts and columns only,
+  /// always in full ink. Uppercase the text with [caps].
+  static TextStyle get capsStyle => TextStyle(
+    fontFamily: condensed,
+    fontSize: 13,
+    fontWeight: FontWeight.w600,
+    letterSpacing: 1.04,
+    color: AppColors.ink,
+    fontFeatures: const [FontFeature.tabularFigures()],
+  );
+
+  static String caps(String text) => text.toUpperCase();
+}
+
+/// The name of a section in condensed caps, as in Tsumiki's schedule.
+class CapsLabel extends StatelessWidget {
+  const CapsLabel(this.text, {super.key, this.color});
+
+  final String text;
+  final Color? color;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      AppType.caps(text),
+      style: AppType.capsStyle.copyWith(color: color),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+    );
+  }
+}
+
+/// Tsumiki's slider thumb: a square of ink.
+class _SquareThumbShape extends SliderComponentShape {
+  const _SquareThumbShape();
+
+  static const _size = 16.0;
+
+  @override
+  Size getPreferredSize(bool isEnabled, bool isDiscrete) =>
+      const Size.square(_size);
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset center, {
+    required Animation<double> activationAnimation,
+    required Animation<double> enableAnimation,
+    required bool isDiscrete,
+    required TextPainter labelPainter,
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required TextDirection textDirection,
+    required double value,
+    required double textScaleFactor,
+    required Size sizeWithOverflow,
+  }) {
+    context.canvas.drawRect(
+      Rect.fromCenter(center: center, width: _size, height: _size),
+      Paint()..color = sliderTheme.thumbColor ?? AppColors.ink,
     );
   }
 }
@@ -597,7 +912,7 @@ class AppButtonStyles {
       padding: EdgeInsets.zero,
       visualDensity: VisualDensity.standard,
       side: BorderSide(color: AppColors.border),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
     );
   }
 }

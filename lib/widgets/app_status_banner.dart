@@ -190,7 +190,7 @@ class AppStatusBanner extends StatelessWidget {
       ),
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.zero,
         side: BorderSide(color: palette.border),
       ),
       clipBehavior: Clip.antiAlias,
@@ -216,7 +216,7 @@ class AppStatusBanner extends StatelessWidget {
                         style: TextStyle(
                           color: AppColors.textPrimary,
                           fontSize: 15,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           height: 1.2,
                           letterSpacing: 0,
                         ),
@@ -376,10 +376,10 @@ class _ActionButton extends StatelessWidget {
         minimumSize: const Size(0, 30),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         visualDensity: VisualDensity.compact,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         textStyle: const TextStyle(
           fontSize: 13,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           letterSpacing: 0,
         ),
       ),
@@ -418,7 +418,7 @@ class AppStatusBannerProgressLine extends StatelessWidget {
         const SizedBox(width: 8),
         Expanded(
           child: ClipRRect(
-            borderRadius: BorderRadius.circular(99),
+            borderRadius: BorderRadius.zero,
             child: LinearProgressIndicator(
               key: barKey,
               value: value,
@@ -434,7 +434,7 @@ class AppStatusBannerProgressLine extends StatelessWidget {
           style: TextStyle(
             color: AppColors.accentForeground,
             fontSize: 13,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             letterSpacing: 0,
           ),
         ),

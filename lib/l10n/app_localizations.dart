@@ -137,7 +137,7 @@ abstract class AppLocalizations {
   /// No description provided for @appLoading.
   ///
   /// In zh, this message translates to:
-  /// **'正在加载 MiriaGo...'**
+  /// **'正在加载 Koma...'**
   String get appLoading;
 
   /// No description provided for @alignPhotoTitle.
@@ -567,7 +567,7 @@ abstract class AppLocalizations {
   /// No description provided for @settingsAboutTitle.
   ///
   /// In zh, this message translates to:
-  /// **'关于 MiriaGo'**
+  /// **'关于 Koma'**
   String get settingsAboutTitle;
 
   /// No description provided for @settingsAboutSubtitle.
@@ -2694,18 +2694,6 @@ abstract class AppLocalizations {
   /// **'片区管理'**
   String get pointManagerGroupManagement;
 
-  /// No description provided for @pointManagerCachingFullReferences.
-  ///
-  /// In zh, this message translates to:
-  /// **'正在缓存完整参考图'**
-  String get pointManagerCachingFullReferences;
-
-  /// No description provided for @pointManagerCacheFullReferences.
-  ///
-  /// In zh, this message translates to:
-  /// **'缓存完整参考图'**
-  String get pointManagerCacheFullReferences;
-
   /// No description provided for @pointManagerExitMultiSelect.
   ///
   /// In zh, this message translates to:
@@ -2886,36 +2874,6 @@ abstract class AppLocalizations {
   /// **'批量重置失败'**
   String get pointManagerBatchResetFailed;
 
-  /// No description provided for @pointManagerNothingToCache.
-  ///
-  /// In zh, this message translates to:
-  /// **'当前计划没有需要缓存的参考图'**
-  String get pointManagerNothingToCache;
-
-  /// No description provided for @pointManagerCacheMessage.
-  ///
-  /// In zh, this message translates to:
-  /// **'将缓存当前计划中 {countText}完整参考图，可能需要较长时间和网络流量。'**
-  String pointManagerCacheMessage(String countText);
-
-  /// No description provided for @pointManagerImageCount.
-  ///
-  /// In zh, this message translates to:
-  /// **'{count} 张'**
-  String pointManagerImageCount(int count);
-
-  /// No description provided for @pointManagerStartCache.
-  ///
-  /// In zh, this message translates to:
-  /// **'开始缓存'**
-  String get pointManagerStartCache;
-
-  /// No description provided for @pointManagerCacheWifiNotice.
-  ///
-  /// In zh, this message translates to:
-  /// **'建议在 Wi-Fi 环境下进行缓存'**
-  String get pointManagerCacheWifiNotice;
-
   /// No description provided for @pointManagerGroupNameEmpty.
   ///
   /// In zh, this message translates to:
@@ -2973,8 +2931,8 @@ abstract class AppLocalizations {
   /// No description provided for @pointManagerUnitSpots.
   ///
   /// In zh, this message translates to:
-  /// **'点位'**
-  String get pointManagerUnitSpots;
+  /// **'{count, plural, other{点位}}'**
+  String pointManagerUnitSpots(int count);
 
   /// No description provided for @pointManagerUnitCompleted.
   ///
@@ -4886,12 +4844,6 @@ abstract class AppLocalizations {
   /// **'片区名称'**
   String get planGroupManagerNameLabel;
 
-  /// No description provided for @planGroupManagerNewShort.
-  ///
-  /// In zh, this message translates to:
-  /// **'新建'**
-  String get planGroupManagerNewShort;
-
   /// No description provided for @planGroupManagerSummary.
   ///
   /// In zh, this message translates to:
@@ -5113,42 +5065,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'三次元'**
   String get pilgrimageModelsSubjectReal;
-
-  /// No description provided for @pilgrimageModelsPaletteClassicGreen.
-  ///
-  /// In zh, this message translates to:
-  /// **'经典绿'**
-  String get pilgrimageModelsPaletteClassicGreen;
-
-  /// No description provided for @pilgrimageModelsPaletteDeepBlue.
-  ///
-  /// In zh, this message translates to:
-  /// **'深邃蓝'**
-  String get pilgrimageModelsPaletteDeepBlue;
-
-  /// No description provided for @pilgrimageModelsPaletteCherryPink.
-  ///
-  /// In zh, this message translates to:
-  /// **'樱花粉'**
-  String get pilgrimageModelsPaletteCherryPink;
-
-  /// No description provided for @pilgrimageModelsPaletteTwilightPurple.
-  ///
-  /// In zh, this message translates to:
-  /// **'暮光紫'**
-  String get pilgrimageModelsPaletteTwilightPurple;
-
-  /// No description provided for @pilgrimageModelsPaletteMiriaYellow.
-  ///
-  /// In zh, this message translates to:
-  /// **'琵珀橙'**
-  String get pilgrimageModelsPaletteMiriaYellow;
-
-  /// No description provided for @pilgrimageModelsPaletteGraphite.
-  ///
-  /// In zh, this message translates to:
-  /// **'石墨黑'**
-  String get pilgrimageModelsPaletteGraphite;
 
   /// No description provided for @pilgrimageModelsPaletteCustom.
   ///
@@ -5627,7 +5543,7 @@ abstract class AppLocalizations {
   /// No description provided for @mainStartupFailed.
   ///
   /// In zh, this message translates to:
-  /// **'MiriaGo 启动失败'**
+  /// **'Koma 启动失败'**
   String get mainStartupFailed;
 
   /// No description provided for @mainStartupFailedHint.
@@ -5933,7 +5849,7 @@ abstract class AppLocalizations {
   /// No description provided for @importExportImportSubtitleIos.
   ///
   /// In zh, this message translates to:
-  /// **'从文件、聊天、浏览器或网盘等位置用 MiriaGo 打开 .sjhplan。'**
+  /// **'从文件、聊天、浏览器或网盘等位置用 Koma 打开 .sjhplan。'**
   String get importExportImportSubtitleIos;
 
   /// No description provided for @importExportImportSubtitle.
@@ -5957,13 +5873,13 @@ abstract class AppLocalizations {
   /// No description provided for @importExportImportFile.
   ///
   /// In zh, this message translates to:
-  /// **'导入 MiriaGo 文件'**
+  /// **'导入 Koma 文件'**
   String get importExportImportFile;
 
   /// No description provided for @importExportOpenFromOtherAppSubtitle.
   ///
   /// In zh, this message translates to:
-  /// **'在文件、聊天、浏览器下载页或网盘中选择 .sjhplan，然后分享或用 MiriaGo 打开。'**
+  /// **'在文件、聊天、浏览器下载页或网盘中选择 .sjhplan，然后分享或用 Koma 打开。'**
   String get importExportOpenFromOtherAppSubtitle;
 
   /// No description provided for @importExportImportFileSubtitle.
@@ -5987,7 +5903,7 @@ abstract class AppLocalizations {
   /// No description provided for @importExportPackageSection.
   ///
   /// In zh, this message translates to:
-  /// **'MiriaGo 数据包'**
+  /// **'Koma 数据包'**
   String get importExportPackageSection;
 
   /// No description provided for @importExportPackageSubtitle.
@@ -6029,13 +5945,13 @@ abstract class AppLocalizations {
   /// No description provided for @importExportIosHelpMessage.
   ///
   /// In zh, this message translates to:
-  /// **'请在文件、聊天、浏览器下载页、网盘或其他保存位置找到 .sjhplan 文件，然后点开文件，或使用分享/更多菜单选择 MiriaGo。\n\nMiriaGo 收到文件后会自动进入导入预览页面。若列表里没有 MiriaGo，可以先把文件保存到“文件”App，再长按文件选择分享或打开方式。'**
+  /// **'请在文件、聊天、浏览器下载页、网盘或其他保存位置找到 .sjhplan 文件，然后点开文件，或使用分享/更多菜单选择 Koma。\n\nKoma 收到文件后会自动进入导入预览页面。若列表里没有 Koma，可以先把文件保存到“文件”App，再长按文件选择分享或打开方式。'**
   String get importExportIosHelpMessage;
 
   /// No description provided for @importExportShareText.
   ///
   /// In zh, this message translates to:
-  /// **'MiriaGo数据包：{planName}'**
+  /// **'Koma数据包：{planName}'**
   String importExportShareText(String planName);
 
   /// No description provided for @importExportPackageExported.
@@ -6065,7 +5981,7 @@ abstract class AppLocalizations {
   /// No description provided for @importExportMyMapsShareText.
   ///
   /// In zh, this message translates to:
-  /// **'MiriaGo My Maps CSV：{planName}'**
+  /// **'Koma My Maps CSV：{planName}'**
   String importExportMyMapsShareText(String planName);
 
   /// No description provided for @importExportPendingCoordinateWarning.
@@ -6209,7 +6125,7 @@ abstract class AppLocalizations {
   /// No description provided for @importExportExportPackage.
   ///
   /// In zh, this message translates to:
-  /// **'导出 MiriaGo 数据包'**
+  /// **'导出 Koma 数据包'**
   String get importExportExportPackage;
 
   /// No description provided for @importExportEstimating.
@@ -6479,7 +6395,7 @@ abstract class AppLocalizations {
   /// No description provided for @planLinkImportNotAPlanPackage.
   ///
   /// In zh, this message translates to:
-  /// **'下载的文件不是 MiriaGo 计划包'**
+  /// **'下载的文件不是 Koma 计划包'**
   String get planLinkImportNotAPlanPackage;
 
   /// No description provided for @planLinkImportReadFailed.
@@ -6497,7 +6413,7 @@ abstract class AppLocalizations {
   /// No description provided for @planLinkImportIntro.
   ///
   /// In zh, this message translates to:
-  /// **'粘贴 GitHub 发布页面或计划文件的下载链接，MiriaGo 会下载计划并打开导入预览。'**
+  /// **'粘贴 GitHub 发布页面或计划文件的下载链接，Koma 会下载计划并打开导入预览。'**
   String get planLinkImportIntro;
 
   /// No description provided for @planLinkImportWebUnavailableTitle.
@@ -6509,7 +6425,7 @@ abstract class AppLocalizations {
   /// No description provided for @planLinkImportWebUnavailableSubtitle.
   ///
   /// In zh, this message translates to:
-  /// **'请先在浏览器中下载 .sjhplan 或 .zip，再回到“导入导出”，用“导入 MiriaGo 文件”导入。'**
+  /// **'请先在浏览器中下载 .sjhplan 或 .zip，再回到“导入导出”，用“导入 Koma 文件”导入。'**
   String get planLinkImportWebUnavailableSubtitle;
 
   /// No description provided for @planLinkImportLinkLabel.
@@ -6533,7 +6449,7 @@ abstract class AppLocalizations {
   /// No description provided for @planLinkImportHelp.
   ///
   /// In zh, this message translates to:
-  /// **'支持：\n• GitHub 发布页面或仓库链接（自动列出最新发布中的计划文件）\n• GitHub 发布中的文件下载链接\n• 其他 https:// 开头的 .sjhplan 或 .zip 直链\n.zip 中可以带说明等其他文件，MiriaGo 只读取其中的 .sjhplan。下载会连接你输入的地址（以及它跳转到的下载服务器）；GitHub 发布或仓库链接还会向 api.github.com 查询发布中的文件。'**
+  /// **'支持：\n• GitHub 发布页面或仓库链接（自动列出最新发布中的计划文件）\n• GitHub 发布中的文件下载链接\n• 其他 https:// 开头的 .sjhplan 或 .zip 直链\n.zip 中可以带说明等其他文件，Koma 只读取其中的 .sjhplan。下载会连接你输入的地址（以及它跳转到的下载服务器）；GitHub 发布或仓库链接还会向 api.github.com 查询发布中的文件。'**
   String get planLinkImportHelp;
 
   /// No description provided for @planLinkImportResolving.
@@ -6677,7 +6593,7 @@ abstract class AppLocalizations {
   /// No description provided for @planLinkServiceWebUnavailable.
   ///
   /// In zh, this message translates to:
-  /// **'网页版无法直接下载，请先下载文件，再用“导入 MiriaGo 文件”导入'**
+  /// **'网页版无法直接下载，请先下载文件，再用“导入 Koma 文件”导入'**
   String get planLinkServiceWebUnavailable;
 
   /// No description provided for @incomingPlanFileTooLarge.
@@ -7495,7 +7411,7 @@ abstract class AppLocalizations {
   /// No description provided for @comparisonExportSupportShareText.
   ///
   /// In zh, this message translates to:
-  /// **'MiriaGo 对比图'**
+  /// **'Koma 对比图'**
   String get comparisonExportSupportShareText;
 
   /// No description provided for @comparisonExportLoadSettingsFailed.
@@ -7609,7 +7525,7 @@ abstract class AppLocalizations {
   /// No description provided for @gallerySaveResultPermissionSubtitle.
   ///
   /// In zh, this message translates to:
-  /// **'请在系统设置中允许 MiriaGo 添加照片。'**
+  /// **'请在系统设置中允许 Koma 添加照片。'**
   String get gallerySaveResultPermissionSubtitle;
 
   /// No description provided for @gallerySaveResultSettings.
@@ -8257,7 +8173,7 @@ abstract class AppLocalizations {
   /// No description provided for @imageViewerShareText.
   ///
   /// In zh, this message translates to:
-  /// **'MiriaGo 图片'**
+  /// **'Koma 图片'**
   String get imageViewerShareText;
 
   /// No description provided for @imageViewerSaveCanceled.
@@ -9969,7 +9885,7 @@ abstract class AppLocalizations {
   /// No description provided for @camerawesomeReferencePermissionBody.
   ///
   /// In zh, this message translates to:
-  /// **'请在系统设置中允许 MiriaGo 使用相机，用于拍摄巡礼照片。'**
+  /// **'请在系统设置中允许 Koma 使用相机，用于拍摄巡礼照片。'**
   String get camerawesomeReferencePermissionBody;
 
   /// No description provided for @camerawesomeReferenceOpenSettings.
@@ -9993,7 +9909,7 @@ abstract class AppLocalizations {
   /// No description provided for @camerawesomeReferenceUnavailableBody.
   ///
   /// In zh, this message translates to:
-  /// **'相机暂时无法使用，请稍后重试。如果问题持续，请重启 MiriaGo。'**
+  /// **'相机暂时无法使用，请稍后重试。如果问题持续，请重启 Koma。'**
   String get camerawesomeReferenceUnavailableBody;
 
   /// No description provided for @addPointsPickWork.
@@ -10133,6 +10049,54 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'删除计划失败，请重试'**
   String get planManagerDeleteFailed;
+
+  /// No description provided for @paletteFjord.
+  ///
+  /// In zh, this message translates to:
+  /// **'峡湾蓝'**
+  String get paletteFjord;
+
+  /// No description provided for @paletteSpruce.
+  ///
+  /// In zh, this message translates to:
+  /// **'云杉'**
+  String get paletteSpruce;
+
+  /// No description provided for @paletteMoss.
+  ///
+  /// In zh, this message translates to:
+  /// **'苔绿'**
+  String get paletteMoss;
+
+  /// No description provided for @paletteLake.
+  ///
+  /// In zh, this message translates to:
+  /// **'湖蓝'**
+  String get paletteLake;
+
+  /// No description provided for @paletteBark.
+  ///
+  /// In zh, this message translates to:
+  /// **'树皮'**
+  String get paletteBark;
+
+  /// No description provided for @paletteOchre.
+  ///
+  /// In zh, this message translates to:
+  /// **'赭黄'**
+  String get paletteOchre;
+
+  /// No description provided for @paletteInk.
+  ///
+  /// In zh, this message translates to:
+  /// **'墨色'**
+  String get paletteInk;
+
+  /// No description provided for @planAreaEmpty.
+  ///
+  /// In zh, this message translates to:
+  /// **'这个片区还没有点位，左右切换查看其他片区。'**
+  String get planAreaEmpty;
 }
 
 class _AppLocalizationsDelegate

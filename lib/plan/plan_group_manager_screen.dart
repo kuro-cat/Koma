@@ -28,7 +28,7 @@ Widget _cleanReorderProxy(
         color: Colors.transparent,
         shadowColor: Colors.black.withValues(alpha: 0.18),
         elevation: elevation,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         child: child,
       );
     },
@@ -478,34 +478,13 @@ class _CreateGroupFab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Theme(
-      data: Theme.of(context).copyWith(
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          sizeConstraints: BoxConstraints.tightFor(width: 64, height: 64),
-          shape: CircleBorder(),
-        ),
-      ),
-      child: FloatingActionButton(
-        key: const ValueKey('plan-group-create-fab'),
-        onPressed: onPressed,
-        tooltip: l10n.planGroupManagerNewArea,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(LucideIcons.plus, size: 24),
-            SizedBox(height: 2),
-            Text(
-              l10n.planGroupManagerNewShort,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.w700,
-                height: 1,
-                letterSpacing: 0,
-              ),
-            ),
-          ],
-        ),
-      ),
+    // A square primary key, as everywhere else; the theme styles it.
+    return FloatingActionButton.extended(
+      key: const ValueKey('plan-group-create-fab'),
+      onPressed: onPressed,
+      tooltip: l10n.planGroupManagerNewArea,
+      icon: const Icon(LucideIcons.plus, size: 20),
+      label: Text(l10n.planGroupManagerNewArea),
     );
   }
 }
@@ -531,7 +510,7 @@ class _PlanGroupManagerHeader extends StatelessWidget {
             style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 18,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -585,15 +564,15 @@ class _PlanGroupCard extends StatelessWidget {
 
     return Material(
       color: surface,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       child: InkWell(
         onTap: onOpen,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         child: Container(
           padding: const EdgeInsets.fromLTRB(8, 12, 6, 12),
           decoration: BoxDecoration(
             border: Border.all(color: AppColors.border),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.zero,
           ),
           child: Row(
             children: [
@@ -621,7 +600,7 @@ class _PlanGroupCard extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
                               fontSize: 16,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w600,
                               letterSpacing: 0,
                               color: isEmpty
                                   ? AppColors.textSecondary
@@ -674,15 +653,7 @@ class _PlanGroupCard extends StatelessWidget {
                 icon: const Icon(LucideIcons.ellipsisVertical),
                 position: PopupMenuPosition.under,
                 offset: const Offset(0, 6),
-                elevation: 8,
-                shadowColor: Colors.black.withValues(alpha: 0.16),
-                color: AppColors.surface,
-                surfaceTintColor: Colors.transparent,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                  side: BorderSide(color: AppColors.border),
-                ),
-                constraints: const BoxConstraints(minWidth: 0, maxWidth: 148),
+                constraints: const BoxConstraints(minWidth: 200, maxWidth: 320),
                 onSelected: (value) {
                   switch (value) {
                     case 'rename':
@@ -768,14 +739,14 @@ class _GroupMetaChip extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.zero,
       ),
       child: Text(
         label,
         style: TextStyle(
           color: color,
           fontSize: 11,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           letterSpacing: 0,
         ),
       ),
@@ -807,7 +778,7 @@ class _GroupActionRow extends StatelessWidget {
           style: TextStyle(
             color: color,
             fontSize: 13,
-            fontWeight: FontWeight.w700,
+            fontWeight: FontWeight.w600,
             letterSpacing: 0,
           ),
         ),
@@ -828,14 +799,14 @@ class _UngroupedGroupCard extends StatelessWidget {
     return Material(
       key: const ValueKey('ungrouped'),
       color: AppColors.surfaceMuted,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       child: InkWell(
         onTap: onOpen,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         child: Container(
           padding: const EdgeInsets.all(14),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.zero,
             border: Border.all(color: AppColors.border),
           ),
           child: Row(
@@ -850,7 +821,7 @@ class _UngroupedGroupCard extends StatelessWidget {
                       l10n.planGroupManagerUngroupedSpots,
                       style: TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0,
                       ),
                     ),
@@ -865,7 +836,7 @@ class _UngroupedGroupCard extends StatelessWidget {
                             : AppColors.textSecondary,
                         fontSize: 12,
                         fontWeight: hasPoints
-                            ? FontWeight.w800
+                            ? FontWeight.w600
                             : FontWeight.w500,
                         letterSpacing: 0,
                       ),

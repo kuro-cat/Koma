@@ -44,8 +44,8 @@ class PilgrimageWorkDropdown extends StatelessWidget {
         initialValue: value,
         decoration: _decoration(),
         isExpanded: true,
-        elevation: 2,
-        borderRadius: BorderRadius.circular(8),
+        elevation: 0,
+        borderRadius: BorderRadius.zero,
         dropdownColor: AppColors.surface,
         itemHeight: null,
         menuMaxHeight: appScaledOverlayExtent(settings, 360),
@@ -88,19 +88,19 @@ class PilgrimageWorkDropdown extends StatelessWidget {
       hoverColor: AppColors.accent.withValues(alpha: 0.035),
       contentPadding: const EdgeInsets.fromLTRB(14, 10, 4, 10),
       enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         borderSide: BorderSide(color: AppColors.border, width: 1.4),
       ),
       focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         borderSide: BorderSide(color: AppColors.accent, width: 1.4),
       ),
       errorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         borderSide: const BorderSide(color: Colors.redAccent, width: 1.4),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         borderSide: const BorderSide(color: Colors.redAccent, width: 1.4),
       ),
     );
@@ -168,14 +168,14 @@ class _WorkDropdownItemState extends State<_WorkDropdownItem> {
                 border: Border.all(
                   color: AppColors.accent.withValues(alpha: 0.42),
                 ),
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: BorderRadius.zero,
               ),
               child: Text(
                 badgeLabel,
                 style: TextStyle(
                   color: AppColors.accentForeground,
                   fontSize: 11,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   height: 1.15,
                   letterSpacing: 0,
                 ),
@@ -234,7 +234,7 @@ class _WorkDropdownItemState extends State<_WorkDropdownItem> {
                 color: AppColors.accent.withValues(
                   alpha: selected ? 0.1 : (_hovered ? 0.05 : 0),
                 ),
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.zero,
               ),
             ),
           ),

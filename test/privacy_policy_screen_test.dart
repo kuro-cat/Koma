@@ -180,8 +180,8 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await tester.scrollUntilVisible(find.text('关于 MiriaGo'), 400);
-    await tester.tap(find.text('关于 MiriaGo'));
+    await tester.scrollUntilVisible(find.text('关于 Koma'), 400);
+    await tester.tap(find.text('关于 Koma'));
     await tester.pumpAndSettle();
     await tester.scrollUntilVisible(find.text('隐私政策'), 250);
     await tester.tap(find.text('隐私政策'));
@@ -191,7 +191,7 @@ void main() {
     await tester.tap(find.byType(AppBackButton).last);
     await tester.pumpAndSettle();
     expect(find.byType(PrivacyPolicyScreen), findsNothing);
-    expect(find.text('关于 MiriaGo'), findsOneWidget);
+    expect(find.text('关于 Koma'), findsOneWidget);
     expect(tester.takeException(), isNull);
   });
 

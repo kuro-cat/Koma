@@ -642,37 +642,15 @@ class _AppShellState extends State<AppShell> {
                       ),
                     ],
                   ),
-                  bottomNavigationBar: NavigationBarTheme(
-                    data: NavigationBarThemeData(
-                      indicatorColor: AppColors.accent,
-                      iconTheme: WidgetStateProperty.resolveWith((states) {
-                        if (states.contains(WidgetState.selected)) {
-                          return IconThemeData(color: AppColors.onAccent);
-                        }
-
-                        return IconThemeData(color: AppColors.textPrimary);
-                      }),
-                      labelTextStyle: WidgetStateProperty.resolveWith((states) {
-                        if (states.contains(WidgetState.selected)) {
-                          return TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w800,
-                            letterSpacing: 0,
-                          );
-                        }
-
-                        return TextStyle(
-                          color: AppColors.textPrimary,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0,
-                        );
-                      }),
+                  // The theme styles the bar; a 1px ink rule sits on top,
+                  // like the rule under Tsumiki's header.
+                  bottomNavigationBar: DecoratedBox(
+                    position: DecorationPosition.foreground,
+                    decoration: BoxDecoration(
+                      border: Border(top: BorderSide(color: AppColors.ink)),
                     ),
                     child: NavigationBar(
                       selectedIndex: _selectedIndex,
-                      backgroundColor: AppColors.surface,
                       onDestinationSelected: (index) {
                         setState(() {
                           _selectedIndex = index;
@@ -750,7 +728,7 @@ class _NoPlanState extends StatelessWidget {
                 l10n.appShellNoPlansTitle,
                 style: const TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -806,7 +784,7 @@ class _PlanLoadState extends StatelessWidget {
                 hasError ? l10n.appShellLoadFailed : l10n.appShellLoading,
                 style: const TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),

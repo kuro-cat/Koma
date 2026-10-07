@@ -52,12 +52,12 @@ class ComparisonExportConfigEditor extends StatelessWidget {
           builder: (context, controller, child) => Material(
             color: AppColors.surface,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.zero,
               side: BorderSide(color: AppColors.border),
             ),
             child: InkWell(
               key: const ValueKey('comparison-encoding-selector'),
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.zero,
               onTap: () =>
                   controller.isOpen ? controller.close() : controller.open(),
               child: Padding(
@@ -256,7 +256,7 @@ class _ValueCapsule extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
         color: AppColors.surfaceMuted,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Text(
@@ -264,7 +264,7 @@ class _ValueCapsule extends StatelessWidget {
         style: TextStyle(
           color: AppColors.textPrimary,
           fontSize: 13,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           letterSpacing: 0,
         ),
       ),
@@ -296,7 +296,7 @@ class _OutputWidthSelector extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
@@ -362,7 +362,7 @@ class _OutputWidthOption extends StatelessWidget {
                         ? AppColors.accentStrongForeground
                         : AppColors.textSecondary,
                     fontSize: 12,
-                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
                     letterSpacing: 0,
                   ),
                 ),
@@ -376,9 +376,7 @@ class _OutputWidthOption extends StatelessWidget {
                     height: 3,
                     decoration: BoxDecoration(
                       color: AppColors.accent,
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(3),
-                      ),
+                      borderRadius: BorderRadius.zero,
                     ),
                   ),
                 ),
@@ -418,7 +416,7 @@ class _ToggleSetting extends StatelessWidget {
                 style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 14,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -575,7 +573,7 @@ class _MetadataFilterChip extends StatelessWidget {
             style: TextStyle(
               color: foreground,
               fontSize: 12,
-              fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+              fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
               letterSpacing: 0,
             ),
           ),
@@ -586,7 +584,7 @@ class _MetadataFilterChip extends StatelessWidget {
       selectedColor: AppColors.accent.withValues(alpha: 0.08),
       backgroundColor: AppColors.surface,
       side: BorderSide(color: selected ? AppColors.accent : AppColors.border),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       visualDensity: VisualDensity.compact,
       onSelected: (_) => onSelected(),
@@ -620,15 +618,15 @@ InputDecoration _comparisonTextFieldDecoration({
     fillColor: enabled ? AppColors.surface : AppColors.surfaceMuted,
     contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       borderSide: BorderSide(color: AppColors.border),
     ),
     disabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       borderSide: BorderSide(color: AppColors.border.withValues(alpha: 0.65)),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       borderSide: BorderSide(color: AppColors.accent, width: 1.4),
     ),
   );
@@ -650,7 +648,7 @@ class _ColorOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: AnimatedScale(
         scale: selected ? 1.03 : 1,
@@ -665,7 +663,7 @@ class _ColorOption extends StatelessWidget {
             color: selected
                 ? AppColors.accent.withValues(alpha: 0.08)
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.zero,
             border: Border.all(
               color: selected ? AppColors.accent : AppColors.border,
               width: selected ? 1.4 : 1,
@@ -716,7 +714,7 @@ class _ColorOption extends StatelessWidget {
                       ? AppColors.accentStrongForeground
                       : AppColors.textPrimary,
                   fontSize: 13,
-                  fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
                   letterSpacing: 0,
                 ),
               ),
@@ -739,7 +737,7 @@ class _SectionLabel extends StatelessWidget {
       label,
       style: const TextStyle(
         fontSize: 18,
-        fontWeight: FontWeight.w900,
+        fontWeight: FontWeight.w600,
         letterSpacing: 0,
       ),
     );
@@ -767,7 +765,7 @@ class _FieldLabel extends StatelessWidget {
       style: TextStyle(
         color: AppColors.textPrimary,
         fontSize: 14,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         letterSpacing: 0,
       ),
     );

@@ -98,13 +98,6 @@ class MapThumbnailMarker extends StatelessWidget {
                     color: pinColor,
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.white, width: 2),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.18),
-                        blurRadius: 4,
-                        offset: const Offset(0, 2),
-                      ),
-                    ],
                   ),
                 ),
               ),
@@ -170,18 +163,11 @@ class _ThumbnailBubble extends StatelessWidget {
       height: height,
       decoration: BoxDecoration(
         color: MapColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: borderColor, width: 2.5),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.18),
-            blurRadius: 5,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(5.5),
+        borderRadius: BorderRadius.zero,
         child: ColoredBox(
           color: MapColors.surfaceMuted,
           child: ReferenceThumbnail(

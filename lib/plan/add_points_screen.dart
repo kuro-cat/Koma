@@ -111,19 +111,19 @@ InputDecoration _boxedFormDecoration({
     helperText: reserveHelperSpace ? ' ' : null,
     contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       borderSide: BorderSide(color: AppColors.border),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       borderSide: BorderSide(color: AppColors.accent, width: 1.4),
     ),
     errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       borderSide: const BorderSide(color: Colors.redAccent),
     ),
     focusedErrorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       borderSide: const BorderSide(color: Colors.redAccent, width: 1.4),
     ),
   );
@@ -138,19 +138,19 @@ InputDecoration _workTypeDropdownDecoration() {
     helperText: ' ',
     contentPadding: const EdgeInsets.fromLTRB(14, 10, 4, 10),
     enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       borderSide: BorderSide(color: AppColors.border, width: 1.4),
     ),
     focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       borderSide: BorderSide(color: AppColors.accent, width: 1.4),
     ),
     errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       borderSide: const BorderSide(color: Colors.redAccent, width: 1.4),
     ),
     focusedErrorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       borderSide: const BorderSide(color: Colors.redAccent, width: 1.4),
     ),
   );
@@ -766,7 +766,7 @@ class _BangumiTypeFilter extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
@@ -809,7 +809,7 @@ class _BangumiTypeFilter extends StatelessWidget {
                         ? AppColors.accentStrongForeground
                         : AppColors.textSecondary,
                     fontSize: 13,
-                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
                     letterSpacing: 0,
                   ),
                 ),
@@ -823,9 +823,7 @@ class _BangumiTypeFilter extends StatelessWidget {
                     height: 3,
                     decoration: BoxDecoration(
                       color: AppColors.accent,
-                      borderRadius: const BorderRadius.vertical(
-                        top: Radius.circular(3),
-                      ),
+                      borderRadius: BorderRadius.zero,
                     ),
                   ),
                 ),
@@ -870,7 +868,7 @@ class _BangumiTypeFilterDisclosure extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Column(
@@ -891,7 +889,7 @@ class _BangumiTypeFilterDisclosure extends StatelessWidget {
                           style: TextStyle(
                             color: AppColors.textPrimary,
                             fontSize: 13,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             letterSpacing: 0,
                           ),
                         ),
@@ -1053,7 +1051,7 @@ class _AnitabiLinkInputScreenState extends State<AnitabiLinkInputScreen> {
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 border: Border.all(color: AppColors.border),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.zero,
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1063,7 +1061,7 @@ class _AnitabiLinkInputScreenState extends State<AnitabiLinkInputScreen> {
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 18,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -1108,22 +1106,22 @@ class _AnitabiLinkInputScreenState extends State<AnitabiLinkInputScreen> {
                         vertical: 14,
                       ),
                       enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.zero,
                         borderSide: BorderSide(color: AppColors.border),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.zero,
                         borderSide: BorderSide(
                           color: AppColors.accent,
                           width: 1.4,
                         ),
                       ),
                       errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.zero,
                         borderSide: const BorderSide(color: Colors.redAccent),
                       ),
                       focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.zero,
                         borderSide: const BorderSide(
                           color: Colors.redAccent,
                           width: 1.4,
@@ -1150,7 +1148,7 @@ class _AnitabiLinkInputScreenState extends State<AnitabiLinkInputScreen> {
                         l10n.addPointsOpenAnitabiSpots,
                         style: TextStyle(
                           fontSize: 16,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           height: 1,
                           letterSpacing: 0,
                         ),
@@ -1202,7 +1200,7 @@ class _LinkExampleCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1212,7 +1210,7 @@ class _LinkExampleCard extends StatelessWidget {
             style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 14,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -1286,7 +1284,7 @@ class _ExampleLinkText extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
       decoration: BoxDecoration(
         color: AppColors.accent.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.zero,
       ),
       child: Text(
         text,
@@ -1295,7 +1293,7 @@ class _ExampleLinkText extends StatelessWidget {
           color: AppColors.accentStrongForeground,
           fontSize: 13,
           fontFamily: 'monospace',
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           height: 1.25,
           letterSpacing: 0,
         ),
@@ -1341,7 +1339,7 @@ class _ExampleNote extends StatelessWidget {
   static TextStyle get textStyle => TextStyle(
     color: AppColors.textSecondary,
     fontSize: 12,
-    fontWeight: FontWeight.w700,
+    fontWeight: FontWeight.w600,
     height: 1,
     letterSpacing: 0,
   );
@@ -1354,7 +1352,7 @@ class _ExampleNote extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         color: AppColors.surfaceMuted,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.zero,
       ),
       child: Text(text, style: textStyle),
     );
@@ -1457,7 +1455,7 @@ class ManualWorkFormScreenState extends State<ManualWorkFormScreen> {
       builder: (context) => Dialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
         backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         clipBehavior: Clip.antiAlias,
         child: SizedBox(
           height: _guideDialogHeight(context, 540),
@@ -1555,8 +1553,8 @@ class ManualWorkFormScreenState extends State<ManualWorkFormScreen> {
                         initialValue: _selectedSubjectType,
                         decoration: _workTypeDropdownDecoration(),
                         isExpanded: true,
-                        elevation: 2,
-                        borderRadius: BorderRadius.circular(8),
+                        elevation: 0,
+                        borderRadius: BorderRadius.zero,
                         dropdownColor: AppColors.surface,
                         itemHeight: null,
                         menuMaxHeight: appScaledOverlayExtent(
@@ -1682,7 +1680,7 @@ class _ManualPointFillingGuideSheet extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 20,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -1747,7 +1745,7 @@ class _ManualPointFillingGuideSheet extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: AppColors.accent.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.zero,
                 border: Border.all(
                   color: AppColors.accent.withValues(alpha: 0.28),
                 ),
@@ -1821,7 +1819,7 @@ class _ManualWorkFillingGuideSheet extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 20,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -1879,7 +1877,7 @@ class _ManualWorkFillingGuideSheet extends StatelessWidget {
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
                 color: AppColors.accent.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.zero,
                 border: Border.all(
                   color: AppColors.accent.withValues(alpha: 0.28),
                 ),
@@ -1969,7 +1967,7 @@ class _FillingGuideItem extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.onAccent,
                       fontSize: 13,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -1992,7 +1990,7 @@ class _FillingGuideItem extends StatelessWidget {
                           style: TextStyle(
                             color: AppColors.textPrimary,
                             fontSize: 15,
-                            fontWeight: FontWeight.w900,
+                            fontWeight: FontWeight.w600,
                             letterSpacing: 0,
                           ),
                         ),
@@ -2006,7 +2004,7 @@ class _FillingGuideItem extends StatelessWidget {
                           color: badge == l10n.addPointsBadgeRequired
                               ? AppColors.accent.withValues(alpha: 0.1)
                               : AppColors.surfaceMuted,
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.zero,
                         ),
                         child: Text(
                           badge,
@@ -2015,7 +2013,7 @@ class _FillingGuideItem extends StatelessWidget {
                                 ? AppColors.accentStrongForeground
                                 : AppColors.textSecondary,
                             fontSize: 11,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             letterSpacing: 0,
                           ),
                         ),
@@ -2038,7 +2036,7 @@ class _FillingGuideItem extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.accentStrongForeground,
                       fontSize: 12,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -2088,7 +2086,7 @@ class _ManualWorkTypeDropdownItemState
           color: AppColors.accent.withValues(
             alpha: widget.selected ? 0.10 : (hovered ? 0.05 : 0),
           ),
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.zero,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -2139,7 +2137,7 @@ class _ManualWorkLabeledField extends StatelessWidget {
           style: TextStyle(
             color: AppColors.textPrimary,
             fontSize: prominent ? 15 : 13,
-            fontWeight: prominent ? FontWeight.w800 : FontWeight.w600,
+            fontWeight: prominent ? FontWeight.w600 : FontWeight.w600,
             letterSpacing: 0,
           ),
         ),
@@ -2271,7 +2269,7 @@ class _QuickManualPointFormScreenState
       builder: (context) => Dialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
         backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         clipBehavior: Clip.antiAlias,
         child: SizedBox(
           height: _guideDialogHeight(context, 500),
@@ -2422,7 +2420,7 @@ class _QuickManualPointFormScreenState
                         style: TextStyle(
                           color: AppColors.textPrimary,
                           fontSize: 15,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
@@ -2432,7 +2430,7 @@ class _QuickManualPointFormScreenState
                       style: TextStyle(
                         color: AppColors.textSecondary.withValues(alpha: 0.8),
                         fontSize: 12,
-                        fontWeight: FontWeight.w700,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0,
                       ),
                     ),
@@ -2521,7 +2519,7 @@ class _QuickManualPointFormScreenState
                             color: AppColors.accent.withValues(alpha: 0.35),
                           ),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.zero,
                           ),
                         ),
                         child: ResponsiveButtonContent(
@@ -2545,7 +2543,7 @@ class _QuickManualPointFormScreenState
                           foregroundColor: AppColors.textPrimary,
                           side: BorderSide(color: AppColors.border),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.zero,
                           ),
                         ),
                         icon: const Icon(LucideIcons.clipboardPaste),
@@ -2603,7 +2601,7 @@ class _QuickManualPointFillingGuideSheet extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 20,
-                      fontWeight: FontWeight.w900,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -3048,7 +3046,7 @@ class _ManualPointFormScreenState extends State<_ManualPointFormScreen> {
       builder: (context) => Dialog(
         insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 40),
         backgroundColor: AppColors.surface,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
         clipBehavior: Clip.antiAlias,
         child: AppScaledOverlayContent(
           settings: widget.settings ?? const AppSettings(),
@@ -3287,7 +3285,7 @@ class _ManualPointFormScreenState extends State<_ManualPointFormScreen> {
                       style: TextStyle(
                         color: AppColors.textPrimary,
                         fontSize: 15,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0,
                       ),
                     ),
@@ -3375,7 +3373,7 @@ class _ManualPointFormScreenState extends State<_ManualPointFormScreen> {
                               color: AppColors.accent.withValues(alpha: 0.35),
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.zero,
                             ),
                           ),
                           child: ResponsiveButtonContent(
@@ -3401,7 +3399,7 @@ class _ManualPointFormScreenState extends State<_ManualPointFormScreen> {
                             foregroundColor: AppColors.textPrimary,
                             side: BorderSide(color: AppColors.border),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
+                              borderRadius: BorderRadius.zero,
                             ),
                           ),
                           icon: const Icon(LucideIcons.clipboardPaste),
@@ -3564,7 +3562,7 @@ class _CoordinateLabeledField extends StatelessWidget {
               color: focused ? AppColors.accent : AppColors.border,
               width: 1.4,
             ),
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.zero,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -3584,7 +3582,7 @@ class _CoordinateLabeledField extends StatelessWidget {
                 style: TextStyle(
                   color: AppColors.textSecondary,
                   fontSize: 12,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -3732,7 +3730,7 @@ class _ManualPointPositionMarker extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: MapColors.accent,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: Colors.white, width: 3),
       ),
       child: Icon(LucideIcons.mapPinPlus, color: MapColors.onAccent),
@@ -3757,7 +3755,7 @@ class _MapToolButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: selected ? AppColors.accent : AppColors.surface,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       child: IconButton(
         tooltip: tooltip,
         onPressed: onTap,
@@ -3794,7 +3792,7 @@ class _ManualPointSelectionCard extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
@@ -3810,7 +3808,7 @@ class _ManualPointSelectionCard extends StatelessWidget {
                   l10n.addPointsMapPickTitle,
                   style: TextStyle(
                     fontSize: 17,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -3860,7 +3858,7 @@ class _LinkedWorksPanel extends StatelessWidget {
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Column(
@@ -3876,28 +3874,11 @@ class _LinkedWorksPanel extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(14, 12, 10, 10),
                     child: Row(
                       children: [
-                        Container(
-                          width: 3,
-                          height: 20,
-                          decoration: BoxDecoration(
-                            color: AppColors.accent,
-                            borderRadius: BorderRadius.circular(3),
-                          ),
-                        ),
-                        const SizedBox(width: 9),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                l10n.addPointsLinkedWorks,
-                                style: TextStyle(
-                                  color: AppColors.textPrimary,
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 0,
-                                ),
-                              ),
+                              CapsLabel(l10n.addPointsLinkedWorks),
                               const SizedBox(height: 2),
                               Text(
                                 l10n.addPointsLinkedWorksSummary(
@@ -3921,7 +3902,7 @@ class _LinkedWorksPanel extends StatelessWidget {
                               style: TextStyle(
                                 color: AppColors.accentStrongForeground,
                                 fontSize: 13,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w600,
                                 letterSpacing: 0,
                               ),
                             ),
@@ -3947,7 +3928,7 @@ class _LinkedWorksPanel extends StatelessWidget {
                         ),
                         decoration: BoxDecoration(
                           color: AppColors.accent.withValues(alpha: 0.04),
-                          borderRadius: BorderRadius.circular(6),
+                          borderRadius: BorderRadius.zero,
                         ),
                         child: Text(
                           l10n.addPointsNoLinkedWorks,
@@ -4078,7 +4059,7 @@ class _MoreWorksIndicator extends StatelessWidget {
             style: TextStyle(
               color: AppColors.accentStrongForeground,
               fontSize: 13,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -4106,10 +4087,10 @@ class _WorkCreationAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      borderRadius: BorderRadius.circular(6),
+      borderRadius: BorderRadius.zero,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.zero,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
@@ -4128,7 +4109,7 @@ class _WorkCreationAction extends StatelessWidget {
                       style: TextStyle(
                         color: AppColors.textPrimary,
                         fontSize: 15,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0,
                       ),
                     ),
@@ -4189,7 +4170,7 @@ class _ManualReferenceImagePicker extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: IntrinsicHeight(
@@ -4209,7 +4190,7 @@ class _ManualReferenceImagePicker extends StatelessWidget {
                       )
                     : null,
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.zero,
                   child: Container(
                     width: 104,
                     color: AppColors.surfaceMuted,
@@ -4239,7 +4220,7 @@ class _ManualReferenceImagePicker extends StatelessWidget {
                     l10n.addPointsReferenceImageLabel,
                     style: TextStyle(
                       fontSize: 15,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -4321,7 +4302,7 @@ class _WorkResultCardState extends State<_WorkResultCard> {
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
@@ -4338,7 +4319,7 @@ class _WorkResultCardState extends State<_WorkResultCard> {
                       _titleExpanded = !_titleExpanded;
                     });
                   },
-                  borderRadius: BorderRadius.circular(4),
+                  borderRadius: BorderRadius.zero,
                   child: Padding(
                     padding: EdgeInsets.zero,
                     child: Text(
@@ -4349,7 +4330,7 @@ class _WorkResultCardState extends State<_WorkResultCard> {
                           : TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 16,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                         letterSpacing: 0,
                       ),
                     ),
@@ -4358,7 +4339,7 @@ class _WorkResultCardState extends State<_WorkResultCard> {
                 if (showSubtitle)
                   InkWell(
                     onTap: () => setState(() => _expanded = !_expanded),
-                    borderRadius: BorderRadius.circular(4),
+                    borderRadius: BorderRadius.zero,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 1),
                       child: Text(
@@ -4433,7 +4414,7 @@ class _InfoPill extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
         color: AppColors.surfaceMuted,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Text(
@@ -4441,7 +4422,7 @@ class _InfoPill extends StatelessWidget {
         style: TextStyle(
           color: AppColors.textSecondary,
           fontSize: 11,
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.w600,
           letterSpacing: 0,
         ),
       ),
@@ -4461,7 +4442,7 @@ class _MessageCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
@@ -4506,7 +4487,7 @@ class _BangumiSearchHintContent extends StatelessWidget {
               style: TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 15,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 height: 1,
                 letterSpacing: 0,
               ),
@@ -4549,7 +4530,7 @@ class _BangumiSearchHintContent extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.accentStrongForeground,
                       fontSize: 13,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       height: 1.35,
                       letterSpacing: 0,
                     ),
@@ -4575,7 +4556,7 @@ class _FormSection extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Column(children: children),
@@ -4593,14 +4574,14 @@ class _FindSpotsPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: AppColors.accent.withValues(alpha: 0.04),
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       child: InkWell(
         key: const ValueKey('add-points-anitabi-map'),
         onTap: enabled ? onTap : null,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.zero,
             border: Border.all(color: AppColors.accent.withValues(alpha: 0.32)),
           ),
           child: Column(
@@ -4612,14 +4593,8 @@ class _FindSpotsPanel extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Container(
-                          width: 46,
-                          height: 46,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: AppColors.accent.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
+                        SizedBox(
+                          width: 32,
                           child: Icon(
                             LucideIcons.map,
                             color: AppColors.accentForeground,
@@ -4638,7 +4613,7 @@ class _FindSpotsPanel extends StatelessWidget {
                                     style: TextStyle(
                                       color: AppColors.textPrimary,
                                       fontSize: 17,
-                                      fontWeight: FontWeight.w900,
+                                      fontWeight: FontWeight.w600,
                                       letterSpacing: 0,
                                     ),
                                   ),
@@ -4652,14 +4627,14 @@ class _FindSpotsPanel extends StatelessWidget {
                                       color: AppColors.accent.withValues(
                                         alpha: 0.10,
                                       ),
-                                      borderRadius: BorderRadius.circular(4),
+                                      borderRadius: BorderRadius.zero,
                                     ),
                                     child: Text(
                                       l10n.addPointsRecommended,
                                       style: TextStyle(
                                         color: AppColors.accentStrongForeground,
                                         fontSize: 11,
-                                        fontWeight: FontWeight.w800,
+                                        fontWeight: FontWeight.w600,
                                         letterSpacing: 0,
                                       ),
                                     ),
@@ -4716,7 +4691,7 @@ class _AddPointPanel extends StatelessWidget {
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.accent.withValues(alpha: 0.28)),
       ),
       child: Column(
@@ -4724,28 +4699,7 @@ class _AddPointPanel extends StatelessWidget {
         children: [
           Padding(
             padding: const EdgeInsets.fromLTRB(4, 2, 4, 10),
-            child: Row(
-              children: [
-                Container(
-                  width: 3,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    color: AppColors.accent,
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                ),
-                const SizedBox(width: 9),
-                Text(
-                  l10n.addPointsOwnSpotsSection,
-                  style: TextStyle(
-                    color: AppColors.textPrimary,
-                    fontSize: 17,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: 0,
-                  ),
-                ),
-              ],
-            ),
+            child: Row(children: [CapsLabel(l10n.addPointsOwnSpotsSection)]),
           ),
           _PointCreationAction(
             key: const ValueKey('add-points-quick-manual-point'),
@@ -4799,27 +4753,19 @@ class _PointCreationAction extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: Material(
         color: enabled ? Colors.transparent : AppColors.surfaceMuted,
-        borderRadius: BorderRadius.circular(7),
+        borderRadius: BorderRadius.zero,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: enabled ? onTap : null,
-          borderRadius: BorderRadius.circular(7),
+          borderRadius: BorderRadius.zero,
           child: ConstrainedBox(
             constraints: const BoxConstraints(minHeight: 72),
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
               child: Row(
                 children: [
-                  Container(
-                    width: 42,
-                    height: 42,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: enabled
-                          ? AppColors.accent.withValues(alpha: 0.08)
-                          : AppColors.border.withValues(alpha: 0.35),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                  SizedBox(
+                    width: 32,
                     child: Icon(
                       icon,
                       color: enabled
@@ -4846,7 +4792,7 @@ class _PointCreationAction extends StatelessWidget {
                                       ? AppColors.textPrimary
                                       : AppColors.textSecondary,
                                   fontSize: 15,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w600,
                                   letterSpacing: 0,
                                 ),
                               ),

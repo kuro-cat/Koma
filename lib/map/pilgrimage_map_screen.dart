@@ -1036,9 +1036,9 @@ class _MapGroupFilterBar extends StatelessWidget {
     return Material(
       key: const ValueKey('map-group-filter-bar'),
       color: MapColors.surface.withValues(alpha: 0.94),
-      borderRadius: BorderRadius.circular(999),
+      borderRadius: BorderRadius.zero,
       child: InkWell(
-        borderRadius: BorderRadius.circular(999),
+        borderRadius: BorderRadius.zero,
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
@@ -1052,7 +1052,7 @@ class _MapGroupFilterBar extends StatelessWidget {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -1084,9 +1084,9 @@ class _MapFloatingIconButton extends StatelessWidget {
       message: tooltip,
       child: Material(
         color: MapColors.surface.withValues(alpha: 0.94),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         child: InkWell(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           onTap: onTap,
           child: IconTheme(
             data: IconThemeData(color: AppColors.textPrimary),
@@ -1220,7 +1220,7 @@ class _PointCard extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(16, showOverlapPager ? 6 : 16, 16, 16),
       decoration: BoxDecoration(
         color: MapColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: MapColors.border),
       ),
       child: Column(
@@ -1272,7 +1272,7 @@ class _PointCard extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
                                   fontSize: 17,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w600,
                                   letterSpacing: 0,
                                 ),
                               ),
@@ -1450,7 +1450,7 @@ class _PointThumbnail extends StatelessWidget {
         imageUrl: remoteImageUrl,
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         child: Container(
           width: 64,
           height: 64,
@@ -1494,15 +1494,8 @@ class _MapRecordBadge extends StatelessWidget {
       alignment: Alignment.center,
       decoration: BoxDecoration(
         color: MapColors.surface,
-        borderRadius: BorderRadius.circular(4),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: MapColors.accent.withValues(alpha: 0.42)),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.08),
-            blurRadius: 2,
-            offset: const Offset(0, 1),
-          ),
-        ],
       ),
       child: Icon(
         stacked ? LucideIcons.images : LucideIcons.image,
@@ -1526,7 +1519,7 @@ class _EmptyMapCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: MapColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: MapColors.border),
       ),
       child: Row(
@@ -1544,7 +1537,7 @@ class _EmptyMapCard extends StatelessWidget {
                   style: TextStyle(
                     color: MapColors.accentDark,
                     fontSize: 16,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -1590,14 +1583,14 @@ class _StatusBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.zero,
       ),
       child: Text(
         text,
         style: TextStyle(
           color: color,
           fontSize: 12,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           letterSpacing: 0,
         ),
       ),

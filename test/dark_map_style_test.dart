@@ -214,7 +214,7 @@ void main() {
   }
 
   test('light chrome on a dark base keeps the navigation route readable', () {
-    AppTheme.light(palette: AppThemePalette.deepBlue);
+    AppTheme.light(palette: AppThemePalette.lake);
     final routeColor = configuredMapRouteColor(
       const AppSettings(mapAppearance: MapAppearance.dark),
       dark: false,

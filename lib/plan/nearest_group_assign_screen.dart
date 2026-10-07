@@ -1017,12 +1017,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
             ),
             side: WidgetStatePropertyAll(BorderSide(color: AppColors.border)),
             shape: const WidgetStatePropertyAll(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(8),
-                  top: Radius.circular(4),
-                ),
-              ),
+              RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
           ),
           builder: (context, controller, child) {
@@ -1030,10 +1025,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
               color: AppColors.surface,
               shape: RoundedRectangleBorder(
                 side: BorderSide(color: AppColors.border),
-                borderRadius: BorderRadius.vertical(
-                  top: const Radius.circular(8),
-                  bottom: Radius.circular(_isOpen ? 4 : 8),
-                ),
+                borderRadius: BorderRadius.zero,
               ),
               clipBehavior: Clip.antiAlias,
               child: InkWell(
@@ -1062,7 +1054,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
-                              fontWeight: FontWeight.w700,
+                              fontWeight: FontWeight.w600,
                               letterSpacing: 0,
                             ),
                           ),
@@ -1101,7 +1093,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                               l10n.nearestGroupAssignChooseArea,
                               style: TextStyle(
                                 fontSize: 14,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w600,
                                 letterSpacing: 0,
                               ),
                             ),
@@ -1177,7 +1169,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                                     ),
                                     shape: WidgetStatePropertyAll(
                                       RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(6),
+                                        borderRadius: BorderRadius.zero,
                                       ),
                                     ),
                                   ),
@@ -1186,7 +1178,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                     style: const TextStyle(
-                                      fontWeight: FontWeight.w700,
+                                      fontWeight: FontWeight.w600,
                                       letterSpacing: 0,
                                     ),
                                   ),
@@ -1232,14 +1224,14 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                           ),
                           shape: WidgetStatePropertyAll(
                             RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(6),
+                              borderRadius: BorderRadius.zero,
                             ),
                           ),
                         ),
                         child: Text(
                           l10n.nearestGroupAssignNewArea,
                           style: TextStyle(
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             letterSpacing: 0,
                           ),
                         ),
@@ -1343,7 +1335,7 @@ class _BoxAssignPanel extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.96),
         border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
       ),
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -1400,7 +1392,7 @@ class _BoxAssignPanel extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 13,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -1496,7 +1488,7 @@ class _NearestAssignPanel extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.96),
         border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -1515,7 +1507,7 @@ class _NearestAssignPanel extends StatelessWidget {
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -1528,7 +1520,7 @@ class _NearestAssignPanel extends StatelessWidget {
                   style: TextStyle(
                     color: AppColors.textSecondary,
                     fontSize: 13,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -1555,7 +1547,7 @@ class _NearestAssignPanel extends StatelessWidget {
                   style: TextStyle(
                     color: AppColors.accentStrongForeground,
                     fontSize: 12,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -1637,7 +1629,7 @@ class _NearestAssignPointCard extends StatelessWidget {
       child: Material(
         color: AppColors.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           side: BorderSide(color: AppColors.border),
         ),
         clipBehavior: Clip.antiAlias,
@@ -1648,7 +1640,7 @@ class _NearestAssignPointCard extends StatelessWidget {
             child: Row(
               children: [
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.zero,
                   child: SizedBox(
                     width: 56,
                     height: 56,
@@ -1677,7 +1669,7 @@ class _NearestAssignPointCard extends StatelessWidget {
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
@@ -1705,7 +1697,7 @@ class _NearestAssignPointCard extends StatelessWidget {
                               ? AppColors.accentStrongForeground
                               : AppColors.warning,
                           fontSize: 12,
-                          fontWeight: FontWeight.w700,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
@@ -1747,7 +1739,7 @@ class _NearestAssignHintCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           border: Border.all(color: AppColors.border),
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
         ),
         child: Padding(
           padding: const EdgeInsets.all(12),
@@ -1758,7 +1750,7 @@ class _NearestAssignHintCard extends StatelessWidget {
             textAlign: TextAlign.center,
             style: TextStyle(
               color: AppColors.textSecondary,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -1814,15 +1806,8 @@ class _AnchorMarker extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: MapColors.surface,
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           border: Border.all(color: MapColors.accentDark, width: 2),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.16),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
         ),
         child: Icon(LucideIcons.flag, color: MapColors.accentDark),
       ),

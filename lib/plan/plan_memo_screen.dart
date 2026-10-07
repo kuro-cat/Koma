@@ -410,7 +410,7 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
                                 style: TextStyle(
                                   color: AppColors.textPrimary,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w800,
+                                  fontWeight: FontWeight.w600,
                                   letterSpacing: 0,
                                 ),
                               ),
@@ -450,19 +450,19 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
                                       16,
                                     ),
                                     border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
+                                      borderRadius: BorderRadius.zero,
                                       borderSide: BorderSide(
                                         color: AppColors.border,
                                       ),
                                     ),
                                     enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
+                                      borderRadius: BorderRadius.zero,
                                       borderSide: BorderSide(
                                         color: AppColors.border,
                                       ),
                                     ),
                                     focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(16),
+                                      borderRadius: BorderRadius.zero,
                                       borderSide: BorderSide(
                                         color: AppColors.accent,
                                         width: 1.5,
@@ -548,7 +548,7 @@ class _MarkdownToolbar extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
       ),
       padding: const EdgeInsets.all(8),
       child: SingleChildScrollView(
@@ -637,13 +637,13 @@ class _PlanMemoMarkdownPreview extends StatelessWidget {
       a: TextStyle(
         color: AppColors.accentStrongForeground,
         fontSize: 16,
-        fontWeight: FontWeight.w700,
+        fontWeight: FontWeight.w600,
         height: 1.55,
         letterSpacing: 0,
         decoration: TextDecoration.underline,
       ),
       p: paragraph,
-      listBullet: paragraph.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
+      listBullet: paragraph.copyWith(fontSize: 18, fontWeight: FontWeight.w600),
       listBulletPadding: EdgeInsets.zero,
       checkbox: TextStyle(
         color: AppColors.accentStrongForeground,
@@ -652,25 +652,25 @@ class _PlanMemoMarkdownPreview extends StatelessWidget {
       h1: TextStyle(
         color: AppColors.textPrimary,
         fontSize: 24,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w600,
         height: 1.25,
         letterSpacing: 0,
       ),
       h2: TextStyle(
         color: AppColors.textPrimary,
         fontSize: 21,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w600,
         height: 1.3,
         letterSpacing: 0,
       ),
       h3: TextStyle(
         color: AppColors.textPrimary,
         fontSize: 18,
-        fontWeight: FontWeight.w800,
+        fontWeight: FontWeight.w600,
         height: 1.35,
         letterSpacing: 0,
       ),
-      strong: const TextStyle(fontWeight: FontWeight.w800),
+      strong: const TextStyle(fontWeight: FontWeight.w600),
       blockSpacing: 10,
       blockquote: TextStyle(
         color: AppColors.textSecondary,
@@ -682,7 +682,7 @@ class _PlanMemoMarkdownPreview extends StatelessWidget {
       blockquoteDecoration: BoxDecoration(
         color: AppColors.surfaceMuted,
         border: Border(left: BorderSide(color: AppColors.accentDark, width: 4)),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
       ),
       code: TextStyle(
         color: AppColors.textPrimary,
@@ -694,7 +694,7 @@ class _PlanMemoMarkdownPreview extends StatelessWidget {
       codeblockPadding: const EdgeInsets.all(12),
       codeblockDecoration: BoxDecoration(
         color: AppColors.surfaceMuted,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       horizontalRuleDecoration: BoxDecoration(
@@ -722,7 +722,7 @@ class _TaskCheckboxBuilder {
       child: Tooltip(
         message: value ? l10n.planMemoUncheck : l10n.planMemoMarkDone,
         child: InkWell(
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.zero,
           onTap: () => onToggleTask(taskIndex),
           child: SizedBox(
             width: 28,
@@ -753,7 +753,7 @@ Widget _buildMarkdownBullet(MarkdownBulletParameters parameters) {
           style: TextStyle(
             color: AppColors.textPrimary,
             fontSize: 16,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             height: 1.45,
             letterSpacing: 0,
           ),
@@ -772,7 +772,7 @@ Widget _buildMarkdownBullet(MarkdownBulletParameters parameters) {
           style: TextStyle(
             color: AppColors.textPrimary,
             fontSize: 22,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             height: 1,
             letterSpacing: 0,
           ),
@@ -796,7 +796,7 @@ class _UnsupportedMarkdownImage extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceMuted,
         border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
       ),
       child: Row(
         children: [
@@ -872,7 +872,7 @@ class _EmptyPlanMemo extends StatelessWidget {
                   height: 72,
                   decoration: BoxDecoration(
                     color: AppColors.accent.withValues(alpha: 0.10),
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.zero,
                   ),
                   child: Icon(
                     LucideIcons.stickyNote,
@@ -886,7 +886,7 @@ class _EmptyPlanMemo extends StatelessWidget {
                   style: TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 18,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -909,7 +909,7 @@ class _EmptyPlanMemo extends StatelessWidget {
                     padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
                     decoration: BoxDecoration(
                       color: AppColors.surfaceMuted,
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.zero,
                       border: Border.all(color: AppColors.border),
                     ),
                     child: Column(
@@ -928,7 +928,7 @@ class _EmptyPlanMemo extends StatelessWidget {
                               style: TextStyle(
                                 color: AppColors.accentStrongForeground,
                                 fontSize: 13,
-                                fontWeight: FontWeight.w800,
+                                fontWeight: FontWeight.w600,
                                 letterSpacing: 0,
                               ),
                             ),
@@ -1014,7 +1014,7 @@ class _MemoSuggestionItem extends StatelessWidget {
                   style: TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 13,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),

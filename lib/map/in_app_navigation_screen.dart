@@ -1123,22 +1123,13 @@ class _InstructionBanner extends StatelessWidget {
     final zoneName = groupName?.trim() ?? '';
 
     return ClipRRect(
-      borderRadius: const BorderRadius.vertical(bottom: Radius.circular(22)),
+      borderRadius: BorderRadius.zero,
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: DecoratedBox(
           decoration: BoxDecoration(
             color: chrome.panel,
-            borderRadius: const BorderRadius.vertical(
-              bottom: Radius.circular(22),
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.08),
-                blurRadius: 18,
-                offset: const Offset(0, 6),
-              ),
-            ],
+            borderRadius: BorderRadius.zero,
           ),
           child: SafeArea(
             bottom: false,
@@ -1199,7 +1190,7 @@ class _InstructionBanner extends StatelessWidget {
                                           color: chrome.primaryText,
                                           fontSize: 34,
                                           height: 1.05,
-                                          fontWeight: FontWeight.w800,
+                                          fontWeight: FontWeight.w600,
                                           letterSpacing: 0,
                                         ),
                                       ),
@@ -1325,20 +1316,11 @@ class _BottomPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return ClipRRect(
       key: const ValueKey('in-app-navigation-bottom-panel'),
-      borderRadius: const BorderRadius.vertical(top: Radius.circular(22)),
+      borderRadius: BorderRadius.zero,
       child: BackdropFilter(
         filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
         child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: chrome.panel,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 0.1),
-                blurRadius: 18,
-                offset: const Offset(0, -4),
-              ),
-            ],
-          ),
+          decoration: BoxDecoration(color: chrome.panel),
           child: AnimatedSize(
             duration: const Duration(milliseconds: 280),
             curve: Curves.easeOutCubic,
@@ -1389,11 +1371,11 @@ class _BottomPanel extends StatelessWidget {
                           foregroundColor: chrome.primaryText,
                           side: BorderSide(color: chrome.iconButton),
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.zero,
                           ),
                           textStyle: const TextStyle(
                             fontSize: 17,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             letterSpacing: 0,
                           ),
                         ),
@@ -1411,11 +1393,11 @@ class _BottomPanel extends StatelessWidget {
                           backgroundColor: _endRouteRed,
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
+                            borderRadius: BorderRadius.zero,
                           ),
                           textStyle: const TextStyle(
                             fontSize: 17,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             letterSpacing: 0,
                           ),
                         ),
@@ -1463,7 +1445,7 @@ class _SheetHeader extends StatelessWidget {
                 style: TextStyle(
                   color: chrome.primaryText,
                   fontSize: 17,
-                  fontWeight: FontWeight.w700,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -1562,7 +1544,7 @@ class _TripMetricColumn extends StatelessWidget {
               color: chrome.primaryText,
               fontSize: 28,
               height: 1.05,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -1606,14 +1588,14 @@ class _GroupNameRow extends StatelessWidget {
           decoration: BoxDecoration(
             color: AppColors.accent.withValues(alpha: 0.08),
             border: Border.all(color: AppColors.accent.withValues(alpha: 0.42)),
-            borderRadius: BorderRadius.circular(4),
+            borderRadius: BorderRadius.zero,
           ),
           child: Text(
             l10n.inAppNavigationAreaBadge,
             style: TextStyle(
               color: AppColors.accentForeground,
               fontSize: 11,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               height: 1.15,
               letterSpacing: 0,
             ),
@@ -1662,10 +1644,10 @@ class _InfoRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: chrome.row,
-      borderRadius: BorderRadius.circular(14),
+      borderRadius: BorderRadius.zero,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.zero,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
           child: Row(
@@ -1735,7 +1717,7 @@ class _RecenterButton extends StatelessWidget {
       child: Material(
         color: chrome.recenterFill,
         shape: const CircleBorder(),
-        elevation: 2,
+        elevation: 0,
         shadowColor: Colors.black.withValues(alpha: 0.18),
         child: InkWell(
           key: const ValueKey('in-app-navigation-recenter'),
@@ -1797,7 +1779,7 @@ class _WaypointDot extends StatelessWidget {
           style: const TextStyle(
             color: Colors.white,
             fontSize: 11,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             height: 1,
           ),
         ),
@@ -1819,13 +1801,6 @@ class _DestinationPin extends StatelessWidget {
           color: _endRouteRed,
           shape: BoxShape.circle,
           border: Border.all(color: Colors.white, width: 2.5),
-          boxShadow: [
-            BoxShadow(
-              color: _endRouteRed.withValues(alpha: 0.35),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
-            ),
-          ],
         ),
         child: const Icon(LucideIcons.mapPin, color: Colors.white, size: 18),
       ),
@@ -1879,7 +1854,7 @@ class _ArrivalSheet extends StatelessWidget {
               style: TextStyle(
                 color: chrome.primaryText,
                 fontSize: 20,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -1931,11 +1906,11 @@ class _ArrivalSheet extends StatelessWidget {
                     backgroundColor: AppColors.accent,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.zero,
                     ),
                     textStyle: const TextStyle(
                       fontSize: 17,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -1955,7 +1930,7 @@ class _ArrivalSheet extends StatelessWidget {
                     backgroundColor: _endRouteRed,
                     foregroundColor: Colors.white,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
+                      borderRadius: BorderRadius.zero,
                     ),
                   ),
                   child: Text(l10n.inAppNavigationEndRoute),
@@ -2002,7 +1977,7 @@ class _AllStopsSheet extends StatelessWidget {
                   style: TextStyle(
                     color: chrome.primaryText,
                     fontSize: 20,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -2056,7 +2031,7 @@ class _AllStopTile extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
       decoration: BoxDecoration(
         color: chrome.row,
-        borderRadius: BorderRadius.circular(14),
+        borderRadius: BorderRadius.zero,
       ),
       child: Row(
         children: [
@@ -2077,7 +2052,7 @@ class _AllStopTile extends StatelessWidget {
               style: TextStyle(
                 color: skipped ? chrome.secondaryText : Colors.white,
                 fontSize: 13,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -2093,7 +2068,7 @@ class _AllStopTile extends StatelessWidget {
                   style: TextStyle(
                     color: titleColor,
                     fontSize: 16,
-                    fontWeight: FontWeight.w700,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),

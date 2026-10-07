@@ -23,7 +23,7 @@ class ColorGradingParameterSummary extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Column(
@@ -36,7 +36,7 @@ class ColorGradingParameterSummary extends StatelessWidget {
                   l10n.colorGradingParameterSummaryIntensity,
                   style: const TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
               ),
@@ -45,7 +45,7 @@ class ColorGradingParameterSummary extends StatelessWidget {
                 style: TextStyle(
                   color: AppColors.accentStrongForeground,
                   fontSize: 15,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],
@@ -66,7 +66,7 @@ class ColorGradingParameterSummary extends StatelessWidget {
                   l10n.colorGradingParameterSummaryParameters,
                   style: const TextStyle(
                     fontSize: 15,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
@@ -233,7 +233,7 @@ class _ColorGradingParameterSheet extends StatelessWidget {
                 l10n.colorGradingParameterSummaryParameters,
                 style: const TextStyle(
                   fontSize: 18,
-                  fontWeight: FontWeight.w900,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               );
@@ -277,7 +277,7 @@ class _ParameterRow extends StatelessWidget {
                 item.label,
                 style: TextStyle(
                   fontSize: 14,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -287,7 +287,7 @@ class _ParameterRow extends StatelessWidget {
               style: TextStyle(
                 color: AppColors.textSecondary,
                 fontSize: 12,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -295,7 +295,7 @@ class _ParameterRow extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         ClipRRect(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.zero,
           child: LinearProgressIndicator(
             value: activeT,
             minHeight: 7,

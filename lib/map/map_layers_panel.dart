@@ -195,7 +195,7 @@ class _MapLayersPanelState extends State<MapLayersPanel> {
             style: TextStyle(
               color: AppColors.textPrimary,
               fontSize: 17,
-              fontWeight: FontWeight.w800,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -212,7 +212,7 @@ class _MapLayersPanelState extends State<MapLayersPanel> {
               style: TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 15,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -235,10 +235,10 @@ class _MapLayersPanelState extends State<MapLayersPanel> {
     }
     return Material(
       color: AppColors.surface,
-      elevation: 6,
+      elevation: 0,
       shadowColor: Colors.black.withValues(alpha: 0.18),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.zero,
         side: BorderSide(color: AppColors.border),
       ),
       clipBehavior: Clip.antiAlias,

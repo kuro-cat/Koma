@@ -620,7 +620,7 @@ class _RecordComparisonPanelState extends State<_RecordComparisonPanel> {
               visualDensity: VisualDensity.compact,
               textStyle: const TextStyle(
                 fontSize: 13,
-                fontWeight: FontWeight.w700,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -706,7 +706,7 @@ class _RecordImageTile extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ClipRRect(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           child: AspectRatio(
             aspectRatio: 16 / 9,
             child: GestureDetector(
@@ -723,7 +723,7 @@ class _RecordImageTile extends StatelessWidget {
           style: TextStyle(
             color: AppColors.textSecondary,
             fontSize: 12,
-            fontWeight: FontWeight.w800,
+            fontWeight: FontWeight.w600,
             letterSpacing: 0,
           ),
         ),
@@ -787,7 +787,7 @@ class _OrphanRecordNotice extends StatelessWidget {
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.warning.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.warning.withValues(alpha: 0.35)),
       ),
       child: Row(
@@ -828,14 +828,14 @@ class _RecordInfoDashboard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Column(
         children: [
           InkWell(
             onTap: onHeaderTap,
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(7)),
+            borderRadius: BorderRadius.zero,
             child: Padding(
               padding: const EdgeInsets.all(14),
               child: Row(
@@ -849,7 +849,7 @@ class _RecordInfoDashboard extends StatelessWidget {
                           title,
                           style: const TextStyle(
                             fontSize: 22,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             letterSpacing: 0,
                           ),
                         ),
@@ -927,7 +927,7 @@ class _RecordActionPanel extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Column(
@@ -992,10 +992,10 @@ class _RecordAction extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      borderRadius: BorderRadius.circular(6),
+      borderRadius: BorderRadius.zero,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.zero,
         child: SizedBox(
           height: 56,
           child: Padding(
@@ -1016,7 +1016,7 @@ class _RecordAction extends StatelessWidget {
                         style: TextStyle(
                           color: AppColors.textPrimary,
                           fontSize: 14,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
@@ -1068,7 +1068,7 @@ class _DetailRow extends StatelessWidget {
             style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 13,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),

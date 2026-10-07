@@ -350,7 +350,7 @@ class PointDetailSheet extends StatelessWidget {
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               fontSize: 21,
-                              fontWeight: FontWeight.w800,
+                              fontWeight: FontWeight.w600,
                               letterSpacing: 0,
                             ),
                           ),
@@ -684,8 +684,9 @@ class _PointDetailActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final canNavigate =
         onOpenInAppNavigation != null || onOpenExternalNavigation != null;
+    // Matches the theme's 48dp keys so both halves of a row line up.
     final actionHeight =
-        44 + Theme.of(context).visualDensity.baseSizeAdjustment.dy;
+        48 + Theme.of(context).visualDensity.baseSizeAdjustment.dy;
     final actionStyle = OutlinedButton.styleFrom(
       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
     );
@@ -824,7 +825,7 @@ class _ReferenceColumn extends StatelessWidget {
               imageUrl: remoteImageUrl,
             ),
             child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
+              borderRadius: BorderRadius.zero,
               child: Container(
                 width: 76,
                 height: 76,
@@ -850,7 +851,7 @@ class _ReferenceColumn extends StatelessWidget {
                 padding: EdgeInsets.zero,
                 textStyle: const TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -882,13 +883,13 @@ class _GroupInfoRow extends StatelessWidget {
         Icon(LucideIcons.grid2X2, color: AppColors.textSecondary, size: 19),
         const SizedBox(width: 8),
         SizedBox(
-          width: 42,
+          width: 64,
           child: Text(
             l10n.pointDetailArea,
             style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 13,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -930,7 +931,7 @@ class _GroupInfoRow extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 textStyle: const TextStyle(
                   fontSize: 12,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -966,14 +967,14 @@ class _StatusBadge extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
         color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.zero,
       ),
       child: Text(
         text,
         style: TextStyle(
           color: color,
           fontSize: 12,
-          fontWeight: FontWeight.w800,
+          fontWeight: FontWeight.w600,
           letterSpacing: 0,
         ),
       ),
@@ -1000,13 +1001,13 @@ class _InfoRow extends StatelessWidget {
         Icon(icon, color: AppColors.textSecondary, size: 19),
         const SizedBox(width: 8),
         SizedBox(
-          width: 42,
+          width: 64,
           child: Text(
             label,
             style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 13,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -1054,7 +1055,7 @@ class _PointRecordsPreview extends StatelessWidget {
               l10n.pointDetailRecordsCount(records.length),
               style: const TextStyle(
                 fontSize: 15,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),
@@ -1079,7 +1080,7 @@ class _PointRecordsPreview extends StatelessWidget {
                 width: 92,
                 child: Material(
                   color: Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.zero,
                   clipBehavior: Clip.antiAlias,
                   child: InkWell(
                     onTap: onOpenRecord == null
@@ -1091,7 +1092,7 @@ class _PointRecordsPreview extends StatelessWidget {
                         Expanded(
                           child: ClipRRect(
                             key: const ValueKey('point-record-preview-photo'),
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.zero,
                             child: VisitRecordPhoto(path: photoPath),
                           ),
                         ),
@@ -1104,7 +1105,7 @@ class _PointRecordsPreview extends StatelessWidget {
                           style: TextStyle(
                             color: AppColors.textSecondary,
                             fontSize: 11,
-                            fontWeight: FontWeight.w700,
+                            fontWeight: FontWeight.w600,
                             letterSpacing: 0,
                           ),
                         ),

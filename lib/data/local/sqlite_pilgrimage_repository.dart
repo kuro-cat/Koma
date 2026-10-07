@@ -2237,10 +2237,7 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
   }
 
   AppThemePalette _themePaletteFromName(String name) {
-    return AppThemePalette.values.firstWhere(
-      (palette) => palette.name == name,
-      orElse: () => AppThemePalette.classicGreen,
-    );
+    return AppThemePalette.fromName(name) ?? AppThemePalette.fjord;
   }
 
   AppThemeMode _themeModeFromName(String name) {

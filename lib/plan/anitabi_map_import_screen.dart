@@ -2117,7 +2117,7 @@ class _ImportOrganizeDialog extends StatelessWidget {
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       backgroundColor: AppColors.surface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 420),
         child: Padding(
@@ -2131,7 +2131,7 @@ class _ImportOrganizeDialog extends StatelessWidget {
                 style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 18,
-                  fontWeight: FontWeight.w800,
+                  fontWeight: FontWeight.w600,
                   letterSpacing: 0,
                 ),
               ),
@@ -2144,7 +2144,7 @@ class _ImportOrganizeDialog extends StatelessWidget {
                       text: l10n.anitabiMapImportSpotCount(importedCount),
                       style: TextStyle(
                         color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w800,
+                        fontWeight: FontWeight.w600,
                       ),
                     ),
                     TextSpan(text: l10n.anitabiMapImportOrganizeTail),
@@ -2332,7 +2332,7 @@ class _ImportSummary extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Column(
@@ -2369,7 +2369,7 @@ class _ImportSummary extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 13,
-                      fontWeight: FontWeight.w700,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -2424,7 +2424,7 @@ class _ImportSummary extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 10),
                         textStyle: const TextStyle(
                           fontSize: 13,
-                          fontWeight: FontWeight.w800,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
@@ -2465,7 +2465,7 @@ class _ImportSummary extends StatelessWidget {
         color: selected ? AppColors.accent : AppColors.border,
         width: selected ? 2 : 1,
       ),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
     );
   }
 }
@@ -2593,7 +2593,7 @@ class _AnitabiPointCard extends StatelessWidget {
       child: Material(
         color: AppColors.surface,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.zero,
           side: BorderSide(color: AppColors.border),
         ),
         clipBehavior: Clip.antiAlias,
@@ -2629,7 +2629,7 @@ class _AnitabiPointCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         ClipRRect(
-                          borderRadius: BorderRadius.circular(8),
+                          borderRadius: BorderRadius.zero,
                           child: Material(
                             color: AppColors.surfaceMuted,
                             child: InkWell(
@@ -2680,7 +2680,7 @@ class _AnitabiPointCard extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                     fontSize: 16,
-                                    fontWeight: FontWeight.w800,
+                                    fontWeight: FontWeight.w600,
                                     letterSpacing: 0,
                                   ),
                                 ),
@@ -2851,7 +2851,7 @@ class _AnitabiPointDetailSheet extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
+                    borderRadius: BorderRadius.zero,
                     child: Material(
                       color: AppColors.surfaceMuted,
                       child: InkWell(
@@ -2887,7 +2887,7 @@ class _AnitabiPointDetailSheet extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                             fontSize: 20,
-                            fontWeight: FontWeight.w800,
+                            fontWeight: FontWeight.w600,
                             letterSpacing: 0,
                           ),
                         ),
@@ -2981,7 +2981,7 @@ class _AnitabiDetailInfoLine extends StatelessWidget {
             style: TextStyle(
               color: AppColors.textSecondary,
               fontSize: 13,
-              fontWeight: FontWeight.w700,
+              fontWeight: FontWeight.w600,
               letterSpacing: 0,
             ),
           ),
@@ -3026,7 +3026,7 @@ class _NoPointSelectedCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
@@ -3080,7 +3080,7 @@ class _EmptyImportState extends StatelessWidget {
           padding: const EdgeInsets.all(18),
           decoration: BoxDecoration(
             color: AppColors.surface,
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.zero,
             border: Border.all(color: AppColors.border),
           ),
           child: Column(
@@ -3098,7 +3098,7 @@ class _EmptyImportState extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.accentStrongForeground,
                       fontSize: 18,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -3194,7 +3194,7 @@ class _ImportWorkGuideStep extends StatelessWidget {
                     height: 10,
                     decoration: BoxDecoration(
                       color: AppColors.accent,
-                      borderRadius: BorderRadius.circular(5),
+                      borderRadius: BorderRadius.zero,
                     ),
                   ),
                 ),
@@ -3213,7 +3213,7 @@ class _ImportWorkGuideStep extends StatelessWidget {
                     style: TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 16,
-                      fontWeight: FontWeight.w800,
+                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
@@ -3340,7 +3340,7 @@ class _ImportErrorState extends StatelessWidget {
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w800,
+                fontWeight: FontWeight.w600,
                 letterSpacing: 0,
               ),
             ),

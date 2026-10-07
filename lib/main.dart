@@ -22,6 +22,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   LicenseRegistry.addLicense(() async* {
     yield LicenseEntryWithLineBreaks([
+      'Archivo',
+    ], await rootBundle.loadString('assets/fonts/Archivo-OFL.txt'));
+  });
+  LicenseRegistry.addLicense(() async* {
+    yield LicenseEntryWithLineBreaks([
       'MiriaGo Readable Dark / OpenFreeMap / OpenMapTiles',
     ], await rootBundle.loadString('assets/maps/LICENSE.txt'));
   });
@@ -101,7 +106,7 @@ class _MiriaGoBootstrapState extends State<MiriaGoBootstrap> {
       return MiriaGoApp(repository: repository);
     }
     return MaterialApp(
-      title: 'MiriaGo',
+      title: 'Koma',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
       localizationsDelegates: AppLocalizations.localizationsDelegates,
@@ -308,7 +313,7 @@ class _MiriaGoAppState extends State<MiriaGoApp> with WidgetsBindingObserver {
     );
 
     return MaterialApp(
-      title: 'MiriaGo',
+      title: 'Koma',
       debugShowCheckedModeBanner: false,
       theme: theme,
       themeAnimationDuration: Duration.zero,

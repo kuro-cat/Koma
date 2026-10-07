@@ -333,7 +333,7 @@ class _ManualAnchorMarker extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppColors.warning,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: Colors.white, width: 3),
       ),
       child: const Icon(LucideIcons.mapPinPlus, color: Colors.white),
@@ -358,7 +358,7 @@ class _MapToolButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: selected ? AppColors.accent : AppColors.surface,
-      borderRadius: BorderRadius.circular(8),
+      borderRadius: BorderRadius.zero,
       child: IconButton(
         tooltip: tooltip,
         onPressed: onTap,
@@ -405,7 +405,7 @@ class _AnchorSelectionCard extends StatelessWidget {
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.zero,
         border: Border.all(color: AppColors.border),
       ),
       child: Row(
@@ -423,7 +423,7 @@ class _AnchorSelectionCard extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
                     fontSize: 17,
-                    fontWeight: FontWeight.w800,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
