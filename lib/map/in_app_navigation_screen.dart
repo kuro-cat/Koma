@@ -1611,7 +1611,7 @@ class _GroupNameRow extends StatelessWidget {
           child: Text(
             l10n.inAppNavigationAreaBadge,
             style: TextStyle(
-              color: AppColors.accent,
+              color: AppColors.accentForeground,
               fontSize: 11,
               fontWeight: FontWeight.w700,
               height: 1.15,
@@ -1746,7 +1746,7 @@ class _RecenterButton extends StatelessWidget {
             height: 44,
             child: Icon(
               LucideIcons.navigation,
-              color: AppColors.accent,
+              color: AppColors.accentForeground,
               size: 22,
             ),
           ),

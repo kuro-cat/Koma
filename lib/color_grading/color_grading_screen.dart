@@ -856,7 +856,7 @@ class _ScoreValue extends StatelessWidget {
           Text(
             '$score',
             style: TextStyle(
-              color: AppColors.accentDark,
+              color: AppColors.accentStrongForeground,
               fontSize: 22,
               fontWeight: FontWeight.w900,
               letterSpacing: 0,

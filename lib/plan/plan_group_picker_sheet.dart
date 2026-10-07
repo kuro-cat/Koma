@@ -335,7 +335,7 @@ class _PlanGroupPickerTile extends StatelessWidget {
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             color: selected
-                                ? AppColors.accentDark
+                                ? AppColors.accentStrongForeground
                                 : AppColors.textSecondary,
                             fontSize: emphasizeTotalCount ? 10 : 17,
                             fontWeight: FontWeight.w800,
@@ -460,12 +460,15 @@ Future<String?> showPlanGroupSelectionSheet({
                             child: Row(
                               children: [
                                 const SizedBox(width: 8),
-                                Icon(LucideIcons.plus, color: AppColors.accent),
+                                Icon(
+                                  LucideIcons.plus,
+                                  color: AppColors.accentForeground,
+                                ),
                                 const SizedBox(width: 12),
                                 Text(
                                   l10n.planGroupPickerNewGroup,
                                   style: TextStyle(
-                                    color: AppColors.accentDark,
+                                    color: AppColors.accentStrongForeground,
                                     fontSize: 14,
                                     fontWeight: FontWeight.w700,
                                     letterSpacing: 0,
@@ -551,7 +554,7 @@ class _PlanGroupSelectionTileState extends State<_PlanGroupSelectionTile> {
                             'plan-point-group-selection-${widget.option.title}',
                           ),
                           color: widget.selected
-                              ? AppColors.accent
+                              ? AppColors.accentForeground
                               : AppColors.textSecondary,
                           size: 20,
                         ),

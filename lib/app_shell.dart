@@ -263,7 +263,9 @@ class _AppShellState extends State<AppShell> {
                     plan.id == currentId
                         ? LucideIcons.circleCheck
                         : LucideIcons.circle,
-                    color: plan.id == currentId ? AppColors.accent : null,
+                    color: plan.id == currentId
+                        ? AppColors.accentForeground
+                        : null,
                   ),
                   title: Text(plan.name),
                   subtitle: Text(
@@ -738,7 +740,11 @@ class _NoPlanState extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(LucideIcons.route, color: AppColors.accent, size: 40),
+              Icon(
+                LucideIcons.route,
+                color: AppColors.accentForeground,
+                size: 40,
+              ),
               const SizedBox(height: 12),
               Text(
                 l10n.appShellNoPlansTitle,
@@ -792,7 +798,7 @@ class _PlanLoadState extends StatelessWidget {
             children: [
               Icon(
                 hasError ? LucideIcons.circleAlert : LucideIcons.route,
-                color: hasError ? AppColors.error : AppColors.accent,
+                color: hasError ? AppColors.error : AppColors.accentForeground,
                 size: 40,
               ),
               const SizedBox(height: 12),

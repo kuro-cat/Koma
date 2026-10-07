@@ -948,7 +948,7 @@ class _PlanActionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themedIcon = IconTheme(
-      data: IconThemeData(color: AppColors.accentDark),
+      data: IconThemeData(color: AppColors.accentStrongForeground),
       child: icon,
     );
     return Material(
@@ -1713,12 +1713,12 @@ class _EmptyPlanCard extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(LucideIcons.package, color: AppColors.accent),
+              Icon(LucideIcons.package, color: AppColors.accentForeground),
               const SizedBox(width: 10),
               Text(
                 l10n.planNoSpotsYet,
                 style: TextStyle(
-                  color: AppColors.accentDark,
+                  color: AppColors.accentStrongForeground,
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0,
@@ -1889,7 +1889,10 @@ class _WorkHeader extends StatelessWidget {
               color: AppColors.surfaceMuted,
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(LucideIcons.clapperboard, color: AppColors.accentDark),
+            child: Icon(
+              LucideIcons.clapperboard,
+              color: AppColors.accentStrongForeground,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -2148,7 +2151,7 @@ class _PointRecordBadge extends StatelessWidget {
       child: Icon(
         stacked ? LucideIcons.images : LucideIcons.image,
         size: 10,
-        color: AppColors.accentDark,
+        color: AppColors.accentStrongForeground,
       ),
     );
   }

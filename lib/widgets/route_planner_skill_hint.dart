@@ -134,7 +134,7 @@ class _RoutePlannerSkillCardState extends State<RoutePlannerSkillCard> {
               children: [
                 Icon(
                   LucideIcons.sparkles,
-                  color: AppColors.accentDark,
+                  color: AppColors.accentStrongForeground,
                   size: 20,
                 ),
                 const SizedBox(width: 8),
@@ -174,7 +174,7 @@ class _RoutePlannerSkillCardState extends State<RoutePlannerSkillCard> {
                 l10n.routePlannerSkillHintTapForGuide,
                 key: const ValueKey('route-planner-skill-open'),
                 style: TextStyle(
-                  color: AppColors.accentDark,
+                  color: AppColors.accentStrongForeground,
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0,
@@ -268,7 +268,7 @@ class _RoutePlannerSkillLinkState extends State<RoutePlannerSkillLink> {
               child: Icon(
                 LucideIcons.sparkles,
                 size: 14,
-                color: AppColors.accentDark,
+                color: AppColors.accentStrongForeground,
               ),
             ),
             const SizedBox(width: 6),
@@ -281,10 +281,10 @@ class _RoutePlannerSkillLinkState extends State<RoutePlannerSkillLink> {
                     TextSpan(
                       text: l10n.routePlannerSkillHintLinkText,
                       style: TextStyle(
-                        color: AppColors.accentDark,
+                        color: AppColors.accentStrongForeground,
                         fontWeight: FontWeight.w700,
                         decoration: TextDecoration.underline,
-                        decorationColor: AppColors.accentDark,
+                        decorationColor: AppColors.accentStrongForeground,
                       ),
                     ),
                   ],

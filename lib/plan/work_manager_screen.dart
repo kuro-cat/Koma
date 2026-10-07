@@ -614,7 +614,9 @@ class _WorkManageBadge extends StatelessWidget {
         maxLines: 1,
         softWrap: false,
         style: TextStyle(
-          color: emphasized ? AppColors.accentDark : AppColors.textSecondary,
+          color: emphasized
+              ? AppColors.accentStrongForeground
+              : AppColors.textSecondary,
           fontSize: 11,
           fontWeight: FontWeight.w700,
           letterSpacing: 0,
@@ -641,12 +643,12 @@ class _EmptyWorkPanel extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(LucideIcons.clapperboard, color: AppColors.accent),
+              Icon(LucideIcons.clapperboard, color: AppColors.accentForeground),
               const SizedBox(width: 8),
               Text(
                 l10n.workManagerEmptyTitle,
                 style: TextStyle(
-                  color: AppColors.accentDark,
+                  color: AppColors.accentStrongForeground,
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0,

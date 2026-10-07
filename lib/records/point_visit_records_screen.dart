@@ -117,7 +117,7 @@ class _PointRecordsHeader extends StatelessWidget {
               color: AppColors.accent.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(LucideIcons.folders, color: AppColors.accent),
+            child: Icon(LucideIcons.folders, color: AppColors.accentForeground),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -157,7 +157,7 @@ class _PointRecordsHeader extends StatelessWidget {
               Text(
                 '$count',
                 style: TextStyle(
-                  color: AppColors.accentDark,
+                  color: AppColors.accentStrongForeground,
                   fontSize: 26,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0,
@@ -167,7 +167,7 @@ class _PointRecordsHeader extends StatelessWidget {
               Text(
                 l10n.pointVisitRecordsCountUnit(count),
                 style: TextStyle(
-                  color: AppColors.accentDark,
+                  color: AppColors.accentStrongForeground,
                   fontSize: 13,
                   fontWeight: FontWeight.w800,
                   letterSpacing: 0,
@@ -220,7 +220,11 @@ class _PointRecordsListLabel extends StatelessWidget {
       padding: EdgeInsets.zero,
       child: Row(
         children: [
-          Icon(LucideIcons.calendarClock, color: AppColors.accent, size: 15),
+          Icon(
+            LucideIcons.calendarClock,
+            color: AppColors.accentForeground,
+            size: 15,
+          ),
           const SizedBox(width: 6),
           Text(
             l10n.pointVisitRecordsListLabel,

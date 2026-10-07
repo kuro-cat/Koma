@@ -43,7 +43,7 @@ class ColorGradingParameterSummary extends StatelessWidget {
               Text(
                 '${(intensity * 100).round()}%',
                 style: TextStyle(
-                  color: AppColors.accentDark,
+                  color: AppColors.accentStrongForeground,
                   fontSize: 15,
                   fontWeight: FontWeight.w900,
                 ),

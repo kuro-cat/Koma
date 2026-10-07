@@ -1299,7 +1299,7 @@ class _PlanManagerHeader extends StatelessWidget {
                             Icon(
                               LucideIcons.flag,
                               size: 18,
-                              color: AppColors.accent,
+                              color: AppColors.accentForeground,
                             ),
                             const SizedBox(width: 8),
                             Expanded(
@@ -1308,7 +1308,7 @@ class _PlanManagerHeader extends StatelessWidget {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
-                                  color: AppColors.accent,
+                                  color: AppColors.accentForeground,
                                   fontSize: 15,
                                   fontWeight: FontWeight.w800,
                                   letterSpacing: 0,
@@ -2601,7 +2601,7 @@ class _AnchorSelectionCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(LucideIcons.flag, color: AppColors.accent, size: 28),
+          Icon(LucideIcons.flag, color: AppColors.accentForeground, size: 28),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

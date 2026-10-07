@@ -154,7 +154,9 @@ class _AppDialogFieldState extends State<AppDialogField> {
           Text(
             widget.label,
             style: TextStyle(
-              color: _hasFocus ? AppColors.accentDark : AppColors.textSecondary,
+              color: _hasFocus
+                  ? AppColors.accentStrongForeground
+                  : AppColors.textSecondary,
               fontSize: 13,
               fontWeight: FontWeight.w700,
               letterSpacing: 0,

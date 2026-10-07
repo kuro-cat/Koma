@@ -635,7 +635,7 @@ class _PlanMemoMarkdownPreview extends StatelessWidget {
     );
     return base.copyWith(
       a: TextStyle(
-        color: AppColors.accentDark,
+        color: AppColors.accentStrongForeground,
         fontSize: 16,
         fontWeight: FontWeight.w700,
         height: 1.55,
@@ -645,7 +645,10 @@ class _PlanMemoMarkdownPreview extends StatelessWidget {
       p: paragraph,
       listBullet: paragraph.copyWith(fontSize: 18, fontWeight: FontWeight.w800),
       listBulletPadding: EdgeInsets.zero,
-      checkbox: TextStyle(color: AppColors.accentDark, fontSize: 24),
+      checkbox: TextStyle(
+        color: AppColors.accentStrongForeground,
+        fontSize: 24,
+      ),
       h1: TextStyle(
         color: AppColors.textPrimary,
         fontSize: 24,
@@ -727,7 +730,9 @@ class _TaskCheckboxBuilder {
             child: Icon(
               value ? LucideIcons.squareCheckBig : LucideIcons.square,
               size: 25,
-              color: value ? AppColors.accentDark : AppColors.textSecondary,
+              color: value
+                  ? AppColors.accentStrongForeground
+                  : AppColors.textSecondary,
             ),
           ),
         ),
@@ -871,7 +876,7 @@ class _EmptyPlanMemo extends StatelessWidget {
                   ),
                   child: Icon(
                     LucideIcons.stickyNote,
-                    color: AppColors.accentDark,
+                    color: AppColors.accentStrongForeground,
                     size: 34,
                   ),
                 ),
@@ -914,14 +919,14 @@ class _EmptyPlanMemo extends StatelessWidget {
                           children: [
                             Icon(
                               LucideIcons.lightbulb,
-                              color: AppColors.accent,
+                              color: AppColors.accentForeground,
                               size: 18,
                             ),
                             const SizedBox(width: 7),
                             Text(
                               l10n.planMemoSuggestionsTitle,
                               style: TextStyle(
-                                color: AppColors.accentDark,
+                                color: AppColors.accentStrongForeground,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w800,
                                 letterSpacing: 0,
@@ -991,7 +996,11 @@ class _MemoSuggestionItem extends StatelessWidget {
               color: AppColors.accent.withValues(alpha: 0.08),
               shape: BoxShape.circle,
             ),
-            child: Icon(suggestion.icon, color: AppColors.accent, size: 18),
+            child: Icon(
+              suggestion.icon,
+              color: AppColors.accentForeground,
+              size: 18,
+            ),
           ),
           const SizedBox(width: 8),
           Expanded(

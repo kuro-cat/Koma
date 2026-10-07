@@ -3656,7 +3656,7 @@ class _FallbackPreview extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(LucideIcons.camera, color: AppColors.accentDark),
+            Icon(LucideIcons.camera, color: AppColors.accentStrongForeground),
             SizedBox(height: 8),
             Text(
               l10n.camerawesomeReferenceWebPreview,

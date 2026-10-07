@@ -37,7 +37,7 @@ class ReferenceImagePlaceholder extends StatelessWidget {
           child: compact
               ? Icon(
                   LucideIcons.image,
-                  color: iconColor ?? AppColors.accentDark,
+                  color: iconColor ?? AppColors.accentStrongForeground,
                   size: 28,
                 )
               : Column(
@@ -52,7 +52,7 @@ class ReferenceImagePlaceholder extends StatelessWidget {
                     else
                       Icon(
                         LucideIcons.image,
-                        color: iconColor ?? AppColors.accentDark,
+                        color: iconColor ?? AppColors.accentStrongForeground,
                         size: 32,
                       ),
                     const SizedBox(height: 8),

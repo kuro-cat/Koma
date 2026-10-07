@@ -274,7 +274,10 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
             for (final entry in entries)
               ListTile(
                 key: ValueKey('plan-link-entry-${entry.name}'),
-                leading: Icon(LucideIcons.package, color: AppColors.accentDark),
+                leading: Icon(
+                  LucideIcons.package,
+                  color: AppColors.accentStrongForeground,
+                ),
                 title: Text(entry.fileName),
                 subtitle: Text(formatPlanLinkBytes(entry.size)),
                 onTap: () => Navigator.of(context).pop(entry.name),
@@ -448,7 +451,7 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
                   _assets[i].isPlan
                       ? LucideIcons.package
                       : LucideIcons.fileArchive,
-                  color: AppColors.accentDark,
+                  color: AppColors.accentStrongForeground,
                 ),
                 title: Text(_assets[i].name),
                 subtitle: Text(

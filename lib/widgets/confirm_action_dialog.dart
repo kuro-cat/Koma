@@ -287,7 +287,7 @@ class _StandardConfirmDialog extends StatelessWidget {
                       children: [
                         Icon(
                           LucideIcons.info,
-                          color: AppColors.accent,
+                          color: AppColors.accentForeground,
                           size: 17,
                         ),
                         const SizedBox(width: 8),
@@ -295,7 +295,7 @@ class _StandardConfirmDialog extends StatelessWidget {
                           child: Text(
                             notice!,
                             style: TextStyle(
-                              color: AppColors.accentDark,
+                              color: AppColors.accentStrongForeground,
                               fontSize: 13,
                               fontWeight: FontWeight.w600,
                               letterSpacing: 0,

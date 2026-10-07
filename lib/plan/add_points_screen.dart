@@ -806,7 +806,7 @@ class _BangumiTypeFilter extends StatelessWidget {
                   maxLines: 1,
                   style: TextStyle(
                     color: selected
-                        ? AppColors.accentDark
+                        ? AppColors.accentStrongForeground
                         : AppColors.textSecondary,
                     fontSize: 13,
                     fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
@@ -1292,7 +1292,7 @@ class _ExampleLinkText extends StatelessWidget {
         text,
         softWrap: false,
         style: TextStyle(
-          color: AppColors.accentDark,
+          color: AppColors.accentStrongForeground,
           fontSize: 13,
           fontFamily: 'monospace',
           fontWeight: FontWeight.w800,
@@ -1722,7 +1722,7 @@ class _ManualPointFillingGuideSheet extends StatelessWidget {
               children: [
                 Icon(
                   LucideIcons.mapPinPlus,
-                  color: AppColors.accentDark,
+                  color: AppColors.accentStrongForeground,
                   size: 24,
                 ),
                 const SizedBox(width: 10),
@@ -1808,7 +1808,7 @@ class _ManualPointFillingGuideSheet extends StatelessWidget {
                   Icon(
                     LucideIcons.locateFixed,
                     size: 19,
-                    color: AppColors.accentDark,
+                    color: AppColors.accentStrongForeground,
                   ),
                   const SizedBox(width: 9),
                   Expanded(
@@ -1861,7 +1861,7 @@ class _ManualWorkFillingGuideSheet extends StatelessWidget {
               children: [
                 Icon(
                   LucideIcons.bookOpen,
-                  color: AppColors.accentDark,
+                  color: AppColors.accentStrongForeground,
                   size: 24,
                 ),
                 const SizedBox(width: 10),
@@ -1940,7 +1940,7 @@ class _ManualWorkFillingGuideSheet extends StatelessWidget {
                   Icon(
                     LucideIcons.lightbulb,
                     size: 19,
-                    color: AppColors.accentDark,
+                    color: AppColors.accentStrongForeground,
                   ),
                   const SizedBox(width: 9),
                   Expanded(
@@ -2062,7 +2062,7 @@ class _FillingGuideItem extends StatelessWidget {
                           badge,
                           style: TextStyle(
                             color: badge == l10n.addPointsBadgeRequired
-                                ? AppColors.accentDark
+                                ? AppColors.accentStrongForeground
                                 : AppColors.textSecondary,
                             fontSize: 11,
                             fontWeight: FontWeight.w800,
@@ -2086,7 +2086,7 @@ class _FillingGuideItem extends StatelessWidget {
                   Text(
                     l10n.addPointsGuideExample(example),
                     style: TextStyle(
-                      color: AppColors.accentDark,
+                      color: AppColors.accentStrongForeground,
                       fontSize: 12,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 0,
@@ -2145,7 +2145,11 @@ class _ManualWorkTypeDropdownItemState
           children: [
             Expanded(child: Text(widget.type.label)),
             if (widget.selected)
-              Icon(LucideIcons.checkCircle, color: AppColors.accent, size: 18),
+              Icon(
+                LucideIcons.checkCircle,
+                color: AppColors.accentForeground,
+                size: 18,
+              ),
           ],
         ),
       ),
@@ -2639,7 +2643,7 @@ class _QuickManualPointFillingGuideSheet extends StatelessWidget {
               children: [
                 Icon(
                   LucideIcons.mapPinPlus,
-                  color: AppColors.accentDark,
+                  color: AppColors.accentStrongForeground,
                   size: 24,
                 ),
                 const SizedBox(width: 10),
@@ -3845,7 +3849,7 @@ class _ManualPointSelectionCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(LucideIcons.mapPinPlus, color: AppColors.accent),
+          Icon(LucideIcons.mapPinPlus, color: AppColors.accentForeground),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -3965,7 +3969,7 @@ class _LinkedWorksPanel extends StatelessWidget {
                             Text(
                               l10n.addPointsManageWorks,
                               style: TextStyle(
-                                color: AppColors.accentDark,
+                                color: AppColors.accentStrongForeground,
                                 fontSize: 13,
                                 fontWeight: FontWeight.w800,
                                 letterSpacing: 0,
@@ -3974,7 +3978,7 @@ class _LinkedWorksPanel extends StatelessWidget {
                             SizedBox(width: 2),
                             Icon(
                               LucideIcons.chevronRight,
-                              color: AppColors.accent,
+                              color: AppColors.accentForeground,
                               size: 20,
                             ),
                           ],
@@ -4122,7 +4126,7 @@ class _MoreWorksIndicator extends StatelessWidget {
           child: Text(
             '+$count',
             style: TextStyle(
-              color: AppColors.accentDark,
+              color: AppColors.accentStrongForeground,
               fontSize: 13,
               fontWeight: FontWeight.w800,
               letterSpacing: 0,
@@ -4160,7 +4164,7 @@ class _WorkCreationAction extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Row(
             children: [
-              Icon(icon, color: AppColors.accent, size: 22),
+              Icon(icon, color: AppColors.accentForeground, size: 22),
               const SizedBox(width: 8),
               Expanded(
                 child: Column(
@@ -4541,7 +4545,11 @@ class _BangumiSearchHintContent extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(LucideIcons.search, color: AppColors.accent, size: 17),
+            Icon(
+              LucideIcons.search,
+              color: AppColors.accentForeground,
+              size: 17,
+            ),
             const SizedBox(width: 8),
             Text(
               l10n.addPointsSearchHelpTitle,
@@ -4580,7 +4588,7 @@ class _BangumiSearchHintContent extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 1),
                   child: Icon(
                     LucideIcons.info,
-                    color: AppColors.accent,
+                    color: AppColors.accentForeground,
                     size: 16,
                   ),
                 ),
@@ -4589,7 +4597,7 @@ class _BangumiSearchHintContent extends StatelessWidget {
                   child: Text(
                     l10n.addPointsBangumiNetworkNote,
                     style: TextStyle(
-                      color: AppColors.accentDark,
+                      color: AppColors.accentStrongForeground,
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
                       height: 1.35,
@@ -4664,7 +4672,7 @@ class _FindSpotsPanel extends StatelessWidget {
                           ),
                           child: Icon(
                             LucideIcons.map,
-                            color: AppColors.accent,
+                            color: AppColors.accentForeground,
                             size: 26,
                           ),
                         ),
@@ -4699,7 +4707,7 @@ class _FindSpotsPanel extends StatelessWidget {
                                     child: Text(
                                       l10n.addPointsRecommended,
                                       style: TextStyle(
-                                        color: AppColors.accentDark,
+                                        color: AppColors.accentStrongForeground,
                                         fontSize: 11,
                                         fontWeight: FontWeight.w800,
                                         letterSpacing: 0,
@@ -4723,7 +4731,7 @@ class _FindSpotsPanel extends StatelessWidget {
                         Icon(
                           LucideIcons.chevronRight,
                           color: enabled
-                              ? AppColors.accent
+                              ? AppColors.accentForeground
                               : AppColors.textSecondary,
                         ),
                       ],
@@ -4865,7 +4873,7 @@ class _PointCreationAction extends StatelessWidget {
                     child: Icon(
                       icon,
                       color: enabled
-                          ? AppColors.accent
+                          ? AppColors.accentForeground
                           : AppColors.textSecondary,
                       size: 24,
                     ),
@@ -4913,7 +4921,9 @@ class _PointCreationAction extends StatelessWidget {
                   ),
                   Icon(
                     LucideIcons.chevronRight,
-                    color: enabled ? AppColors.accent : AppColors.textSecondary,
+                    color: enabled
+                        ? AppColors.accentForeground
+                        : AppColors.textSecondary,
                     size: 22,
                   ),
                 ],

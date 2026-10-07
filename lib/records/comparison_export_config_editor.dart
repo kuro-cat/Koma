@@ -359,7 +359,7 @@ class _OutputWidthOption extends StatelessWidget {
                   maxLines: 1,
                   style: TextStyle(
                     color: selected
-                        ? AppColors.accentDark
+                        ? AppColors.accentStrongForeground
                         : AppColors.textSecondary,
                     fontSize: 12,
                     fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
@@ -713,7 +713,7 @@ class _ColorOption extends StatelessWidget {
                 label,
                 style: TextStyle(
                   color: selected
-                      ? AppColors.accentDark
+                      ? AppColors.accentStrongForeground
                       : AppColors.textPrimary,
                   fontSize: 13,
                   fontWeight: selected ? FontWeight.w700 : FontWeight.w500,

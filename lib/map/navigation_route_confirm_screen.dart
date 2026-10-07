@@ -498,7 +498,7 @@ class _GroupNameRow extends StatelessWidget {
           child: Text(
             l10n.navigationRouteConfirmAreaBadge,
             style: TextStyle(
-              color: AppColors.accent,
+              color: AppColors.accentForeground,
               fontSize: 11,
               fontWeight: FontWeight.w700,
               height: 1.15,

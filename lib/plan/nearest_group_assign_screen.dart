@@ -1553,7 +1553,7 @@ class _NearestAssignPanel extends StatelessWidget {
                     _formatDistance(distanceMeters),
                   ),
                   style: TextStyle(
-                    color: AppColors.accentDark,
+                    color: AppColors.accentStrongForeground,
                     fontSize: 12,
                     fontWeight: FontWeight.w700,
                     letterSpacing: 0,
@@ -1702,7 +1702,7 @@ class _NearestAssignPointCard extends StatelessWidget {
                                   l10n.nearestGroupAssignOutOfRange,
                         style: TextStyle(
                           color: assignable
-                              ? AppColors.accentDark
+                              ? AppColors.accentStrongForeground
                               : AppColors.warning,
                           fontSize: 12,
                           fontWeight: FontWeight.w700,
@@ -1715,7 +1715,9 @@ class _NearestAssignPointCard extends StatelessWidget {
                 const SizedBox(width: 8),
                 Icon(
                   assignable ? LucideIcons.circleCheckBig : LucideIcons.info,
-                  color: assignable ? AppColors.accentDark : AppColors.warning,
+                  color: assignable
+                      ? AppColors.accentStrongForeground
+                      : AppColors.warning,
                   size: 20,
                 ),
               ],

@@ -657,7 +657,7 @@ class _PlanCardState extends State<_PlanCard> {
                                 ? LucideIcons.checkCircle
                                 : LucideIcons.arrowLeftRight,
                             color: selected
-                                ? AppColors.accent
+                                ? AppColors.accentForeground
                                 : AppColors.textSecondary.withValues(
                                     alpha: 0.62,
                                   ),
@@ -677,7 +677,7 @@ class _PlanCardState extends State<_PlanCard> {
                             ),
                             style: TextStyle(
                               color: selected
-                                  ? AppColors.accentDark
+                                  ? AppColors.accentStrongForeground
                                   : AppColors.textSecondary,
                               fontSize: 12,
                               height: 1.15,

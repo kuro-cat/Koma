@@ -91,7 +91,10 @@ class VisitRecordPhoto extends StatelessWidget {
     return ColoredBox(
       color: AppColors.surfaceMuted,
       child: Center(
-        child: Icon(LucideIcons.imageOff, color: AppColors.accentDark),
+        child: Icon(
+          LucideIcons.imageOff,
+          color: AppColors.accentStrongForeground,
+        ),
       ),
     );
   }

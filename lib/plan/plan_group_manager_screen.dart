@@ -861,7 +861,7 @@ class _UngroupedGroupCard extends StatelessWidget {
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
                         color: hasPoints
-                            ? AppColors.accent
+                            ? AppColors.accentForeground
                             : AppColors.textSecondary,
                         fontSize: 12,
                         fontWeight: hasPoints

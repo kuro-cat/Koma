@@ -410,7 +410,7 @@ class _AnchorSelectionCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(LucideIcons.flag, color: AppColors.accent, size: 28),
+          Icon(LucideIcons.flag, color: AppColors.accentForeground, size: 28),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

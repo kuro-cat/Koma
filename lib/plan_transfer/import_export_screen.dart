@@ -638,7 +638,10 @@ class _PlanExportSummary extends StatelessWidget {
               color: AppColors.accent.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(LucideIcons.archive, color: AppColors.accentDark),
+            child: Icon(
+              LucideIcons.archive,
+              color: AppColors.accentStrongForeground,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -690,7 +693,7 @@ class _SectionTitle extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: AppColors.accentDark, size: 20),
+        Icon(icon, color: AppColors.accentStrongForeground, size: 20),
         const SizedBox(width: 8),
         Expanded(
           child: Column(
@@ -908,7 +911,9 @@ class _ActionTile extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: enabled ? AppColors.accentDark : AppColors.textSecondary,
+                color: enabled
+                    ? AppColors.accentStrongForeground
+                    : AppColors.textSecondary,
               ),
               const SizedBox(width: 12),
               Expanded(

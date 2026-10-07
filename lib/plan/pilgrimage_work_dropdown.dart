@@ -173,7 +173,7 @@ class _WorkDropdownItemState extends State<_WorkDropdownItem> {
               child: Text(
                 badgeLabel,
                 style: TextStyle(
-                  color: AppColors.accent,
+                  color: AppColors.accentForeground,
                   fontSize: 11,
                   fontWeight: FontWeight.w700,
                   height: 1.15,
@@ -204,7 +204,11 @@ class _WorkDropdownItemState extends State<_WorkDropdownItem> {
             ),
             if (selected) ...[
               const SizedBox(width: 8),
-              Icon(LucideIcons.checkCircle, color: AppColors.accent, size: 18),
+              Icon(
+                LucideIcons.checkCircle,
+                color: AppColors.accentForeground,
+                size: 18,
+              ),
             ],
           ],
         ),

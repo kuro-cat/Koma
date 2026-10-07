@@ -275,7 +275,10 @@ class _PackageHeader extends StatelessWidget {
               color: AppColors.accent.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(LucideIcons.package, color: AppColors.accentDark),
+            child: Icon(
+              LucideIcons.package,
+              color: AppColors.accentStrongForeground,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -403,7 +406,7 @@ class _SectionTitle extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, color: AppColors.accentDark, size: 20),
+        Icon(icon, color: AppColors.accentStrongForeground, size: 20),
         const SizedBox(width: 8),
         Expanded(
           child: Column(
@@ -464,7 +467,9 @@ class _ImportOptionTile extends StatelessWidget {
         children: [
           Icon(
             icon,
-            color: enabled ? AppColors.accentDark : AppColors.textSecondary,
+            color: enabled
+                ? AppColors.accentStrongForeground
+                : AppColors.textSecondary,
           ),
           const SizedBox(width: 12),
           Expanded(

@@ -2347,7 +2347,7 @@ class _ImportSummary extends StatelessWidget {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               else
-                Icon(LucideIcons.map, color: AppColors.accent),
+                Icon(LucideIcons.map, color: AppColors.accentForeground),
               const SizedBox(width: 10),
               Expanded(
                 child: AppContentFade(
@@ -3031,7 +3031,7 @@ class _NoPointSelectedCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(LucideIcons.pointer, color: AppColors.accent),
+          Icon(LucideIcons.pointer, color: AppColors.accentForeground),
           SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -3088,12 +3088,15 @@ class _EmptyImportState extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(LucideIcons.clapperboard, color: AppColors.accent),
+                  Icon(
+                    LucideIcons.clapperboard,
+                    color: AppColors.accentForeground,
+                  ),
                   const SizedBox(width: 8),
                   Text(
                     l10n.anitabiMapImportNoWorks,
                     style: TextStyle(
-                      color: AppColors.accentDark,
+                      color: AppColors.accentStrongForeground,
                       fontSize: 18,
                       fontWeight: FontWeight.w800,
                       letterSpacing: 0,
