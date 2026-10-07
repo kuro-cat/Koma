@@ -1479,28 +1479,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Bangumi search needs an international network connection.';
 
   @override
-  String get addPointsQuickImport => 'Quick import';
-
-  @override
   String get addPointsRecommended => 'Recommended';
-
-  @override
-  String get addPointsQuickImportSubtitle =>
-      'Imports works along with Anitabi spots';
-
-  @override
-  String get addPointsAddPointsSection => 'Add spots';
-
-  @override
-  String get addPointsImportFromWorkMap => 'Import spots from work map';
-
-  @override
-  String get addPointsImportFromWorkMapSubtitle =>
-      'Choose and import spots on the work map';
-
-  @override
-  String get addPointsAddWorkViaBangumiFirst =>
-      'Add a work via Bangumi search first';
 
   @override
   String get addPointsQuickManualSubtitle =>
@@ -2500,25 +2479,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planNoSpotsYet => 'No spots yet';
 
   @override
-  String get planOnboardingWorksTitle => 'Add works';
-
-  @override
-  String get planOnboardingWorksBody =>
-      'Tap the top-right corner to show plan actions, choose \"Add spots\", then tap \"Manage works\" to search for and add the works you want in this plan.';
-
-  @override
   String get planOnboardingSpotsTitle => 'Pick spots';
 
   @override
   String get planOnboardingSpotsBody =>
-      'On the \"Add spots\" page, tap \"Import from work map\" to pick and add pilgrimage spots.\nYou can also tap \"Import Anitabi link\" on the \"Add spots\" page. With a valid link, the work is added along with its spots.';
-
-  @override
-  String get planOnboardingAreasTitle => 'Set up areas';
-
-  @override
-  String get planOnboardingAreasBody =>
-      'Back on the \"Plan\" page, tap the top-right corner to show plan actions and choose \"Manage plan\". There you can manage the plan\'s spots in detail, create areas and group nearby spots.';
+      'Tap spots on the map to import them. The anime is added to this plan for you.';
 
   @override
   String get planUndoCheckIn => 'Undo check-in';
@@ -2749,7 +2714,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get anitabiMapImportAnitabiSpot => 'Anitabi spot';
 
   @override
-  String get anitabiMapImportTitle => 'Import from work map';
+  String get anitabiMapImportTitle => 'Import spots';
 
   @override
   String get anitabiMapImportLayers => 'Layers';
@@ -2911,14 +2876,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get anitabiMapImportNoWorks => 'No works yet';
 
   @override
-  String get anitabiMapImportManageWorks => 'Manage works';
-
-  @override
-  String get anitabiMapImportFromBangumiTitle => 'Import from Bangumi';
+  String get anitabiMapImportFromBangumiTitle => 'Find an anime';
 
   @override
   String get anitabiMapImportFromBangumiBody =>
-      'Tap the Bangumi button in work management, then search for and import the work you want. You can then see that work\'s Anitabi spots right here.';
+      'Search Bangumi for the anime, or paste a link copied from anitabi.cn. Its spots show on this map, and the anime joins your plan when you import spots.';
 
   @override
   String get anitabiMapImportLoadingWorks => 'Loading Anitabi works and spots';
@@ -5759,11 +5721,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get navigationRouteConfirmExternalShort => 'External';
 
   @override
-  String navigationRouteConfirmExternalWith(String app) {
-    return 'Navigate with $app';
-  }
-
-  @override
   String get navigationRouteConfirmExternalFailed =>
       'Couldn\'t open the external map app';
 
@@ -6217,5 +6174,43 @@ class AppLocalizationsEn extends AppLocalizations {
       'The camera is unavailable right now. Try again later. If the problem continues, restart MiriaGo.';
 
   @override
+  String get addPointsPickWork => 'View spots';
+
+  @override
+  String get addPointsFindSpots => 'Find anime spots';
+
+  @override
+  String get addPointsFindSpotsSubtitle =>
+      'Search an anime or paste an Anitabi link, then pick spots on the map';
+
+  @override
+  String get addPointsOwnSpotsSection => 'Add your own spots';
+
+  @override
+  String get anitabiMapImportSearchWork => 'Search for an anime';
+
+  @override
+  String get anitabiMapImportPasteLink => 'Paste Anitabi link';
+
+  @override
   String get anitabiMapImportClusterAdded => 'added';
+
+  @override
+  String navigationRouteConfirmExternalWith(String app) {
+    return 'Navigate with $app';
+  }
+
+  @override
+  String get planOnboardingFindTitle => 'Find an anime';
+
+  @override
+  String get planOnboardingFindBody =>
+      'Tap Add spots below, then Find anime spots. Search for the anime or paste an Anitabi link.';
+
+  @override
+  String get planOnboardingShootTitle => 'Shoot on site';
+
+  @override
+  String get planOnboardingShootBody =>
+      'At each spot, tap the camera button and line your shot up with the anime frame.';
 }

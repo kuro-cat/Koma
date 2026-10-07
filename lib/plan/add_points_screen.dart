@@ -199,8 +199,6 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
   @override
   Widget build(BuildContext context) {
     final currentPlan = _plan;
-    final hasBangumiWork =
-        currentPlan?.works.any((work) => work.bangumiId != null) ?? false;
 
     return PopScope(
       canPop: true,
@@ -219,6 +217,25 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
         body: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
+            _FindSpotsPanel(
+              enabled: currentPlan != null,
+              onTap: currentPlan == null
+                  ? null
+                  : () => _openAnitabiMapImport(context, currentPlan),
+            ),
+            const SizedBox(height: 12),
+            _AddPointPanel(
+              manualEnabled: currentPlan != null,
+              quickManualEnabled:
+                  currentPlan != null && currentPlan.works.isNotEmpty,
+              onManual: currentPlan == null
+                  ? null
+                  : () => _openManualPointForm(context, currentPlan),
+              onQuickManual: currentPlan == null || currentPlan.works.isEmpty
+                  ? null
+                  : () => _openQuickManualPointForm(context, currentPlan),
+            ),
+            const SizedBox(height: 12),
             _LinkedWorksPanel(
               plan: currentPlan,
               onManage: currentPlan == null
@@ -230,29 +247,6 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
               onManual: currentPlan == null
                   ? null
                   : () => _openManualWorkForm(context, currentPlan),
-            ),
-            const SizedBox(height: 12),
-            _QuickImportPanel(
-              enabled: currentPlan != null,
-              onTap: currentPlan == null
-                  ? null
-                  : () => _openAnitabiLinkImport(context, currentPlan),
-            ),
-            const SizedBox(height: 12),
-            _AddPointPanel(
-              mapEnabled: currentPlan != null && hasBangumiWork,
-              manualEnabled: currentPlan != null,
-              quickManualEnabled:
-                  currentPlan != null && currentPlan.works.isNotEmpty,
-              onMap: currentPlan == null || !hasBangumiWork
-                  ? null
-                  : () => _openAnitabiMapImport(context, currentPlan),
-              onManual: currentPlan == null
-                  ? null
-                  : () => _openManualPointForm(context, currentPlan),
-              onQuickManual: currentPlan == null || currentPlan.works.isEmpty
-                  ? null
-                  : () => _openQuickManualPointForm(context, currentPlan),
             ),
             const SizedBox(height: 8),
             RoutePlannerSkillLink(
@@ -374,31 +368,6 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
     Navigator.of(context).pop(true);
   }
 
-  Future<void> _openAnitabiLinkImport(
-    BuildContext context,
-    PilgrimagePlan plan,
-  ) async {
-    await Navigator.of(context).push<bool>(
-      appScaledMaterialPageRoute<bool>(
-        settings: widget.settings,
-        builder: (_) => _AnitabiLinkImportScreen(
-          plan: plan,
-          repository: widget.repository,
-          settings: widget.settings,
-        ),
-      ),
-    );
-    if (!context.mounted) {
-      return;
-    }
-
-    final changed = await _reloadPlan(plan.id);
-    if (!context.mounted || !changed) {
-      return;
-    }
-    Navigator.of(context).pop(true);
-  }
-
   Future<void> _openManualPointForm(
     BuildContext context,
     PilgrimagePlan plan,
@@ -498,12 +467,16 @@ class BangumiWorkSearchScreen extends StatefulWidget {
     required this.plan,
     required this.repository,
     required this.bangumiApiClient,
+    this.pickOnly = false,
     super.key,
   });
 
   final PilgrimagePlan plan;
   final PilgrimageRepository repository;
   final BangumiApiClient bangumiApiClient;
+
+  /// Pops with the chosen work instead of adding it to the plan.
+  final bool pickOnly;
 
   @override
   State<BangumiWorkSearchScreen> createState() =>
@@ -638,13 +611,14 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
         if (didPop) {
           return;
         }
-        Navigator.of(context).pop(_didAdd);
+        Navigator.of(context).pop(widget.pickOnly ? null : _didAdd);
       },
       child: Scaffold(
         appBar: AppBar(
           title: Text(l10n.addPointsSearchBangumiTitle),
           leading: AppBackButton(
-            onPressed: () => Navigator.of(context).pop(_didAdd),
+            onPressed: () =>
+                Navigator.of(context).pop(widget.pickOnly ? null : _didAdd),
           ),
         ),
         body: ListView(
@@ -746,9 +720,12 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
               for (final work in _results) ...[
                 _WorkResultCard(
                   work: work,
-                  added: _hasWork(widget.plan, work),
+                  added: !widget.pickOnly && _hasWork(widget.plan, work),
                   disabled: _isAdding,
-                  onAdd: () => _addWork(work),
+                  actionLabel: widget.pickOnly ? l10n.addPointsPickWork : null,
+                  onAdd: widget.pickOnly
+                      ? () => Navigator.of(context).pop(work)
+                      : () => _addWork(work),
                 ),
                 const SizedBox(height: 8),
               ],
@@ -962,23 +939,22 @@ class _BangumiTypeFilterDisclosure extends StatelessWidget {
   }
 }
 
-class _AnitabiLinkImportScreen extends StatefulWidget {
-  const _AnitabiLinkImportScreen({
+/// Asks for an Anitabi map link and pops with it once it names a work.
+class AnitabiLinkInputScreen extends StatefulWidget {
+  const AnitabiLinkInputScreen({
     required this.plan,
-    required this.repository,
     required this.settings,
+    super.key,
   });
 
   final PilgrimagePlan plan;
-  final PilgrimageRepository repository;
   final AppSettings settings;
 
   @override
-  State<_AnitabiLinkImportScreen> createState() =>
-      _AnitabiLinkImportScreenState();
+  State<AnitabiLinkInputScreen> createState() => _AnitabiLinkInputScreenState();
 }
 
-class _AnitabiLinkImportScreenState extends State<_AnitabiLinkImportScreen> {
+class _AnitabiLinkInputScreenState extends State<AnitabiLinkInputScreen> {
   final _formKey = GlobalKey<FormState>();
   final _linkController = TextEditingController();
 
@@ -1006,7 +982,7 @@ class _AnitabiLinkImportScreenState extends State<_AnitabiLinkImportScreen> {
     super.dispose();
   }
 
-  Future<void> _openImport() async {
+  void _openImport() {
     final valid = _formKey.currentState?.validate() ?? false;
     if (!valid) {
       return;
@@ -1016,32 +992,7 @@ class _AnitabiLinkImportScreenState extends State<_AnitabiLinkImportScreen> {
     if (link == null || link.bangumiId == null) {
       return;
     }
-    final oldPointCount = widget.plan.points.length;
-    await Navigator.of(context).push<bool>(
-      appScaledMaterialPageRoute<bool>(
-        settings: widget.settings,
-        builder: (_) => AnitabiMapImportScreen(
-          plan: widget.plan,
-          repository: widget.repository,
-          initialSettings: widget.settings,
-          initialBangumiId: link.bangumiId,
-          initialPointId: link.pointId,
-        ),
-      ),
-    );
-    if (!mounted) {
-      return;
-    }
-    final plans = await widget.repository.loadPlans();
-    if (!mounted) {
-      return;
-    }
-    final updatedPlan = plans.firstWhere((plan) => plan.id == widget.plan.id);
-    if (updatedPlan.points.length == oldPointCount) {
-      return;
-    }
-
-    Navigator.of(context).pop(true);
+    Navigator.of(context).pop(link);
   }
 
   Future<void> _pasteLinkFromClipboard() async {
@@ -4389,12 +4340,14 @@ class _WorkResultCard extends StatefulWidget {
     required this.added,
     required this.disabled,
     required this.onAdd,
+    this.actionLabel,
   });
 
   final PilgrimageWork work;
   final bool added;
   final bool disabled;
   final VoidCallback onAdd;
+  final String? actionLabel;
 
   @override
   State<_WorkResultCard> createState() => _WorkResultCardState();
@@ -4439,7 +4392,7 @@ class _WorkResultCardState extends State<_WorkResultCard> {
                     padding: EdgeInsets.zero,
                     child: Text(
                       work.title,
-                      maxLines: _titleExpanded ? null : 1,
+                      maxLines: _titleExpanded ? null : 2,
                       overflow: _titleExpanded
                           ? TextOverflow.visible
                           : TextOverflow.ellipsis,
@@ -4506,7 +4459,7 @@ class _WorkResultCardState extends State<_WorkResultCard> {
                 minimumSize: const Size(88, 40),
                 padding: const EdgeInsets.symmetric(horizontal: 14),
               ),
-              child: Text(l10n.addPointsAdd),
+              child: Text(widget.actionLabel ?? l10n.addPointsAdd),
             ),
         ],
       ),
@@ -4679,8 +4632,8 @@ class _FormSection extends StatelessWidget {
   }
 }
 
-class _QuickImportPanel extends StatelessWidget {
-  const _QuickImportPanel({required this.enabled, required this.onTap});
+class _FindSpotsPanel extends StatelessWidget {
+  const _FindSpotsPanel({required this.enabled, required this.onTap});
 
   final bool enabled;
   final VoidCallback? onTap;
@@ -4691,7 +4644,7 @@ class _QuickImportPanel extends StatelessWidget {
       color: AppColors.accent.withValues(alpha: 0.04),
       borderRadius: BorderRadius.circular(8),
       child: InkWell(
-        key: const ValueKey('add-points-anitabi-link'),
+        key: const ValueKey('add-points-anitabi-map'),
         onTap: enabled ? onTap : null,
         borderRadius: BorderRadius.circular(8),
         child: Container(
@@ -4717,7 +4670,7 @@ class _QuickImportPanel extends StatelessWidget {
                             borderRadius: BorderRadius.circular(8),
                           ),
                           child: Icon(
-                            LucideIcons.link,
+                            LucideIcons.map,
                             color: AppColors.accent,
                             size: 26,
                           ),
@@ -4730,7 +4683,7 @@ class _QuickImportPanel extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    l10n.addPointsQuickImport,
+                                    l10n.addPointsFindSpots,
                                     style: TextStyle(
                                       color: AppColors.textPrimary,
                                       fontSize: 17,
@@ -4764,7 +4717,7 @@ class _QuickImportPanel extends StatelessWidget {
                               ),
                               const SizedBox(height: 3),
                               Text(
-                                l10n.addPointsQuickImportSubtitle,
+                                l10n.addPointsFindSpotsSubtitle,
                                 style: TextStyle(
                                   color: AppColors.textSecondary,
                                   fontSize: 13,
@@ -4795,18 +4748,14 @@ class _QuickImportPanel extends StatelessWidget {
 
 class _AddPointPanel extends StatelessWidget {
   const _AddPointPanel({
-    required this.mapEnabled,
     required this.manualEnabled,
     required this.quickManualEnabled,
-    required this.onMap,
     required this.onManual,
     required this.onQuickManual,
   });
 
-  final bool mapEnabled;
   final bool manualEnabled;
   final bool quickManualEnabled;
-  final VoidCallback? onMap;
   final VoidCallback? onManual;
   final VoidCallback? onQuickManual;
 
@@ -4836,7 +4785,7 @@ class _AddPointPanel extends StatelessWidget {
                 ),
                 const SizedBox(width: 9),
                 Text(
-                  l10n.addPointsAddPointsSection,
+                  l10n.addPointsOwnSpotsSection,
                   style: TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 17,
@@ -4846,23 +4795,6 @@ class _AddPointPanel extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          _PointCreationAction(
-            key: const ValueKey('add-points-anitabi-map'),
-            icon: LucideIcons.map,
-            title: l10n.addPointsImportFromWorkMap,
-            subtitle: mapEnabled
-                ? l10n.addPointsImportFromWorkMapSubtitle
-                : l10n.addPointsAddWorkViaBangumiFirst,
-            recommended: true,
-            enabled: mapEnabled,
-            onTap: onMap,
-          ),
-          Divider(
-            height: 1,
-            indent: 12,
-            endIndent: 12,
-            color: AppColors.border.withValues(alpha: 0.60),
           ),
           _PointCreationAction(
             key: const ValueKey('add-points-quick-manual-point'),
@@ -4901,7 +4833,6 @@ class _PointCreationAction extends StatelessWidget {
     required this.subtitle,
     required this.enabled,
     required this.onTap,
-    this.recommended = false,
     super.key,
   });
 
@@ -4910,7 +4841,6 @@ class _PointCreationAction extends StatelessWidget {
   final String subtitle;
   final bool enabled;
   final VoidCallback? onTap;
-  final bool recommended;
 
   @override
   Widget build(BuildContext context) {
@@ -4923,10 +4853,10 @@ class _PointCreationAction extends StatelessWidget {
         child: InkWell(
           onTap: enabled ? onTap : null,
           borderRadius: BorderRadius.circular(7),
-          child: SizedBox(
-            height: 72,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 72),
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
               child: Row(
                 children: [
                   Container(
@@ -4970,40 +4900,12 @@ class _PointCreationAction extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            if (recommended) ...[
-                              const SizedBox(width: 6),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 5,
-                                  vertical: 2,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: enabled
-                                      ? AppColors.accent.withValues(alpha: 0.10)
-                                      : AppColors.border.withValues(
-                                          alpha: 0.30,
-                                        ),
-                                  borderRadius: BorderRadius.circular(4),
-                                ),
-                                child: Text(
-                                  l10n.addPointsRecommended,
-                                  style: TextStyle(
-                                    color: enabled
-                                        ? AppColors.accentDark
-                                        : AppColors.textSecondary,
-                                    fontSize: 10,
-                                    fontWeight: FontWeight.w800,
-                                    letterSpacing: 0,
-                                  ),
-                                ),
-                              ),
-                            ],
                           ],
                         ),
                         const SizedBox(height: 3),
                         Text(
                           subtitle,
-                          maxLines: 1,
+                          maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             color: AppColors.textSecondary.withValues(

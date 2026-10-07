@@ -245,9 +245,7 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey('plan-actions-two-rows')), findsOneWidget);
-    final memo = tester.getRect(
-      find.byKey(const ValueKey('plan-action-memo')),
-    );
+    final memo = tester.getRect(find.byKey(const ValueKey('plan-action-memo')));
     final cache = tester.getRect(
       find.byKey(const ValueKey('plan-action-cache-references')),
     );
@@ -438,9 +436,7 @@ void main() {
     expect(find.text('备份迁移计划'), findsNothing);
   });
 
-  testWidgets('plan actions keep one row on a wider screen', (
-    tester,
-  ) async {
+  testWidgets('plan actions keep one row on a wider screen', (tester) async {
     await tester.binding.setSurfaceSize(const Size(430, 800));
     addTearDown(() => tester.binding.setSurfaceSize(null));
     await _pumpApp(tester);
@@ -956,9 +952,7 @@ void main() {
     await tester.pumpAndSettle();
 
     tester
-        .widget<IconButton>(
-          find.widgetWithIcon(IconButton, LucideIcons.mapPin),
-        )
+        .widget<IconButton>(find.widgetWithIcon(IconButton, LucideIcons.mapPin))
         .onPressed!();
     await tester.pumpAndSettle();
     expect(find.text('宇治上神社参道'), findsWidgets);
@@ -967,42 +961,48 @@ void main() {
     expect(find.text('在最大距离范围内'), findsNothing);
   });
 
-  testWidgets('nearest assign keeps distance status and puts assign beside slider', (
-    tester,
-  ) async {
-    final repository = SamplePilgrimageRepository();
-    final plan = await repository.loadActivePlan();
-    await tester.pumpWidget(
-      MaterialApp(
-        theme: AppTheme.light(),
-        home: NearestGroupAssignScreen(
-          plan: plan,
-          repository: repository,
-          settings: const AppSettings(),
+  testWidgets(
+    'nearest assign keeps distance status and puts assign beside slider',
+    (tester) async {
+      final repository = SamplePilgrimageRepository();
+      final plan = await repository.loadActivePlan();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: AppTheme.light(),
+          home: NearestGroupAssignScreen(
+            plan: plan,
+            repository: repository,
+            settings: const AppSettings(),
+          ),
         ),
-      ),
-    );
-    await tester.pumpAndSettle();
+      );
+      await tester.pumpAndSettle();
 
-    final sliderRect = tester.getRect(find.byType(Slider));
-    final assignRect = tester.getRect(find.widgetWithText(FilledButton, '分配'));
-    expect(assignRect.left, greaterThan(sliderRect.center.dx));
-    expect(assignRect.top, closeTo(sliderRect.center.dy - assignRect.height / 2, 8));
+      final sliderRect = tester.getRect(find.byType(Slider));
+      final assignRect = tester.getRect(
+        find.widgetWithText(FilledButton, '分配'),
+      );
+      expect(assignRect.left, greaterThan(sliderRect.center.dx));
+      expect(
+        assignRect.top,
+        closeTo(sliderRect.center.dy - assignRect.height / 2, 8),
+      );
 
-    tester
-        .widget<IconButton>(
-          find.widgetWithIcon(IconButton, LucideIcons.mapPin),
-        )
-        .onPressed!();
-    await tester.pumpAndSettle();
-    expect(find.text('未框选'), findsNothing);
-    expect(find.text('已框选'), findsNothing);
-    expect(
-      find.text('超出最大距离').evaluate().isNotEmpty ||
-          find.text('在最大距离范围内').evaluate().isNotEmpty,
-      isTrue,
-    );
-  });
+      tester
+          .widget<IconButton>(
+            find.widgetWithIcon(IconButton, LucideIcons.mapPin),
+          )
+          .onPressed!();
+      await tester.pumpAndSettle();
+      expect(find.text('未框选'), findsNothing);
+      expect(find.text('已框选'), findsNothing);
+      expect(
+        find.text('超出最大距离').evaluate().isNotEmpty ||
+            find.text('在最大距离范围内').evaluate().isNotEmpty,
+        isTrue,
+      );
+    },
+  );
 
   testWidgets('app shell uses the Lucide bottom navigation icons', (
     tester,
@@ -2000,7 +2000,10 @@ void main() {
     final deleteIcon = tester.widget<Icon>(
       find.descendant(of: deleteButton, matching: find.byType(Icon)),
     );
-    expect(deleteIcon.size, lessThanOrEqualTo(tester.getSize(deleteButton).height));
+    expect(
+      deleteIcon.size,
+      lessThanOrEqualTo(tester.getSize(deleteButton).height),
+    );
     expect(
       tester.getCenter(find.text('待访问')).dy,
       closeTo(tester.getCenter(deleteButton).dy, 0.1),
@@ -2936,9 +2939,9 @@ void main() {
     expect(find.textContaining('新巡礼计划 2'), findsWidgets);
     expect(find.text('还没有点位'), findsOneWidget);
     expect(find.text('添加点位'), findsOneWidget);
-    expect(find.text('加作品'), findsOneWidget);
+    expect(find.text('找作品'), findsOneWidget);
     expect(find.text('选点位'), findsOneWidget);
-    expect(find.text('划片区'), findsOneWidget);
+    expect(find.text('现场拍摄'), findsOneWidget);
 
     await _openAddPointsFromEmptyPlan(tester);
 
@@ -2949,10 +2952,7 @@ void main() {
       findsOneWidget,
     );
     final mapImportInkWell = tester.widget<InkWell>(
-      find.descendant(
-        of: find.byKey(const ValueKey('add-points-anitabi-map')),
-        matching: find.byType(InkWell),
-      ),
+      find.byKey(const ValueKey('add-points-anitabi-map')),
     );
     final manualPointInkWell = tester.widget<InkWell>(
       find.descendant(
@@ -2966,8 +2966,8 @@ void main() {
         matching: find.byType(InkWell),
       ),
     );
-    expect(mapImportInkWell.onTap, isNull);
-    expect(find.text('请先通过 Bangumi 搜索添加作品'), findsOneWidget);
+    // Finding spots also finds the work, so it needs nothing first.
+    expect(mapImportInkWell.onTap, isNotNull);
     expect(quickManualPointInkWell.onTap, isNull);
     expect(manualPointInkWell.onTap, isNotNull);
   });
@@ -3420,10 +3420,7 @@ void main() {
     await tester.pumpAndSettle();
     // Added points and the work's Anitabi total are told apart.
     final pointCount = plan.points.where((p) => p.work.id == work.id).length;
-    expect(
-      find.text('已加入 $pointCount · 共 582 点位'),
-      findsOneWidget,
-    );
+    expect(find.text('已加入 $pointCount · 共 582 点位'), findsOneWidget);
 
     final moreButton = find.byKey(ValueKey('work-manage-more-${work.id}'));
     expect(moreButton, findsOneWidget);
@@ -3575,14 +3572,10 @@ void main() {
     await tester.pumpAndSettle();
 
     final mapImportInkWell = tester.widget<InkWell>(
-      find.descendant(
-        of: find.byKey(const ValueKey('add-points-anitabi-map')),
-        matching: find.byType(InkWell),
-      ),
+      find.byKey(const ValueKey('add-points-anitabi-map')),
     );
     expect(mapImportInkWell.onTap, isNotNull);
-    expect(find.text('在作品地图上选择并导入点位'), findsOneWidget);
-    expect(find.text('请先通过 Bangumi 搜索添加作品'), findsNothing);
+    expect(find.text('搜索作品或粘贴 Anitabi 链接，在地图上挑选点位'), findsOneWidget);
   });
 
   testWidgets('Bangumi search shows a trailing clear button after input', (
@@ -3700,6 +3693,10 @@ void main() {
       find.byKey(const ValueKey('route-planner-skill-link')),
       findsOneWidget,
     );
+    await tester.ensureVisible(
+      find.byKey(const ValueKey('route-planner-skill-link-dismiss')),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(
       find.byKey(const ValueKey('route-planner-skill-link-dismiss')),
     );
@@ -4056,9 +4053,7 @@ void main() {
     }
   });
 
-  testWidgets('import map can hide points already in the plan', (
-    tester,
-  ) async {
+  testWidgets('import map can hide points already in the plan', (tester) async {
     AnitabiPoint point(String id, double lat) => AnitabiPoint(
       bangumiId: 12345,
       id: id,
@@ -4105,9 +4100,7 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    final secondMarker = find.byKey(
-      const ValueKey('anitabi-import-marker-p2'),
-    );
+    final secondMarker = find.byKey(const ValueKey('anitabi-import-marker-p2'));
     Future<void> setOnlyUnimported(bool expected) async {
       await tester.tap(find.byKey(const ValueKey('map-layers-button')));
       await tester.pumpAndSettle();
@@ -4517,14 +4510,10 @@ void main() {
     expect(find.textContaining('已导入 1 个点位'), findsNothing);
   });
 
-  testWidgets('Anitabi link import requires bangumi ID before opening map', (
+  testWidgets('Anitabi link input requires bangumi ID before returning', (
     tester,
   ) async {
-    await _pumpAppWithEmptyPlan(tester);
-
-    await _openAddPointsFromEmptyPlan(tester);
-    _invokeKeyedAction(tester, 'add-points-anitabi-link');
-    await tester.pumpAndSettle();
+    await _pumpAnitabiLinkInput(tester);
 
     await tester.enterText(
       find.byType(TextFormField),
@@ -4534,16 +4523,13 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.textContaining('链接缺少作品 ID'), findsOneWidget);
-    expect(find.text('从作品地图导入'), findsNothing);
+    expect(find.byType(AnitabiLinkInputScreen), findsOneWidget);
   });
 
   testWidgets('Anitabi link import pastes clipboard without opening map', (
     tester,
   ) async {
-    await _pumpAppWithEmptyPlan(tester);
-    await _openAddPointsFromEmptyPlan(tester);
-    _invokeKeyedAction(tester, 'add-points-anitabi-link');
-    await tester.pumpAndSettle();
+    await _pumpAnitabiLinkInput(tester);
     const link = 'https://ww.anitabi.cn/map?bangumiId=282923&pid=djnfcvo';
     _mockClipboardRead(tester, link);
 
@@ -4571,10 +4557,7 @@ void main() {
   });
 
   testWidgets('Anitabi link import explains empty clipboard', (tester) async {
-    await _pumpAppWithEmptyPlan(tester);
-    await _openAddPointsFromEmptyPlan(tester);
-    _invokeKeyedAction(tester, 'add-points-anitabi-link');
-    await tester.pumpAndSettle();
+    await _pumpAnitabiLinkInput(tester);
     _mockClipboardRead(tester, '');
 
     await tester.tap(find.byTooltip('粘贴'));
@@ -4584,10 +4567,7 @@ void main() {
   });
 
   testWidgets('Anitabi link import validates pasted text', (tester) async {
-    await _pumpAppWithEmptyPlan(tester);
-    await _openAddPointsFromEmptyPlan(tester);
-    _invokeKeyedAction(tester, 'add-points-anitabi-link');
-    await tester.pumpAndSettle();
+    await _pumpAnitabiLinkInput(tester);
     _mockClipboardRead(tester, 'not an Anitabi URL');
 
     await tester.tap(find.byTooltip('粘贴'));
@@ -4600,10 +4580,7 @@ void main() {
   testWidgets('Anitabi link import handles clipboard read failure', (
     tester,
   ) async {
-    await _pumpAppWithEmptyPlan(tester);
-    await _openAddPointsFromEmptyPlan(tester);
-    _invokeKeyedAction(tester, 'add-points-anitabi-link');
-    await tester.pumpAndSettle();
+    await _pumpAnitabiLinkInput(tester);
     final messenger = tester.binding.defaultBinaryMessenger;
     messenger.setMockMethodCallHandler(SystemChannels.platform, (call) async {
       if (call.method == 'Clipboard.getData') {
@@ -5133,4 +5110,15 @@ class _FakeAnitabiClient extends AnitabiClient {
       points: points,
     );
   }
+}
+
+Future<void> _pumpAnitabiLinkInput(WidgetTester tester) async {
+  final repository = SamplePilgrimageRepository(plans: const []);
+  final plan = await repository.createPlan(name: '链接测试', area: '东京');
+  await tester.pumpWidget(
+    MaterialApp(
+      home: AnitabiLinkInputScreen(plan: plan, settings: const AppSettings()),
+    ),
+  );
+  await tester.pumpAndSettle();
 }

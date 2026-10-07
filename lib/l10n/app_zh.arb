@@ -695,13 +695,7 @@
   "addPointsSearchHelpTitle": "搜索说明",
   "addPointsSearchHelpBody": "输入作品名后搜索，选择结果即可加入当前计划。",
   "addPointsBangumiNetworkNote": "Bangumi需要国际网络环境才能正常搜索。",
-  "addPointsQuickImport": "快速导入",
   "addPointsRecommended": "推荐",
-  "addPointsQuickImportSubtitle": "在导入Anitabi点位的同时自动导入作品",
-  "addPointsAddPointsSection": "添加点位",
-  "addPointsImportFromWorkMap": "从作品地图导入点位",
-  "addPointsImportFromWorkMapSubtitle": "在作品地图上选择并导入点位",
-  "addPointsAddWorkViaBangumiFirst": "请先通过 Bangumi 搜索添加作品",
   "addPointsQuickManualSubtitle": "只填写作品、名称和可选坐标",
   "addPointsAddWorkFirst": "请先添加作品",
   "addPointsManualAddPointSubtitle": "手动输入点位信息，逐个添加",
@@ -1240,12 +1234,8 @@
   "planHideLocation": "隐藏当前位置",
   "planShowLocation": "显示当前位置",
   "planNoSpotsYet": "还没有点位",
-  "planOnboardingWorksTitle": "加作品",
-  "planOnboardingWorksBody": "点击右上角展开计划操作，选择“添加点位”，再点击“作品管理”，搜索并添加想要加入巡礼计划的作品。",
   "planOnboardingSpotsTitle": "选点位",
-  "planOnboardingSpotsBody": "在“添加点位”页面点击“从作品地图导入”，在这里你可以选择并添加巡礼点位。\n你也可以在“添加点位”页面点击“从Anitabi链接导入”。通过使用有效链接，导入点位时作品也会被一起添加。",
-  "planOnboardingAreasTitle": "划片区",
-  "planOnboardingAreasBody": "回到“计划”页，点击右上角展开计划操作，选择“管理计划”。在这里可以细致管理已加入计划的点位，创建片区并归纳距离接近的点位。",
+  "planOnboardingSpotsBody": "在地图上点选点位并导入，作品会自动加入这个计划。",
   "planUndoCheckIn": "撤回打卡",
   "planComplete": "完成",
   "planShootReference": "拍摄参考",
@@ -1463,9 +1453,8 @@
   "anitabiMapImportTapSpotHint": "点击地图上的点位查看缩略图和详情。",
   "anitabiMapImportNoImportableSpots": "当前作品没有可导入的 Anitabi 点位。",
   "anitabiMapImportNoWorks": "还没有作品",
-  "anitabiMapImportManageWorks": "作品管理",
-  "anitabiMapImportFromBangumiTitle": "从Bangumi导入",
-  "anitabiMapImportFromBangumiBody": "点击作品管理中的Bangumi按钮，搜索你想导入的作品并导入。之后你可以在这里直接查看对应作品在Anitabi上的点位。",
+  "anitabiMapImportFromBangumiTitle": "找到作品",
+  "anitabiMapImportFromBangumiBody": "在 Bangumi 搜索作品，或粘贴从 anitabi.cn 复制的链接。作品的点位会显示在地图上，导入点位时作品会自动加入计划。",
   "anitabiMapImportLoadingWorks": "正在加载 Anitabi 作品和点位",
   "planGroupManagerTitle": "片区管理",
   "planGroupManagerNewArea": "新建片区",
@@ -3103,14 +3092,6 @@
   "navigationRouteConfirmLoading": "正在获取当前位置并规划步行路线…",
   "navigationRouteConfirmReplan": "重新规划路线",
   "navigationRouteConfirmExternalShort": "外部导航",
-  "navigationRouteConfirmExternalWith": "使用 {app} 导航",
-  "@navigationRouteConfirmExternalWith": {
-    "placeholders": {
-      "app": {
-        "type": "String"
-      }
-    }
-  },
   "navigationRouteConfirmExternalFailed": "无法打开外部地图",
   "navigationRouteConfirmStart": "开始导航",
   "navigationRouteConfirmStartArea": "串联整个片区导航",
@@ -3340,5 +3321,23 @@
   "camerawesomeReferencePickFromGallery": "从相册选择照片",
   "camerawesomeReferenceUnavailableTitle": "相机无法启动",
   "camerawesomeReferenceUnavailableBody": "相机暂时无法使用，请稍后重试。如果问题持续，请重启 MiriaGo。",
-  "anitabiMapImportClusterAdded": "已加入"
+  "addPointsPickWork": "查看点位",
+  "addPointsFindSpots": "查找作品点位",
+  "addPointsFindSpotsSubtitle": "搜索作品或粘贴 Anitabi 链接，在地图上挑选点位",
+  "addPointsOwnSpotsSection": "自行添加点位",
+  "anitabiMapImportSearchWork": "搜索作品",
+  "anitabiMapImportPasteLink": "粘贴 Anitabi 链接",
+  "anitabiMapImportClusterAdded": "已加入",
+  "navigationRouteConfirmExternalWith": "使用 {app} 导航",
+  "@navigationRouteConfirmExternalWith": {
+    "placeholders": {
+      "app": {
+        "type": "String"
+      }
+    }
+  },
+  "planOnboardingFindTitle": "找作品",
+  "planOnboardingFindBody": "点击下方“添加点位”，选择“查找作品点位”，搜索作品或粘贴 Anitabi 链接。",
+  "planOnboardingShootTitle": "现场拍摄",
+  "planOnboardingShootBody": "到达点位后点相机按钮，对照动画画面取景。"
 }

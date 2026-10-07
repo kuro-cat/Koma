@@ -2592,47 +2592,11 @@ abstract class AppLocalizations {
   /// **'Bangumi需要国际网络环境才能正常搜索。'**
   String get addPointsBangumiNetworkNote;
 
-  /// No description provided for @addPointsQuickImport.
-  ///
-  /// In zh, this message translates to:
-  /// **'快速导入'**
-  String get addPointsQuickImport;
-
   /// No description provided for @addPointsRecommended.
   ///
   /// In zh, this message translates to:
   /// **'推荐'**
   String get addPointsRecommended;
-
-  /// No description provided for @addPointsQuickImportSubtitle.
-  ///
-  /// In zh, this message translates to:
-  /// **'在导入Anitabi点位的同时自动导入作品'**
-  String get addPointsQuickImportSubtitle;
-
-  /// No description provided for @addPointsAddPointsSection.
-  ///
-  /// In zh, this message translates to:
-  /// **'添加点位'**
-  String get addPointsAddPointsSection;
-
-  /// No description provided for @addPointsImportFromWorkMap.
-  ///
-  /// In zh, this message translates to:
-  /// **'从作品地图导入点位'**
-  String get addPointsImportFromWorkMap;
-
-  /// No description provided for @addPointsImportFromWorkMapSubtitle.
-  ///
-  /// In zh, this message translates to:
-  /// **'在作品地图上选择并导入点位'**
-  String get addPointsImportFromWorkMapSubtitle;
-
-  /// No description provided for @addPointsAddWorkViaBangumiFirst.
-  ///
-  /// In zh, this message translates to:
-  /// **'请先通过 Bangumi 搜索添加作品'**
-  String get addPointsAddWorkViaBangumiFirst;
 
   /// No description provided for @addPointsQuickManualSubtitle.
   ///
@@ -4234,18 +4198,6 @@ abstract class AppLocalizations {
   /// **'还没有点位'**
   String get planNoSpotsYet;
 
-  /// No description provided for @planOnboardingWorksTitle.
-  ///
-  /// In zh, this message translates to:
-  /// **'加作品'**
-  String get planOnboardingWorksTitle;
-
-  /// No description provided for @planOnboardingWorksBody.
-  ///
-  /// In zh, this message translates to:
-  /// **'点击右上角展开计划操作，选择“添加点位”，再点击“作品管理”，搜索并添加想要加入巡礼计划的作品。'**
-  String get planOnboardingWorksBody;
-
   /// No description provided for @planOnboardingSpotsTitle.
   ///
   /// In zh, this message translates to:
@@ -4255,20 +4207,8 @@ abstract class AppLocalizations {
   /// No description provided for @planOnboardingSpotsBody.
   ///
   /// In zh, this message translates to:
-  /// **'在“添加点位”页面点击“从作品地图导入”，在这里你可以选择并添加巡礼点位。\n你也可以在“添加点位”页面点击“从Anitabi链接导入”。通过使用有效链接，导入点位时作品也会被一起添加。'**
+  /// **'在地图上点选点位并导入，作品会自动加入这个计划。'**
   String get planOnboardingSpotsBody;
-
-  /// No description provided for @planOnboardingAreasTitle.
-  ///
-  /// In zh, this message translates to:
-  /// **'划片区'**
-  String get planOnboardingAreasTitle;
-
-  /// No description provided for @planOnboardingAreasBody.
-  ///
-  /// In zh, this message translates to:
-  /// **'回到“计划”页，点击右上角展开计划操作，选择“管理计划”。在这里可以细致管理已加入计划的点位，创建片区并归纳距离接近的点位。'**
-  String get planOnboardingAreasBody;
 
   /// No description provided for @planUndoCheckIn.
   ///
@@ -4844,22 +4784,16 @@ abstract class AppLocalizations {
   /// **'还没有作品'**
   String get anitabiMapImportNoWorks;
 
-  /// No description provided for @anitabiMapImportManageWorks.
-  ///
-  /// In zh, this message translates to:
-  /// **'作品管理'**
-  String get anitabiMapImportManageWorks;
-
   /// No description provided for @anitabiMapImportFromBangumiTitle.
   ///
   /// In zh, this message translates to:
-  /// **'从Bangumi导入'**
+  /// **'找到作品'**
   String get anitabiMapImportFromBangumiTitle;
 
   /// No description provided for @anitabiMapImportFromBangumiBody.
   ///
   /// In zh, this message translates to:
-  /// **'点击作品管理中的Bangumi按钮，搜索你想导入的作品并导入。之后你可以在这里直接查看对应作品在Anitabi上的点位。'**
+  /// **'在 Bangumi 搜索作品，或粘贴从 anitabi.cn 复制的链接。作品的点位会显示在地图上，导入点位时作品会自动加入计划。'**
   String get anitabiMapImportFromBangumiBody;
 
   /// No description provided for @anitabiMapImportLoadingWorks.
@@ -9306,12 +9240,6 @@ abstract class AppLocalizations {
   /// **'外部导航'**
   String get navigationRouteConfirmExternalShort;
 
-  /// No description provided for @navigationRouteConfirmExternalWith.
-  ///
-  /// In zh, this message translates to:
-  /// **'使用 {app} 导航'**
-  String navigationRouteConfirmExternalWith(String app);
-
   /// No description provided for @navigationRouteConfirmExternalFailed.
   ///
   /// In zh, this message translates to:
@@ -10086,11 +10014,77 @@ abstract class AppLocalizations {
   /// **'相机暂时无法使用，请稍后重试。如果问题持续，请重启 MiriaGo。'**
   String get camerawesomeReferenceUnavailableBody;
 
+  /// No description provided for @addPointsPickWork.
+  ///
+  /// In zh, this message translates to:
+  /// **'查看点位'**
+  String get addPointsPickWork;
+
+  /// No description provided for @addPointsFindSpots.
+  ///
+  /// In zh, this message translates to:
+  /// **'查找作品点位'**
+  String get addPointsFindSpots;
+
+  /// No description provided for @addPointsFindSpotsSubtitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'搜索作品或粘贴 Anitabi 链接，在地图上挑选点位'**
+  String get addPointsFindSpotsSubtitle;
+
+  /// No description provided for @addPointsOwnSpotsSection.
+  ///
+  /// In zh, this message translates to:
+  /// **'自行添加点位'**
+  String get addPointsOwnSpotsSection;
+
+  /// No description provided for @anitabiMapImportSearchWork.
+  ///
+  /// In zh, this message translates to:
+  /// **'搜索作品'**
+  String get anitabiMapImportSearchWork;
+
+  /// No description provided for @anitabiMapImportPasteLink.
+  ///
+  /// In zh, this message translates to:
+  /// **'粘贴 Anitabi 链接'**
+  String get anitabiMapImportPasteLink;
+
   /// No description provided for @anitabiMapImportClusterAdded.
   ///
   /// In zh, this message translates to:
   /// **'已加入'**
   String get anitabiMapImportClusterAdded;
+
+  /// No description provided for @navigationRouteConfirmExternalWith.
+  ///
+  /// In zh, this message translates to:
+  /// **'使用 {app} 导航'**
+  String navigationRouteConfirmExternalWith(String app);
+
+  /// No description provided for @planOnboardingFindTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'找作品'**
+  String get planOnboardingFindTitle;
+
+  /// No description provided for @planOnboardingFindBody.
+  ///
+  /// In zh, this message translates to:
+  /// **'点击下方“添加点位”，选择“查找作品点位”，搜索作品或粘贴 Anitabi 链接。'**
+  String get planOnboardingFindBody;
+
+  /// No description provided for @planOnboardingShootTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'现场拍摄'**
+  String get planOnboardingShootTitle;
+
+  /// No description provided for @planOnboardingShootBody.
+  ///
+  /// In zh, this message translates to:
+  /// **'到达点位后点相机按钮，对照动画画面取景。'**
+  String get planOnboardingShootBody;
 }
 
 class _AppLocalizationsDelegate

@@ -20,6 +20,7 @@ import '../widgets/snackbar_helper.dart';
 import '../data/anitabi_client.dart';
 import '../data/bangumi_api_client.dart';
 import '../data/anitabi_image_url.dart';
+import '../data/anitabi_link_parser.dart';
 import '../data/pilgrimage_repository.dart';
 import '../data/reference_image_cache_stub.dart'
     if (dart.library.io) '../data/reference_image_cache_io.dart'
@@ -38,12 +39,12 @@ import '../widgets/app_scaled_route.dart';
 import '../widgets/app_back_button.dart';
 import '../utils/limited_concurrency.dart';
 import '../utils/selected_item_order.dart';
+import 'add_points_screen.dart';
 import 'nearest_group_assign_screen.dart';
 import 'pilgrimage_models.dart';
 import 'pilgrimage_work_dropdown.dart';
 import 'plan_group_picker_sheet.dart';
 import 'plan_group_utils.dart';
-import 'work_manager_screen.dart';
 import '../settings/app_settings_updater.dart';
 
 class AnitabiMapImportScreen extends StatefulWidget {
@@ -266,31 +267,50 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
     });
   }
 
-  Future<void> _openWorkManager() async {
-    final didUpdate = await Navigator.of(context).push<bool>(
-      appScaledMaterialPageRoute<bool>(
-        settings: _settings,
-        builder: (_) => WorkManagerScreen(
-          plan: _importedPlan,
-          repository: widget.repository,
+  /// Searches Bangumi and shows the chosen work's spots. The work joins the
+  /// plan only when its spots are imported.
+  Future<void> _searchWork() async {
+    final client = BangumiApiClient();
+    final PilgrimageWork? picked;
+    try {
+      picked = await Navigator.of(context).push<PilgrimageWork>(
+        appScaledMaterialPageRoute<PilgrimageWork>(
           settings: _settings,
+          builder: (_) => BangumiWorkSearchScreen(
+            plan: _importedPlan,
+            repository: widget.repository,
+            bangumiApiClient: client,
+            pickOnly: true,
+          ),
         ),
+      );
+    } finally {
+      client.close();
+    }
+    final bangumiId = picked?.bangumiId;
+    if (picked == null || bangumiId == null || !mounted) {
+      return;
+    }
+    await _loadPoints(_workForBangumiId(bangumiId) ?? picked);
+  }
+
+  Future<void> _openLink() async {
+    final link = await Navigator.of(context).push<AnitabiImportLink>(
+      appScaledMaterialPageRoute<AnitabiImportLink>(
+        settings: _settings,
+        builder: (_) =>
+            AnitabiLinkInputScreen(plan: _importedPlan, settings: _settings),
       ),
     );
-    if (!mounted || didUpdate != true) {
+    final bangumiId = link?.bangumiId;
+    if (link == null || bangumiId == null || !mounted) {
       return;
     }
-
-    final plans = await widget.repository.loadPlans();
-    if (!mounted) {
-      return;
+    if (link.hasPointId) {
+      await _loadInitialPointLink(bangumiId, link.pointId!);
+    } else {
+      await _loadInitialBangumiId(bangumiId);
     }
-    final updatedPlan = plans.firstWhere((plan) => plan.id == _importedPlan.id);
-    setState(() {
-      _replaceImportedPlan(updatedPlan);
-      _didUpdatePlan = true;
-    });
-    await _refreshAnitabiData();
   }
 
   Future<void> _loadPoints(PilgrimageWork work) async {
@@ -1622,19 +1642,37 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
               : PreferredSize(
                   preferredSize: const Size.fromHeight(58),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 12),
-                    child: PilgrimageWorkDropdown(
-                      works: works,
-                      value: _selectedWork,
-                      settings: _settings,
-                      omitScrollbarInsetWhenUnscrollable: true,
-                      onChanged: _isImporting
-                          ? null
-                          : (work) {
-                              if (work != null) {
-                                _loadPoints(work);
-                              }
-                            },
+                    padding: const EdgeInsets.fromLTRB(16, 0, 8, 12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: PilgrimageWorkDropdown(
+                            works: works,
+                            value: _selectedWork,
+                            settings: _settings,
+                            omitScrollbarInsetWhenUnscrollable: true,
+                            onChanged: _isImporting
+                                ? null
+                                : (work) {
+                                    if (work != null) {
+                                      _loadPoints(work);
+                                    }
+                                  },
+                          ),
+                        ),
+                        IconButton(
+                          key: const ValueKey('import-search-work-button'),
+                          tooltip: l10n.anitabiMapImportSearchWork,
+                          onPressed: _isImporting ? null : _searchWork,
+                          icon: const Icon(LucideIcons.search),
+                        ),
+                        IconButton(
+                          key: const ValueKey('import-paste-link-button'),
+                          tooltip: l10n.anitabiMapImportPasteLink,
+                          onPressed: _isImporting ? null : _openLink,
+                          icon: const Icon(LucideIcons.link),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -1654,7 +1692,10 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
             }
 
             if (works.isEmpty) {
-              return _EmptyImportState(onOpenWorkManager: _openWorkManager);
+              return _EmptyImportState(
+                onSearch: _searchWork,
+                onPasteLink: _openLink,
+              );
             }
 
             if (!_isLoading &&
@@ -3026,9 +3067,10 @@ String? _anitabiThumbnailUrl(String? url) {
 }
 
 class _EmptyImportState extends StatelessWidget {
-  const _EmptyImportState({required this.onOpenWorkManager});
+  const _EmptyImportState({required this.onSearch, required this.onPasteLink});
 
-  final VoidCallback onOpenWorkManager;
+  final VoidCallback onSearch;
+  final VoidCallback onPasteLink;
 
   @override
   Widget build(BuildContext context) {
@@ -3066,13 +3108,27 @@ class _EmptyImportState extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: FilledButton.icon(
-                  onPressed: onOpenWorkManager,
+                  key: const ValueKey('import-empty-search-button'),
+                  onPressed: onSearch,
                   style: FilledButton.styleFrom(
                     minimumSize: const Size.fromHeight(46),
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                   ),
-                  icon: const Icon(LucideIcons.clapperboard, size: 20),
-                  label: Text(l10n.anitabiMapImportManageWorks),
+                  icon: const Icon(LucideIcons.search, size: 20),
+                  label: Text(l10n.anitabiMapImportSearchWork),
+                ),
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                child: OutlinedButton.icon(
+                  onPressed: onPasteLink,
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size.fromHeight(46),
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                  ),
+                  icon: const Icon(LucideIcons.link, size: 20),
+                  label: Text(l10n.anitabiMapImportPasteLink),
                 ),
               ),
             ],

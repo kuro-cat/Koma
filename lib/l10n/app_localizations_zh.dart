@@ -1355,25 +1355,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addPointsBangumiNetworkNote => 'Bangumi需要国际网络环境才能正常搜索。';
 
   @override
-  String get addPointsQuickImport => '快速导入';
-
-  @override
   String get addPointsRecommended => '推荐';
-
-  @override
-  String get addPointsQuickImportSubtitle => '在导入Anitabi点位的同时自动导入作品';
-
-  @override
-  String get addPointsAddPointsSection => '添加点位';
-
-  @override
-  String get addPointsImportFromWorkMap => '从作品地图导入点位';
-
-  @override
-  String get addPointsImportFromWorkMapSubtitle => '在作品地图上选择并导入点位';
-
-  @override
-  String get addPointsAddWorkViaBangumiFirst => '请先通过 Bangumi 搜索添加作品';
 
   @override
   String get addPointsQuickManualSubtitle => '只填写作品、名称和可选坐标';
@@ -2247,25 +2229,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planNoSpotsYet => '还没有点位';
 
   @override
-  String get planOnboardingWorksTitle => '加作品';
-
-  @override
-  String get planOnboardingWorksBody =>
-      '点击右上角展开计划操作，选择“添加点位”，再点击“作品管理”，搜索并添加想要加入巡礼计划的作品。';
-
-  @override
   String get planOnboardingSpotsTitle => '选点位';
 
   @override
-  String get planOnboardingSpotsBody =>
-      '在“添加点位”页面点击“从作品地图导入”，在这里你可以选择并添加巡礼点位。\n你也可以在“添加点位”页面点击“从Anitabi链接导入”。通过使用有效链接，导入点位时作品也会被一起添加。';
-
-  @override
-  String get planOnboardingAreasTitle => '划片区';
-
-  @override
-  String get planOnboardingAreasBody =>
-      '回到“计划”页，点击右上角展开计划操作，选择“管理计划”。在这里可以细致管理已加入计划的点位，创建片区并归纳距离接近的点位。';
+  String get planOnboardingSpotsBody => '在地图上点选点位并导入，作品会自动加入这个计划。';
 
   @override
   String get planUndoCheckIn => '撤回打卡';
@@ -2593,14 +2560,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get anitabiMapImportNoWorks => '还没有作品';
 
   @override
-  String get anitabiMapImportManageWorks => '作品管理';
-
-  @override
-  String get anitabiMapImportFromBangumiTitle => '从Bangumi导入';
+  String get anitabiMapImportFromBangumiTitle => '找到作品';
 
   @override
   String get anitabiMapImportFromBangumiBody =>
-      '点击作品管理中的Bangumi按钮，搜索你想导入的作品并导入。之后你可以在这里直接查看对应作品在Anitabi上的点位。';
+      '在 Bangumi 搜索作品，或粘贴从 anitabi.cn 复制的链接。作品的点位会显示在地图上，导入点位时作品会自动加入计划。';
 
   @override
   String get anitabiMapImportLoadingWorks => '正在加载 Anitabi 作品和点位';
@@ -5099,11 +5063,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get navigationRouteConfirmExternalShort => '外部导航';
 
   @override
-  String navigationRouteConfirmExternalWith(String app) {
-    return '使用 $app 导航';
-  }
-
-  @override
   String get navigationRouteConfirmExternalFailed => '无法打开外部地图';
 
   @override
@@ -5521,5 +5480,41 @@ class AppLocalizationsZh extends AppLocalizations {
       '相机暂时无法使用，请稍后重试。如果问题持续，请重启 MiriaGo。';
 
   @override
+  String get addPointsPickWork => '查看点位';
+
+  @override
+  String get addPointsFindSpots => '查找作品点位';
+
+  @override
+  String get addPointsFindSpotsSubtitle => '搜索作品或粘贴 Anitabi 链接，在地图上挑选点位';
+
+  @override
+  String get addPointsOwnSpotsSection => '自行添加点位';
+
+  @override
+  String get anitabiMapImportSearchWork => '搜索作品';
+
+  @override
+  String get anitabiMapImportPasteLink => '粘贴 Anitabi 链接';
+
+  @override
   String get anitabiMapImportClusterAdded => '已加入';
+
+  @override
+  String navigationRouteConfirmExternalWith(String app) {
+    return '使用 $app 导航';
+  }
+
+  @override
+  String get planOnboardingFindTitle => '找作品';
+
+  @override
+  String get planOnboardingFindBody =>
+      '点击下方“添加点位”，选择“查找作品点位”，搜索作品或粘贴 Anitabi 链接。';
+
+  @override
+  String get planOnboardingShootTitle => '现场拍摄';
+
+  @override
+  String get planOnboardingShootBody => '到达点位后点相机按钮，对照动画画面取景。';
 }

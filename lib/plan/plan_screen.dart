@@ -1734,8 +1734,8 @@ class _OnboardingTimeline extends StatelessWidget {
       children: [
         _OnboardingStep(
           number: 1,
-          title: l10n.planOnboardingWorksTitle,
-          body: l10n.planOnboardingWorksBody,
+          title: l10n.planOnboardingFindTitle,
+          body: l10n.planOnboardingFindBody,
         ),
         _OnboardingStep(
           number: 2,
@@ -1744,8 +1744,8 @@ class _OnboardingTimeline extends StatelessWidget {
         ),
         _OnboardingStep(
           number: 3,
-          title: l10n.planOnboardingAreasTitle,
-          body: l10n.planOnboardingAreasBody,
+          title: l10n.planOnboardingShootTitle,
+          body: l10n.planOnboardingShootBody,
           isLast: true,
         ),
       ],
