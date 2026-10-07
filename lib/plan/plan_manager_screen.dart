@@ -138,10 +138,19 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
       return;
     }
 
-    await deletePlanReclaimingFiles(
-      repository: widget.repository,
-      planId: plan.id,
-    );
+    try {
+      await deletePlanReclaimingFiles(
+        repository: widget.repository,
+        planId: plan.id,
+      );
+    } on Object {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showStatusSnack(
+          kind: AppStatusBannerKind.error,
+          title: l10n.planManagerDeleteFailed,
+        );
+      }
+    }
     await _loadPlans();
   }
 

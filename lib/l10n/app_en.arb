@@ -1663,5 +1663,6 @@
   "appShellNoPlansBody": "Create a plan, then add the anime spots you want to visit.",
   "appShellCreatePlan": "Create plan",
   "appShellCreatePlanFailed": "Couldn't create the plan. Please try again.",
-  "appShellNewPlan": "New plan"
+  "appShellNewPlan": "New plan",
+  "planManagerDeleteFailed": "Couldn't delete the plan. Please try again."
 }

@@ -10127,6 +10127,12 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'新建计划'**
   String get appShellNewPlan;
+
+  /// No description provided for @planManagerDeleteFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'删除计划失败，请重试'**
+  String get planManagerDeleteFailed;
 }
 
 class _AppLocalizationsDelegate

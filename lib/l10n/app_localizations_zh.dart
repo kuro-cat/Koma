@@ -5538,4 +5538,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get appShellNewPlan => '新建计划';
+
+  @override
+  String get planManagerDeleteFailed => '删除计划失败，请重试';
 }

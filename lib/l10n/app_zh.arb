@@ -3346,5 +3346,6 @@
   "appShellNoPlansBody": "创建一个巡礼计划，把想去的作品点位加进来。",
   "appShellCreatePlan": "创建计划",
   "appShellCreatePlanFailed": "计划创建失败，请重试",
-  "appShellNewPlan": "新建计划"
+  "appShellNewPlan": "新建计划",
+  "planManagerDeleteFailed": "删除计划失败，请重试"
 }

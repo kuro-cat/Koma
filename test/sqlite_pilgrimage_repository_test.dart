@@ -2658,6 +2658,23 @@ void main() {
     },
   );
 
+  test(
+    'deletes the last plan and starts empty without the demo plan',
+    () async {
+      final database = AppDatabase(NativeDatabase.memory());
+      addTearDown(database.close);
+      final repository = SqlitePilgrimageRepository(
+        database: database,
+        seedSamplePlan: false,
+      );
+      final plan = await repository.createPlan(name: 'Only plan', area: 'Uji');
+
+      await repository.deletePlan(plan.id);
+
+      expect(await repository.loadPlans(), isEmpty);
+    },
+  );
+
   test('uses explicit captured time when creating visit records', () async {
     final database = AppDatabase(NativeDatabase.memory());
     addTearDown(database.close);

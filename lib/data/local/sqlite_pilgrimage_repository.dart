@@ -1361,10 +1361,13 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
                     (table) => OrderingTerm.asc(table.id),
                   ])
                   ..limit(1))
-                .getSingle();
-        await (_database.update(_database.plans)
-              ..where((table) => table.id.equals(nextPlan.id)))
-            .write(const PlansCompanion(active: Value(true)));
+                .getSingleOrNull();
+        // None left is fine: the app then asks the user to create a plan.
+        if (nextPlan != null) {
+          await (_database.update(_database.plans)
+                ..where((table) => table.id.equals(nextPlan.id)))
+              .write(const PlansCompanion(active: Value(true)));
+        }
       }
     });
   }

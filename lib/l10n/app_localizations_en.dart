@@ -6235,4 +6235,8 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appShellNewPlan => 'New plan';
+
+  @override
+  String get planManagerDeleteFailed =>
+      'Couldn\'t delete the plan. Please try again.';
 }
