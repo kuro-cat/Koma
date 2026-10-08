@@ -101,7 +101,6 @@ void main() {
                   onOpenMap: () {},
                   onOpenPlanManager: () {},
                   onOpenAddPoints: () {},
-                  onOpenPointManager: () {},
                   onOpenImportExport: () {},
                 )
               : PilgrimageMapScreen(

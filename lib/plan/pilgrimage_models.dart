@@ -100,8 +100,6 @@ enum AppThemePalette {
   spruce,
   moss,
   lake,
-  bark,
-  ochre,
   ink,
   custom;
 
@@ -109,10 +107,10 @@ enum AppThemePalette {
   static AppThemePalette? fromName(Object? name) => switch (name) {
     'classicGreen' => fjord,
     'deepBlue' => lake,
-    'cherryPink' => bark,
     'twilightPurple' => spruce,
-    'miriaYellow' => ochre,
     'graphite' => ink,
+    // Removed palettes fall back to the default.
+    'cherryPink' || 'miriaYellow' || 'bark' || 'ochre' => fjord,
     'aurora' => custom,
     _ => values.where((palette) => palette.name == name).firstOrNull,
   };
@@ -123,8 +121,6 @@ enum AppThemePalette {
       AppThemePalette.spruce => l10n.paletteSpruce,
       AppThemePalette.moss => l10n.paletteMoss,
       AppThemePalette.lake => l10n.paletteLake,
-      AppThemePalette.bark => l10n.paletteBark,
-      AppThemePalette.ochre => l10n.paletteOchre,
       AppThemePalette.ink => l10n.paletteInk,
       AppThemePalette.custom => l10n.pilgrimageModelsPaletteCustom,
     };

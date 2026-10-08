@@ -7,7 +7,6 @@ import 'package:miriago/data/sample_pilgrimage_repository.dart';
 import 'package:miriago/plan/pilgrimage_models.dart';
 import 'package:miriago/plan/pilgrimage_plan_controller.dart';
 import 'package:miriago/plan/plan_screen.dart';
-import 'package:miriago/plan/point_manager_screen.dart';
 import 'package:miriago/plan/reference_cache_progress_dialog.dart';
 import 'package:miriago/plan/reference_full_cache_runner.dart';
 import 'package:miriago/plan_transfer/import_export_screen.dart';
@@ -71,22 +70,15 @@ void main() {
         await tester.pumpWidget(
           MaterialApp(
             theme: AppTheme.light(),
-            home: manager
-                ? PointManagerScreen(
-                    plan: plan,
-                    repository: repository,
-                    settings: const AppSettings(),
-                  )
-                : PlanScreen(
-                    controller: controller,
-                    repository: repository,
-                    settings: const AppSettings(),
-                    onOpenMap: () {},
-                    onOpenPlanManager: () {},
-                    onOpenAddPoints: () {},
-                    onOpenPointManager: () {},
-                    onOpenImportExport: () {},
-                  ),
+            home: PlanScreen(
+              controller: controller,
+              repository: repository,
+              settings: const AppSettings(),
+              onOpenMap: () {},
+              onOpenPlanManager: () {},
+              onOpenAddPoints: () {},
+              onOpenImportExport: () {},
+            ),
           ),
         );
         await tester.pump();

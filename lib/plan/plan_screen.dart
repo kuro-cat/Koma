@@ -12,6 +12,7 @@ import '../widgets/input_dialog.dart';
 import '../widgets/reference_thumbnail_stub.dart'
     if (dart.library.io) '../widgets/reference_thumbnail_io.dart';
 import '../widgets/snackbar_helper.dart';
+import '../data/app_file_reclamation.dart';
 import '../camera_reference/camerawesome_reference_screen.dart';
 import '../point_detail/point_detail_sheet.dart';
 import '../records/point_visit_records_screen.dart';
@@ -21,6 +22,9 @@ import '../map/map_tile_config.dart';
 import '../map/map_location_tracker.dart';
 import '../utils/selected_item_order.dart';
 import 'add_points_screen.dart';
+import 'nearest_group_assign_screen.dart';
+import 'plan_group_actions.dart';
+import 'plan_group_manager_screen.dart';
 import 'plan_group_picker_sheet.dart';
 import 'plan_group_utils.dart';
 import 'plan_memo_screen.dart';
@@ -38,7 +42,6 @@ class PlanScreen extends StatefulWidget {
     required this.onOpenMap,
     required this.onOpenPlanManager,
     required this.onOpenAddPoints,
-    required this.onOpenPointManager,
     required this.onOpenImportExport,
     this.onPickPlan,
     this.isActive = true,
@@ -52,7 +55,6 @@ class PlanScreen extends StatefulWidget {
   final VoidCallback onOpenMap;
   final VoidCallback onOpenPlanManager;
   final VoidCallback onOpenAddPoints;
-  final VoidCallback onOpenPointManager;
   final VoidCallback onOpenImportExport;
 
   /// Opens the plan list from the title; the title is plain text without it.
@@ -75,6 +77,11 @@ class _PlanScreenState extends State<PlanScreen>
   bool _showPlanActions = false;
   bool _showVirtualLocation = false;
   bool _isLocating = false;
+
+  // Edit mode: the same list, with selection, bulk actions and reorder.
+  bool _editing = false;
+  final Set<String> _selectedIds = {};
+  bool _isSaving = false;
   ReferenceCacheTask? _observedCacheTask;
   PilgrimagePlan? _seenCachedPlan;
   ReferenceCacheTask get _cacheTask =>
@@ -359,206 +366,519 @@ class _PlanScreenState extends State<PlanScreen>
             currentLocation: _currentLocation,
           );
 
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: kToolbarHeight,
-        actionsPadding: EdgeInsets.zero,
-        title: InkWell(
-          key: const ValueKey('plan-title-picker'),
-          onTap: widget.onPickPlan,
-          borderRadius: BorderRadius.zero,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                child: Text(
-                  plan.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
+    final canReorder =
+        _editing &&
+        selectedGroup != null &&
+        selectedGroup.isManualOrder &&
+        _sortMode == PointSortMode.plan &&
+        !_sortDescending;
+
+    return PopScope(
+      canPop: !_editing,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop) {
+          _setEditing(false);
+        }
+      },
+      child: Scaffold(
+        appBar: _editing
+            ? AppBar(
+                toolbarHeight: kToolbarHeight,
+                automaticallyImplyLeading: false,
+                title: Text(
+                  l10n.pointManagerSelectedCount(_selectedIds.length),
+                ),
+                actions: [
+                  TextButton(
+                    key: const ValueKey('plan-select-all'),
+                    onPressed: () => setState(() {
+                      final ids = displayPoints.map((point) => point.id);
+                      if (_selectedIds.containsAll(ids)) {
+                        _selectedIds.clear();
+                      } else {
+                        _selectedIds.addAll(ids);
+                      }
+                    }),
+                    child: Text(l10n.pointManagerSelectAll),
+                  ),
+                  TextButton(
+                    key: const ValueKey('plan-edit-done'),
+                    onPressed: () => _setEditing(false),
+                    child: Text(l10n.planEditDone),
+                  ),
+                  const SizedBox(width: 8),
+                ],
+              )
+            : AppBar(
+                toolbarHeight: kToolbarHeight,
+                actionsPadding: EdgeInsets.zero,
+                title: InkWell(
+                  key: const ValueKey('plan-title-picker'),
+                  onTap: widget.onPickPlan,
+                  borderRadius: BorderRadius.zero,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Flexible(
+                        child: Text(
+                          plan.name,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      if (widget.onPickPlan != null) ...[
+                        const SizedBox(width: 4),
+                        const Icon(LucideIcons.chevronsUpDown, size: 18),
+                      ],
+                    ],
                   ),
                 ),
+                actions: [
+                  if (controller.points.isNotEmpty)
+                    TextButton(
+                      key: const ValueKey('plan-edit-button'),
+                      onPressed: () => _setEditing(true),
+                      child: Text(l10n.planEdit),
+                    ),
+                  IconButton(
+                    key: const ValueKey('plan-add-points-button'),
+                    tooltip: l10n.planAddSpots,
+                    onPressed: () => _openPlanAction(widget.onOpenAddPoints),
+                    icon: const Icon(LucideIcons.mapPinPlus),
+                  ),
+                  IconButton(
+                    key: const ValueKey('plan-actions-toggle'),
+                    tooltip: _showPlanActions
+                        ? l10n.planHideActions
+                        : l10n.planShowActions,
+                    onPressed: _togglePlanActions,
+                    icon: Icon(
+                      _showPlanActions
+                          ? LucideIcons.chevronUp
+                          : LucideIcons.chevronDown,
+                    ),
+                  ),
+                ],
               ),
-              if (widget.onPickPlan != null) ...[
-                const SizedBox(width: 4),
-                const Icon(LucideIcons.chevronsUpDown, size: 18),
+        body: Listener(
+          behavior: HitTestBehavior.translucent,
+          onPointerDown: _handlePlanBodyPointerDown,
+          child: Column(
+            children: [
+              if (selectedGroup == null || controller.points.isEmpty)
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                    children: [
+                      _WorkHeader(plan: plan),
+                      _PlanActionsReveal(
+                        expanded: _showPlanActions,
+                        child: KeyedSubtree(
+                          key: _planActionsPanelRegionKey,
+                          child: _PlanActionsPanel(
+                            isCachingReferences: _isCachingFullReferences,
+                            onCacheReferences: _handleReferenceCachePressed,
+                            onSwitchPlan: () =>
+                                _openPlanAction(widget.onOpenPlanManager),
+                            onOpenMemo: () => _openPlanAction(_openPlanMemo),
+                            onImportExport: () =>
+                                _openPlanAction(widget.onOpenImportExport),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      _EmptyPlanCard(onAddPoints: widget.onOpenAddPoints),
+                    ],
+                  ),
+                )
+              else ...[
+                _PlanActionsReveal(
+                  expanded: _showPlanActions,
+                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+                  child: KeyedSubtree(
+                    key: _planActionsPanelRegionKey,
+                    child: _PlanActionsPanel(
+                      isCachingReferences: _isCachingFullReferences,
+                      onCacheReferences: _handleReferenceCachePressed,
+                      onSwitchPlan: () =>
+                          _openPlanAction(widget.onOpenPlanManager),
+                      onOpenMemo: () => _openPlanAction(_openPlanMemo),
+                      onImportExport: () =>
+                          _openPlanAction(widget.onOpenImportExport),
+                    ),
+                  ),
+                ),
+                _GroupSwitcher(
+                  groups: groups,
+                  selectedIndex: _selectedGroupIndex,
+                  showProgressRing: widget.settings.showPlanGroupProgress,
+                  onSelectGroup: (group) {
+                    final currentGroups = planGroupBuckets(
+                      controller.plan,
+                      controller.completedPointIds,
+                    );
+                    final index = currentGroups.indexWhere(
+                      (candidate) => candidate.id == group.id,
+                    );
+                    if (index >= 0) {
+                      _selectGroup(index, currentGroups);
+                    }
+                  },
+                  onCreateGroup: () => _createGroupFromPointDetail(context),
+                  onAreaAction: (action) =>
+                      _handleAreaAction(action, selectedGroup),
+                ),
+                _PlanGroupControls(
+                  locationError: _locationError,
+                  group: selectedGroup,
+                  showMap: _showMap,
+                  sortMode: _sortMode,
+                  sortDescending: _sortDescending,
+                  mapHeightRatio: _mapHeightRatio,
+                  settings: settings,
+                  showVirtualLocation: _showVirtualLocation,
+                  isLocating: _isLocating,
+                  currentLocation: _currentLocation,
+                  selectedPointId: controller.selectedPoint?.id,
+                  onSetSortMode: (mode) {
+                    setState(() {
+                      _sortMode = mode;
+                    });
+                  },
+                  onToggleSortDirection: () {
+                    setState(() {
+                      _sortDescending = !_sortDescending;
+                    });
+                  },
+                  onToggleMap: () {
+                    setState(() {
+                      _showMap = !_showMap;
+                    });
+                    syncLocationActivity();
+                  },
+                  onResizeMap: _resizeMap,
+                  onToggleVirtualLocation: _toggleCurrentLocation,
+                  onSelectPoint: (point) =>
+                      _handleMapPointTap(context, point, groups),
+                  completedPointIds: controller.completedPointIds,
+                ),
+                Expanded(
+                  child: Column(
+                    children: [
+                      // Rows hang from a 2px ink rule, as Tsumiki's lists do.
+                      if (displayPoints.isNotEmpty)
+                        Container(
+                          height: 2,
+                          margin: const EdgeInsets.symmetric(horizontal: 16),
+                          color: AppColors.ink,
+                        ),
+                      Expanded(
+                        child: displayPoints.isEmpty
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 32,
+                                  horizontal: 16,
+                                ),
+                                child: Text(
+                                  l10n.planAreaEmpty,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: AppColors.textSecondary,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              )
+                            : ReorderableListView.builder(
+                                scrollController: _pointListController,
+                                padding: const EdgeInsets.fromLTRB(
+                                  16,
+                                  0,
+                                  16,
+                                  24,
+                                ),
+                                buildDefaultDragHandles: false,
+                                itemCount: displayPoints.length,
+                                onReorderItem: (oldIndex, newIndex) =>
+                                    _reorderPoints(
+                                      selectedGroup,
+                                      displayPoints,
+                                      oldIndex,
+                                      newIndex,
+                                    ),
+                                itemBuilder: (context, index) {
+                                  final point = displayPoints[index];
+                                  return _PlanPointTile(
+                                    key: _pointTileKey(point.id),
+                                    controller: controller,
+                                    point: point,
+                                    status: controller.statusFor(point),
+                                    recordCount: controller
+                                        .recordsForPoint(point.id)
+                                        .length,
+                                    editing: _editing,
+                                    selected: _selectedIds.contains(point.id),
+                                    reorderIndex: canReorder ? index : null,
+                                    onTap: _editing
+                                        ? () => _toggleSelected(point)
+                                        : () {
+                                            _selectPoint(point, groups);
+                                            _showPointDetail(context, point);
+                                          },
+                                    onLongPress: _editing
+                                        ? null
+                                        : () => _setEditing(true, point),
+                                    onOpenCamera: () =>
+                                        _openCamera(context, point),
+                                    onComplete: () =>
+                                        controller.completePoint(point),
+                                    onReopen: () =>
+                                        controller.reopenPoint(point),
+                                  );
+                                },
+                              ),
+                      ),
+                      if (_editing)
+                        _EditBar(
+                          hasSelection: _selectedIds.isNotEmpty && !_isSaving,
+                          onMove: _moveSelected,
+                          onComplete: _completeSelected,
+                          onDelete: _deleteSelected,
+                        ),
+                    ],
+                  ),
+                ),
               ],
             ],
           ),
         ),
-        actions: [
-          IconButton(
-            key: const ValueKey('plan-add-points-button'),
-            tooltip: l10n.planAddSpots,
-            onPressed: () => _openPlanAction(widget.onOpenAddPoints),
-            icon: const Icon(LucideIcons.mapPinPlus),
-          ),
-          IconButton(
-            key: const ValueKey('plan-actions-toggle'),
-            tooltip: _showPlanActions
-                ? l10n.planHideActions
-                : l10n.planShowActions,
-            onPressed: _togglePlanActions,
-            icon: Icon(
-              _showPlanActions
-                  ? LucideIcons.chevronUp
-                  : LucideIcons.chevronDown,
-            ),
-          ),
-        ],
-      ),
-      body: Listener(
-        behavior: HitTestBehavior.translucent,
-        onPointerDown: _handlePlanBodyPointerDown,
-        child: Column(
-          children: [
-            if (selectedGroup == null || controller.points.isEmpty)
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                  children: [
-                    _WorkHeader(plan: plan),
-                    _PlanActionsReveal(
-                      expanded: _showPlanActions,
-                      child: KeyedSubtree(
-                        key: _planActionsPanelRegionKey,
-                        child: _PlanActionsPanel(
-                          isCachingReferences: _isCachingFullReferences,
-                          onCacheReferences: _handleReferenceCachePressed,
-                          onSwitchPlan: () =>
-                              _openPlanAction(widget.onOpenPlanManager),
-                          onManagePoints: () =>
-                              _openPlanAction(widget.onOpenPointManager),
-                          onOpenMemo: () => _openPlanAction(_openPlanMemo),
-                          onImportExport: () =>
-                              _openPlanAction(widget.onOpenImportExport),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    _EmptyPlanCard(onAddPoints: widget.onOpenAddPoints),
-                  ],
-                ),
-              )
-            else ...[
-              _PlanActionsReveal(
-                expanded: _showPlanActions,
-                padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
-                child: KeyedSubtree(
-                  key: _planActionsPanelRegionKey,
-                  child: _PlanActionsPanel(
-                    isCachingReferences: _isCachingFullReferences,
-                    onCacheReferences: _handleReferenceCachePressed,
-                    onSwitchPlan: () =>
-                        _openPlanAction(widget.onOpenPlanManager),
-                    onManagePoints: () =>
-                        _openPlanAction(widget.onOpenPointManager),
-                    onOpenMemo: () => _openPlanAction(_openPlanMemo),
-                    onImportExport: () =>
-                        _openPlanAction(widget.onOpenImportExport),
-                  ),
-                ),
-              ),
-              _GroupSwitcher(
-                groups: groups,
-                selectedIndex: _selectedGroupIndex,
-                showProgressRing: widget.settings.showPlanGroupProgress,
-                onSelectGroup: (group) {
-                  final currentGroups = planGroupBuckets(
-                    controller.plan,
-                    controller.completedPointIds,
-                  );
-                  final index = currentGroups.indexWhere(
-                    (candidate) => candidate.id == group.id,
-                  );
-                  if (index >= 0) {
-                    _selectGroup(index, currentGroups);
-                  }
-                },
-                onCreateGroup: () => _createGroupFromPointDetail(context),
-              ),
-              _PlanGroupControls(
-                locationError: _locationError,
-                group: selectedGroup,
-                showMap: _showMap,
-                sortMode: _sortMode,
-                sortDescending: _sortDescending,
-                mapHeightRatio: _mapHeightRatio,
-                settings: settings,
-                showVirtualLocation: _showVirtualLocation,
-                isLocating: _isLocating,
-                currentLocation: _currentLocation,
-                selectedPointId: controller.selectedPoint?.id,
-                onSetSortMode: (mode) {
-                  setState(() {
-                    _sortMode = mode;
-                  });
-                },
-                onToggleSortDirection: () {
-                  setState(() {
-                    _sortDescending = !_sortDescending;
-                  });
-                },
-                onToggleMap: () {
-                  setState(() {
-                    _showMap = !_showMap;
-                  });
-                  syncLocationActivity();
-                },
-                onResizeMap: _resizeMap,
-                onToggleVirtualLocation: _toggleCurrentLocation,
-                onSelectPoint: (point) =>
-                    _handleMapPointTap(context, point, groups),
-                completedPointIds: controller.completedPointIds,
-              ),
-              Expanded(
-                child: ListView(
-                  controller: _pointListController,
-                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-                  children: [
-                    // Rows hang from a 2px ink rule, as Tsumiki's lists do.
-                    if (displayPoints.isNotEmpty)
-                      Container(height: 2, color: AppColors.ink)
-                    else
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 32),
-                        child: Text(
-                          l10n.planAreaEmpty,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 15,
-                          ),
-                        ),
-                      ),
-                    for (final point in displayPoints) ...[
-                      _PlanPointTile(
-                        key: _pointTileKey(point.id),
-                        controller: controller,
-                        point: point,
-                        status: controller.statusFor(point),
-                        recordCount: controller
-                            .recordsForPoint(point.id)
-                            .length,
-                        onTap: () {
-                          _selectPoint(point, groups);
-                          _showPointDetail(context, point);
-                        },
-                        onOpenCamera: () => _openCamera(context, point),
-                        onComplete: () => controller.completePoint(point),
-                        onReopen: () => controller.reopenPoint(point),
-                      ),
-                    ],
-                  ],
-                ),
-              ),
-            ],
-          ],
-        ),
       ),
     );
+  }
+
+  void _setEditing(bool editing, [PilgrimagePoint? first]) {
+    setState(() {
+      _editing = editing;
+      _showPlanActions = false;
+      _selectedIds.clear();
+      if (first != null) {
+        _selectedIds.add(first.id);
+      }
+    });
+  }
+
+  void _toggleSelected(PilgrimagePoint point) {
+    setState(() {
+      if (!_selectedIds.remove(point.id)) {
+        _selectedIds.add(point.id);
+      }
+    });
+  }
+
+  /// Saves a change and shows the stored plan; names what failed otherwise.
+  Future<bool> _savePlanChange(PlanChange action, String failureMessage) async {
+    if (_isSaving) {
+      return false;
+    }
+    setState(() => _isSaving = true);
+    try {
+      final updatedPlan = await action();
+      if (mounted) {
+        controller.replacePlan(updatedPlan);
+      }
+      return true;
+    } catch (_) {
+      _showSnackBar(failureMessage);
+      return false;
+    } finally {
+      if (mounted) {
+        setState(() => _isSaving = false);
+      }
+    }
+  }
+
+  Future<void> _runAreaChange(
+    Future<PlanChange?> pending,
+    String failureMessage,
+  ) async {
+    final change = await pending;
+    if (change != null && mounted) {
+      await _savePlanChange(change, failureMessage);
+    }
+  }
+
+  Future<void> _reloadPlan() async {
+    final updatedPlan = await widget.repository.loadActivePlan();
+    if (mounted) {
+      controller.replacePlan(updatedPlan);
+    }
+  }
+
+  Future<void> _moveSelected() async {
+    const ungrouped = '__ungrouped__';
+    final pointIds = {..._selectedIds};
+    final picked = await showPlanGroupSelectionSheet(
+      context: context,
+      title: l10n.pointManagerMoveToGroup,
+      subtitle: l10n.pointManagerMoveToGroupSubtitle,
+      selectedOptionId: '',
+      options: [
+        PlanGroupSelectionOption(
+          id: ungrouped,
+          title: l10n.pointManagerNotInGroup,
+        ),
+        for (final group in sortGroupsByPlanOrder(controller.plan.groups))
+          PlanGroupSelectionOption(id: group.id, title: group.name),
+      ],
+      onCreateOption: () async {
+        final created = await _createGroupFromPointDetail(context);
+        return created == null
+            ? null
+            : PlanGroupSelectionOption(id: created.id, title: created.name);
+      },
+    );
+    if (picked == null || !mounted) {
+      return;
+    }
+    final saved = await _savePlanChange(
+      () => widget.repository.movePointsToGroup(
+        planId: controller.plan.id,
+        pointIds: pointIds,
+        groupId: picked == ungrouped ? null : picked,
+      ),
+      l10n.pointManagerMoveGroupFailed,
+    );
+    if (saved) {
+      _setEditing(false);
+    }
+  }
+
+  void _completeSelected() {
+    for (final point in controller.points) {
+      if (_selectedIds.contains(point.id) &&
+          controller.statusFor(point) != VisitStatus.completed) {
+        controller.completePoint(point);
+      }
+    }
+    _setEditing(false);
+  }
+
+  Future<void> _deleteSelected() async {
+    final points = controller.points
+        .where((point) => _selectedIds.contains(point.id))
+        .toList(growable: false);
+    final countText = l10n.pointManagerSpotCount(points.length);
+    final confirmed = await showConfirmActionDialog(
+      context,
+      title: l10n.pointManagerBatchDeleteTitle,
+      message: l10n.pointManagerBatchDeleteMessage(countText),
+      confirmLabel: l10n.commonDelete,
+      destructive: true,
+      emphasizedValues: [countText],
+    );
+    if (!confirmed || !mounted) {
+      return;
+    }
+    final saved = await _savePlanChange(() async {
+      final updatedPlan = await widget.repository.deletePointsFromPlan(
+        planId: controller.plan.id,
+        pointIds: {for (final point in points) point.id},
+      );
+      // Reference files are reclaimed only after the deletion has committed.
+      reclaimDeletedPointFiles(repository: widget.repository, points: points);
+      return updatedPlan;
+    }, l10n.pointManagerBatchDeleteFailed);
+    if (saved) {
+      _setEditing(false);
+    }
+  }
+
+  Future<void> _reorderPoints(
+    PlanGroupBucket group,
+    List<PilgrimagePoint> points,
+    int oldIndex,
+    int newIndex,
+  ) async {
+    final ordered = [...points];
+    ordered.insert(newIndex, ordered.removeAt(oldIndex));
+    await _savePlanChange(
+      () => widget.repository.reorderGroupPoints(
+        planId: controller.plan.id,
+        groupId: group.id,
+        pointIds: [for (final point in ordered) point.id],
+      ),
+      l10n.pointManagerPointOrderSaveFailed,
+    );
+  }
+
+  Future<void> _handleAreaAction(
+    _AreaAction action,
+    PlanGroupBucket bucket,
+  ) async {
+    final plan = controller.plan;
+    final group = bucket.group;
+    switch (action) {
+      case _AreaAction.rename when group != null:
+        await _runAreaChange(
+          renameAreaChange(context, widget.repository, plan, group),
+          l10n.planGroupManagerRenameFailed,
+        );
+      case _AreaAction.anchor when group != null:
+        await _runAreaChange(
+          setAreaAnchorChange(context, widget.repository, plan, group),
+          l10n.planGroupManagerAnchorSaveFailed,
+        );
+      case _AreaAction.order when group != null:
+        await _savePlanChange(
+          toggleAreaOrderChange(widget.repository, plan, group),
+          l10n.planGroupManagerOrderModeSaveFailed,
+        );
+      case _AreaAction.delete when group != null:
+        await _runAreaChange(
+          deleteAreaChange(context, widget.repository, plan, group),
+          l10n.planGroupManagerDeleteFailed,
+        );
+      case _AreaAction.manage:
+        final pickedId = await Navigator.of(context).push<String?>(
+          MaterialPageRoute(
+            builder: (_) => PlanGroupManagerScreen(
+              plan: plan,
+              repository: widget.repository,
+            ),
+          ),
+        );
+        await _reloadPlan();
+        if (pickedId != null && mounted) {
+          setState(() => _selectedGroupId = pickedId);
+        }
+      case _AreaAction.nearest:
+        await Navigator.of(context).push<bool>(
+          MaterialPageRoute(
+            builder: (_) => NearestGroupAssignScreen(
+              plan: plan,
+              settings: settings,
+              repository: widget.repository,
+            ),
+          ),
+        );
+        await _reloadPlan();
+      case _AreaAction.box:
+        await Navigator.of(context).push<bool>(
+          MaterialPageRoute(
+            builder: (_) => BoxGroupAssignScreen(
+              plan: plan,
+              repository: widget.repository,
+              settings: settings,
+            ),
+          ),
+        );
+        await _reloadPlan();
+      default:
+        break;
+    }
   }
 
   Future<void> _openPlanMemo() async {
@@ -846,7 +1166,6 @@ class _PlanActionsPanel extends StatelessWidget {
     required this.isCachingReferences,
     required this.onCacheReferences,
     required this.onSwitchPlan,
-    required this.onManagePoints,
     required this.onOpenMemo,
     required this.onImportExport,
   });
@@ -854,7 +1173,6 @@ class _PlanActionsPanel extends StatelessWidget {
   final bool isCachingReferences;
   final VoidCallback onCacheReferences;
   final VoidCallback onSwitchPlan;
-  final VoidCallback onManagePoints;
   final VoidCallback onOpenMemo;
   final VoidCallback onImportExport;
 
@@ -866,12 +1184,6 @@ class _PlanActionsPanel extends StatelessWidget {
         icon: const Icon(LucideIcons.list, size: 20),
         title: l10n.planSwitchPlan,
         onTap: onSwitchPlan,
-      ),
-      _PlanActionItem(
-        key: const ValueKey('plan-action-manage-points'),
-        icon: const Icon(LucideIcons.slidersHorizontal, size: 20),
-        title: l10n.planManagePlan,
-        onTap: onManagePoints,
       ),
       _PlanActionItem(
         key: const ValueKey('plan-action-cache-references'),
@@ -907,7 +1219,7 @@ class _PlanActionsPanel extends StatelessWidget {
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-          // Large text: five labels no longer fit in one row; 3 + 2 keeps
+          // Large text: four labels no longer fit in one row; 2 + 2 keeps
           // them readable instead of cutting them off.
           final textScale = MediaQuery.textScalerOf(context).scale(11) / 11;
           final perItem = constraints.maxWidth / items.length;
@@ -918,10 +1230,9 @@ class _PlanActionsPanel extends StatelessWidget {
             key: const ValueKey('plan-actions-two-rows'),
             mainAxisSize: MainAxisSize.min,
             children: [
-              _planActionRow(items.sublist(0, 3)),
+              _planActionRow(items.sublist(0, 2)),
               Divider(height: 1, color: AppColors.border),
-              // Same item width as the first row.
-              _planActionRow(items.sublist(3), slots: 3),
+              _planActionRow(items.sublist(2)),
             ],
           );
         },
@@ -930,8 +1241,7 @@ class _PlanActionsPanel extends StatelessWidget {
   }
 }
 
-/// [slots] (at least the number of items) leaves empty room at the end.
-Widget _planActionRow(List<Widget> items, {int? slots}) {
+Widget _planActionRow(List<Widget> items) {
   return IntrinsicHeight(
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -940,8 +1250,6 @@ Widget _planActionRow(List<Widget> items, {int? slots}) {
           if (i > 0) const _PlanActionDivider(),
           Expanded(child: items[i]),
         ],
-        for (var i = items.length; i < (slots ?? 0); i++)
-          const Expanded(child: SizedBox.shrink()),
       ],
     ),
   );
@@ -1013,6 +1321,83 @@ class _PlanActionDivider extends StatelessWidget {
   }
 }
 
+enum _AreaAction { rename, anchor, order, manage, delete, nearest, box }
+
+PopupMenuItem<_AreaAction> _areaItem(
+  _AreaAction action,
+  IconData icon,
+  String label, {
+  Color? color,
+}) {
+  return PopupMenuItem(
+    value: action,
+    child: Row(
+      children: [
+        Icon(icon, size: 18, color: color),
+        const SizedBox(width: 12),
+        Flexible(
+          child: Text(label, style: TextStyle(color: color)),
+        ),
+      ],
+    ),
+  );
+}
+
+/// Bulk actions for the selected spots, on an ink rule above the nav bar.
+class _EditBar extends StatelessWidget {
+  const _EditBar({
+    required this.hasSelection,
+    required this.onMove,
+    required this.onComplete,
+    required this.onDelete,
+  });
+
+  final bool hasSelection;
+  final VoidCallback onMove;
+  final VoidCallback onComplete;
+  final VoidCallback onDelete;
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      key: const ValueKey('plan-edit-bar'),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        border: Border(top: BorderSide(color: AppColors.ink)),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Row(
+          children: [
+            Expanded(
+              child: TextButton.icon(
+                onPressed: hasSelection ? onMove : null,
+                icon: const Icon(LucideIcons.folderInput, size: 18),
+                label: Text(l10n.pointManagerMove),
+              ),
+            ),
+            Expanded(
+              child: TextButton.icon(
+                onPressed: hasSelection ? onComplete : null,
+                icon: const Icon(LucideIcons.check, size: 18),
+                label: Text(l10n.planEditMarkVisited),
+              ),
+            ),
+            Expanded(
+              child: TextButton.icon(
+                style: TextButton.styleFrom(foregroundColor: AppColors.error),
+                onPressed: hasSelection ? onDelete : null,
+                icon: const Icon(LucideIcons.trash2, size: 18),
+                label: Text(l10n.commonDelete),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _GroupSwitcher extends StatelessWidget {
   const _GroupSwitcher({
     required this.groups,
@@ -1020,8 +1405,10 @@ class _GroupSwitcher extends StatelessWidget {
     required this.showProgressRing,
     required this.onSelectGroup,
     required this.onCreateGroup,
+    required this.onAreaAction,
   });
 
+  final ValueChanged<_AreaAction> onAreaAction;
   final List<PlanGroupBucket> groups;
   final int selectedIndex;
   final bool showProgressRing;
@@ -1033,7 +1420,7 @@ class _GroupSwitcher extends StatelessWidget {
     final group = groups[selectedIndex];
     return Padding(
       key: const ValueKey('plan-group-switcher'),
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+      padding: const EdgeInsets.fromLTRB(4, 12, 4, 8),
       child: Row(
         children: [
           IconButton(
@@ -1043,19 +1430,31 @@ class _GroupSwitcher extends StatelessWidget {
             icon: const Icon(LucideIcons.chevronLeft),
             tooltip: l10n.planPreviousArea,
           ),
+          // The area name is a picker, unframed like the plan title.
           Expanded(
-            child: FilledButton.tonal(
-              onPressed: () => _showGroupPicker(context),
-              style: FilledButton.styleFrom(
-                backgroundColor: AppColors.surface,
-                foregroundColor: AppColors.textPrimary,
-                side: BorderSide(color: AppColors.border),
-              ),
-              child: Text(
-                group.name,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontWeight: FontWeight.w600),
+            child: InkWell(
+              key: const ValueKey('plan-area-picker'),
+              onTap: () => _showGroupPicker(context),
+              child: SizedBox(
+                height: 48,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        group.name,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 4),
+                    const Icon(LucideIcons.chevronDown, size: 18),
+                  ],
+                ),
               ),
             ),
           ),
@@ -1065,6 +1464,56 @@ class _GroupSwitcher extends StatelessWidget {
                 : () => onSelectGroup(groups[selectedIndex + 1]),
             icon: const Icon(LucideIcons.chevronRight),
             tooltip: l10n.planNextArea,
+          ),
+          PopupMenuButton<_AreaAction>(
+            key: const ValueKey('plan-area-actions'),
+            tooltip: l10n.planGroupManagerAreaActions,
+            icon: const Icon(LucideIcons.ellipsisVertical),
+            onSelected: onAreaAction,
+            itemBuilder: (context) => [
+              if (group.isUngrouped) ...[
+                _areaItem(
+                  _AreaAction.nearest,
+                  LucideIcons.locateFixed,
+                  l10n.pointManagerNearestAssign,
+                ),
+                _areaItem(
+                  _AreaAction.box,
+                  LucideIcons.scan,
+                  l10n.pointManagerBoxAssign,
+                ),
+              ] else ...[
+                _areaItem(
+                  _AreaAction.rename,
+                  LucideIcons.pencil,
+                  l10n.planGroupManagerRename,
+                ),
+                _areaItem(
+                  _AreaAction.anchor,
+                  LucideIcons.flag,
+                  l10n.planGroupManagerSetAnchor,
+                ),
+                _areaItem(
+                  _AreaAction.order,
+                  LucideIcons.arrowUpDown,
+                  group.isManualOrder
+                      ? l10n.planGroupManagerSwitchToUnordered
+                      : l10n.planGroupManagerSwitchToManualOrder,
+                ),
+              ],
+              _areaItem(
+                _AreaAction.manage,
+                LucideIcons.layers,
+                l10n.pointManagerGroupManagement,
+              ),
+              if (!group.isUngrouped)
+                _areaItem(
+                  _AreaAction.delete,
+                  LucideIcons.trash2,
+                  l10n.planGroupManagerDeleteArea,
+                  color: AppColors.error,
+                ),
+            ],
           ),
         ],
       ),
@@ -1707,9 +2156,7 @@ class _EmptyPlanCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1878,9 +2325,7 @@ class _WorkHeader extends StatelessWidget {
       margin: const EdgeInsets.fromLTRB(0, 8, 0, 12),
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.zero,
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Row(
         children: [
@@ -1953,9 +2398,19 @@ class _PlanPointTile extends StatelessWidget {
     required this.onOpenCamera,
     required this.onComplete,
     required this.onReopen,
+    this.editing = false,
+    this.selected = false,
+    this.reorderIndex,
+    this.onLongPress,
     super.key,
   });
 
+  final bool editing;
+  final bool selected;
+
+  /// Set when the row can be dragged; the grip starts the drag.
+  final int? reorderIndex;
+  final VoidCallback? onLongPress;
   final PilgrimagePlanController controller;
   final PilgrimagePoint point;
   final VisitStatus status;
@@ -1969,25 +2424,26 @@ class _PlanPointTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final colors = _statusColors(status);
     final visited = status == VisitStatus.completed;
+    // Repeated row actions stay frameless, as Tsumiki's quiet keys.
     final keyStyle = IconButton.styleFrom(
-      side: BorderSide(color: AppColors.ink),
-      backgroundColor: AppColors.surface,
-      fixedSize: const Size(44, 44),
-      minimumSize: const Size(44, 44),
+      fixedSize: const Size(48, 48),
+      minimumSize: const Size(48, 48),
     );
 
     return Material(
       // The next stop sits on the accent wash; rows are split by rules.
-      color: status == VisitStatus.current
+      color: selected || status == VisitStatus.current
           ? AppColors.accentWash
           : AppColors.surface,
       shape: Border(bottom: BorderSide(color: AppColors.divider)),
       child: InkWell(
         onTap: onTap,
+        onLongPress: onLongPress,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 10, 4, 10),
+          padding: EdgeInsets.fromLTRB(editing ? 0 : 12, 10, 4, 10),
           child: Row(
             children: [
+              if (editing) Checkbox(value: selected, onChanged: (_) => onTap()),
               // The anime frame at its own 16:9, not cropped to a square.
               SizedBox(
                 width: 72,
@@ -2040,38 +2496,55 @@ class _PlanPointTile extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
-              IconButton(
-                style: keyStyle,
-                tooltip: visited ? l10n.planUndoCheckIn : l10n.planComplete,
-                onPressed: visited ? onReopen : onComplete,
-                icon: Icon(
-                  visited ? LucideIcons.rotateCcw : LucideIcons.check,
-                  size: 20,
-                ),
-              ),
-              const SizedBox(width: 8),
-              IconButton(
-                style: keyStyle,
-                tooltip: l10n.planShootReference,
-                onPressed: onOpenCamera,
-                icon: SizedBox(
-                  width: 22,
-                  height: 22,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      const Center(child: Icon(LucideIcons.camera, size: 20)),
-                      if (recordCount > 0)
-                        Positioned(
-                          top: -6,
-                          right: -6,
-                          child: _PointRecordBadge(stacked: recordCount > 1),
-                        ),
-                    ],
+              if (editing)
+                if (reorderIndex case final index?)
+                  ReorderableDragStartListener(
+                    index: index,
+                    child: SizedBox(
+                      width: 48,
+                      height: 48,
+                      child: Icon(
+                        LucideIcons.gripVertical,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  )
+                else
+                  const SizedBox.shrink()
+              else ...[
+                const SizedBox(width: 4),
+                IconButton(
+                  style: keyStyle,
+                  tooltip: visited ? l10n.planUndoCheckIn : l10n.planComplete,
+                  onPressed: visited ? onReopen : onComplete,
+                  icon: Icon(
+                    visited ? LucideIcons.rotateCcw : LucideIcons.check,
+                    size: 20,
                   ),
                 ),
-              ),
+                IconButton(
+                  style: keyStyle,
+                  color: AppColors.accentForeground,
+                  tooltip: l10n.planShootReference,
+                  onPressed: onOpenCamera,
+                  icon: SizedBox(
+                    width: 22,
+                    height: 22,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        const Center(child: Icon(LucideIcons.camera, size: 20)),
+                        if (recordCount > 0)
+                          Positioned(
+                            top: -6,
+                            right: -6,
+                            child: _PointRecordBadge(stacked: recordCount > 1),
+                          ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ],
           ),
         ),
@@ -2095,7 +2568,7 @@ class _PlanPointTile extends StatelessWidget {
       ),
       VisitStatus.pending => _PointStatusColors(
         background: AppColors.surfaceMuted,
-        foreground: AppColors.accentDark,
+        foreground: AppColors.textTertiary,
         border: AppColors.border,
         icon: LucideIcons.mapPin,
       ),

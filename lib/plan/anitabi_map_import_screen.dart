@@ -102,6 +102,12 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
   bool _didUpdatePlan = false;
   bool get _showThumbnailMarkers => _settings.importMapShowThumbnailMarkers;
   bool _isBoxSelecting = false;
+  static const _ungroupedOptionId = '__ungrouped__';
+
+  /// Where the next box goes: an area id, [_ungroupedOptionId], or null
+  /// until the user picks one. Kept for the session so boxing area after
+  /// area takes one tap each.
+  String? _boxGroupId;
   Offset? _selectionStart;
   Offset? _selectionEnd;
   int _loadGeneration = 0;
@@ -891,7 +897,7 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
       return const [];
     }
 
-    return _availablePoints
+    return _pointsForWork(work)
         .where((point) {
           final offset = _mapController.camera.latLngToScreenOffset(
             point.position,
@@ -941,31 +947,92 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
     );
   }
 
-  Future<void> _importSelectedBoxPoints() async {
+  /// Imports the boxed spots that are new and puts every boxed spot,
+  /// new or already in the plan, into the chosen area.
+  Future<void> _applyBoxSelection() async {
+    final work = _selectedWork;
+    final choice = _boxGroupId;
     final points = _pointsInSelection();
-    if (points.isEmpty) {
-      ScaffoldMessenger.of(context).showStatusSnack(
-        kind: AppStatusBannerKind.warning,
-        title: l10n.anitabiMapImportBoxEmpty,
+    if (work == null || choice == null || points.isEmpty || _isImporting) {
+      return;
+    }
+    final pointIds = points
+        .map((point) => point.toPilgrimagePoint(work).id)
+        .toSet();
+    final newPoints = points
+        .where(
+          (point) =>
+              !_importedPointIds.contains(point.toPilgrimagePoint(work).id),
+        )
+        .toList(growable: false);
+    if (newPoints.isNotEmpty) {
+      await _importPoints(
+        newPoints,
+        successMessage: l10n.anitabiMapImportAddedBox,
+        failureMessage: l10n.anitabiMapImportBoxFailed,
+        showOrganizeGuide: false,
       );
+    }
+    if (!mounted) {
       return;
     }
-
-    final confirmed = await _confirmBulkImport(
-      title: l10n.anitabiMapImportAddBoxTitle,
-      message: l10n.anitabiMapImportAddBoxMessage(points.length),
-      confirmLabel: l10n.anitabiMapImportAddBoxConfirm,
-    );
-    if (!confirmed) {
+    // Only spots that made it into the plan can move.
+    final movable = pointIds.where(_importedPointIds.contains).toSet();
+    if (movable.isEmpty) {
       return;
     }
-
-    await _importPoints(
-      points,
-      successMessage: l10n.anitabiMapImportAddedBox,
-      failureMessage: l10n.anitabiMapImportBoxFailed,
-      exitBoxSelectionOnSuccess: true,
+    await _movePointsToGroup(
+      movable,
+      choice == _ungroupedOptionId ? null : choice,
     );
+    if (mounted) {
+      setState(() {
+        _selectionStart = null;
+        _selectionEnd = null;
+      });
+    }
+  }
+
+  Future<void> _pickBoxGroup() async {
+    final groups = sortGroupsByPlanOrder(_importedPlan.groups);
+    final picked = await showPlanGroupSelectionSheet(
+      context: context,
+      title: l10n.anitabiMapImportBoxChooseArea,
+      subtitle: l10n.anitabiMapImportBoxAreaSubtitle,
+      selectedOptionId: _boxGroupId ?? '',
+      options: [
+        for (final group in groups)
+          PlanGroupSelectionOption(id: group.id, title: group.name),
+        PlanGroupSelectionOption(
+          id: _ungroupedOptionId,
+          title: l10n.anitabiMapImportNotInArea,
+        ),
+      ],
+      onCreateOption: () async {
+        final created = await _createGroupForAssignment();
+        return created == null
+            ? null
+            : PlanGroupSelectionOption(id: created.id, title: created.name);
+      },
+    );
+    if (!mounted || picked == null) {
+      return;
+    }
+    setState(() => _boxGroupId = picked);
+  }
+
+  String? get _boxGroupName {
+    final id = _boxGroupId;
+    if (id == null) {
+      return null;
+    }
+    if (id == _ungroupedOptionId) {
+      return l10n.anitabiMapImportNotInArea;
+    }
+    return _importedPlan.groups
+        .where((group) => group.id == id)
+        .map((group) => group.name)
+        .firstOrNull;
   }
 
   Future<void> _importPoints(
@@ -973,6 +1040,7 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
     required String successMessage,
     required String failureMessage,
     bool exitBoxSelectionOnSuccess = false,
+    bool showOrganizeGuide = true,
   }) async {
     final selectedWork = _selectedWork;
     if (selectedWork == null || points.isEmpty || _isImporting) {
@@ -1137,7 +1205,8 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
                 cached,
               ),
       );
-      shouldShowOrganizeGuide = pilgrimagePoints.length > 1;
+      shouldShowOrganizeGuide =
+          showOrganizeGuide && pilgrimagePoints.length > 1;
     } catch (error, stackTrace) {
       debugPrint('Failed to import Anitabi points: $error');
       debugPrintStack(stackTrace: stackTrace);
@@ -1219,16 +1288,15 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
   }
 
   Future<void> _assignImportedPointsToGroup(Set<String> pointIds) async {
-    const ungroupedOptionId = '__ungrouped__';
     final groups = sortGroupsByPlanOrder(_importedPlan.groups);
     final selectedGroupId = await showPlanGroupSelectionSheet(
       context: context,
       title: l10n.anitabiMapImportAssignToArea,
       subtitle: l10n.anitabiMapImportAssignToAreaSubtitle,
-      selectedOptionId: ungroupedOptionId,
+      selectedOptionId: _ungroupedOptionId,
       options: [
         PlanGroupSelectionOption(
-          id: ungroupedOptionId,
+          id: _ungroupedOptionId,
           title: l10n.anitabiMapImportNotInArea,
         ),
         for (final group in groups)
@@ -1244,10 +1312,13 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
     if (!mounted || selectedGroupId == null) {
       return;
     }
+    await _movePointsToGroup(
+      pointIds,
+      selectedGroupId == _ungroupedOptionId ? null : selectedGroupId,
+    );
+  }
 
-    final groupId = selectedGroupId == ungroupedOptionId
-        ? null
-        : selectedGroupId;
+  Future<void> _movePointsToGroup(Set<String> pointIds, String? groupId) async {
     try {
       final updatedPlan = await widget.repository.movePointsToGroup(
         planId: _importedPlan.id,
@@ -1713,7 +1784,17 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
 
             return LayoutBuilder(
               builder: (context, constraints) {
-                final selectedBoxCount = _pointsInSelection().length;
+                final boxedPoints = _pointsInSelection();
+                final selectedBoxCount = boxedPoints.length;
+                final newBoxCount = selectedWork == null
+                    ? 0
+                    : boxedPoints
+                          .where(
+                            (point) => !_importedPointIds.contains(
+                              point.toPilgrimagePoint(selectedWork).id,
+                            ),
+                          )
+                          .length;
 
                 return Stack(
                   children: [
@@ -1942,9 +2023,12 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
                         availableCount: _availablePoints.length,
                         boxSelectionEnabled: _isBoxSelecting,
                         selectedBoxCount: selectedBoxCount,
+                        newBoxCount: newBoxCount,
+                        boxGroupName: _boxGroupName,
                         onToggleBoxSelection: _toggleBoxSelection,
                         onImportAll: _importAllAvailablePoints,
-                        onImportSelection: _importSelectedBoxPoints,
+                        onPickBoxGroup: _pickBoxGroup,
+                        onApplySelection: _applyBoxSelection,
                       ),
                     ),
                     Align(
@@ -2306,9 +2390,12 @@ class _ImportSummary extends StatelessWidget {
     required this.availableCount,
     required this.boxSelectionEnabled,
     required this.selectedBoxCount,
+    required this.newBoxCount,
+    required this.boxGroupName,
     required this.onToggleBoxSelection,
     required this.onImportAll,
-    required this.onImportSelection,
+    required this.onPickBoxGroup,
+    required this.onApplySelection,
   });
 
   final bool isLoading;
@@ -2320,9 +2407,14 @@ class _ImportSummary extends StatelessWidget {
   final int availableCount;
   final bool boxSelectionEnabled;
   final int selectedBoxCount;
+  final int newBoxCount;
+
+  /// The area the box goes into; null until one is picked.
+  final String? boxGroupName;
   final VoidCallback onToggleBoxSelection;
   final VoidCallback onImportAll;
-  final VoidCallback onImportSelection;
+  final VoidCallback onPickBoxGroup;
+  final VoidCallback onApplySelection;
 
   @override
   Widget build(BuildContext context) {
@@ -2356,7 +2448,14 @@ class _ImportSummary extends StatelessWidget {
                     isLoading
                         ? l10n.anitabiMapImportLoadingSpots
                         : importProgress?.label ??
-                              (expected == null
+                              (boxSelectionEnabled
+                                  ? selectedBoxCount == 0
+                                        ? l10n.anitabiMapImportBoxHint
+                                        : l10n.anitabiMapImportBoxCount(
+                                            selectedBoxCount,
+                                            newBoxCount,
+                                          )
+                                  : expected == null
                                   ? l10n.anitabiMapImportShownCount(
                                       importedCount,
                                       totalCount,
@@ -2408,40 +2507,67 @@ class _ImportSummary extends StatelessWidget {
                     style: _summaryIconButtonStyle(boxSelectionEnabled),
                   ),
                 ),
-                const SizedBox(width: 8),
-
-                Expanded(
-                  child: SizedBox(
+                if (boxSelectionEnabled) ...[
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: SizedBox(
+                      height: 36,
+                      child: OutlinedButton(
+                        key: const ValueKey('import-box-area-button'),
+                        onPressed: isImporting ? null : onPickBoxGroup,
+                        style: OutlinedButton.styleFrom(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                        ),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                boxGroupName ?? l10n.anitabiMapImportBoxArea,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: boxGroupName == null
+                                      ? AppColors.textSecondary
+                                      : AppColors.textPrimary,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0,
+                                ),
+                              ),
+                            ),
+                            Icon(
+                              LucideIcons.chevronDown,
+                              size: 16,
+                              color: AppColors.textPrimary,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  SizedBox(
                     height: 36,
                     child: FilledButton(
+                      key: const ValueKey('import-box-apply-button'),
                       onPressed:
                           isImporting ||
-                              !boxSelectionEnabled ||
-                              selectedBoxCount == 0
+                              selectedBoxCount == 0 ||
+                              boxGroupName == null
                           ? null
-                          : onImportSelection,
+                          : onApplySelection,
                       style: FilledButton.styleFrom(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
                         textStyle: const TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
-                      child: ResponsiveButtonContent(
-                        icon: LucideIcons.mapPinPlus,
-                        iconSize: 16,
-                        label: selectedBoxCount == 0
-                            ? l10n.anitabiMapImportImportSelection
-                            : l10n.anitabiMapImportImportCount(
-                                selectedBoxCount,
-                              ),
-                        shortLabel: l10n.anitabiMapImportImport,
-                        semanticLabel: l10n.anitabiMapImportImportSelection,
-                      ),
+                      child: Text(l10n.anitabiMapImportBoxApply),
                     ),
                   ),
-                ),
+                ],
               ],
             ),
           ],
@@ -2452,19 +2578,15 @@ class _ImportSummary extends StatelessWidget {
 
   ButtonStyle _summaryIconButtonStyle(bool selected) {
     return IconButton.styleFrom(
-      backgroundColor: selected
-          ? AppColors.accent.withValues(alpha: 0.12)
-          : AppColors.surface,
-      foregroundColor: selected ? AppColors.accentDark : AppColors.textPrimary,
+      // Selected inverts to ink, as every Koma key does.
+      backgroundColor: selected ? AppColors.ink : AppColors.surface,
+      foregroundColor: selected ? AppColors.background : AppColors.textPrimary,
       disabledBackgroundColor: AppColors.surfaceMuted,
       disabledForegroundColor: AppColors.textSecondary,
       fixedSize: const Size.square(36),
       minimumSize: const Size.square(36),
       padding: EdgeInsets.zero,
-      side: BorderSide(
-        color: selected ? AppColors.accent : AppColors.border,
-        width: selected ? 2 : 1,
-      ),
+      side: BorderSide(color: AppColors.ink),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
     );
   }

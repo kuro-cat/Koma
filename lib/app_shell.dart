@@ -20,7 +20,6 @@ import 'plan/plan_manager_screen.dart';
 import 'plan/pilgrimage_models.dart';
 import 'plan/pilgrimage_plan_controller.dart';
 import 'plan/plan_screen.dart';
-import 'plan/point_manager_screen.dart';
 import 'plan_transfer/import_export_screen.dart';
 import 'plan_transfer/incoming_plan_file.dart';
 import 'plan_transfer/plan_import_file_stub.dart'
@@ -341,26 +340,6 @@ class _AppShellState extends State<AppShell> {
     }
   }
 
-  Future<void> _openPointManager() async {
-    final plan = _planController?.plan;
-    if (plan == null) {
-      return;
-    }
-
-    await Navigator.of(context).push<bool>(
-      MaterialPageRoute<bool>(
-        builder: (_) => PointManagerScreen(
-          plan: plan,
-          repository: widget.repository,
-          settings: _settings,
-        ),
-      ),
-    );
-    if (mounted) {
-      await _loadActivePlan();
-    }
-  }
-
   Future<void> _openImportExport() async {
     final plan = _planController?.plan;
     if (plan == null) {
@@ -616,7 +595,6 @@ class _AppShellState extends State<AppShell> {
                             onOpenMap: _openMap,
                             onOpenPlanManager: _openPlanManager,
                             onOpenAddPoints: _openAddPoints,
-                            onOpenPointManager: _openPointManager,
                             onOpenImportExport: _openImportExport,
                             onPickPlan: _showPlanPicker,
                           ),

@@ -3857,9 +3857,7 @@ class _LinkedWorksPanel extends StatelessWidget {
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Column(
         children: [
@@ -4573,7 +4571,7 @@ class _FindSpotsPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.accent.withValues(alpha: 0.04),
+      color: AppColors.accentWash,
       borderRadius: BorderRadius.zero,
       child: InkWell(
         key: const ValueKey('add-points-anitabi-map'),
@@ -4582,7 +4580,8 @@ class _FindSpotsPanel extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.zero,
-            border: Border.all(color: AppColors.accent.withValues(alpha: 0.32)),
+            // The recommended path sits on the wash under an ink rule.
+            border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
           ),
           child: Column(
             children: [
@@ -4690,9 +4689,7 @@ class _AddPointPanel extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.accent.withValues(alpha: 0.28)),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

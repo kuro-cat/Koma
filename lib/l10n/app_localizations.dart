@@ -2682,95 +2682,17 @@ abstract class AppLocalizations {
   /// **'已选 {count}'**
   String pointManagerSelectedCount(int count);
 
-  /// No description provided for @pointManagerTitle.
-  ///
-  /// In zh, this message translates to:
-  /// **'管理计划'**
-  String get pointManagerTitle;
-
   /// No description provided for @pointManagerGroupManagement.
   ///
   /// In zh, this message translates to:
   /// **'片区管理'**
   String get pointManagerGroupManagement;
 
-  /// No description provided for @pointManagerExitMultiSelect.
-  ///
-  /// In zh, this message translates to:
-  /// **'退出多选'**
-  String get pointManagerExitMultiSelect;
-
-  /// No description provided for @pointManagerMultiSelect.
-  ///
-  /// In zh, this message translates to:
-  /// **'多选'**
-  String get pointManagerMultiSelect;
-
-  /// No description provided for @pointManagerCreateGroupFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'片区创建失败，请稍后重试。'**
-  String get pointManagerCreateGroupFailed;
-
-  /// No description provided for @pointManagerUngroupedNoAnchor.
-  ///
-  /// In zh, this message translates to:
-  /// **'未分配点位没有关键点。'**
-  String get pointManagerUngroupedNoAnchor;
-
-  /// No description provided for @pointManagerGroupNotFound.
-  ///
-  /// In zh, this message translates to:
-  /// **'片区不存在。'**
-  String get pointManagerGroupNotFound;
-
-  /// No description provided for @pointManagerAnchorSaveFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'关键点保存失败'**
-  String get pointManagerAnchorSaveFailed;
-
-  /// No description provided for @pointManagerUngroupedNoOrder.
-  ///
-  /// In zh, this message translates to:
-  /// **'未分配点位不需要排序方式。'**
-  String get pointManagerUngroupedNoOrder;
-
-  /// No description provided for @pointManagerOrderModeSaveFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'排序方式保存失败'**
-  String get pointManagerOrderModeSaveFailed;
-
   /// No description provided for @pointManagerMoveGroupFailed.
   ///
   /// In zh, this message translates to:
   /// **'移动片区失败'**
   String get pointManagerMoveGroupFailed;
-
-  /// No description provided for @pointManagerOpenCameraHint.
-  ///
-  /// In zh, this message translates to:
-  /// **'请从计划页或地图页打开拍摄。'**
-  String get pointManagerOpenCameraHint;
-
-  /// No description provided for @pointManagerReferenceSaveFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'参考图保存失败'**
-  String get pointManagerReferenceSaveFailed;
-
-  /// No description provided for @pointManagerUngroupedSpots.
-  ///
-  /// In zh, this message translates to:
-  /// **'未分配点位'**
-  String get pointManagerUngroupedSpots;
-
-  /// No description provided for @pointManagerUnknownGroup.
-  ///
-  /// In zh, this message translates to:
-  /// **'未知片区'**
-  String get pointManagerUnknownGroup;
 
   /// No description provided for @pointManagerMoveToGroup.
   ///
@@ -2796,30 +2718,6 @@ abstract class AppLocalizations {
   /// **'点位顺序保存失败'**
   String get pointManagerPointOrderSaveFailed;
 
-  /// No description provided for @pointManagerDeletePoint.
-  ///
-  /// In zh, this message translates to:
-  /// **'删除点位'**
-  String get pointManagerDeletePoint;
-
-  /// No description provided for @pointManagerDeletePointMessage.
-  ///
-  /// In zh, this message translates to:
-  /// **'将从计划中删除「{name}」。'**
-  String pointManagerDeletePointMessage(String name);
-
-  /// No description provided for @pointManagerDeleteIrreversible.
-  ///
-  /// In zh, this message translates to:
-  /// **'删除后无法撤销'**
-  String get pointManagerDeleteIrreversible;
-
-  /// No description provided for @pointManagerDeletePointFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'点位删除失败'**
-  String get pointManagerDeletePointFailed;
-
   /// No description provided for @pointManagerBatchDeleteTitle.
   ///
   /// In zh, this message translates to:
@@ -2844,108 +2742,6 @@ abstract class AppLocalizations {
   /// **'批量删除失败'**
   String get pointManagerBatchDeleteFailed;
 
-  /// No description provided for @pointManagerCurrentTargetSaveFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'当前目标保存失败'**
-  String get pointManagerCurrentTargetSaveFailed;
-
-  /// No description provided for @pointManagerCompletionSaveFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'完成状态保存失败'**
-  String get pointManagerCompletionSaveFailed;
-
-  /// No description provided for @pointManagerStatusSaveFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'点位状态保存失败'**
-  String get pointManagerStatusSaveFailed;
-
-  /// No description provided for @pointManagerBatchCompleteFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'批量完成失败'**
-  String get pointManagerBatchCompleteFailed;
-
-  /// No description provided for @pointManagerBatchResetFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'批量重置失败'**
-  String get pointManagerBatchResetFailed;
-
-  /// No description provided for @pointManagerGroupNameEmpty.
-  ///
-  /// In zh, this message translates to:
-  /// **'片区名不能为空'**
-  String get pointManagerGroupNameEmpty;
-
-  /// No description provided for @pointManagerNewGroup.
-  ///
-  /// In zh, this message translates to:
-  /// **'新建片区'**
-  String get pointManagerNewGroup;
-
-  /// No description provided for @pointManagerGroupNameLabel.
-  ///
-  /// In zh, this message translates to:
-  /// **'片区名称'**
-  String get pointManagerGroupNameLabel;
-
-  /// No description provided for @pointManagerCreate.
-  ///
-  /// In zh, this message translates to:
-  /// **'创建'**
-  String get pointManagerCreate;
-
-  /// No description provided for @pointManagerAnchor.
-  ///
-  /// In zh, this message translates to:
-  /// **'关键点：{name}'**
-  String pointManagerAnchor(String name);
-
-  /// No description provided for @pointManagerAnchorUnset.
-  ///
-  /// In zh, this message translates to:
-  /// **'关键点：未设置'**
-  String get pointManagerAnchorUnset;
-
-  /// No description provided for @pointManagerPreviousGroup.
-  ///
-  /// In zh, this message translates to:
-  /// **'上一个片区'**
-  String get pointManagerPreviousGroup;
-
-  /// No description provided for @pointManagerNextGroup.
-  ///
-  /// In zh, this message translates to:
-  /// **'下一个片区'**
-  String get pointManagerNextGroup;
-
-  /// No description provided for @pointManagerChange.
-  ///
-  /// In zh, this message translates to:
-  /// **'更改'**
-  String get pointManagerChange;
-
-  /// No description provided for @pointManagerUnitSpots.
-  ///
-  /// In zh, this message translates to:
-  /// **'{count, plural, other{点位}}'**
-  String pointManagerUnitSpots(int count);
-
-  /// No description provided for @pointManagerUnitCompleted.
-  ///
-  /// In zh, this message translates to:
-  /// **'完成'**
-  String get pointManagerUnitCompleted;
-
-  /// No description provided for @pointManagerUngroupedWaitSuffix.
-  ///
-  /// In zh, this message translates to:
-  /// **' 个点位等待整理'**
-  String pointManagerUngroupedWaitSuffix(int count);
-
   /// No description provided for @pointManagerNearestAssign.
   ///
   /// In zh, this message translates to:
@@ -2958,96 +2754,6 @@ abstract class AppLocalizations {
   /// **'框选分配'**
   String get pointManagerBoxAssign;
 
-  /// No description provided for @pointManagerOrderUnordered.
-  ///
-  /// In zh, this message translates to:
-  /// **'无序'**
-  String get pointManagerOrderUnordered;
-
-  /// No description provided for @pointManagerOrderManual.
-  ///
-  /// In zh, this message translates to:
-  /// **'手动排序'**
-  String get pointManagerOrderManual;
-
-  /// No description provided for @pointManagerGroupOrder.
-  ///
-  /// In zh, this message translates to:
-  /// **'片区内顺序'**
-  String get pointManagerGroupOrder;
-
-  /// No description provided for @pointManagerStatusCurrent.
-  ///
-  /// In zh, this message translates to:
-  /// **'当前目标'**
-  String get pointManagerStatusCurrent;
-
-  /// No description provided for @pointManagerStatusCompleted.
-  ///
-  /// In zh, this message translates to:
-  /// **'已完成'**
-  String get pointManagerStatusCompleted;
-
-  /// No description provided for @pointManagerStatusPending.
-  ///
-  /// In zh, this message translates to:
-  /// **'待访问'**
-  String get pointManagerStatusPending;
-
-  /// No description provided for @pointManagerPointActions.
-  ///
-  /// In zh, this message translates to:
-  /// **'点位操作'**
-  String get pointManagerPointActions;
-
-  /// No description provided for @pointManagerSetCurrentTarget.
-  ///
-  /// In zh, this message translates to:
-  /// **'设为当前目标'**
-  String get pointManagerSetCurrentTarget;
-
-  /// No description provided for @pointManagerUnmarkCompleted.
-  ///
-  /// In zh, this message translates to:
-  /// **'取消完成'**
-  String get pointManagerUnmarkCompleted;
-
-  /// No description provided for @pointManagerMarkCompleted.
-  ///
-  /// In zh, this message translates to:
-  /// **'标记完成'**
-  String get pointManagerMarkCompleted;
-
-  /// No description provided for @pointManagerReferenceNone.
-  ///
-  /// In zh, this message translates to:
-  /// **'无参考图'**
-  String get pointManagerReferenceNone;
-
-  /// No description provided for @pointManagerReferenceLocal.
-  ///
-  /// In zh, this message translates to:
-  /// **'本地上传'**
-  String get pointManagerReferenceLocal;
-
-  /// No description provided for @pointManagerReferenceCached.
-  ///
-  /// In zh, this message translates to:
-  /// **'已缓存'**
-  String get pointManagerReferenceCached;
-
-  /// No description provided for @pointManagerReferenceRemote.
-  ///
-  /// In zh, this message translates to:
-  /// **'未缓存'**
-  String get pointManagerReferenceRemote;
-
-  /// No description provided for @pointManagerClearSelection.
-  ///
-  /// In zh, this message translates to:
-  /// **'清空'**
-  String get pointManagerClearSelection;
-
   /// No description provided for @pointManagerSelectAll.
   ///
   /// In zh, this message translates to:
@@ -3059,24 +2765,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'移动'**
   String get pointManagerMove;
-
-  /// No description provided for @pointManagerComplete.
-  ///
-  /// In zh, this message translates to:
-  /// **'完成'**
-  String get pointManagerComplete;
-
-  /// No description provided for @pointManagerReset.
-  ///
-  /// In zh, this message translates to:
-  /// **'重置'**
-  String get pointManagerReset;
-
-  /// No description provided for @pointManagerEmpty.
-  ///
-  /// In zh, this message translates to:
-  /// **'还没有可以管理的点位'**
-  String get pointManagerEmpty;
 
   /// No description provided for @coordinateInputClipboardReadFailed.
   ///
@@ -3282,23 +2970,11 @@ abstract class AppLocalizations {
   /// **'暂无作品'**
   String get planManagerNoWorks;
 
-  /// No description provided for @planManagerDragToReorder.
-  ///
-  /// In zh, this message translates to:
-  /// **'拖动调整顺序'**
-  String get planManagerDragToReorder;
-
   /// No description provided for @planManagerCurrentPlan.
   ///
   /// In zh, this message translates to:
   /// **'当前计划'**
   String get planManagerCurrentPlan;
-
-  /// No description provided for @planManagerSwitchable.
-  ///
-  /// In zh, this message translates to:
-  /// **'可切换'**
-  String get planManagerSwitchable;
 
   /// No description provided for @planManagerDragSort.
   ///
@@ -4030,12 +3706,6 @@ abstract class AppLocalizations {
   /// **'计划列表'**
   String get planSwitchPlan;
 
-  /// No description provided for @planManagePlan.
-  ///
-  /// In zh, this message translates to:
-  /// **'管理计划'**
-  String get planManagePlan;
-
   /// No description provided for @planCacheReferences.
   ///
   /// In zh, this message translates to:
@@ -4180,12 +3850,6 @@ abstract class AppLocalizations {
   /// **'将把当前作品中 {count} 个还不在计划里的点位加入计划，并暂时放在未分组。'**
   String anitabiMapImportAddAllMessage(int count);
 
-  /// No description provided for @anitabiMapImportAddBoxMessage.
-  ///
-  /// In zh, this message translates to:
-  /// **'将把框选范围内 {count} 个还不在计划里的点位加入计划，并暂时放在未分组。'**
-  String anitabiMapImportAddBoxMessage(int count);
-
   /// No description provided for @anitabiMapImportImporting.
   ///
   /// In zh, this message translates to:
@@ -4207,6 +3871,36 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'已导入 {count} 个点位，缩略图缓存 {cached}/{count}，其余稍后会自动补齐。'**
   String anitabiMapImportImportedPartialCache(int count, int cached);
+
+  /// No description provided for @anitabiMapImportBoxHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'在地图上拖出一个框来选择点位'**
+  String get anitabiMapImportBoxHint;
+
+  /// No description provided for @anitabiMapImportBoxCount.
+  ///
+  /// In zh, this message translates to:
+  /// **'{count} 个点位 · {newCount} 个新点位'**
+  String anitabiMapImportBoxCount(int count, int newCount);
+
+  /// No description provided for @anitabiMapImportBoxChooseArea.
+  ///
+  /// In zh, this message translates to:
+  /// **'选择片区'**
+  String get anitabiMapImportBoxChooseArea;
+
+  /// No description provided for @anitabiMapImportBoxAreaSubtitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'新点位会导入到这个片区，已在计划里的点位会移到这里'**
+  String get anitabiMapImportBoxAreaSubtitle;
+
+  /// No description provided for @anitabiMapImportBoxApply.
+  ///
+  /// In zh, this message translates to:
+  /// **'放入片区'**
+  String get anitabiMapImportBoxApply;
 
   /// No description provided for @anitabiMapImportAssigned.
   ///
@@ -4237,12 +3931,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'已导入 {imported} / 当前显示 {shown} / 共 {total}'**
   String anitabiMapImportShownCountOfTotal(int imported, int shown, int total);
-
-  /// No description provided for @anitabiMapImportImportCount.
-  ///
-  /// In zh, this message translates to:
-  /// **'导入 {count} 个'**
-  String anitabiMapImportImportCount(int count);
 
   /// No description provided for @anitabiMapImportOpenAppFailed.
   ///
@@ -4327,24 +4015,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'批量导入失败，请稍后重试。'**
   String get anitabiMapImportBulkFailed;
-
-  /// No description provided for @anitabiMapImportBoxEmpty.
-  ///
-  /// In zh, this message translates to:
-  /// **'框选范围内没有可添加点位'**
-  String get anitabiMapImportBoxEmpty;
-
-  /// No description provided for @anitabiMapImportAddBoxTitle.
-  ///
-  /// In zh, this message translates to:
-  /// **'添加框选点位'**
-  String get anitabiMapImportAddBoxTitle;
-
-  /// No description provided for @anitabiMapImportAddBoxConfirm.
-  ///
-  /// In zh, this message translates to:
-  /// **'添加框选'**
-  String get anitabiMapImportAddBoxConfirm;
 
   /// No description provided for @anitabiMapImportAddedBox.
   ///
@@ -4633,18 +4303,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'框选点位'**
   String get anitabiMapImportBoxSelect;
-
-  /// No description provided for @anitabiMapImportImportSelection.
-  ///
-  /// In zh, this message translates to:
-  /// **'导入框选结果'**
-  String get anitabiMapImportImportSelection;
-
-  /// No description provided for @anitabiMapImportImport.
-  ///
-  /// In zh, this message translates to:
-  /// **'导入'**
-  String get anitabiMapImportImport;
 
   /// No description provided for @anitabiMapImportSpotName.
   ///
@@ -10008,12 +9666,6 @@ abstract class AppLocalizations {
   /// **'导航'**
   String get splitNavigationMapsShort;
 
-  /// No description provided for @pointManagerAreasShort.
-  ///
-  /// In zh, this message translates to:
-  /// **'片区'**
-  String get pointManagerAreasShort;
-
   /// No description provided for @appShellNoPlansTitle.
   ///
   /// In zh, this message translates to:
@@ -10074,18 +9726,6 @@ abstract class AppLocalizations {
   /// **'湖蓝'**
   String get paletteLake;
 
-  /// No description provided for @paletteBark.
-  ///
-  /// In zh, this message translates to:
-  /// **'树皮'**
-  String get paletteBark;
-
-  /// No description provided for @paletteOchre.
-  ///
-  /// In zh, this message translates to:
-  /// **'赭黄'**
-  String get paletteOchre;
-
   /// No description provided for @paletteInk.
   ///
   /// In zh, this message translates to:
@@ -10097,6 +9737,84 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'这个片区还没有点位，左右切换查看其他片区。'**
   String get planAreaEmpty;
+
+  /// No description provided for @planManagerOpenPlan.
+  ///
+  /// In zh, this message translates to:
+  /// **'打开计划'**
+  String get planManagerOpenPlan;
+
+  /// No description provided for @planManagerEditDetails.
+  ///
+  /// In zh, this message translates to:
+  /// **'编辑详情'**
+  String get planManagerEditDetails;
+
+  /// No description provided for @planManagerDetails.
+  ///
+  /// In zh, this message translates to:
+  /// **'详情'**
+  String get planManagerDetails;
+
+  /// No description provided for @planManagerNoDetails.
+  ///
+  /// In zh, this message translates to:
+  /// **'暂无详情'**
+  String get planManagerNoDetails;
+
+  /// No description provided for @planManagerFactSpots.
+  ///
+  /// In zh, this message translates to:
+  /// **'点位'**
+  String get planManagerFactSpots;
+
+  /// No description provided for @planManagerFactAreas.
+  ///
+  /// In zh, this message translates to:
+  /// **'区域'**
+  String get planManagerFactAreas;
+
+  /// No description provided for @planManagerFactCreated.
+  ///
+  /// In zh, this message translates to:
+  /// **'创建'**
+  String get planManagerFactCreated;
+
+  /// No description provided for @planManagerFactUpdated.
+  ///
+  /// In zh, this message translates to:
+  /// **'更新'**
+  String get planManagerFactUpdated;
+
+  /// No description provided for @planManagerSpotsDone.
+  ///
+  /// In zh, this message translates to:
+  /// **'{total} · 已完成 {done}'**
+  String planManagerSpotsDone(int total, int done);
+
+  /// No description provided for @planEdit.
+  ///
+  /// In zh, this message translates to:
+  /// **'编辑'**
+  String get planEdit;
+
+  /// No description provided for @planEditDone.
+  ///
+  /// In zh, this message translates to:
+  /// **'完成'**
+  String get planEditDone;
+
+  /// No description provided for @planEditMarkVisited.
+  ///
+  /// In zh, this message translates to:
+  /// **'已到访'**
+  String get planEditMarkVisited;
+
+  /// No description provided for @anitabiMapImportBoxArea.
+  ///
+  /// In zh, this message translates to:
+  /// **'区域'**
+  String get anitabiMapImportBoxArea;
 }
 
 class _AppLocalizationsDelegate

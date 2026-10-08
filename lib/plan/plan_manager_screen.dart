@@ -52,6 +52,7 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
   String? _switchingPlanId;
   bool _sorting = false;
   bool _savingOrder = false;
+  String? _expandedPlanId;
 
   @override
   void initState() {
@@ -165,15 +166,19 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
     }
 
     final area = result.area.isEmpty ? l10n.planManagerAreaNotSet : result.area;
-    if (result.name == plan.name && area == plan.area) {
-      return;
+    if (result.name != plan.name || area != plan.area) {
+      await widget.repository.updatePlanInfo(
+        planId: plan.id,
+        name: result.name,
+        area: area,
+      );
     }
-
-    await widget.repository.updatePlanInfo(
-      planId: plan.id,
-      name: result.name,
-      area: area,
-    );
+    if (result.memo != plan.memo) {
+      await widget.repository.updatePlanMemo(
+        planId: plan.id,
+        memo: result.memo,
+      );
+    }
     await _loadPlans();
   }
 
@@ -275,7 +280,10 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
                   : l10n.planManagerSortPlans,
               onPressed: _savingOrder
                   ? null
-                  : () => setState(() => _sorting = !_sorting),
+                  : () => setState(() {
+                      _sorting = !_sorting;
+                      _expandedPlanId = null;
+                    }),
               icon: _savingOrder
                   ? const SizedBox.square(
                       dimension: 20,
@@ -333,10 +341,17 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
                       child: _PlanCard(
                         plan: plan,
                         selected: plan.id == activePlan?.id,
+                        expanded: _expandedPlanId == plan.id,
                         reorderIndex: _sorting ? index : null,
                         reorderEnabled: !_savingOrder,
-                        onSwitch: _sorting ? null : () => _switchPlan(plan),
-                        onRename: _sorting ? null : () => _editPlanInfo(plan),
+                        onToggle: _sorting
+                            ? null
+                            : () => setState(
+                                () => _expandedPlanId =
+                                    _expandedPlanId == plan.id ? null : plan.id,
+                              ),
+                        onOpen: () => _switchPlan(plan),
+                        onEdit: () => _editPlanInfo(plan),
                         onExport: _sorting
                             ? null
                             : () => _openImportExport(plan),
@@ -369,11 +384,13 @@ class _PlanInfoDialog extends StatefulWidget {
 class _PlanInfoDialogState extends State<_PlanInfoDialog> {
   late final _nameController = TextEditingController(text: widget.plan.name);
   late final _areaController = TextEditingController(text: widget.plan.area);
+  late final _memoController = TextEditingController(text: widget.plan.memo);
 
   @override
   void dispose() {
     _nameController.dispose();
     _areaController.dispose();
+    _memoController.dispose();
     super.dispose();
   }
 
@@ -382,6 +399,7 @@ class _PlanInfoDialogState extends State<_PlanInfoDialog> {
       _PlanInfoFormResult(
         name: _nameController.text.trim(),
         area: _areaController.text.trim(),
+        memo: _memoController.text,
       ),
     );
   }
@@ -410,8 +428,20 @@ class _PlanInfoDialogState extends State<_PlanInfoDialog> {
               onTapOutside: dismissKeyboardOnTapOutside,
               controller: _areaController,
               decoration: appDialogInputDecoration(),
-              textInputAction: TextInputAction.done,
-              onSubmitted: (_) => _submit(),
+              textInputAction: TextInputAction.next,
+            ),
+          ),
+          const SizedBox(height: 14),
+          AppDialogField(
+            label: l10n.planManagerDetails,
+            child: TextField(
+              key: const ValueKey('plan-info-details-field'),
+              onTapOutside: dismissKeyboardOnTapOutside,
+              controller: _memoController,
+              decoration: appDialogInputDecoration(),
+              keyboardType: TextInputType.multiline,
+              minLines: 3,
+              maxLines: 8,
             ),
           ),
         ],
@@ -423,10 +453,15 @@ class _PlanInfoDialogState extends State<_PlanInfoDialog> {
 }
 
 class _PlanInfoFormResult {
-  const _PlanInfoFormResult({required this.name, required this.area});
+  const _PlanInfoFormResult({
+    required this.name,
+    required this.area,
+    required this.memo,
+  });
 
   final String name;
   final String area;
+  final String memo;
 }
 
 class _CreatePlanButton extends StatelessWidget {
@@ -469,12 +504,16 @@ class _PlanSectionLabel extends StatelessWidget {
   }
 }
 
-class _PlanCard extends StatefulWidget {
+/// A ruled plan row. Tapping it opens the plan's details in place; the
+/// Open key below them switches to the plan.
+class _PlanCard extends StatelessWidget {
   const _PlanCard({
     required this.plan,
     required this.selected,
-    required this.onSwitch,
-    required this.onRename,
+    required this.expanded,
+    required this.onToggle,
+    required this.onOpen,
+    required this.onEdit,
     required this.onExport,
     required this.onDuplicate,
     required this.onDelete,
@@ -484,8 +523,10 @@ class _PlanCard extends StatefulWidget {
 
   final PilgrimagePlan plan;
   final bool selected;
-  final VoidCallback? onSwitch;
-  final VoidCallback? onRename;
+  final bool expanded;
+  final VoidCallback? onToggle;
+  final VoidCallback onOpen;
+  final VoidCallback onEdit;
   final VoidCallback? onExport;
   final VoidCallback? onDuplicate;
   final VoidCallback? onDelete;
@@ -493,91 +534,33 @@ class _PlanCard extends StatefulWidget {
   final bool reorderEnabled;
 
   @override
-  State<_PlanCard> createState() => _PlanCardState();
-}
-
-class _PlanCardState extends State<_PlanCard> {
-  bool _cardHovered = false;
-  bool _actionHovered = false;
-  bool _menuOpen = false;
-
-  void _setActionHovered(bool hovered) {
-    if (_actionHovered == hovered) {
-      return;
-    }
-    setState(() => _actionHovered = hovered);
-  }
-
-  void _setCardHovered(bool hovered) {
-    if (_cardHovered == hovered) {
-      return;
-    }
-    setState(() => _cardHovered = hovered);
-  }
-
-  void _setMenuOpen(bool open) {
-    if (_menuOpen == open) {
-      return;
-    }
-    setState(() {
-      _menuOpen = open;
-      _cardHovered = false;
-      if (!open) {
-        _actionHovered = false;
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final plan = widget.plan;
-    final selected = widget.selected;
     final works = _works(plan);
+    final reduceMotion = MediaQuery.disableAnimationsOf(context);
 
     // The current plan sits on the accent wash, as Tsumiki's current row.
-    final cardColor = selected
-        ? AppColors.accentWash
-        : _cardHovered && !_actionHovered && !_menuOpen
-        ? AppColors.surfaceMuted
-        : AppColors.surface;
+    // An opened row keeps its ground so the mist work tags stay visible.
+    final cardColor = selected ? AppColors.accentWash : AppColors.surface;
 
-    return MouseRegion(
-      key: ValueKey('plan-card-hover-${plan.id}'),
-      onEnter: (_) => _setCardHovered(true),
-      onExit: (_) => _setCardHovered(false),
-      child: Material(
-        key: ValueKey('plan-card-${plan.id}'),
-        color: cardColor,
-        animationDuration: const Duration(milliseconds: 120),
-        shape: Border(bottom: BorderSide(color: AppColors.divider)),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: selected ? null : widget.onSwitch,
-          hoverColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          splashColor: Colors.transparent,
-          overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-          child: Stack(
-            children: [
-              Padding(
-                padding: EdgeInsets.fromLTRB(
-                  widget.reorderIndex == null ? 16 : 50,
-                  10,
-                  10,
-                  4,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+    final header = Padding(
+      padding: EdgeInsets.fromLTRB(reorderIndex == null ? 16 : 50, 12, 4, 12),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Row(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 48),
+                    Flexible(
                       child: CopyableText(
                         key: ValueKey('plan-card-title-${plan.id}'),
                         text: plan.name,
                         copyLabel: l10n.planManagerPlanName,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        onTap: selected ? null : widget.onSwitch,
+                        onTap: onToggle,
                         style: TextStyle(
                           color: AppColors.textPrimary,
                           fontSize: 17,
@@ -587,174 +570,152 @@ class _PlanCardState extends State<_PlanCard> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 5),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 48),
-                      child: CopyableText(
-                        key: ValueKey('plan-card-summary-${plan.id}'),
-                        text: l10n.planManagerPlanSummary(
-                          plan.area,
-                          plan.points.length,
-                          works.length,
-                        ),
-                        copyText: l10n.planManagerPlanCopyText(
-                          plan.name,
-                          plan.area,
-                          plan.points.length,
-                          works.length,
-                        ),
-                        copyLabel: l10n.planManagerPlanInfo,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        onTap: selected ? null : widget.onSwitch,
+                    if (selected) ...[
+                      const SizedBox(width: 8),
+                      Text(
+                        l10n.planManagerCurrentPlan,
+                        key: const ValueKey('plan-status-current'),
                         style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 12.5,
-                          height: 1.15,
-                          fontWeight: FontWeight.w500,
+                          color: AppColors.accentStrongForeground,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 3),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 48),
-                      child: SizedBox(
-                        key: ValueKey('plan-card-work-row-${plan.id}'),
-                        height: 18,
-                        child: works.isEmpty
-                            ? Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text(
-                                  l10n.planManagerNoWorks,
-                                  style: TextStyle(
-                                    color: AppColors.textSecondary,
-                                    fontSize: 11,
-                                    height: 1,
-                                    fontWeight: FontWeight.w500,
-                                    letterSpacing: 0,
-                                  ),
-                                ),
-                              )
-                            : _PlanWorkTags(works: works),
-                      ),
-                    ),
-                    const SizedBox(height: 7),
-                    Divider(
-                      height: 1,
-                      thickness: 1,
-                      color: AppColors.border.withValues(alpha: 0.52),
-                    ),
-                    const SizedBox(height: 4),
-                    SizedBox(
-                      height: 34,
-                      child: Row(
-                        children: [
-                          Icon(
-                            widget.reorderIndex != null
-                                ? LucideIcons.arrowUpDown
-                                : selected
-                                ? LucideIcons.checkCircle
-                                : LucideIcons.arrowLeftRight,
-                            color: selected
-                                ? AppColors.accentForeground
-                                : AppColors.textSecondary.withValues(
-                                    alpha: 0.62,
-                                  ),
-                            size: 16,
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            widget.reorderIndex != null
-                                ? l10n.planManagerDragToReorder
-                                : selected
-                                ? l10n.planManagerCurrentPlan
-                                : l10n.planManagerSwitchable,
-                            key: ValueKey(
-                              selected
-                                  ? 'plan-status-current'
-                                  : 'plan-status-switchable',
-                            ),
+                    ],
+                  ],
+                ),
+                const SizedBox(height: 5),
+                CopyableText(
+                  key: ValueKey('plan-card-summary-${plan.id}'),
+                  text: l10n.planManagerPlanSummary(
+                    plan.area,
+                    plan.points.length,
+                    works.length,
+                  ),
+                  copyText: l10n.planManagerPlanCopyText(
+                    plan.name,
+                    plan.area,
+                    plan.points.length,
+                    works.length,
+                  ),
+                  copyLabel: l10n.planManagerPlanInfo,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  onTap: onToggle,
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12.5,
+                    height: 1.15,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0,
+                  ),
+                ),
+                const SizedBox(height: 6),
+                SizedBox(
+                  key: ValueKey('plan-card-work-row-${plan.id}'),
+                  height: 18,
+                  child: works.isEmpty
+                      ? Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            l10n.planManagerNoWorks,
                             style: TextStyle(
-                              color: selected
-                                  ? AppColors.accentStrongForeground
-                                  : AppColors.textSecondary,
-                              fontSize: 12,
-                              height: 1.15,
+                              color: AppColors.textSecondary,
+                              fontSize: 11,
+                              height: 1,
                               fontWeight: FontWeight.w500,
                               letterSpacing: 0,
                             ),
                           ),
-                          const Spacer(),
-                          const SizedBox(width: 82),
-                        ],
-                      ),
-                    ),
-                  ],
+                        )
+                      : _PlanWorkTags(works: works),
+                ),
+              ],
+            ),
+          ),
+          if (onExport != null && onDuplicate != null && onDelete != null)
+            _PlanMoreButton(
+              plan: plan,
+              onExport: onExport!,
+              onDuplicate: onDuplicate!,
+              onDelete: onDelete!,
+            ),
+          if (onToggle != null)
+            SizedBox(
+              width: 40,
+              height: 44,
+              child: AnimatedRotation(
+                turns: expanded ? 0.5 : 0,
+                duration: reduceMotion
+                    ? Duration.zero
+                    : const Duration(milliseconds: 180),
+                curve: Curves.easeOutCubic,
+                child: Icon(
+                  LucideIcons.chevronDown,
+                  size: 20,
+                  color: AppColors.textSecondary,
                 ),
               ),
-              if (widget.reorderIndex case final index?)
-                Positioned(
-                  left: selected ? 3 : 0,
-                  top: 0,
-                  bottom: 0,
-                  child: ReorderableDragStartListener(
-                    index: index,
-                    enabled: widget.reorderEnabled,
-                    child: SizedBox(
-                      key: ValueKey('plan-card-drag-handle-${plan.id}'),
-                      width: 44,
-                      child: Tooltip(
-                        message: l10n.planManagerDragSort,
-                        child: Center(
-                          child: Icon(
-                            LucideIcons.gripVertical,
-                            size: 22,
-                            color: AppColors.textSecondary.withValues(
-                              alpha: widget.reorderEnabled ? 0.7 : 0.35,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              Positioned(
-                right: 9,
-                bottom: 4,
-                child: MouseRegion(
-                  key: ValueKey('plan-card-actions-${plan.id}'),
-                  onEnter: (_) => _setActionHovered(true),
-                  onExit: (_) => _setActionHovered(false),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _PlanActionButton(
-                        key: ValueKey('plan-card-edit-${plan.id}'),
-                        tooltip: l10n.planManagerEditInfo,
-                        onPressed: widget.onRename,
-                        icon: LucideIcons.edit,
-                        iconSize: 21,
-                      ),
-                      const SizedBox(width: 2),
-                      if (widget.onExport != null &&
-                          widget.onDuplicate != null &&
-                          widget.onDelete != null)
-                        _PlanMoreButton(
-                          plan: plan,
-                          onExport: widget.onExport!,
-                          onDuplicate: widget.onDuplicate!,
-                          onDelete: widget.onDelete!,
-                          onMenuOpenChanged: _setMenuOpen,
-                          onMenuHoverChanged: _setActionHovered,
-                        ),
-                    ],
-                  ),
-                ),
+            ),
+        ],
+      ),
+    );
+
+    return Material(
+      key: ValueKey('plan-card-${plan.id}'),
+      color: cardColor,
+      shape: Border(bottom: BorderSide(color: AppColors.divider)),
+      clipBehavior: Clip.antiAlias,
+      child: Stack(
+        children: [
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              InkWell(
+                key: ValueKey('plan-card-toggle-${plan.id}'),
+                onTap: onToggle,
+                child: header,
+              ),
+              AnimatedSize(
+                duration: reduceMotion
+                    ? Duration.zero
+                    : const Duration(milliseconds: 180),
+                curve: Curves.easeOutCubic,
+                alignment: Alignment.topCenter,
+                child: expanded
+                    ? _PlanDetails(plan: plan, onOpen: onOpen, onEdit: onEdit)
+                    : const SizedBox(width: double.infinity),
               ),
             ],
           ),
-        ),
+          if (reorderIndex case final index?)
+            Positioned(
+              left: 0,
+              top: 0,
+              bottom: 0,
+              child: ReorderableDragStartListener(
+                index: index,
+                enabled: reorderEnabled,
+                child: SizedBox(
+                  key: ValueKey('plan-card-drag-handle-${plan.id}'),
+                  width: 44,
+                  child: Tooltip(
+                    message: l10n.planManagerDragSort,
+                    child: Center(
+                      child: Icon(
+                        LucideIcons.gripVertical,
+                        size: 22,
+                        color: AppColors.textSecondary.withValues(
+                          alpha: reorderEnabled ? 0.7 : 0.35,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -772,22 +733,138 @@ class _PlanCardState extends State<_PlanCard> {
   }
 }
 
+/// The opened part of a plan row: facts, the plan's details, and the keys.
+class _PlanDetails extends StatelessWidget {
+  const _PlanDetails({
+    required this.plan,
+    required this.onOpen,
+    required this.onEdit,
+  });
+
+  final PilgrimagePlan plan;
+  final VoidCallback onOpen;
+  final VoidCallback onEdit;
+
+  @override
+  Widget build(BuildContext context) {
+    final dates = MaterialLocalizations.of(context);
+    final done = plan.points
+        .where((point) => plan.completedPointIds.contains(point.id))
+        .length;
+    final memo = plan.memo.trim();
+
+    return Padding(
+      key: ValueKey('plan-card-details-${plan.id}'),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Wrap(
+            spacing: 24,
+            runSpacing: 10,
+            children: [
+              _PlanFact(
+                label: l10n.planManagerFactSpots,
+                value: l10n.planManagerSpotsDone(plan.points.length, done),
+              ),
+              _PlanFact(
+                label: l10n.planManagerFactAreas,
+                value: '${plan.groups.length}',
+              ),
+              _PlanFact(
+                label: l10n.planManagerFactCreated,
+                value: dates.formatMediumDate(plan.createdAt),
+              ),
+              _PlanFact(
+                label: l10n.planManagerFactUpdated,
+                value: dates.formatMediumDate(plan.updatedAt),
+              ),
+            ],
+          ),
+          const SizedBox(height: 14),
+          Text(
+            memo.isEmpty ? l10n.planManagerNoDetails : memo,
+            key: ValueKey('plan-card-memo-${plan.id}'),
+            maxLines: 4,
+            overflow: TextOverflow.ellipsis,
+            style: TextStyle(
+              color: memo.isEmpty
+                  ? AppColors.textTertiary
+                  : AppColors.textSecondary,
+              fontSize: 14,
+              height: 1.4,
+              letterSpacing: 0,
+            ),
+          ),
+          const SizedBox(height: 16),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  key: ValueKey('plan-card-edit-${plan.id}'),
+                  onPressed: onEdit,
+                  icon: const Icon(LucideIcons.edit, size: 18),
+                  label: Text(l10n.planManagerEditDetails),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: FilledButton.icon(
+                  key: ValueKey('plan-card-open-${plan.id}'),
+                  onPressed: onOpen,
+                  icon: const Icon(LucideIcons.arrowRight, size: 18),
+                  label: Text(l10n.planManagerOpenPlan),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A caps name over its value, as Tsumiki's trip facts.
+class _PlanFact extends StatelessWidget {
+  const _PlanFact({required this.label, required this.value});
+
+  final String label;
+  final String value;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CapsLabel(label),
+        const SizedBox(height: 2),
+        Text(
+          value,
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            letterSpacing: 0,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 class _PlanMoreButton extends StatefulWidget {
   const _PlanMoreButton({
     required this.plan,
     required this.onExport,
     required this.onDuplicate,
     required this.onDelete,
-    required this.onMenuOpenChanged,
-    required this.onMenuHoverChanged,
   });
 
   final PilgrimagePlan plan;
   final VoidCallback onExport;
   final VoidCallback onDuplicate;
   final VoidCallback onDelete;
-  final ValueChanged<bool> onMenuOpenChanged;
-  final ValueChanged<bool> onMenuHoverChanged;
 
   @override
   State<_PlanMoreButton> createState() => _PlanMoreButtonState();
@@ -796,37 +873,25 @@ class _PlanMoreButton extends StatefulWidget {
 class _PlanMoreButtonState extends State<_PlanMoreButton> {
   final MenuController _controller = MenuController();
 
-  static const double _menuWidth = 150;
-  static const double _buttonWidth = 38;
+  static const double _menuWidth = 200;
+  static const double _buttonWidth = 40;
 
   @override
   Widget build(BuildContext context) {
     return MenuAnchor(
       controller: _controller,
-      onOpen: () => widget.onMenuOpenChanged(true),
-      onClose: () => widget.onMenuOpenChanged(false),
       alignmentOffset: const Offset(_buttonWidth - _menuWidth, 4),
-      clipBehavior: Clip.none,
       style: const MenuStyle(
         alignment: AlignmentDirectional.bottomStart,
-        backgroundColor: WidgetStatePropertyAll(Colors.transparent),
-        surfaceTintColor: WidgetStatePropertyAll(Colors.transparent),
-        shadowColor: WidgetStatePropertyAll(Colors.transparent),
         padding: WidgetStatePropertyAll(EdgeInsets.zero),
         minimumSize: WidgetStatePropertyAll(Size(_menuWidth, 0)),
         maximumSize: WidgetStatePropertyAll(Size(_menuWidth, 520)),
-        elevation: WidgetStatePropertyAll(0),
-        side: WidgetStatePropertyAll(BorderSide.none),
-        shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(side: BorderSide.none),
-        ),
       ),
       menuChildren: [
         _PlanActionsMenuPanel(
           onExport: widget.onExport,
           onDuplicate: widget.onDuplicate,
           onDelete: widget.onDelete,
-          onHoverChanged: widget.onMenuHoverChanged,
         ),
       ],
       child: _PlanActionButton(
@@ -846,130 +911,52 @@ class _PlanMoreButtonState extends State<_PlanMoreButton> {
   }
 }
 
+/// The plan's ⋯ menu; the theme's menu style draws its 1px ink frame.
 class _PlanActionsMenuPanel extends StatelessWidget {
   const _PlanActionsMenuPanel({
     required this.onExport,
     required this.onDuplicate,
     required this.onDelete,
-    required this.onHoverChanged,
   });
   final VoidCallback onExport;
   final VoidCallback onDuplicate;
   final VoidCallback onDelete;
-  final ValueChanged<bool> onHoverChanged;
 
   @override
   Widget build(BuildContext context) {
-    return MouseRegion(
-      onEnter: (_) => onHoverChanged(true),
-      onExit: (_) => onHoverChanged(false),
-      child: SizedBox(
-        key: const ValueKey('plan-actions-menu'),
-        width: _PlanMoreButtonState._menuWidth,
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            CustomPaint(
-              key: const ValueKey('plan-actions-menu-panel'),
-              painter: const _PlanMenuSurfacePainter(),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 23, 10, 10),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _PlanMenuActionItem(
-                      actionKey: const ValueKey('plan-menu-action-transfer'),
-                      label: l10n.planManagerImportExport,
-                      icon: LucideIcons.import,
-                      onPressed: onExport,
-                    ),
-                    const SizedBox(height: 6),
-                    _PlanMenuActionItem(
-                      actionKey: const ValueKey('plan-menu-action-copy'),
-                      label: l10n.planManagerCopyPlan,
-                      icon: LucideIcons.copy,
-                      onPressed: onDuplicate,
-                    ),
-                    Divider(height: 17, color: AppColors.border),
-                    _PlanMenuActionItem(
-                      actionKey: const ValueKey('plan-menu-action-delete'),
-                      label: l10n.planManagerDeletePlan,
-                      icon: LucideIcons.trash2,
-                      onPressed: onDelete,
-                      isDangerous: true,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const Positioned(
-              top: 0,
-              right: 8,
-              child: SizedBox(
-                key: ValueKey('plan-actions-menu-pointer'),
-                width: 22,
-                height: 13,
-              ),
-            ),
-          ],
-        ),
+    return SizedBox(
+      key: const ValueKey('plan-actions-menu'),
+      width: _PlanMoreButtonState._menuWidth,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _PlanMenuActionItem(
+            actionKey: const ValueKey('plan-menu-action-transfer'),
+            label: l10n.planManagerImportExport,
+            icon: LucideIcons.import,
+            onPressed: onExport,
+          ),
+          _PlanMenuActionItem(
+            actionKey: const ValueKey('plan-menu-action-copy'),
+            label: l10n.planManagerCopyPlan,
+            icon: LucideIcons.copy,
+            onPressed: onDuplicate,
+          ),
+          Divider(height: 1, color: AppColors.divider),
+          _PlanMenuActionItem(
+            actionKey: const ValueKey('plan-menu-action-delete'),
+            label: l10n.planManagerDeletePlan,
+            icon: LucideIcons.trash2,
+            onPressed: onDelete,
+            isDangerous: true,
+          ),
+        ],
       ),
     );
   }
 }
 
-class _PlanMenuSurfacePainter extends CustomPainter {
-  const _PlanMenuSurfacePainter();
-
-  static const double _pointerHeight = 13;
-  static const double _cornerRadius = 8;
-  static const double _pointerRight = 8;
-  static const double _pointerWidth = 22;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final pointerRight = size.width - _pointerRight;
-    final pointerLeft = pointerRight - _pointerWidth;
-    final pointerCenter = (pointerLeft + pointerRight) / 2;
-    final path = Path()
-      ..moveTo(_cornerRadius, _pointerHeight)
-      ..lineTo(pointerLeft, _pointerHeight)
-      ..lineTo(pointerCenter, 0)
-      ..lineTo(pointerRight, _pointerHeight)
-      ..lineTo(size.width - _cornerRadius, _pointerHeight)
-      ..quadraticBezierTo(
-        size.width,
-        _pointerHeight,
-        size.width,
-        _pointerHeight + _cornerRadius,
-      )
-      ..lineTo(size.width, size.height - _cornerRadius)
-      ..quadraticBezierTo(
-        size.width,
-        size.height,
-        size.width - _cornerRadius,
-        size.height,
-      )
-      ..lineTo(_cornerRadius, size.height)
-      ..quadraticBezierTo(0, size.height, 0, size.height - _cornerRadius)
-      ..lineTo(0, _pointerHeight + _cornerRadius)
-      ..quadraticBezierTo(0, _pointerHeight, _cornerRadius, _pointerHeight)
-      ..close();
-
-    canvas.drawPath(
-      path,
-      Paint()
-        ..color = AppColors.textPrimary.withValues(alpha: 0.16)
-        ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 7),
-    );
-    canvas.drawPath(path, Paint()..color = AppColors.surface);
-  }
-
-  @override
-  bool shouldRepaint(covariant _PlanMenuSurfacePainter oldDelegate) => false;
-}
-
-class _PlanMenuActionItem extends StatefulWidget {
+class _PlanMenuActionItem extends StatelessWidget {
   const _PlanMenuActionItem({
     required this.actionKey,
     required this.label,
@@ -985,47 +972,24 @@ class _PlanMenuActionItem extends StatefulWidget {
   final bool isDangerous;
 
   @override
-  State<_PlanMenuActionItem> createState() => _PlanMenuActionItemState();
-}
-
-class _PlanMenuActionItemState extends State<_PlanMenuActionItem> {
-  bool _hovered = false;
-
-  @override
   Widget build(BuildContext context) {
-    final foregroundColor = widget.isDangerous
+    final foregroundColor = isDangerous
         ? AppColors.error
         : AppColors.textPrimary;
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hovered = true),
-      onExit: (_) => setState(() => _hovered = false),
-      child: AnimatedContainer(
-        key: widget.actionKey,
-        duration: const Duration(milliseconds: 160),
-        curve: Curves.easeOutCubic,
-        decoration: BoxDecoration(
-          color: _hovered ? AppColors.surfaceMuted : AppColors.surface,
-          borderRadius: BorderRadius.zero,
+    return MenuItemButton(
+      key: actionKey,
+      onPressed: onPressed,
+      leadingIcon: Icon(icon),
+      style: ButtonStyle(
+        minimumSize: const WidgetStatePropertyAll(Size.fromHeight(48)),
+        padding: const WidgetStatePropertyAll(
+          EdgeInsets.symmetric(horizontal: 14),
         ),
-        child: MenuItemButton(
-          onPressed: widget.onPressed,
-          leadingIcon: Icon(widget.icon),
-          style: ButtonStyle(
-            minimumSize: const WidgetStatePropertyAll(Size.fromHeight(46)),
-            padding: const WidgetStatePropertyAll(
-              EdgeInsets.symmetric(horizontal: 14),
-            ),
-            shape: WidgetStatePropertyAll(
-              RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-            ),
-            foregroundColor: WidgetStatePropertyAll(foregroundColor),
-            iconColor: WidgetStatePropertyAll(foregroundColor),
-            overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-          ),
-          child: Text(widget.label),
-        ),
+        foregroundColor: WidgetStatePropertyAll(foregroundColor),
+        iconColor: WidgetStatePropertyAll(foregroundColor),
       ),
+      child: Text(label),
     );
   }
 }
@@ -1053,8 +1017,8 @@ class _PlanActionButton extends StatelessWidget {
         enabled: onPressed != null,
         label: tooltip,
         child: SizedBox(
-          width: 38,
-          height: 34,
+          width: 40,
+          height: 44,
           child: Material(
             color: Colors.transparent,
             borderRadius: BorderRadius.zero,

@@ -717,36 +717,12 @@
       }
     }
   },
-  "pointManagerTitle": "管理计划",
   "pointManagerGroupManagement": "片区管理",
-  "pointManagerExitMultiSelect": "退出多选",
-  "pointManagerMultiSelect": "多选",
-  "pointManagerCreateGroupFailed": "片区创建失败，请稍后重试。",
-  "pointManagerUngroupedNoAnchor": "未分配点位没有关键点。",
-  "pointManagerGroupNotFound": "片区不存在。",
-  "pointManagerAnchorSaveFailed": "关键点保存失败",
-  "pointManagerUngroupedNoOrder": "未分配点位不需要排序方式。",
-  "pointManagerOrderModeSaveFailed": "排序方式保存失败",
   "pointManagerMoveGroupFailed": "移动片区失败",
-  "pointManagerOpenCameraHint": "请从计划页或地图页打开拍摄。",
-  "pointManagerReferenceSaveFailed": "参考图保存失败",
-  "pointManagerUngroupedSpots": "未分配点位",
-  "pointManagerUnknownGroup": "未知片区",
   "pointManagerMoveToGroup": "移动到片区",
   "pointManagerMoveToGroupSubtitle": "选择一个片区作为当前点位所属片区",
   "pointManagerNotInGroup": "未分入片区",
   "pointManagerPointOrderSaveFailed": "点位顺序保存失败",
-  "pointManagerDeletePoint": "删除点位",
-  "pointManagerDeletePointMessage": "将从计划中删除「{name}」。",
-  "@pointManagerDeletePointMessage": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "pointManagerDeleteIrreversible": "删除后无法撤销",
-  "pointManagerDeletePointFailed": "点位删除失败",
   "pointManagerBatchDeleteTitle": "批量删除点位",
   "pointManagerBatchDeleteMessage": "将从计划中删除 {countText}。",
   "@pointManagerBatchDeleteMessage": {
@@ -765,59 +741,10 @@
     }
   },
   "pointManagerBatchDeleteFailed": "批量删除失败",
-  "pointManagerCurrentTargetSaveFailed": "当前目标保存失败",
-  "pointManagerCompletionSaveFailed": "完成状态保存失败",
-  "pointManagerStatusSaveFailed": "点位状态保存失败",
-  "pointManagerBatchCompleteFailed": "批量完成失败",
-  "pointManagerBatchResetFailed": "批量重置失败",
-  "pointManagerGroupNameEmpty": "片区名不能为空",
-  "pointManagerNewGroup": "新建片区",
-  "pointManagerGroupNameLabel": "片区名称",
-  "pointManagerCreate": "创建",
-  "pointManagerAnchor": "关键点：{name}",
-  "@pointManagerAnchor": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "pointManagerAnchorUnset": "关键点：未设置",
-  "pointManagerPreviousGroup": "上一个片区",
-  "pointManagerNextGroup": "下一个片区",
-  "pointManagerChange": "更改",
-  "pointManagerUnitSpots": "{count, plural, other{点位}}",
-  "pointManagerUnitCompleted": "完成",
-  "pointManagerUngroupedWaitSuffix": " 个点位等待整理",
-  "@pointManagerUngroupedWaitSuffix": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "pointManagerNearestAssign": "最近分配",
   "pointManagerBoxAssign": "框选分配",
-  "pointManagerOrderUnordered": "无序",
-  "pointManagerOrderManual": "手动排序",
-  "pointManagerGroupOrder": "片区内顺序",
-  "pointManagerStatusCurrent": "当前目标",
-  "pointManagerStatusCompleted": "已完成",
-  "pointManagerStatusPending": "待访问",
-  "pointManagerPointActions": "点位操作",
-  "pointManagerSetCurrentTarget": "设为当前目标",
-  "pointManagerUnmarkCompleted": "取消完成",
-  "pointManagerMarkCompleted": "标记完成",
-  "pointManagerReferenceNone": "无参考图",
-  "pointManagerReferenceLocal": "本地上传",
-  "pointManagerReferenceCached": "已缓存",
-  "pointManagerReferenceRemote": "未缓存",
-  "pointManagerClearSelection": "清空",
   "pointManagerSelectAll": "全选",
   "pointManagerMove": "移动",
-  "pointManagerComplete": "完成",
-  "pointManagerReset": "重置",
-  "pointManagerEmpty": "还没有可以管理的点位",
   "coordinateInputClipboardReadFailed": "无法读取剪贴板。",
   "coordinateInputClipboardNoCoordinate": "剪贴板中没有可识别的坐标。",
   "coordinateInputInvalid": "请输入有效经纬度",
@@ -866,9 +793,7 @@
   "planManagerNewPlan": "新建计划",
   "planManagerPlanInfo": "计划信息",
   "planManagerNoWorks": "暂无作品",
-  "planManagerDragToReorder": "拖动调整顺序",
   "planManagerCurrentPlan": "当前计划",
-  "planManagerSwitchable": "可切换",
   "planManagerDragSort": "拖动排序",
   "planManagerMoreActions": "更多计划操作",
   "planManagerImportExport": "导入导出",
@@ -1192,7 +1117,6 @@
   "planAreaName": "片区名称",
   "planCreate": "创建",
   "planSwitchPlan": "计划列表",
-  "planManagePlan": "管理计划",
   "planCacheReferences": "缓存参考图",
   "planActionMemo": "计划备忘录",
   "planActionImportExport": "导入导出",
@@ -1218,14 +1142,6 @@
   "planShootReference": "拍摄参考",
   "anitabiMapImportAddAllMessage": "将把当前作品中 {count} 个还不在计划里的点位加入计划，并暂时放在未分组。",
   "@anitabiMapImportAddAllMessage": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "anitabiMapImportAddBoxMessage": "将把框选范围内 {count} 个还不在计划里的点位加入计划，并暂时放在未分组。",
-  "@anitabiMapImportAddBoxMessage": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -1265,6 +1181,21 @@
       }
     }
   },
+  "anitabiMapImportBoxHint": "在地图上拖出一个框来选择点位",
+  "anitabiMapImportBoxCount": "{count} 个点位 · {newCount} 个新点位",
+  "@anitabiMapImportBoxCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "newCount": {
+        "type": "int"
+      }
+    }
+  },
+  "anitabiMapImportBoxChooseArea": "选择片区",
+  "anitabiMapImportBoxAreaSubtitle": "新点位会导入到这个片区，已在计划里的点位会移到这里",
+  "anitabiMapImportBoxApply": "放入片区",
   "anitabiMapImportAssigned": "已将 {count} 个点位分配到「{area}」",
   "@anitabiMapImportAssigned": {
     "placeholders": {
@@ -1320,14 +1251,6 @@
       }
     }
   },
-  "anitabiMapImportImportCount": "导入 {count} 个",
-  "@anitabiMapImportImportCount": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
   "anitabiMapImportOpenAppFailed": "无法打开{app}。",
   "@anitabiMapImportOpenAppFailed": {
     "placeholders": {
@@ -1363,9 +1286,6 @@
   "anitabiMapImportAddAllConfirm": "添加全部",
   "anitabiMapImportAddedAll": "已添加所有未加入的点位。",
   "anitabiMapImportBulkFailed": "批量导入失败，请稍后重试。",
-  "anitabiMapImportBoxEmpty": "框选范围内没有可添加点位",
-  "anitabiMapImportAddBoxTitle": "添加框选点位",
-  "anitabiMapImportAddBoxConfirm": "添加框选",
   "anitabiMapImportAddedBox": "已添加框选点位。",
   "anitabiMapImportBoxFailed": "框选点位导入失败，请稍后重试。",
   "anitabiMapImportOrganizeOpenFailed": "点位已导入，但整理流程打开失败，可以稍后在计划中调整片区。",
@@ -1414,8 +1334,6 @@
   "anitabiMapImportLoadingSpots": "正在加载 Anitabi 点位",
   "anitabiMapImportExitBox": "退出框选",
   "anitabiMapImportBoxSelect": "框选点位",
-  "anitabiMapImportImportSelection": "导入框选结果",
-  "anitabiMapImportImport": "导入",
   "anitabiMapImportSpotName": "点位名称",
   "anitabiMapImportSpotInfo": "点位信息",
   "anitabiMapImportSource": "来源",
@@ -3313,7 +3231,6 @@
   "pointDetailUndoShort": "撤销",
   "splitNavigationRouteShort": "路线",
   "splitNavigationMapsShort": "导航",
-  "pointManagerAreasShort": "片区",
   "appShellNoPlansTitle": "还没有计划",
   "appShellNoPlansBody": "创建一个巡礼计划，把想去的作品点位加进来。",
   "appShellCreatePlan": "创建计划",
@@ -3324,15 +3241,29 @@
   "paletteSpruce": "云杉",
   "paletteMoss": "苔绿",
   "paletteLake": "湖蓝",
-  "paletteBark": "树皮",
-  "paletteOchre": "赭黄",
   "paletteInk": "墨色",
-  "@pointManagerUnitSpots": {
+  "planAreaEmpty": "这个片区还没有点位，左右切换查看其他片区。",
+  "planManagerOpenPlan": "打开计划",
+  "planManagerEditDetails": "编辑详情",
+  "planManagerDetails": "详情",
+  "planManagerNoDetails": "暂无详情",
+  "planManagerFactSpots": "点位",
+  "planManagerFactAreas": "区域",
+  "planManagerFactCreated": "创建",
+  "planManagerFactUpdated": "更新",
+  "planManagerSpotsDone": "{total} · 已完成 {done}",
+  "@planManagerSpotsDone": {
     "placeholders": {
-      "count": {
+      "total": {
+        "type": "int"
+      },
+      "done": {
         "type": "int"
       }
     }
   },
-  "planAreaEmpty": "这个片区还没有点位，左右切换查看其他片区。"
+  "planEdit": "编辑",
+  "planEditDone": "完成",
+  "planEditMarkVisited": "已到访",
+  "anitabiMapImportBoxArea": "区域"
 }

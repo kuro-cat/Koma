@@ -110,7 +110,7 @@ void main() {
         cameraCaptureAspectRatio: CameraPhotoAspectRatio.landscape16x9,
         photoLocationStrategy: PhotoLocationStrategy.waitOnConfirmation,
         themeMode: AppThemeMode.dark,
-        themePalette: AppThemePalette.ochre,
+        themePalette: AppThemePalette.moss,
         mapTileProvider: MapTileProvider.customMapLibreStyle,
         openFreeMapStyle: OpenFreeMapStyle.fiord,
         anitabiImageSource: AnitabiImageSource.mirror,
@@ -195,7 +195,7 @@ void main() {
       decoded.settings.photoLocationStrategy,
       PhotoLocationStrategy.waitOnConfirmation,
     );
-    expect(decoded.settings.themePalette, AppThemePalette.ochre);
+    expect(decoded.settings.themePalette, AppThemePalette.moss);
     expect(
       decoded.settings.mapTileProvider,
       MapTileProvider.customMapLibreStyle,

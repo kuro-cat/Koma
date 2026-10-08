@@ -1402,49 +1402,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get pointManagerTitle => '管理计划';
-
-  @override
   String get pointManagerGroupManagement => '片区管理';
 
   @override
-  String get pointManagerExitMultiSelect => '退出多选';
-
-  @override
-  String get pointManagerMultiSelect => '多选';
-
-  @override
-  String get pointManagerCreateGroupFailed => '片区创建失败，请稍后重试。';
-
-  @override
-  String get pointManagerUngroupedNoAnchor => '未分配点位没有关键点。';
-
-  @override
-  String get pointManagerGroupNotFound => '片区不存在。';
-
-  @override
-  String get pointManagerAnchorSaveFailed => '关键点保存失败';
-
-  @override
-  String get pointManagerUngroupedNoOrder => '未分配点位不需要排序方式。';
-
-  @override
-  String get pointManagerOrderModeSaveFailed => '排序方式保存失败';
-
-  @override
   String get pointManagerMoveGroupFailed => '移动片区失败';
-
-  @override
-  String get pointManagerOpenCameraHint => '请从计划页或地图页打开拍摄。';
-
-  @override
-  String get pointManagerReferenceSaveFailed => '参考图保存失败';
-
-  @override
-  String get pointManagerUngroupedSpots => '未分配点位';
-
-  @override
-  String get pointManagerUnknownGroup => '未知片区';
 
   @override
   String get pointManagerMoveToGroup => '移动到片区';
@@ -1457,20 +1418,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get pointManagerPointOrderSaveFailed => '点位顺序保存失败';
-
-  @override
-  String get pointManagerDeletePoint => '删除点位';
-
-  @override
-  String pointManagerDeletePointMessage(String name) {
-    return '将从计划中删除「$name」。';
-  }
-
-  @override
-  String get pointManagerDeleteIrreversible => '删除后无法撤销';
-
-  @override
-  String get pointManagerDeletePointFailed => '点位删除失败';
 
   @override
   String get pointManagerBatchDeleteTitle => '批量删除点位';
@@ -1489,132 +1436,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get pointManagerBatchDeleteFailed => '批量删除失败';
 
   @override
-  String get pointManagerCurrentTargetSaveFailed => '当前目标保存失败';
-
-  @override
-  String get pointManagerCompletionSaveFailed => '完成状态保存失败';
-
-  @override
-  String get pointManagerStatusSaveFailed => '点位状态保存失败';
-
-  @override
-  String get pointManagerBatchCompleteFailed => '批量完成失败';
-
-  @override
-  String get pointManagerBatchResetFailed => '批量重置失败';
-
-  @override
-  String get pointManagerGroupNameEmpty => '片区名不能为空';
-
-  @override
-  String get pointManagerNewGroup => '新建片区';
-
-  @override
-  String get pointManagerGroupNameLabel => '片区名称';
-
-  @override
-  String get pointManagerCreate => '创建';
-
-  @override
-  String pointManagerAnchor(String name) {
-    return '关键点：$name';
-  }
-
-  @override
-  String get pointManagerAnchorUnset => '关键点：未设置';
-
-  @override
-  String get pointManagerPreviousGroup => '上一个片区';
-
-  @override
-  String get pointManagerNextGroup => '下一个片区';
-
-  @override
-  String get pointManagerChange => '更改';
-
-  @override
-  String pointManagerUnitSpots(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '点位',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get pointManagerUnitCompleted => '完成';
-
-  @override
-  String pointManagerUngroupedWaitSuffix(int count) {
-    return ' 个点位等待整理';
-  }
-
-  @override
   String get pointManagerNearestAssign => '最近分配';
 
   @override
   String get pointManagerBoxAssign => '框选分配';
 
   @override
-  String get pointManagerOrderUnordered => '无序';
-
-  @override
-  String get pointManagerOrderManual => '手动排序';
-
-  @override
-  String get pointManagerGroupOrder => '片区内顺序';
-
-  @override
-  String get pointManagerStatusCurrent => '当前目标';
-
-  @override
-  String get pointManagerStatusCompleted => '已完成';
-
-  @override
-  String get pointManagerStatusPending => '待访问';
-
-  @override
-  String get pointManagerPointActions => '点位操作';
-
-  @override
-  String get pointManagerSetCurrentTarget => '设为当前目标';
-
-  @override
-  String get pointManagerUnmarkCompleted => '取消完成';
-
-  @override
-  String get pointManagerMarkCompleted => '标记完成';
-
-  @override
-  String get pointManagerReferenceNone => '无参考图';
-
-  @override
-  String get pointManagerReferenceLocal => '本地上传';
-
-  @override
-  String get pointManagerReferenceCached => '已缓存';
-
-  @override
-  String get pointManagerReferenceRemote => '未缓存';
-
-  @override
-  String get pointManagerClearSelection => '清空';
-
-  @override
   String get pointManagerSelectAll => '全选';
 
   @override
   String get pointManagerMove => '移动';
-
-  @override
-  String get pointManagerComplete => '完成';
-
-  @override
-  String get pointManagerReset => '重置';
-
-  @override
-  String get pointManagerEmpty => '还没有可以管理的点位';
 
   @override
   String get coordinateInputClipboardReadFailed => '无法读取剪贴板。';
@@ -1723,13 +1554,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planManagerNoWorks => '暂无作品';
 
   @override
-  String get planManagerDragToReorder => '拖动调整顺序';
-
-  @override
   String get planManagerCurrentPlan => '当前计划';
-
-  @override
-  String get planManagerSwitchable => '可切换';
 
   @override
   String get planManagerDragSort => '拖动排序';
@@ -2148,9 +1973,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planSwitchPlan => '计划列表';
 
   @override
-  String get planManagePlan => '管理计划';
-
-  @override
   String get planCacheReferences => '缓存参考图';
 
   @override
@@ -2225,11 +2047,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String anitabiMapImportAddBoxMessage(int count) {
-    return '将把框选范围内 $count 个还不在计划里的点位加入计划，并暂时放在未分组。';
-  }
-
-  @override
   String anitabiMapImportImporting(int count) {
     return '正在导入 $count 个点位...';
   }
@@ -2247,6 +2064,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String anitabiMapImportImportedPartialCache(int count, int cached) {
     return '已导入 $count 个点位，缩略图缓存 $cached/$count，其余稍后会自动补齐。';
   }
+
+  @override
+  String get anitabiMapImportBoxHint => '在地图上拖出一个框来选择点位';
+
+  @override
+  String anitabiMapImportBoxCount(int count, int newCount) {
+    return '$count 个点位 · $newCount 个新点位';
+  }
+
+  @override
+  String get anitabiMapImportBoxChooseArea => '选择片区';
+
+  @override
+  String get anitabiMapImportBoxAreaSubtitle => '新点位会导入到这个片区，已在计划里的点位会移到这里';
+
+  @override
+  String get anitabiMapImportBoxApply => '放入片区';
 
   @override
   String anitabiMapImportAssigned(int count, String area) {
@@ -2271,11 +2105,6 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String anitabiMapImportShownCountOfTotal(int imported, int shown, int total) {
     return '已导入 $imported / 当前显示 $shown / 共 $total';
-  }
-
-  @override
-  String anitabiMapImportImportCount(int count) {
-    return '导入 $count 个';
   }
 
   @override
@@ -2327,15 +2156,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get anitabiMapImportBulkFailed => '批量导入失败，请稍后重试。';
-
-  @override
-  String get anitabiMapImportBoxEmpty => '框选范围内没有可添加点位';
-
-  @override
-  String get anitabiMapImportAddBoxTitle => '添加框选点位';
-
-  @override
-  String get anitabiMapImportAddBoxConfirm => '添加框选';
 
   @override
   String get anitabiMapImportAddedBox => '已添加框选点位。';
@@ -2486,12 +2306,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get anitabiMapImportBoxSelect => '框选点位';
-
-  @override
-  String get anitabiMapImportImportSelection => '导入框选结果';
-
-  @override
-  String get anitabiMapImportImport => '导入';
 
   @override
   String get anitabiMapImportSpotName => '点位名称';
@@ -5483,9 +5297,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get splitNavigationMapsShort => '导航';
 
   @override
-  String get pointManagerAreasShort => '片区';
-
-  @override
   String get appShellNoPlansTitle => '还没有计划';
 
   @override
@@ -5516,14 +5327,49 @@ class AppLocalizationsZh extends AppLocalizations {
   String get paletteLake => '湖蓝';
 
   @override
-  String get paletteBark => '树皮';
-
-  @override
-  String get paletteOchre => '赭黄';
-
-  @override
   String get paletteInk => '墨色';
 
   @override
   String get planAreaEmpty => '这个片区还没有点位，左右切换查看其他片区。';
+
+  @override
+  String get planManagerOpenPlan => '打开计划';
+
+  @override
+  String get planManagerEditDetails => '编辑详情';
+
+  @override
+  String get planManagerDetails => '详情';
+
+  @override
+  String get planManagerNoDetails => '暂无详情';
+
+  @override
+  String get planManagerFactSpots => '点位';
+
+  @override
+  String get planManagerFactAreas => '区域';
+
+  @override
+  String get planManagerFactCreated => '创建';
+
+  @override
+  String get planManagerFactUpdated => '更新';
+
+  @override
+  String planManagerSpotsDone(int total, int done) {
+    return '$total · 已完成 $done';
+  }
+
+  @override
+  String get planEdit => '编辑';
+
+  @override
+  String get planEditDone => '完成';
+
+  @override
+  String get planEditMarkVisited => '已到访';
+
+  @override
+  String get anitabiMapImportBoxArea => '区域';
 }

@@ -98,8 +98,6 @@ class AppColors {
     AppThemePalette.spruce: (Color(0xFF2F6B5C), Color(0xFF7DBFAE)),
     AppThemePalette.moss: (Color(0xFF4D6A2C), Color(0xFF9FC27F)),
     AppThemePalette.lake: (Color(0xFF3A5F8F), Color(0xFF8FB3DE)),
-    AppThemePalette.bark: (Color(0xFF7A5536), Color(0xFFCFA47E)),
-    AppThemePalette.ochre: (Color(0xFF855F0E), Color(0xFFD8AD4C)),
     AppThemePalette.ink: (_lightInk, _darkInk),
   };
 

@@ -1531,53 +1531,10 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get pointManagerTitle => 'Manage plan';
-
-  @override
   String get pointManagerGroupManagement => 'Manage areas';
 
   @override
-  String get pointManagerExitMultiSelect => 'Exit multi-select';
-
-  @override
-  String get pointManagerMultiSelect => 'Multi-select';
-
-  @override
-  String get pointManagerCreateGroupFailed =>
-      'Couldn\'t create the area. Please try again later.';
-
-  @override
-  String get pointManagerUngroupedNoAnchor => 'Ungrouped spots have no anchor.';
-
-  @override
-  String get pointManagerGroupNotFound => 'The area doesn\'t exist.';
-
-  @override
-  String get pointManagerAnchorSaveFailed => 'Couldn\'t save the anchor';
-
-  @override
-  String get pointManagerUngroupedNoOrder =>
-      'Ungrouped spots don\'t need an order.';
-
-  @override
-  String get pointManagerOrderModeSaveFailed => 'Couldn\'t save the order';
-
-  @override
   String get pointManagerMoveGroupFailed => 'Couldn\'t move the area';
-
-  @override
-  String get pointManagerOpenCameraHint =>
-      'Open the camera from the plan or map page.';
-
-  @override
-  String get pointManagerReferenceSaveFailed =>
-      'Couldn\'t save the reference image';
-
-  @override
-  String get pointManagerUngroupedSpots => 'Ungrouped spots';
-
-  @override
-  String get pointManagerUnknownGroup => 'Unknown area';
 
   @override
   String get pointManagerMoveToGroup => 'Move to area';
@@ -1592,20 +1549,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pointManagerPointOrderSaveFailed =>
       'Couldn\'t save the spot order';
-
-  @override
-  String get pointManagerDeletePoint => 'Delete spot';
-
-  @override
-  String pointManagerDeletePointMessage(String name) {
-    return '\"$name\" will be removed from the plan.';
-  }
-
-  @override
-  String get pointManagerDeleteIrreversible => 'This can\'t be undone';
-
-  @override
-  String get pointManagerDeletePointFailed => 'Couldn\'t delete the spot';
 
   @override
   String get pointManagerBatchDeleteTitle => 'Delete spots';
@@ -1630,142 +1573,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pointManagerBatchDeleteFailed => 'Couldn\'t delete the spots';
 
   @override
-  String get pointManagerCurrentTargetSaveFailed =>
-      'Couldn\'t save the next stop';
-
-  @override
-  String get pointManagerCompletionSaveFailed =>
-      'Couldn\'t save the completion status';
-
-  @override
-  String get pointManagerStatusSaveFailed => 'Couldn\'t save the spot status';
-
-  @override
-  String get pointManagerBatchCompleteFailed =>
-      'Couldn\'t mark the spots completed';
-
-  @override
-  String get pointManagerBatchResetFailed => 'Couldn\'t reset the spots';
-
-  @override
-  String get pointManagerGroupNameEmpty => 'Area name can\'t be empty';
-
-  @override
-  String get pointManagerNewGroup => 'New area';
-
-  @override
-  String get pointManagerGroupNameLabel => 'Area name';
-
-  @override
-  String get pointManagerCreate => 'Create';
-
-  @override
-  String pointManagerAnchor(String name) {
-    return 'Anchor: $name';
-  }
-
-  @override
-  String get pointManagerAnchorUnset => 'Anchor: not set';
-
-  @override
-  String get pointManagerPreviousGroup => 'Previous area';
-
-  @override
-  String get pointManagerNextGroup => 'Next area';
-
-  @override
-  String get pointManagerChange => 'Change';
-
-  @override
-  String pointManagerUnitSpots(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: 'spots',
-      one: 'spot',
-    );
-    return '$_temp0';
-  }
-
-  @override
-  String get pointManagerUnitCompleted => 'done';
-
-  @override
-  String pointManagerUngroupedWaitSuffix(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: ' spots to sort',
-      one: ' spot to sort',
-    );
-    return '$_temp0';
-  }
-
-  @override
   String get pointManagerNearestAssign => 'Assign nearest';
 
   @override
   String get pointManagerBoxAssign => 'Box assign';
 
   @override
-  String get pointManagerOrderUnordered => 'Unordered';
-
-  @override
-  String get pointManagerOrderManual => 'Manual order';
-
-  @override
-  String get pointManagerGroupOrder => 'Order within area';
-
-  @override
-  String get pointManagerStatusCurrent => 'Next stop';
-
-  @override
-  String get pointManagerStatusCompleted => 'Completed';
-
-  @override
-  String get pointManagerStatusPending => 'To visit';
-
-  @override
-  String get pointManagerPointActions => 'Spot actions';
-
-  @override
-  String get pointManagerSetCurrentTarget => 'Set as next stop';
-
-  @override
-  String get pointManagerUnmarkCompleted => 'Mark not completed';
-
-  @override
-  String get pointManagerMarkCompleted => 'Mark completed';
-
-  @override
-  String get pointManagerReferenceNone => 'No reference image';
-
-  @override
-  String get pointManagerReferenceLocal => 'Local upload';
-
-  @override
-  String get pointManagerReferenceCached => 'Cached';
-
-  @override
-  String get pointManagerReferenceRemote => 'Not cached';
-
-  @override
-  String get pointManagerClearSelection => 'Clear';
-
-  @override
   String get pointManagerSelectAll => 'Select all';
 
   @override
   String get pointManagerMove => 'Move';
-
-  @override
-  String get pointManagerComplete => 'Complete';
-
-  @override
-  String get pointManagerReset => 'Reset';
-
-  @override
-  String get pointManagerEmpty => 'No spots to manage yet';
 
   @override
   String get coordinateInputClipboardReadFailed =>
@@ -1885,13 +1702,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planManagerNoWorks => 'No works yet';
 
   @override
-  String get planManagerDragToReorder => 'Drag to reorder';
-
-  @override
   String get planManagerCurrentPlan => 'Current plan';
-
-  @override
-  String get planManagerSwitchable => 'Tap to switch';
 
   @override
   String get planManagerDragSort => 'Drag to sort';
@@ -2391,9 +2202,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planSwitchPlan => 'All plans';
 
   @override
-  String get planManagePlan => 'Manage plan';
-
-  @override
   String get planCacheReferences => 'Cache images';
 
   @override
@@ -2475,17 +2283,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String anitabiMapImportAddBoxMessage(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count spots',
-      one: '1 spot',
-    );
-    return 'This adds $_temp0 in the selection that aren\'t in the plan yet. They stay ungrouped for now.';
-  }
-
-  @override
   String anitabiMapImportImporting(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -2515,6 +2312,30 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return 'Imported $_temp0, cached $cached/$count thumbnails. The rest will be filled in automatically later.';
   }
+
+  @override
+  String get anitabiMapImportBoxHint => 'Drag a box on the map to select spots';
+
+  @override
+  String anitabiMapImportBoxCount(int count, int newCount) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count spots',
+      one: '1 spot',
+    );
+    return '$_temp0 · $newCount new';
+  }
+
+  @override
+  String get anitabiMapImportBoxChooseArea => 'Choose area';
+
+  @override
+  String get anitabiMapImportBoxAreaSubtitle =>
+      'New spots are imported into it; spots already in the plan move to it';
+
+  @override
+  String get anitabiMapImportBoxApply => 'Put in area';
 
   @override
   String anitabiMapImportAssigned(int count, String area) {
@@ -2551,11 +2372,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String anitabiMapImportShownCountOfTotal(int imported, int shown, int total) {
     return 'Imported $imported / showing $shown / $total total';
-  }
-
-  @override
-  String anitabiMapImportImportCount(int count) {
-    return 'Import $count';
   }
 
   @override
@@ -2617,15 +2433,6 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get anitabiMapImportBulkFailed =>
       'Bulk import failed. Please try again later.';
-
-  @override
-  String get anitabiMapImportBoxEmpty => 'No spots to add in the selection';
-
-  @override
-  String get anitabiMapImportAddBoxTitle => 'Add selected spots';
-
-  @override
-  String get anitabiMapImportAddBoxConfirm => 'Add selection';
 
   @override
   String get anitabiMapImportAddedBox => 'Added the selected spots.';
@@ -2793,12 +2600,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get anitabiMapImportBoxSelect => 'Box select spots';
-
-  @override
-  String get anitabiMapImportImportSelection => 'Import selection';
-
-  @override
-  String get anitabiMapImportImport => 'Import';
 
   @override
   String get anitabiMapImportSpotName => 'Spot name';
@@ -6171,9 +5972,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get splitNavigationMapsShort => 'Maps';
 
   @override
-  String get pointManagerAreasShort => 'Areas';
-
-  @override
   String get appShellNoPlansTitle => 'No plans yet';
 
   @override
@@ -6207,15 +6005,50 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paletteLake => 'Lake';
 
   @override
-  String get paletteBark => 'Bark';
-
-  @override
-  String get paletteOchre => 'Ochre';
-
-  @override
   String get paletteInk => 'Ink';
 
   @override
   String get planAreaEmpty =>
       'No spots in this area. Use the arrows to see the others.';
+
+  @override
+  String get planManagerOpenPlan => 'Open plan';
+
+  @override
+  String get planManagerEditDetails => 'Edit details';
+
+  @override
+  String get planManagerDetails => 'Details';
+
+  @override
+  String get planManagerNoDetails => 'No details yet';
+
+  @override
+  String get planManagerFactSpots => 'Spots';
+
+  @override
+  String get planManagerFactAreas => 'Areas';
+
+  @override
+  String get planManagerFactCreated => 'Created';
+
+  @override
+  String get planManagerFactUpdated => 'Updated';
+
+  @override
+  String planManagerSpotsDone(int total, int done) {
+    return '$total · $done done';
+  }
+
+  @override
+  String get planEdit => 'Edit';
+
+  @override
+  String get planEditDone => 'Done';
+
+  @override
+  String get planEditMarkVisited => 'Visited';
+
+  @override
+  String get anitabiMapImportBoxArea => 'Area';
 }

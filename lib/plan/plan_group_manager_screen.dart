@@ -5,15 +5,10 @@ import '../app_theme.dart';
 import '../data/pilgrimage_repository.dart';
 import '../widgets/snackbar_helper.dart';
 import '../widgets/app_back_button.dart';
-import '../widgets/app_scaled_route.dart';
-import '../widgets/confirm_action_dialog.dart';
-import '../widgets/input_dialog.dart';
-import 'group_anchor_picker_screen.dart';
+import 'plan_group_actions.dart';
 import 'pilgrimage_models.dart';
 import 'plan_order.dart';
 import '../l10n/l10n.dart';
-
-const Object _unsetGroupField = Object();
 
 Widget _cleanReorderProxy(
   Widget child,
@@ -133,10 +128,43 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
                       onOpen: _isSaving
                           ? null
                           : () => Navigator.of(context).pop(group.id),
-                      onRename: () => _renameGroup(group),
-                      onSetAnchor: () => _setGroupAnchor(group),
-                      onToggleOrderMode: () => _toggleOrderMode(group),
-                      onDelete: () => _confirmDeleteGroup(group, pointCount),
+                      onRename: () => _run(
+                        renameAreaChange(
+                          context,
+                          widget.repository,
+                          _plan,
+                          group,
+                        ),
+                        l10n.planGroupManagerRenameFailed,
+                      ),
+                      onSetAnchor: () => _run(
+                        setAreaAnchorChange(
+                          context,
+                          widget.repository,
+                          _plan,
+                          group,
+                        ),
+                        l10n.planGroupManagerAnchorSaveFailed,
+                      ),
+                      onToggleOrderMode: () => _run(
+                        Future.value(
+                          toggleAreaOrderChange(
+                            widget.repository,
+                            _plan,
+                            group,
+                          ),
+                        ),
+                        l10n.planGroupManagerOrderModeSaveFailed,
+                      ),
+                      onDelete: () => _run(
+                        deleteAreaChange(
+                          context,
+                          widget.repository,
+                          _plan,
+                          group,
+                        ),
+                        l10n.planGroupManagerDeleteFailed,
+                      ),
                     ),
                   );
                 },
@@ -162,7 +190,7 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
   Future<void> _createGroup() async {
     final name = await showDialog<String>(
       context: context,
-      builder: (context) => _PlanGroupNameDialog(
+      builder: (context) => AreaNameDialog(
         title: l10n.planGroupManagerNewArea,
         confirmLabel: l10n.planGroupManagerCreate,
       ),
@@ -193,105 +221,12 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
     );
   }
 
-  Future<void> _renameGroup(PilgrimagePlanGroup group) async {
-    // The dialog owns its controller: disposing it here, while the closing
-    // dialog's TextField is still animating out, trips IME assertions.
-    final name = await showDialog<String>(
-      context: context,
-      builder: (context) => _PlanGroupNameDialog(
-        title: l10n.planGroupManagerRenameTitle,
-        confirmLabel: l10n.commonSave,
-        initialName: group.name,
-      ),
-    );
-    final trimmedName = name?.trim();
-    if (trimmedName == null ||
-        trimmedName.isEmpty ||
-        trimmedName == group.name ||
-        !mounted) {
+  Future<void> _run(Future<PlanChange?> pending, String failureMessage) async {
+    final change = await pending;
+    if (change == null || !mounted) {
       return;
     }
-
-    await _savePlanChange(
-      action: () => widget.repository.renamePlanGroup(
-        planId: _plan.id,
-        groupId: group.id,
-        name: trimmedName,
-      ),
-      failureMessage: l10n.planGroupManagerRenameFailed,
-    );
-  }
-
-  Future<void> _toggleOrderMode(PilgrimagePlanGroup group) {
-    final nextMode = group.orderMode == PlanGroupOrderMode.manual
-        ? PlanGroupOrderMode.unordered
-        : PlanGroupOrderMode.manual;
-    return _savePlanChange(
-      action: () => widget.repository.updatePlanGroup(
-        planId: _plan.id,
-        group: _copyGroup(group, orderMode: nextMode),
-      ),
-      failureMessage: l10n.planGroupManagerOrderModeSaveFailed,
-    );
-  }
-
-  Future<void> _setGroupAnchor(PilgrimagePlanGroup group) async {
-    final settings = await widget.repository.loadAppSettings();
-    if (!mounted) {
-      return;
-    }
-    final selection = await Navigator.of(context).push<GroupAnchorSelection>(
-      appScaledMaterialPageRoute<GroupAnchorSelection>(
-        settings: settings,
-        builder: (_) => GroupAnchorPickerScreen(
-          group: group,
-          points: _plan.points,
-          groupNameForPoint: _groupNameForPoint,
-          settings: settings,
-        ),
-      ),
-    );
-    if (selection == null || !mounted) {
-      return;
-    }
-    await _savePlanChange(
-      action: () => widget.repository.updatePlanGroup(
-        planId: _plan.id,
-        group: _copyGroup(
-          group,
-          anchorName: selection.name,
-          anchorLatitude: selection.position?.latitude,
-          anchorLongitude: selection.position?.longitude,
-          anchorPointId: selection.pointId,
-        ),
-      ),
-      failureMessage: l10n.planGroupManagerAnchorSaveFailed,
-    );
-  }
-
-  Future<void> _confirmDeleteGroup(
-    PilgrimagePlanGroup group,
-    int pointCount,
-  ) async {
-    final confirmed = await showConfirmActionDialog(
-      context,
-      title: l10n.planGroupManagerDeleteArea,
-      message: l10n.planGroupManagerDeleteMessage(group.name, pointCount),
-      confirmLabel: l10n.commonDelete,
-      destructive: true,
-      emphasizedValues: [group.name],
-    );
-    if (!confirmed || !mounted) {
-      return;
-    }
-
-    await _savePlanChange(
-      action: () => widget.repository.deletePlanGroup(
-        planId: _plan.id,
-        groupId: group.id,
-      ),
-      failureMessage: l10n.planGroupManagerDeleteFailed,
-    );
+    await _savePlanChange(action: change, failureMessage: failureMessage);
   }
 
   Future<void> _reorderGroups(int oldIndex, int newIndex) async {
@@ -359,122 +294,6 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
         context,
       ).showStatusSnack(kind: AppStatusBannerKind.error, title: failureMessage);
     }
-  }
-
-  PilgrimagePlanGroup _copyGroup(
-    PilgrimagePlanGroup group, {
-    String? name,
-    int? orderIndex,
-    PlanGroupOrderMode? orderMode,
-    Object? anchorName = _unsetGroupField,
-    Object? anchorLatitude = _unsetGroupField,
-    Object? anchorLongitude = _unsetGroupField,
-    Object? anchorPointId = _unsetGroupField,
-  }) {
-    return PilgrimagePlanGroup(
-      id: group.id,
-      name: name ?? group.name,
-      orderIndex: orderIndex ?? group.orderIndex,
-      orderMode: orderMode ?? group.orderMode,
-      anchorName: anchorName == _unsetGroupField
-          ? group.anchorName
-          : anchorName as String?,
-      anchorLatitude: anchorLatitude == _unsetGroupField
-          ? group.anchorLatitude
-          : anchorLatitude as double?,
-      anchorLongitude: anchorLongitude == _unsetGroupField
-          ? group.anchorLongitude
-          : anchorLongitude as double?,
-      anchorPointId: anchorPointId == _unsetGroupField
-          ? group.anchorPointId
-          : anchorPointId as String?,
-      note: group.note,
-      createdAt: group.createdAt,
-    );
-  }
-
-  String _groupNameForPoint(PilgrimagePoint point) {
-    final groupId = point.groupId;
-    if (groupId == null) {
-      return l10n.planGroupManagerUngroupedSpots;
-    }
-    return _plan.groups
-        .firstWhere(
-          (group) => group.id == groupId,
-          orElse: () => PilgrimagePlanGroup(
-            id: groupId,
-            name: l10n.planGroupManagerUnknownArea,
-            orderIndex: 0,
-            createdAt: DateTime.fromMillisecondsSinceEpoch(0),
-          ),
-        )
-        .name;
-  }
-}
-
-class _PlanGroupNameDialog extends StatefulWidget {
-  const _PlanGroupNameDialog({
-    required this.title,
-    required this.confirmLabel,
-    this.initialName = '',
-  });
-
-  final String title;
-  final String confirmLabel;
-  final String initialName;
-
-  @override
-  State<_PlanGroupNameDialog> createState() => _PlanGroupNameDialogState();
-}
-
-class _PlanGroupNameDialogState extends State<_PlanGroupNameDialog> {
-  late final _controller = TextEditingController(text: widget.initialName);
-  String? _errorText;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _submit() {
-    final trimmedName = _controller.text.trim();
-    if (trimmedName.isEmpty) {
-      setState(() {
-        _errorText = l10n.planGroupManagerNameRequired;
-      });
-      return;
-    }
-    Navigator.of(context).pop(trimmedName);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AppInputDialog(
-      title: widget.title,
-      content: AppDialogField(
-        label: l10n.planGroupManagerNameLabel,
-        child: TextField(
-          onTapOutside: dismissKeyboardOnTapOutside,
-          key: const ValueKey('plan-group-name-field'),
-          controller: _controller,
-          autofocus: true,
-          decoration: appDialogInputDecoration(errorText: _errorText),
-          textInputAction: TextInputAction.done,
-          onChanged: (_) {
-            if (_errorText == null) {
-              return;
-            }
-            setState(() {
-              _errorText = null;
-            });
-          },
-          onSubmitted: (_) => _submit(),
-        ),
-      ),
-      confirmLabel: widget.confirmLabel,
-      onConfirm: _submit,
-    );
   }
 }
 

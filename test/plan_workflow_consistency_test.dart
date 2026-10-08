@@ -149,38 +149,40 @@ void main() {
       }
     }
 
-    test('a failing group reorder leaves every group order untouched', () async {
-      final database = AppDatabase(NativeDatabase(file));
-      final repository = SqlitePilgrimageRepository(database: database);
-      var plan = await repository.createPlan(name: 'Groups', area: 'Area');
-      for (var index = 0; index < 3; index++) {
-        plan = await repository.createPlanGroup(
-          planId: plan.id,
-          group: _group('g$index', index),
+    test(
+      'a failing group reorder leaves every group order untouched',
+      () async {
+        final database = AppDatabase(NativeDatabase(file));
+        final repository = SqlitePilgrimageRepository(database: database);
+        var plan = await repository.createPlan(name: 'Groups', area: 'Area');
+        for (var index = 0; index < 3; index++) {
+          plan = await repository.createPlanGroup(
+            planId: plan.id,
+            group: _group('g$index', index),
+          );
+        }
+        await database.customStatement(
+          "CREATE TRIGGER fail_reorder BEFORE UPDATE OF order_index "
+          "ON plan_groups WHEN NEW.id = 'g0' "
+          "BEGIN SELECT RAISE(ABORT, 'disk full'); END",
         );
-      }
-      await database.customStatement(
-        "CREATE TRIGGER fail_reorder BEFORE UPDATE OF order_index "
-        "ON plan_groups WHEN NEW.id = 'g0' "
-        "BEGIN SELECT RAISE(ABORT, 'disk full'); END",
-      );
-      await expectLater(
-        repository.reorderGroups(
-          planId: plan.id,
-          orderedGroupIds: ['g2', 'g1', 'g0'],
-        ),
-        throwsA(anything),
-      );
-      await database.customStatement('DROP TRIGGER fail_reorder');
-      await database.close();
+        await expectLater(
+          repository.reorderGroups(
+            planId: plan.id,
+            orderedGroupIds: ['g2', 'g1', 'g0'],
+          ),
+          throwsA(anything),
+        );
+        await database.customStatement('DROP TRIGGER fail_reorder');
+        await database.close();
 
-      final restored = await reopenPlan(plan.id);
-      expect({for (final group in restored.groups) group.id: group.orderIndex}, {
-        'g0': 0,
-        'g1': 1,
-        'g2': 2,
-      });
-    });
+        final restored = await reopenPlan(plan.id);
+        expect(
+          {for (final group in restored.groups) group.id: group.orderIndex},
+          {'g0': 0, 'g1': 1, 'g2': 2},
+        );
+      },
+    );
 
     test('a failing batch assignment moves no point at all', () async {
       final database = AppDatabase(NativeDatabase(file));
@@ -243,7 +245,10 @@ void main() {
       ],
     );
 
-    Future<void> assign(WidgetTester tester, _AssignRepository repository) async {
+    Future<void> assign(
+      WidgetTester tester,
+      _AssignRepository repository,
+    ) async {
       await tester.pumpWidget(
         MaterialApp(
           theme: AppTheme.light(),
@@ -347,10 +352,10 @@ void main() {
       lessThan(tester.getTopLeft(find.text('b')).dy),
     );
     final stored = await repository.loadActivePlan();
-    expect({for (final group in stored.groups) group.id: group.orderIndex}, {
-      'a': 0,
-      'b': 1,
-    });
+    expect(
+      {for (final group in stored.groups) group.id: group.orderIndex},
+      {'a': 0, 'b': 1},
+    );
   });
 
   testWidgets('renaming a group survives the dialog exit animation', (
@@ -381,10 +386,9 @@ void main() {
     expect(find.text('新名称'), findsOneWidget);
   });
 
-  testWidgets('editing plan info survives the dialog exit animation', (
-    tester,
-  ) async {
+  testWidgets('editing plan details saves name and memo', (tester) async {
     final repository = SamplePilgrimageRepository(visitRecords: const []);
+    final plan = await repository.loadActivePlan();
     await tester.pumpWidget(
       MaterialApp(
         theme: AppTheme.light(),
@@ -392,16 +396,26 @@ void main() {
       ),
     );
     await tester.pumpAndSettle();
-    await tester.tap(find.byTooltip('编辑计划信息').first);
+    await tester.tap(find.byKey(ValueKey('plan-card-title-${plan.id}')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(ValueKey('plan-card-edit-${plan.id}')));
     await tester.pumpAndSettle();
     await tester.enterText(find.byType(TextField).first, '改名后的计划');
+    await tester.enterText(
+      find.byKey(const ValueKey('plan-info-details-field')),
+      '住在宇治站附近',
+    );
     await tester.tap(find.widgetWithText(FilledButton, '保存'));
+    // The dialog owns its controllers through its exit animation.
     for (var frame = 0; frame < 20; frame++) {
       await tester.pump(const Duration(milliseconds: 16));
     }
     await tester.pumpAndSettle();
 
     expect(tester.takeException(), isNull);
-    expect((await repository.loadActivePlan()).name, '改名后的计划');
+    final saved = await repository.loadActivePlan();
+    expect(saved.name, '改名后的计划');
+    expect(saved.memo, '住在宇治站附近');
+    expect(find.text('住在宇治站附近'), findsOneWidget);
   });
 }

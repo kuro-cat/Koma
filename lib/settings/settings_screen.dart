@@ -478,8 +478,6 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
     AppThemePalette.spruce,
     AppThemePalette.moss,
     AppThemePalette.lake,
-    AppThemePalette.bark,
-    AppThemePalette.ochre,
     AppThemePalette.ink,
   ];
 
@@ -631,10 +629,8 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                   subtitle: l10n.settingsThemeColorSubtitle,
                 ),
                 const SizedBox(height: 16),
-                // Every colour in view at once: square swatches that wrap.
-                Wrap(
-                  spacing: 14,
-                  runSpacing: 14,
+                // Every colour in view at once, six to a row on a grid.
+                _SwatchGrid(
                   children: [
                     for (final palette in _visibleThemePalettes)
                       Padding(
@@ -3048,17 +3044,10 @@ class _SettingsChrome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
+    // A section is a 2px ink rule with its rows under it, not a box.
     return Material(
-      color: scheme.surface,
-      elevation: 0,
-      shadowColor: Colors.transparent,
-      surfaceTintColor: Colors.transparent,
-      clipBehavior: Clip.antiAlias,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-        side: BorderSide(color: scheme.outline),
-      ),
+      color: Colors.transparent,
+      shape: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       child: padding == null ? child : Padding(padding: padding!, child: child),
     );
   }
@@ -3076,14 +3065,13 @@ class _SettingsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final outline = Theme.of(context).colorScheme.outline;
     return _SettingsChrome(
       child: Column(
         children: [
           header,
           for (final child in children) ...[
             ColoredBox(
-              color: outline,
+              color: AppColors.divider,
               child: const SizedBox(height: 1, width: double.infinity),
             ),
             child,
@@ -3865,27 +3853,12 @@ class _ThemeColorOption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.zero,
+    return _ThemeColorButton(
+      color: AppColors.swatch(palette),
+      label: palette.label,
+      selected: selected,
+      icon: selected ? LucideIcons.check : null,
       onTap: onTap,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _ThemeSwatch(palette: palette, selected: selected),
-          const SizedBox(height: 8),
-          Text(
-            palette.label,
-            style: TextStyle(
-              color: selected
-                  ? AppColors.accentForeground
-                  : AppColors.textPrimary,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0,
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
@@ -3938,6 +3911,31 @@ class _AddThemeColorOption extends StatelessWidget {
   }
 }
 
+class _SwatchGrid extends StatelessWidget {
+  const _SwatchGrid({required this.children});
+
+  final List<Widget> children;
+
+  static const _columns = 6;
+  static const _gap = 8.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final cell = (constraints.maxWidth - _gap * (_columns - 1)) / _columns;
+        return Wrap(
+          spacing: _gap,
+          runSpacing: 14,
+          children: [
+            for (final child in children) SizedBox(width: cell, child: child),
+          ],
+        );
+      },
+    );
+  }
+}
+
 class _ThemeColorButton extends StatelessWidget {
   const _ThemeColorButton({
     required this.color,
@@ -3966,10 +3964,11 @@ class _ThemeColorButton extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          // One size whether chosen or not, so labels line up.
           Container(
-            width: selected ? 42 : 38,
-            height: selected ? 42 : 38,
-            padding: const EdgeInsets.all(4),
+            width: 42,
+            height: 42,
+            padding: EdgeInsets.all(selected ? 3 : 4),
             decoration: BoxDecoration(
               border: Border.all(
                 color: selected ? AppColors.accentForeground : AppColors.border,
@@ -3984,20 +3983,23 @@ class _ThemeColorButton extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
+          // Long names shrink to fit the cell rather than cut off.
           SizedBox(
-            width: 58,
-            child: Text(
-              label,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: selected
-                    ? AppColors.accentForeground
-                    : AppColors.textPrimary,
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0,
+            width: double.infinity,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                maxLines: 1,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: selected
+                      ? AppColors.accentForeground
+                      : AppColors.textPrimary,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0,
+                ),
               ),
             ),
           ),
@@ -5401,40 +5403,20 @@ class _AppIconMark extends StatelessWidget {
 }
 
 class _ThemeSwatch extends StatelessWidget {
-  const _ThemeSwatch({
-    required this.palette,
-    this.selected = false,
-    this.customColorValue,
-  });
+  const _ThemeSwatch({required this.palette, this.customColorValue});
 
   final AppThemePalette palette;
-  final bool selected;
   final int? customColorValue;
 
   @override
   Widget build(BuildContext context) {
-    final color = AppColors.swatch(palette, customValue: customColorValue);
     return Container(
-      width: selected ? 42 : 38,
-      height: selected ? 42 : 38,
+      width: 42,
+      height: 42,
       padding: const EdgeInsets.all(4),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: selected ? AppColors.accentForeground : AppColors.border,
-          width: selected ? 2 : 1,
-        ),
-      ),
-      child: DecoratedBox(
-        decoration: BoxDecoration(color: color),
-        child: selected
-            ? Icon(
-                LucideIcons.check,
-                color: AppColors.isDark
-                    ? AppColors.foregroundOn(color)
-                    : AppColors.onAccent,
-                size: 18,
-              )
-            : null,
+      decoration: BoxDecoration(border: Border.all(color: AppColors.border)),
+      child: ColoredBox(
+        color: AppColors.swatch(palette, customValue: customColorValue),
       ),
     );
   }
