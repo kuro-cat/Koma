@@ -16,15 +16,18 @@ enum PointSortMode { plan, distance }
 
 const previewCurrentLocation = LatLng(34.8903, 135.8009);
 
+/// Area colours on the map: Tsumiki's family, deep enough to read as
+/// markers. No pink, purple or red (red means trouble).
 const planGroupMapColors = [
-  Color(0xFF0F8B8D),
-  Color(0xFFFFCE00),
-  Color(0xFF7C3AED),
-  Color(0xFF2563EB),
-  Color(0xFFE11D48),
+  Color(0xFF2F6F80), // Fjord
+  Color(0xFF855F0E), // Ochre
+  Color(0xFF2F6B5C), // Spruce
+  Color(0xFF3A5F8F), // Lake
+  Color(0xFF7A5536), // Bark
+  Color(0xFF4D6A2C), // Moss
 ];
 
-const ungroupedMapMarkerColor = Color(0xFF6B7280);
+const ungroupedMapMarkerColor = Color(0xFF5D6D6F);
 
 Color planGroupMapColorAt(int index) {
   return MapColors.readable(

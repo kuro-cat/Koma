@@ -2551,7 +2551,7 @@ class _CameraCircleButton extends StatelessWidget {
         minimumSize: Size(size, size),
         fixedSize: Size(size, size),
         padding: EdgeInsets.zero,
-        shape: const CircleBorder(),
+        shape: const RoundedRectangleBorder(),
       ),
       onPressed: onPressed,
       icon: semanticLabel == null
@@ -2868,7 +2868,7 @@ class _ModeChip extends StatelessWidget {
     return InkWell(
       customBorder: compact
           ? RoundedRectangleBorder(borderRadius: BorderRadius.zero)
-          : const StadiumBorder(),
+          : const RoundedRectangleBorder(),
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 140),
@@ -3351,7 +3351,7 @@ class _CameraActionButton extends StatelessWidget {
         minimumSize: Size(size, size),
         fixedSize: Size(size, size),
         padding: EdgeInsets.zero,
-        shape: const CircleBorder(),
+        shape: const RoundedRectangleBorder(),
       ),
       onPressed: onPressed,
       icon: _CameraButtonIcon(icon: icon, iconSize: iconSize, text: text),

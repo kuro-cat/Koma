@@ -679,10 +679,10 @@ class _PlanMemoMarkdownPreview extends StatelessWidget {
         letterSpacing: 0,
       ),
       blockquotePadding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
+      // A quote is a framed block on mist, not a coloured left bar.
       blockquoteDecoration: BoxDecoration(
         color: AppColors.surfaceMuted,
-        border: Border(left: BorderSide(color: AppColors.accentDark, width: 4)),
-        borderRadius: BorderRadius.zero,
+        border: Border.all(color: AppColors.border),
       ),
       code: TextStyle(
         color: AppColors.textPrimary,

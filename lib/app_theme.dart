@@ -7,6 +7,29 @@ export 'widgets/keyboard_dismiss_on_tap.dart' show dismissKeyboardOnTapOutside;
 
 import 'plan/pilgrimage_models.dart';
 
+/// Tsumiki's Cool Earth rule for custom colours: hues from ochre through
+/// greens to sea blue, at moderate saturation; never pink or purple.
+const coolEarthMinHue = 35.0;
+const coolEarthMaxHue = 205.0;
+const coolEarthMaxSaturation = 0.6;
+
+/// [color] moved into the Cool Earth range, so a stored or typed colour
+/// outside it (pink, purple, neon) shows as its nearest allowed one.
+Color coolEarth(Color color) {
+  final hsv = HSVColor.fromColor(color.withValues(alpha: 1));
+  final hue = hsv.hue;
+  final clampedHue = hue >= coolEarthMinHue && hue <= coolEarthMaxHue
+      ? hue
+      // Blues and violets settle on sea blue; magentas and reds on ochre.
+      : hue > coolEarthMaxHue && hue < 290
+      ? coolEarthMaxHue
+      : coolEarthMinHue;
+  return hsv
+      .withHue(clampedHue)
+      .withSaturation(math.min(hsv.saturation, coolEarthMaxSaturation))
+      .toColor();
+}
+
 /// Koma's palette: Tsumiki's Fjord sea (light) and Night sea (dark) grounds,
 /// ink and rules, with one accent chosen in Settings from Tsumiki's colours.
 class AppColors {
@@ -64,7 +87,7 @@ class AppColors {
   /// The swatch shown for [palette] in Settings, in the current theme.
   static Color swatch(AppThemePalette palette, {int? customValue}) {
     if (palette == AppThemePalette.custom) {
-      return Color(customValue ?? customAccentValue);
+      return coolEarth(Color(customValue ?? customAccentValue));
     }
     final (light, dark) = _accents[palette]!;
     return isDark ? dark : light;
@@ -84,7 +107,7 @@ class AppColors {
   /// progress. Every palette passes 4.5:1 as text on paper and raise.
   static Color get accent {
     if (palette == AppThemePalette.custom) {
-      final custom = Color(customAccentValue);
+      final custom = coolEarth(Color(customAccentValue));
       return isDark ? _readableAccent(custom) : _deepenForText(custom);
     }
     return swatch(palette);

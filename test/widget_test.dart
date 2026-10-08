@@ -2930,7 +2930,8 @@ void main() {
     final hexField = tester.widget<TextField>(
       find.byKey(const ValueKey('custom-theme-color-hex-field')),
     );
-    expect(hexField.controller!.text, '#FF0000');
+    // The square starts at ochre at the Cool Earth saturation cap, never red.
+    expect(hexField.controller!.text, '#FFBF66');
   });
 
   testWidgets('with no plans the plan tabs offer to create one', (

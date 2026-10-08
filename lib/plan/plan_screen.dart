@@ -1640,13 +1640,13 @@ class _CurrentLocationDot extends StatelessWidget {
   Widget build(BuildContext context) {
     return DecoratedBox(
       decoration: BoxDecoration(
-        color: const Color(0xFF2563EB).withValues(alpha: 0.18),
+        color: AppColors.accent.withValues(alpha: 0.18),
         shape: BoxShape.circle,
       ),
       child: Center(
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: const Color(0xFF2563EB),
+            color: AppColors.accent,
             shape: BoxShape.circle,
             border: Border.all(color: Colors.white, width: 2),
           ),

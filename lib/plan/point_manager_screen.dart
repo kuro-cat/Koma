@@ -1706,11 +1706,10 @@ class _PointManagerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final statusColor = switch (status) {
-      VisitStatus.current => AppColors.accent,
-      VisitStatus.completed => AppColors.textSecondary,
-      VisitStatus.pending => AppColors.accentDark,
-    };
+    // Only the next stop takes the accent; other states are muted ink.
+    final statusColor = status == VisitStatus.current
+        ? AppColors.accentForeground
+        : AppColors.textSecondary;
     final statusText = switch (status) {
       VisitStatus.current => l10n.pointManagerStatusCurrent,
       VisitStatus.completed => l10n.pointManagerStatusCompleted,
@@ -2433,7 +2432,7 @@ class _AnchorPointMarker extends StatelessWidget {
         backgroundColor: selected ? MapColors.accent : MapColors.surface,
         foregroundColor: selected ? MapColors.onAccent : MapColors.accent,
         side: BorderSide(
-          color: selected ? AppColors.warning : MapColors.border,
+          color: selected ? AppColors.ink : MapColors.border,
           width: selected ? 2 : 1,
         ),
       ),

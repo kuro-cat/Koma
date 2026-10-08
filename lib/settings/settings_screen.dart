@@ -564,50 +564,66 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                   subtitle: l10n.settingsThemeModeSubtitle,
                 ),
                 const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _ModeButton(
-                        key: const ValueKey('appearance-theme-mode-light'),
-                        icon: LucideIcons.sun,
-                        label: l10n.settingsLight,
-                        selected: settings.themeMode == AppThemeMode.light,
-                        onTap: () {
-                          _update(
-                            settings.copyWith(themeMode: AppThemeMode.light),
-                          );
-                        },
-                      ),
+                // One ink frame with ink dividers; the chosen segment inverts.
+                DecoratedBox(
+                  position: DecorationPosition.foreground,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.ink),
+                  ),
+                  child: IntrinsicHeight(
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: _ModeButton(
+                            framed: false,
+                            key: const ValueKey('appearance-theme-mode-light'),
+                            icon: LucideIcons.sun,
+                            label: l10n.settingsLight,
+                            selected: settings.themeMode == AppThemeMode.light,
+                            onTap: () {
+                              _update(
+                                settings.copyWith(
+                                  themeMode: AppThemeMode.light,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                        Container(width: 1, color: AppColors.ink),
+                        Expanded(
+                          child: _ModeButton(
+                            framed: false,
+                            key: const ValueKey('appearance-theme-mode-dark'),
+                            icon: LucideIcons.moon,
+                            label: l10n.settingsDark,
+                            selected: settings.themeMode == AppThemeMode.dark,
+                            onTap: () {
+                              _update(
+                                settings.copyWith(themeMode: AppThemeMode.dark),
+                              );
+                            },
+                          ),
+                        ),
+                        Container(width: 1, color: AppColors.ink),
+                        Expanded(
+                          child: _ModeButton(
+                            framed: false,
+                            key: const ValueKey('appearance-theme-mode-system'),
+                            icon: LucideIcons.smartphone,
+                            label: l10n.settingsFollowSystem,
+                            selected: settings.themeMode == AppThemeMode.system,
+                            onTap: () {
+                              _update(
+                                settings.copyWith(
+                                  themeMode: AppThemeMode.system,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _ModeButton(
-                        key: const ValueKey('appearance-theme-mode-dark'),
-                        icon: LucideIcons.moon,
-                        label: l10n.settingsDark,
-                        selected: settings.themeMode == AppThemeMode.dark,
-                        onTap: () {
-                          _update(
-                            settings.copyWith(themeMode: AppThemeMode.dark),
-                          );
-                        },
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _ModeButton(
-                        key: const ValueKey('appearance-theme-mode-system'),
-                        icon: LucideIcons.smartphone,
-                        label: l10n.settingsFollowSystem,
-                        selected: settings.themeMode == AppThemeMode.system,
-                        onTap: () {
-                          _update(
-                            settings.copyWith(themeMode: AppThemeMode.system),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
                 const SizedBox(height: 22),
                 _InlineSectionTitle(
@@ -719,36 +735,44 @@ class _AppearanceSettingsPageState extends State<_AppearanceSettingsPage> {
                     Text('Aa', style: _titleTextStyle),
                     const SizedBox(width: 12),
                     Expanded(
-                      child: Row(
-                        children: [
-                          _FontSizeButton(
-                            label: l10n.settingsFontSmall,
-                            selected: fontScale <= 0.9,
-                            onTap: () =>
-                                _update(settings.copyWith(fontScale: 0.9)),
+                      child: DecoratedBox(
+                        position: DecorationPosition.foreground,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.ink),
+                        ),
+                        child: IntrinsicHeight(
+                          child: Row(
+                            children: [
+                              _FontSizeButton(
+                                label: l10n.settingsFontSmall,
+                                selected: fontScale <= 0.9,
+                                onTap: () =>
+                                    _update(settings.copyWith(fontScale: 0.9)),
+                              ),
+                              Container(width: 1, color: AppColors.ink),
+                              _FontSizeButton(
+                                label: l10n.settingsFontStandard,
+                                selected: fontScale > 0.9 && fontScale < 1.1,
+                                onTap: () =>
+                                    _update(settings.copyWith(fontScale: 1)),
+                              ),
+                              Container(width: 1, color: AppColors.ink),
+                              _FontSizeButton(
+                                label: l10n.settingsFontLarge,
+                                selected: fontScale >= 1.1 && fontScale < 1.2,
+                                onTap: () =>
+                                    _update(settings.copyWith(fontScale: 1.1)),
+                              ),
+                              Container(width: 1, color: AppColors.ink),
+                              _FontSizeButton(
+                                label: l10n.settingsFontExtraLarge,
+                                selected: fontScale >= 1.2,
+                                onTap: () =>
+                                    _update(settings.copyWith(fontScale: 1.2)),
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 10),
-                          _FontSizeButton(
-                            label: l10n.settingsFontStandard,
-                            selected: fontScale > 0.9 && fontScale < 1.1,
-                            onTap: () =>
-                                _update(settings.copyWith(fontScale: 1)),
-                          ),
-                          const SizedBox(width: 10),
-                          _FontSizeButton(
-                            label: l10n.settingsFontLarge,
-                            selected: fontScale >= 1.1 && fontScale < 1.2,
-                            onTap: () =>
-                                _update(settings.copyWith(fontScale: 1.1)),
-                          ),
-                          const SizedBox(width: 10),
-                          _FontSizeButton(
-                            label: l10n.settingsFontExtraLarge,
-                            selected: fontScale >= 1.2,
-                            onTap: () =>
-                                _update(settings.copyWith(fontScale: 1.2)),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ],
@@ -3813,16 +3837,15 @@ class _InlineSectionTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
-    return Row(
-      mainAxisSize: MainAxisSize.min,
+    // The description sits under its heading as label text.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(title, style: _titleTextStyle.copyWith(color: scheme.onSurface)),
-        const SizedBox(width: 10),
-        Flexible(
-          child: Text(
-            subtitle,
-            style: _captionTextStyle.copyWith(color: scheme.onSurfaceVariant),
-          ),
+        const SizedBox(height: 4),
+        Text(
+          subtitle,
+          style: _captionTextStyle.copyWith(color: scheme.onSurfaceVariant),
         ),
       ],
     );
@@ -3881,7 +3904,7 @@ class _CustomThemeColorOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _ThemeColorButton(
-      color: Color(color.value),
+      color: coolEarth(Color(color.value)),
       label: color.name,
       selected: selected,
       icon: selected ? LucideIcons.check : null,
@@ -3906,7 +3929,7 @@ class _AddThemeColorOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _ThemeColorButton(
-      color: Color(colorValue),
+      color: coolEarth(Color(colorValue)),
       label: label.trim().isEmpty ? l10n.settingsCustom : label.trim(),
       selected: selected,
       icon: LucideIcons.plus,
@@ -4019,7 +4042,7 @@ class _CustomThemeColorDialogState extends State<_CustomThemeColorDialog> {
 
   void _setColor(Color color, {bool syncHex = true}) {
     setState(() {
-      _color = color.withAlpha(255);
+      _color = coolEarth(color);
       if (syncHex) {
         _hexController.text = _hexFromColor(_color);
       }
@@ -4035,7 +4058,8 @@ class _CustomThemeColorDialogState extends State<_CustomThemeColorDialog> {
 
   void _submit() {
     final name = _nameController.text.trim();
-    final color = _colorFromHex(_hexController.text) ?? _color;
+    final typed = _colorFromHex(_hexController.text);
+    final color = typed == null ? _color : coolEarth(typed);
     if (name.isEmpty) {
       setState(() => _errorText = l10n.settingsEnterColorName);
       return;
@@ -4094,7 +4118,7 @@ class _CustomThemeColorDialogState extends State<_CustomThemeColorDialog> {
               onTapOutside: dismissKeyboardOnTapOutside,
               key: const ValueKey('custom-theme-color-hex-field'),
               controller: _hexController,
-              decoration: appDialogInputDecoration(hintText: '#0F8B8D'),
+              decoration: appDialogInputDecoration(hintText: '#2F6F80'),
               onChanged: (_) => _applyHex(),
               onSubmitted: (_) => _submit(),
             ),
@@ -4122,11 +4146,16 @@ class _HsvColorPalette extends StatelessWidget {
       builder: (context, constraints) {
         final paletteSize = math.min(constraints.maxWidth - 44, 230.0);
 
+        // The square spans only the Cool Earth hues and saturations.
         void updateHueSaturation(Offset position) {
-          final hue = (position.dx.clamp(0, paletteSize) / paletteSize * 360)
-              .clamp(0.0, 359.999);
+          final hue =
+              coolEarthMinHue +
+              position.dx.clamp(0, paletteSize) /
+                  paletteSize *
+                  (coolEarthMaxHue - coolEarthMinHue);
           final saturation =
-              1 - position.dy.clamp(0, paletteSize) / paletteSize;
+              (1 - position.dy.clamp(0, paletteSize) / paletteSize) *
+              coolEarthMaxSaturation;
           onChanged(
             hsv
                 .withHue(hue)
@@ -4160,10 +4189,10 @@ class _HsvColorPalette extends StatelessWidget {
                 (hsv.saturation * 100).round(),
               ),
               onIncrease: () => onChanged(
-                hsv.withHue((hsv.hue + 5) % 360).toColor().withAlpha(255),
+                coolEarth(hsv.withHue((hsv.hue + 5) % 360).toColor()),
               ),
               onDecrease: () => onChanged(
-                hsv.withHue((hsv.hue - 5) % 360).toColor().withAlpha(255),
+                coolEarth(hsv.withHue((hsv.hue - 5) % 360).toColor()),
               ),
               child: GestureDetector(
                 key: const ValueKey('custom-theme-color-palette'),
@@ -4234,15 +4263,16 @@ class _HueSaturationPalettePainter extends CustomPainter {
     canvas.drawRect(
       rect,
       Paint()
-        ..shader = const LinearGradient(
+        ..shader = LinearGradient(
           colors: [
-            Color(0xFFFF0000),
-            Color(0xFFFFFF00),
-            Color(0xFF00FF00),
-            Color(0xFF00FFFF),
-            Color(0xFF0000FF),
-            Color(0xFFFF00FF),
-            Color(0xFFFF0000),
+            for (var step = 0; step <= 4; step++)
+              HSVColor.fromAHSV(
+                1,
+                coolEarthMinHue +
+                    step / 4 * (coolEarthMaxHue - coolEarthMinHue),
+                coolEarthMaxSaturation,
+                1,
+              ).toColor(),
           ],
         ).createShader(rect),
     );
@@ -4265,8 +4295,13 @@ class _HueSaturationPalettePainter extends CustomPainter {
     );
 
     final selector = Offset(
-      hsv.hue / 360 * size.width,
-      (1 - hsv.saturation) * size.height,
+      ((hsv.hue - coolEarthMinHue) / (coolEarthMaxHue - coolEarthMinHue)).clamp(
+            0.0,
+            1.0,
+          ) *
+          size.width,
+      (1 - hsv.saturation / coolEarthMaxSaturation).clamp(0.0, 1.0) *
+          size.height,
     );
     canvas.drawCircle(
       selector,
@@ -4362,6 +4397,7 @@ class _ModeButton extends StatelessWidget {
     required this.icon,
     required this.label,
     this.selected = false,
+    this.framed = true,
     this.onTap,
     super.key,
   });
@@ -4369,28 +4405,26 @@ class _ModeButton extends StatelessWidget {
   final IconData icon;
   final String label;
   final bool selected;
+
+  /// False inside a segmented row, which draws one frame for all segments.
+  final bool framed;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final scheme = Theme.of(context).colorScheme;
-    final border = selected ? AppColors.accentForeground : scheme.outline;
+    // Tsumiki segments: muted ink on raise, the chosen one inverted to ink.
     final foreground = selected
-        ? AppColors.accentForeground
-        : scheme.onSurfaceVariant;
+        ? AppColors.background
+        : AppColors.textSecondary;
     return InkWell(
-      borderRadius: BorderRadius.zero,
       onTap: onTap,
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: selected
-              ? AppColors.accent.withValues(alpha: 0.08)
-              : scheme.surface,
-          borderRadius: BorderRadius.zero,
-          border: Border.all(color: border),
+          color: selected ? AppColors.ink : AppColors.surface,
+          border: framed ? Border.all(color: AppColors.ink) : null,
         ),
         child: SizedBox(
-          height: 40,
+          height: 44,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -4403,8 +4437,8 @@ class _ModeButton extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     color: foreground,
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
                     letterSpacing: 0,
                   ),
                 ),
@@ -4508,7 +4542,6 @@ class _PercentScaleControl extends StatelessWidget {
         SliderTheme(
           data: SliderTheme.of(context).copyWith(
             trackHeight: 3,
-            thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 7),
             overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
           ),
           child: Slider(
@@ -4568,30 +4601,22 @@ class _FontSizeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // A segment of the text-size row: inverted to ink when chosen.
     return Expanded(
       child: InkWell(
-        borderRadius: BorderRadius.zero,
         onTap: onTap,
         child: Container(
-          height: 32,
+          height: 44,
           alignment: Alignment.center,
-          decoration: BoxDecoration(
-            color: selected
-                ? AppColors.accent.withValues(alpha: 0.08)
-                : AppColors.surface,
-            borderRadius: BorderRadius.zero,
-            border: Border.all(
-              color: selected ? AppColors.accentForeground : AppColors.border,
-            ),
-          ),
+          color: selected ? AppColors.ink : AppColors.surface,
           child: Text(
             label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              color: selected
-                  ? AppColors.accentForeground
-                  : AppColors.textPrimary,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+              color: selected ? AppColors.background : AppColors.textSecondary,
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
               letterSpacing: 0,
             ),
           ),

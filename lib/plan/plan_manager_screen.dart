@@ -1107,7 +1107,7 @@ class _PlanWorkTags extends StatelessWidget {
         for (var index = 0; index < visibleWorks.length; index++) ...[
           Flexible(
             fit: FlexFit.loose,
-            child: _PlanWorkTag(work: visibleWorks[index], colorIndex: index),
+            child: _PlanWorkTag(work: visibleWorks[index]),
           ),
           if (index != visibleWorks.length - 1 || remainingCount > 0)
             const SizedBox(width: 5),
@@ -1128,64 +1128,28 @@ class _PlanWorkTags extends StatelessWidget {
   }
 }
 
+/// A Tsumiki tag: the work's name on mist, no colour coding.
 class _PlanWorkTag extends StatelessWidget {
-  const _PlanWorkTag({required this.work, required this.colorIndex});
-
-  static const _dotColors = [
-    Color(0xFF63B3ED),
-    Color(0xFF6EDDC5),
-    Color(0xFFF38CB2),
-    Color(0xFFFFB365),
-    Color(0xFF9B8AFB),
-  ];
-
-  static const _backgroundColors = [
-    Color(0xFFF0F7FF),
-    Color(0xFFF0FBF8),
-    Color(0xFFFFF2F7),
-    Color(0xFFFFF7EC),
-    Color(0xFFF5F2FF),
-  ];
+  const _PlanWorkTag({required this.work});
 
   final PilgrimageWork work;
-  final int colorIndex;
 
   @override
   Widget build(BuildContext context) {
-    final paletteIndex = colorIndex % _dotColors.length;
     return Container(
-      padding: const EdgeInsets.fromLTRB(6, 3, 7, 3),
-      decoration: BoxDecoration(
-        color: _backgroundColors[paletteIndex],
-        borderRadius: BorderRadius.zero,
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 6,
-            height: 6,
-            decoration: BoxDecoration(
-              color: _dotColors[paletteIndex],
-              shape: BoxShape.circle,
-            ),
-          ),
-          const SizedBox(width: 4),
-          Flexible(
-            child: Text(
-              work.title,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 11,
-                height: 1,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0,
-              ),
-            ),
-          ),
-        ],
+      padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
+      color: AppColors.surfaceMuted,
+      child: Text(
+        work.title,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: AppColors.textSecondary,
+          fontSize: 12,
+          height: 1,
+          fontWeight: FontWeight.w500,
+          letterSpacing: 0,
+        ),
       ),
     );
   }

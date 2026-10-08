@@ -98,9 +98,16 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
               sliver: SliverToBoxAdapter(
-                child: _PlanGroupManagerHeader(
-                  plan: _plan,
-                  groupCount: groups.length,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _PlanGroupManagerHeader(
+                      plan: _plan,
+                      groupCount: groups.length,
+                    ),
+                    // The areas hang from a 2px ink rule, as ruled rows.
+                    Container(height: 2, color: AppColors.ink),
+                  ],
                 ),
               ),
             ),
@@ -117,7 +124,7 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
                       .length;
                   return Padding(
                     key: ValueKey(group.id),
-                    padding: const EdgeInsets.only(bottom: 8),
+                    padding: EdgeInsets.zero,
                     child: _PlanGroupCard(
                       index: index,
                       group: group,
@@ -136,7 +143,7 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 96),
+              padding: const EdgeInsets.fromLTRB(16, 0, 16, 112),
               sliver: SliverToBoxAdapter(
                 child: _UngroupedGroupCard(
                   pointCount: _ungroupedCount,
@@ -564,16 +571,11 @@ class _PlanGroupCard extends StatelessWidget {
 
     return Material(
       color: surface,
-      borderRadius: BorderRadius.zero,
+      shape: Border(bottom: BorderSide(color: AppColors.divider)),
       child: InkWell(
         onTap: onOpen,
-        borderRadius: BorderRadius.zero,
-        child: Container(
-          padding: const EdgeInsets.fromLTRB(8, 12, 6, 12),
-          decoration: BoxDecoration(
-            border: Border.all(color: AppColors.border),
-            borderRadius: BorderRadius.zero,
-          ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
           child: Row(
             children: [
               ReorderableDragStartListener(
@@ -799,16 +801,11 @@ class _UngroupedGroupCard extends StatelessWidget {
     return Material(
       key: const ValueKey('ungrouped'),
       color: AppColors.surfaceMuted,
-      borderRadius: BorderRadius.zero,
+      shape: Border(bottom: BorderSide(color: AppColors.divider)),
       child: InkWell(
         onTap: onOpen,
-        borderRadius: BorderRadius.zero,
-        child: Container(
-          padding: const EdgeInsets.all(14),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.zero,
-            border: Border.all(color: AppColors.border),
-          ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(10, 14, 6, 14),
           child: Row(
             children: [
               Icon(LucideIcons.inbox, color: AppColors.textSecondary),

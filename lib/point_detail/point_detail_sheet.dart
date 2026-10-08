@@ -810,7 +810,7 @@ class _ReferenceColumn extends StatelessWidget {
     final color = switch (status) {
       VisitStatus.current => AppColors.accent,
       VisitStatus.completed => AppColors.textSecondary,
-      VisitStatus.pending => AppColors.accentDark,
+      VisitStatus.pending => AppColors.textTertiary,
     };
 
     return SizedBox(
@@ -957,22 +957,16 @@ class _StatusBadge extends StatelessWidget {
       VisitStatus.pending => l10n.pointDetailStatusPending,
     };
 
-    final color = switch (status) {
-      VisitStatus.current => AppColors.accent,
-      VisitStatus.completed => AppColors.textSecondary,
-      VisitStatus.pending => AppColors.warning,
-    };
-
+    // Tsumiki tags: plain facts on mist; only the next stop takes the
+    // accent, as a selected state on its wash.
+    final current = status == VisitStatus.current;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.zero,
-      ),
+      color: current ? AppColors.accentWash : AppColors.surfaceMuted,
       child: Text(
         text,
         style: TextStyle(
-          color: color,
+          color: current ? AppColors.accentForeground : AppColors.textSecondary,
           fontSize: 12,
           fontWeight: FontWeight.w600,
           letterSpacing: 0,

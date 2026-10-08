@@ -158,12 +158,8 @@ class ComparisonAppearanceSection extends StatelessWidget {
           data: SliderTheme.of(context).copyWith(
             trackHeight: 4,
             tickMarkShape: SliderTickMarkShape.noTickMark,
-            thumbShape: const RoundSliderThumbShape(
-              enabledThumbRadius: 7,
-              pressedElevation: 3,
-            ),
             overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
-            valueIndicatorShape: const PaddleSliderValueIndicatorShape(),
+            valueIndicatorShape: const RectangularSliderValueIndicatorShape(),
             showValueIndicator: ShowValueIndicator.onlyForDiscrete,
           ),
           child: Slider(
