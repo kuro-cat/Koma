@@ -8,6 +8,7 @@ import '../l10n/l10n.dart';
 import '../platform/platform_flags_stub.dart'
     if (dart.library.io) '../platform/platform_flags_io.dart';
 import '../plan/pilgrimage_models.dart';
+import '../widgets/rules.dart';
 import '../widgets/confirm_action_dialog.dart';
 import '../widgets/route_planner_skill_hint.dart';
 import '../widgets/snackbar_helper.dart';
@@ -85,7 +86,7 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
           title: Text(l10n.importExportTitle),
         ),
         body: ListView(
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+          padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
           children: [
             _PlanExportSummary(plan: widget.plan),
             const SizedBox(height: 16),
@@ -96,7 +97,7 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
                   ? l10n.importExportImportSubtitleIos
                   : l10n.importExportImportSubtitle,
             ),
-            const _SectionRule(),
+            const SectionRule(),
             _ActionTile(
               icon: _importing
                   ? LucideIcons.hourglass
@@ -130,7 +131,7 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
               title: l10n.importExportPackageSection,
               subtitle: l10n.importExportPackageSubtitle,
             ),
-            const _SectionRule(),
+            const SectionRule(),
             _BackupOptions(
               mode: _mode,
               includeFullReferenceCache: _includeFullReferenceCache,
@@ -153,7 +154,7 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
               title: 'Google My Maps',
               subtitle: l10n.importExportMyMapsSubtitle,
             ),
-            const _SectionRule(),
+            const SectionRule(),
             _ActionTile(
               icon: _exporting ? LucideIcons.hourglass : LucideIcons.table2,
               title: l10n.importExportMyMapsExport,
@@ -709,19 +710,6 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-/// The 2px ink rule a section's rows hang from.
-class _SectionRule extends StatelessWidget {
-  const _SectionRule();
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: AppColors.ink,
-      child: const SizedBox(height: 2, width: double.infinity),
-    );
-  }
-}
-
 class _BackupOptions extends StatelessWidget {
   const _BackupOptions({
     required this.mode,
@@ -885,9 +873,7 @@ class _ActionTile extends StatelessWidget {
         onTap: enabled ? onTap : null,
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-          decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: AppColors.divider)),
-          ),
+          decoration: BoxDecoration(border: Border(bottom: rowDividerSide)),
           child: Row(
             children: [
               Icon(

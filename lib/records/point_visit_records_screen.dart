@@ -45,7 +45,7 @@ class PointVisitRecordsScreen extends StatelessWidget {
               ),
               body: ListView(
                 // Sections and rows run full width and pad themselves 12dp.
-                padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+                padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
                 children: [
                   _PointRecordsHeader(
                     point: resolvedPoint,

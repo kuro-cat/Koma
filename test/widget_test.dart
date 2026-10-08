@@ -381,7 +381,8 @@ void main() {
 
     final reopenedPanel = find.byKey(const ValueKey('plan-actions-panel'));
     expect(reopenedPanel, findsOneWidget);
-    await tester.tapAt(Offset(5, tester.getCenter(reopenedPanel).dy));
+    // The panel runs full width; tap the gap just below it.
+    await tester.tapAt(Offset(2, tester.getBottomLeft(reopenedPanel).dy + 6));
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey('plan-actions-panel')), findsNothing);
@@ -635,7 +636,7 @@ void main() {
     final panel = find.byKey(const ValueKey('plan-actions-panel'));
     expect(panel, findsOneWidget);
 
-    await tester.tapAt(Offset(5, tester.getCenter(panel).dy));
+    await tester.tapAt(Offset(2, tester.getBottomLeft(panel).dy + 6));
     await tester.pumpAndSettle();
 
     expect(panel, findsOneWidget);
@@ -861,13 +862,16 @@ void main() {
     );
     final pickerShape = pickerMaterial.shape! as RoundedRectangleBorder;
     expect(pickerShape.side.color, AppColors.ink);
-    final menuDivider = tester.widget<Divider>(
+    // The menu's one row divider (RowDivider) is drawn in the divider color.
+    expect(
       find.descendant(
         of: find.byKey(const ValueKey('box-assign-group-menu')),
-        matching: find.byType(Divider),
+        matching: find.byWidgetPredicate(
+          (widget) => widget is ColoredBox && widget.color == AppColors.divider,
+        ),
       ),
+      findsOneWidget,
     );
-    expect(menuDivider.color, AppColors.divider);
 
     final selectedOption = tester.widget<MenuItemButton>(
       find.byKey(
@@ -2444,10 +2448,14 @@ void main() {
       tester
           .getTopRight(find.byKey(const ValueKey('settings-reset-button')))
           .dx,
+      // The card runs edge to edge; its content is inset 12dp.
       closeTo(
         tester
-            .getTopRight(find.byKey(const ValueKey('settings-appearance-card')))
-            .dx,
+                .getTopRight(
+                  find.byKey(const ValueKey('settings-appearance-card')),
+                )
+                .dx -
+            12,
         0.1,
       ),
     );

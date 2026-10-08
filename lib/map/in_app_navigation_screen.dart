@@ -14,6 +14,7 @@ import '../camera_reference/camerawesome_reference_screen.dart';
 import '../plan/pilgrimage_models.dart';
 import '../plan/pilgrimage_plan_controller.dart';
 import '../plan/plan_group_utils.dart';
+import '../widgets/rules.dart';
 import 'map_tile_config.dart';
 import 'navigation_progress.dart';
 import 'valhalla_route_client.dart';
@@ -1304,10 +1305,10 @@ class _BottomPanel extends StatelessWidget {
           curve: Curves.easeOutCubic,
           alignment: Alignment.topCenter,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(12, 12, 12, 12 + bottomInset),
+            padding: EdgeInsets.fromLTRB(0, 12, 0, 12 + bottomInset),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: [
+              children: _inset([
                 _SheetHeader(
                   chrome: chrome,
                   headline: _stopHeadline(point, isLast: currentIsLast),
@@ -1317,7 +1318,7 @@ class _BottomPanel extends StatelessWidget {
                 ),
                 if (expanded) ...[
                   const SizedBox(height: 12),
-                  const _ListRule(),
+                  const SectionRule(),
                   _InfoRow(
                     chrome: chrome,
                     icon: LucideIcons.mapPin,
@@ -1377,7 +1378,7 @@ class _BottomPanel extends StatelessWidget {
                     ),
                   ),
                 ],
-              ],
+              ]),
             ),
           ),
         ),
@@ -1620,10 +1621,8 @@ class _InfoRow extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 10),
-          decoration: BoxDecoration(
-            border: Border(bottom: BorderSide(color: AppColors.divider)),
-          ),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          decoration: BoxDecoration(border: Border(bottom: rowDividerSide)),
           child: Row(
             children: [
               Container(
@@ -1813,12 +1812,12 @@ class _ArrivalSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(12, 4, 12, 16),
+        padding: const EdgeInsets.fromLTRB(0, 4, 0, 16),
         child: Column(
           key: const ValueKey('in-app-navigation-arrival-sheet'),
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: _inset([
             Text(
               l10n.inAppNavigationArrivalTitle,
               style: TextStyle(
@@ -1829,7 +1828,7 @@ class _ArrivalSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            const _ListRule(),
+            const SectionRule(),
             _InfoRow(
               chrome: chrome,
               icon: LucideIcons.flag,
@@ -1898,7 +1897,7 @@ class _ArrivalSheet extends StatelessWidget {
                 ),
               ),
             ],
-          ],
+          ]),
         ),
       ),
     );
@@ -1926,13 +1925,13 @@ class _AllStopsSheet extends StatelessWidget {
       child: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: maxHeight),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 4, 12, 16),
+          padding: const EdgeInsets.fromLTRB(0, 4, 0, 16),
           child: SingleChildScrollView(
             child: Column(
               key: const ValueKey('in-app-navigation-all-stops-sheet'),
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: _inset([
                 Text(
                   l10n.inAppNavigationAllStops,
                   style: TextStyle(
@@ -1947,7 +1946,7 @@ class _AllStopsSheet extends StatelessWidget {
                   _GroupNameRow(chrome: chrome, name: zoneName),
                 ],
                 const SizedBox(height: 12),
-                const _ListRule(),
+                const SectionRule(),
                 for (var index = 0; index < stops.length; index++) ...[
                   _AllStopTile(
                     chrome: chrome,
@@ -1957,7 +1956,7 @@ class _AllStopsSheet extends StatelessWidget {
                     skipped: index < startIndex,
                   ),
                 ],
-              ],
+              ]),
             ),
           ),
         ),
@@ -1989,10 +1988,8 @@ class _AllStopTile extends StatelessWidget {
       key: skipped
           ? ValueKey('in-app-navigation-stop-skipped-${stop.id}')
           : null,
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.divider)),
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+      decoration: BoxDecoration(border: Border(bottom: rowDividerSide)),
       child: Row(
         children: [
           Container(
@@ -2054,15 +2051,14 @@ class _AllStopTile extends StatelessWidget {
   }
 }
 
-/// The 2px ink rule a list of rows hangs from.
-class _ListRule extends StatelessWidget {
-  const _ListRule();
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: AppColors.ink,
-      child: const SizedBox(height: 2, width: double.infinity),
-    );
-  }
-}
+// Panels and sheets have no gutter, so the rule and rows run edge to edge;
+// everything else carries the 12dp inset.
+List<Widget> _inset(List<Widget> children) => [
+  for (final child in children)
+    child is SectionRule || child is _InfoRow || child is _AllStopTile
+        ? child
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: child,
+          ),
+];

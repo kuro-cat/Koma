@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../widgets/rules.dart';
 import '../widgets/app_motion.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -449,104 +450,114 @@ class _VisitRecordConfirmationScreenState
           title: Text(l10n.visitRecordConfirmationTitle),
         ),
         body: ListView(
-          padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+          // No gutter: the info panel's lines run edge to edge, everything
+          // else carries the 12dp inset.
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
           children: [
-            Text(
-              widget.point.name,
-              style: const TextStyle(
-                fontSize: 22,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              '${widget.point.work.title} / ${widget.point.displayEpisodeLabel}',
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 14,
-                letterSpacing: 0,
-              ),
-            ),
-            const SizedBox(height: 16),
-            AbsorbPointer(
-              absorbing: _saving,
-              child: _ComparisonPanel(
-                photoPath: widget.photoPath,
-                referenceBytes: widget.referenceBytes,
-                referenceImagePath: widget.referenceImagePath,
-                referenceImageUrl: widget.referenceImageUrl,
-              ),
-            ),
-            const SizedBox(height: 16),
-            _InfoPanel(referenceMode: widget.referenceMode),
-            if (_locationStatus != null) ...[
-              const SizedBox(height: 12),
-              PhotoLocationStatusPanel(
-                label: _locationStatus!,
-                loading: _locating,
-                onSkip:
-                    !_saving &&
-                        !_recordCommitUncertain &&
-                        (_locating || _pendingLocation != null)
-                    ? () {
-                        if (_saving || _recordCommitUncertain) return;
-                        setState(() {
-                          _locationRequest += 1;
-                          _locating = false;
-                          _pendingLocation = null;
-                          _locationStatus =
-                              l10n.visitRecordConfirmationLocationSkipped;
-                        });
-                      }
-                    : null,
-              ),
-            ],
-            AppReveal(
-              visible: _savingStage != null,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: AppContentFade(
-                  revision: _savingStage,
-                  child: _SavingProgressPanel(label: _savingStage ?? ''),
+            for (final child in <Widget>[
+              Text(
+                widget.point.name,
+                style: const TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0,
                 ),
               ),
-            ),
-            const SizedBox(height: 18),
-            FilledButton.icon(
-              onPressed: _saving || _locating || _recordCommitUncertain
-                  ? null
-                  : () => _save(completePoint: false),
-              icon: _saving
-                  ? const SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator(strokeWidth: 2),
-                    )
-                  : const Icon(LucideIcons.save, size: 18),
-              label: Text(
-                _saving
-                    ? l10n.visitRecordConfirmationSavingButton
-                    : l10n.visitRecordConfirmationSave,
+              const SizedBox(height: 4),
+              Text(
+                '${widget.point.work.title} / ${widget.point.displayEpisodeLabel}',
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 14,
+                  letterSpacing: 0,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            OutlinedButton.icon(
-              onPressed: _saving || _locating || _recordCommitUncertain
-                  ? null
-                  : () => _save(completePoint: true),
-              icon: const Icon(LucideIcons.circleCheckBig, size: 18),
-              label: Text(l10n.visitRecordConfirmationSaveAndComplete),
-            ),
-            const SizedBox(height: 8),
-            TextButton(
-              onPressed: _saving
-                  ? null
-                  : () {
-                      if (!_saving) Navigator.of(context).pop();
-                    },
-              child: Text(l10n.commonCancel),
-            ),
+              const SizedBox(height: 16),
+              AbsorbPointer(
+                absorbing: _saving,
+                child: _ComparisonPanel(
+                  photoPath: widget.photoPath,
+                  referenceBytes: widget.referenceBytes,
+                  referenceImagePath: widget.referenceImagePath,
+                  referenceImageUrl: widget.referenceImageUrl,
+                ),
+              ),
+              const SizedBox(height: 16),
+              _InfoPanel(referenceMode: widget.referenceMode),
+              if (_locationStatus != null) ...[
+                const SizedBox(height: 12),
+                PhotoLocationStatusPanel(
+                  label: _locationStatus!,
+                  loading: _locating,
+                  onSkip:
+                      !_saving &&
+                          !_recordCommitUncertain &&
+                          (_locating || _pendingLocation != null)
+                      ? () {
+                          if (_saving || _recordCommitUncertain) return;
+                          setState(() {
+                            _locationRequest += 1;
+                            _locating = false;
+                            _pendingLocation = null;
+                            _locationStatus =
+                                l10n.visitRecordConfirmationLocationSkipped;
+                          });
+                        }
+                      : null,
+                ),
+              ],
+              AppReveal(
+                visible: _savingStage != null,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 12),
+                  child: AppContentFade(
+                    revision: _savingStage,
+                    child: _SavingProgressPanel(label: _savingStage ?? ''),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 18),
+              FilledButton.icon(
+                onPressed: _saving || _locating || _recordCommitUncertain
+                    ? null
+                    : () => _save(completePoint: false),
+                icon: _saving
+                    ? const SizedBox(
+                        width: 18,
+                        height: 18,
+                        child: CircularProgressIndicator(strokeWidth: 2),
+                      )
+                    : const Icon(LucideIcons.save, size: 18),
+                label: Text(
+                  _saving
+                      ? l10n.visitRecordConfirmationSavingButton
+                      : l10n.visitRecordConfirmationSave,
+                ),
+              ),
+              const SizedBox(height: 8),
+              OutlinedButton.icon(
+                onPressed: _saving || _locating || _recordCommitUncertain
+                    ? null
+                    : () => _save(completePoint: true),
+                icon: const Icon(LucideIcons.circleCheckBig, size: 18),
+                label: Text(l10n.visitRecordConfirmationSaveAndComplete),
+              ),
+              const SizedBox(height: 8),
+              TextButton(
+                onPressed: _saving
+                    ? null
+                    : () {
+                        if (!_saving) Navigator.of(context).pop();
+                      },
+                child: Text(l10n.commonCancel),
+              ),
+            ])
+              child is _InfoPanel
+                  ? child
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: child,
+                    ),
           ],
         ),
       ),
@@ -783,12 +794,9 @@ class _InfoPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     // A one-row section: 2px ink rule on top, a divider beneath, no frame.
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
       decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: AppColors.ink, width: 2),
-          bottom: BorderSide(color: AppColors.divider),
-        ),
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
       ),
       child: Row(
         children: [

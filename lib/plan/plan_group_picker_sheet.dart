@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_theme.dart';
+import '../widgets/rules.dart';
 import 'pilgrimage_models.dart';
 import 'plan_group_utils.dart';
 import '../l10n/l10n.dart';
@@ -109,10 +110,7 @@ Future<void> showPlanGroupPickerSheet({
                   ),
                   const SizedBox(height: 12),
                   // The areas hang from a 2px ink rule, as ruled rows.
-                  ColoredBox(
-                    color: AppColors.ink,
-                    child: const SizedBox(height: 2),
-                  ),
+                  const SectionRule(),
                   for (final group in pickerGroups)
                     _PlanGroupPickerTile(
                       group: group,
@@ -160,9 +158,7 @@ class _PlanGroupPickerTile extends StatelessWidget {
     final completed =
         group.points.isNotEmpty && group.completedCount >= group.points.length;
     return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.divider)),
-      ),
+      decoration: BoxDecoration(border: Border(bottom: rowDividerSide)),
       child: Material(
         color: selected ? AppColors.accentWash : Colors.transparent,
         clipBehavior: Clip.antiAlias,
@@ -422,10 +418,7 @@ Future<String?> showPlanGroupSelectionSheet({
                     ),
                   ),
                   const SizedBox(height: 12),
-                  ColoredBox(
-                    color: AppColors.ink,
-                    child: const SizedBox(height: 2),
-                  ),
+                  const SectionRule(),
                   Expanded(
                     child: ListView(
                       key: const ValueKey('plan-point-group-options-list'),
@@ -441,7 +434,7 @@ Future<String?> showPlanGroupSelectionSheet({
                     ),
                   ),
                   if (onCreateOption != null) ...[
-                    Divider(height: 1, color: AppColors.ink),
+                    const RowDivider(),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(4, 8, 12, 12),
                       child: Material(
@@ -508,9 +501,7 @@ class _PlanGroupSelectionTileState extends State<_PlanGroupSelectionTile> {
   @override
   Widget build(BuildContext context) {
     return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.divider)),
-      ),
+      decoration: BoxDecoration(border: Border(bottom: rowDividerSide)),
       child: Material(
         color: Colors.transparent,
         clipBehavior: Clip.antiAlias,

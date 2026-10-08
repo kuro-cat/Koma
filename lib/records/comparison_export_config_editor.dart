@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_theme.dart';
 import '../widgets/constrained_menu_anchor.dart';
+import '../widgets/rules.dart';
 import 'comparison_export_config.dart';
 import '../l10n/l10n.dart';
 
@@ -36,7 +37,8 @@ class ComparisonExportConfigEditor extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _SectionLabel(l10n.comparisonExportConfigEditorAppearance),
-        const SizedBox(height: 12),
+        const SectionRule(),
+        const SizedBox(height: 14),
         ComparisonAppearanceSection(
           config: config,
           borderColorOptions: borderColorOptions,
@@ -44,51 +46,51 @@ class ComparisonExportConfigEditor extends StatelessWidget {
           onChanged: onChanged,
         ),
         const SizedBox(height: 18),
-        _FieldLabel(l10n.comparisonExportConfigEditorFormat),
-        const SizedBox(height: 8),
-        ConstrainedMenuAnchor(
-          maxMenuWidth: double.infinity,
-          screenPadding: EdgeInsets.zero,
-          builder: (context, controller, child) => Material(
-            color: AppColors.surface,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.zero,
-              side: BorderSide(color: AppColors.ink),
-            ),
-            child: InkWell(
-              key: const ValueKey('comparison-encoding-selector'),
-              borderRadius: BorderRadius.zero,
-              onTap: () =>
-                  controller.isOpen ? controller.close() : controller.open(),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
-                ),
-                child: Row(
-                  children: [
-                    Expanded(child: Text(config.imageEncoding.label)),
-                    const Icon(LucideIcons.chevronDown, size: 18),
-                  ],
+        ..._inset([
+          _FieldLabel(l10n.comparisonExportConfigEditorFormat),
+          const SizedBox(height: 8),
+          ConstrainedMenuAnchor(
+            maxMenuWidth: double.infinity,
+            screenPadding: EdgeInsets.zero,
+            builder: (context, controller, child) => Material(
+              color: AppColors.surface,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
+                side: BorderSide(color: AppColors.ink),
+              ),
+              child: InkWell(
+                key: const ValueKey('comparison-encoding-selector'),
+                borderRadius: BorderRadius.zero,
+                onTap: () =>
+                    controller.isOpen ? controller.close() : controller.open(),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 8,
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(child: Text(config.imageEncoding.label)),
+                      const Icon(LucideIcons.chevronDown, size: 18),
+                    ],
+                  ),
                 ),
               ),
             ),
+            menuChildrenBuilder: (context, width) => [
+              for (final encoding in ComparisonImageEncoding.values)
+                MenuItemButton(
+                  onPressed: () =>
+                      onChanged(config.copyWith(imageEncoding: encoding)),
+                  leadingIcon: config.imageEncoding == encoding
+                      ? const Icon(LucideIcons.check, size: 18)
+                      : const SizedBox(width: 18),
+                  child: Text(encoding.label),
+                ),
+            ],
           ),
-          menuChildrenBuilder: (context, width) => [
-            for (final encoding in ComparisonImageEncoding.values)
-              MenuItemButton(
-                onPressed: () =>
-                    onChanged(config.copyWith(imageEncoding: encoding)),
-                leadingIcon: config.imageEncoding == encoding
-                    ? const Icon(LucideIcons.check, size: 18)
-                    : const SizedBox(width: 18),
-                child: Text(encoding.label),
-              ),
-          ],
-        ),
+        ]),
         const SizedBox(height: 20),
-        const _SectionRule(),
-        const SizedBox(height: 14),
         ComparisonMetadataSection(
           config: config,
           pilgrimNameController: pilgrimNameController,
@@ -142,7 +144,7 @@ class ComparisonAppearanceSection extends StatelessWidget {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
+      children: _inset([
         Row(
           children: [
             _FieldLabel(l10n.comparisonExportConfigEditorBorderWidth),
@@ -174,7 +176,7 @@ class ComparisonAppearanceSection extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        const _SectionDivider(),
+        const RowDivider(),
         const SizedBox(height: 16),
         _FieldLabel(l10n.comparisonExportConfigEditorBorderColor),
         const SizedBox(height: 10),
@@ -194,7 +196,7 @@ class ComparisonAppearanceSection extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 18),
-        const _SectionDivider(),
+        const RowDivider(),
         const SizedBox(height: 16),
         _ToggleSetting(
           title: l10n.comparisonExportConfigEditorAutoWidthTitle,
@@ -226,7 +228,7 @@ class ComparisonAppearanceSection extends StatelessWidget {
                 ),
         ),
         const SizedBox(height: 18),
-        const _SectionDivider(),
+        const RowDivider(),
         const SizedBox(height: 8),
         _ToggleSetting(
           title: l10n.comparisonExportConfigEditorShowLabelsTitle,
@@ -234,7 +236,7 @@ class ComparisonAppearanceSection extends StatelessWidget {
           value: config.showLabels,
           onChanged: (value) => onChanged(config.copyWith(showLabels: value)),
         ),
-      ],
+      ]),
     );
   }
 }
@@ -433,78 +435,83 @@ class ComparisonMetadataSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _SectionLabel(l10n.comparisonExportConfigEditorMetadata),
+        const SectionRule(),
         const SizedBox(height: 12),
-        _ToggleSetting(
-          title: l10n.comparisonExportConfigEditorShowPilgrimTitle,
-          subtitle: l10n.comparisonExportConfigEditorShowPilgrimSubtitle,
-          value: config.showPilgrimName,
-          switchKey: const ValueKey('comparison-show-pilgrim-name'),
-          onChanged: (value) =>
-              onChanged(config.copyWith(showPilgrimName: value)),
-        ),
-        const SizedBox(height: 10),
-        AnimatedOpacity(
-          duration: const Duration(milliseconds: 160),
-          opacity: config.showPilgrimName ? 1 : 0.45,
-          child: TextFormField(
-            onTapOutside: dismissKeyboardOnTapOutside,
-            key: const ValueKey('comparison-pilgrim-name'),
-            controller: pilgrimNameController,
-            enabled: config.showPilgrimName,
-            decoration: _comparisonTextFieldDecoration(
-              hintText: l10n.comparisonExportConfigEditorPilgrimHint,
-              enabled: config.showPilgrimName,
-            ),
-            textInputAction: TextInputAction.done,
+        ..._inset([
+          _ToggleSetting(
+            title: l10n.comparisonExportConfigEditorShowPilgrimTitle,
+            subtitle: l10n.comparisonExportConfigEditorShowPilgrimSubtitle,
+            value: config.showPilgrimName,
+            switchKey: const ValueKey('comparison-show-pilgrim-name'),
             onChanged: (value) =>
-                onChanged(config.copyWith(pilgrimName: value)),
+                onChanged(config.copyWith(showPilgrimName: value)),
           ),
-        ),
+          const SizedBox(height: 10),
+          AnimatedOpacity(
+            duration: const Duration(milliseconds: 160),
+            opacity: config.showPilgrimName ? 1 : 0.45,
+            child: TextFormField(
+              onTapOutside: dismissKeyboardOnTapOutside,
+              key: const ValueKey('comparison-pilgrim-name'),
+              controller: pilgrimNameController,
+              enabled: config.showPilgrimName,
+              decoration: _comparisonTextFieldDecoration(
+                hintText: l10n.comparisonExportConfigEditorPilgrimHint,
+                enabled: config.showPilgrimName,
+              ),
+              textInputAction: TextInputAction.done,
+              onChanged: (value) =>
+                  onChanged(config.copyWith(pilgrimName: value)),
+            ),
+          ),
+          const SizedBox(height: 20),
+          const RowDivider(),
+          const SizedBox(height: 10),
+          _ToggleSetting(
+            title: l10n.comparisonExportConfigEditorShowGradingTitle,
+            subtitle: l10n.comparisonExportConfigEditorShowGradingSubtitle,
+            value: config.showColorGradingParams,
+            onChanged: (value) =>
+                onChanged(config.copyWith(showColorGradingParams: value)),
+          ),
+        ]),
         const SizedBox(height: 20),
-        const _SectionDivider(),
-        const SizedBox(height: 10),
-        _ToggleSetting(
-          title: l10n.comparisonExportConfigEditorShowGradingTitle,
-          subtitle: l10n.comparisonExportConfigEditorShowGradingSubtitle,
-          value: config.showColorGradingParams,
-          onChanged: (value) =>
-              onChanged(config.copyWith(showColorGradingParams: value)),
-        ),
-        const SizedBox(height: 20),
-        const _SectionRule(),
-        const SizedBox(height: 14),
         _SectionLabel(l10n.comparisonExportConfigEditorContent),
-        const SizedBox(height: 10),
-        LayoutBuilder(
-          builder: (context, constraints) {
-            const spacing = 8.0;
-            final itemWidth = (constraints.maxWidth - spacing * 2) / 3;
-            return Wrap(
-              spacing: spacing,
-              runSpacing: 8,
-              children: [
-                for (final field in _metadataFieldOrder)
-                  SizedBox(
-                    width: itemWidth,
-                    child: _MetadataFilterChip(
-                      field: field,
-                      selected: config.metadataFields.contains(field),
-                      onSelected: () {
-                        final updated = Set<ComparisonMetadataField>.from(
-                          config.metadataFields,
-                        );
-                        if (updated.contains(field)) {
-                          updated.remove(field);
-                        } else {
-                          updated.add(field);
-                        }
-                        onChanged(config.copyWith(metadataFields: updated));
-                      },
+        const SectionRule(),
+        const SizedBox(height: 14),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              const spacing = 8.0;
+              final itemWidth = (constraints.maxWidth - spacing * 2) / 3;
+              return Wrap(
+                spacing: spacing,
+                runSpacing: 8,
+                children: [
+                  for (final field in _metadataFieldOrder)
+                    SizedBox(
+                      width: itemWidth,
+                      child: _MetadataFilterChip(
+                        field: field,
+                        selected: config.metadataFields.contains(field),
+                        onSelected: () {
+                          final updated = Set<ComparisonMetadataField>.from(
+                            config.metadataFields,
+                          );
+                          if (updated.contains(field)) {
+                            updated.remove(field);
+                          } else {
+                            updated.add(field);
+                          }
+                          onChanged(config.copyWith(metadataFields: updated));
+                        },
+                      ),
                     ),
-                  ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ],
     );
@@ -688,6 +695,7 @@ class _ColorOption extends StatelessWidget {
   }
 }
 
+/// A section's name, set above its 2px rule.
 class _SectionLabel extends StatelessWidget {
   const _SectionLabel(this.label);
 
@@ -695,35 +703,31 @@ class _SectionLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      label,
-      style: const TextStyle(
-        fontSize: 18,
-        fontWeight: FontWeight.w600,
-        letterSpacing: 0,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+      child: Text(
+        label,
+        style: const TextStyle(
+          fontSize: 18,
+          fontWeight: FontWeight.w600,
+          letterSpacing: 0,
+        ),
       ),
     );
   }
 }
 
-class _SectionDivider extends StatelessWidget {
-  const _SectionDivider();
-
-  @override
-  Widget build(BuildContext context) {
-    return Divider(height: 1, thickness: 1, color: AppColors.divider);
-  }
-}
-
-/// The 2px ink rule that opens a section.
-class _SectionRule extends StatelessWidget {
-  const _SectionRule();
-
-  @override
-  Widget build(BuildContext context) {
-    return Divider(height: 2, thickness: 2, color: AppColors.ink);
-  }
-}
+// The editor has no gutter, so its rules run edge to edge; everything else
+// carries the 12dp inset.
+List<Widget> _inset(List<Widget> children) => [
+  for (final child in children)
+    child is RowDivider
+        ? child
+        : Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: child,
+          ),
+];
 
 class _FieldLabel extends StatelessWidget {
   const _FieldLabel(this.label);

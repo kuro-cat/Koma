@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_theme.dart';
 import '../data/pilgrimage_repository.dart';
+import '../widgets/rules.dart';
 import '../widgets/snackbar_helper.dart';
 import '../widgets/app_back_button.dart';
 import 'plan_group_actions.dart';
@@ -82,8 +83,9 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
         ),
         body: CustomScrollView(
           slivers: [
+            // No page gutter: the rule and rows run edge to edge.
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+              padding: const EdgeInsets.only(top: 16),
               sliver: SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -93,77 +95,70 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
                       groupCount: groups.length,
                     ),
                     // The areas hang from a 2px ink rule, as ruled rows.
-                    Container(height: 2, color: AppColors.ink),
+                    const SectionRule(),
                   ],
                 ),
               ),
             ),
-            SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
-              sliver: SliverReorderableList(
-                itemCount: groups.length,
-                onReorderItem: _reorderGroups,
-                proxyDecorator: _cleanReorderProxy,
-                itemBuilder: (context, index) {
-                  final group = groups[index];
-                  final pointCount = _plan.points
-                      .where((point) => point.groupId == group.id)
-                      .length;
-                  return Padding(
-                    key: ValueKey(group.id),
-                    padding: EdgeInsets.zero,
-                    child: _PlanGroupCard(
-                      index: index,
-                      group: group,
-                      pointCount: pointCount,
-                      isBusy: _isSaving,
-                      onOpen: _isSaving
-                          ? null
-                          : () => Navigator.of(context).pop(group.id),
-                      onRename: () => _run(
-                        renameAreaChange(
-                          context,
-                          widget.repository,
-                          _plan,
-                          group,
-                        ),
-                        l10n.planGroupManagerRenameFailed,
+            SliverReorderableList(
+              itemCount: groups.length,
+              onReorderItem: _reorderGroups,
+              proxyDecorator: _cleanReorderProxy,
+              itemBuilder: (context, index) {
+                final group = groups[index];
+                final pointCount = _plan.points
+                    .where((point) => point.groupId == group.id)
+                    .length;
+                return Padding(
+                  key: ValueKey(group.id),
+                  padding: EdgeInsets.zero,
+                  child: _PlanGroupCard(
+                    index: index,
+                    group: group,
+                    pointCount: pointCount,
+                    isBusy: _isSaving,
+                    onOpen: _isSaving
+                        ? null
+                        : () => Navigator.of(context).pop(group.id),
+                    onRename: () => _run(
+                      renameAreaChange(
+                        context,
+                        widget.repository,
+                        _plan,
+                        group,
                       ),
-                      onSetAnchor: () => _run(
-                        setAreaAnchorChange(
-                          context,
-                          widget.repository,
-                          _plan,
-                          group,
-                        ),
-                        l10n.planGroupManagerAnchorSaveFailed,
-                      ),
-                      onToggleOrderMode: () => _run(
-                        Future.value(
-                          toggleAreaOrderChange(
-                            widget.repository,
-                            _plan,
-                            group,
-                          ),
-                        ),
-                        l10n.planGroupManagerOrderModeSaveFailed,
-                      ),
-                      onDelete: () => _run(
-                        deleteAreaChange(
-                          context,
-                          widget.repository,
-                          _plan,
-                          group,
-                        ),
-                        l10n.planGroupManagerDeleteFailed,
-                      ),
+                      l10n.planGroupManagerRenameFailed,
                     ),
-                  );
-                },
-              ),
+                    onSetAnchor: () => _run(
+                      setAreaAnchorChange(
+                        context,
+                        widget.repository,
+                        _plan,
+                        group,
+                      ),
+                      l10n.planGroupManagerAnchorSaveFailed,
+                    ),
+                    onToggleOrderMode: () => _run(
+                      Future.value(
+                        toggleAreaOrderChange(widget.repository, _plan, group),
+                      ),
+                      l10n.planGroupManagerOrderModeSaveFailed,
+                    ),
+                    onDelete: () => _run(
+                      deleteAreaChange(
+                        context,
+                        widget.repository,
+                        _plan,
+                        group,
+                      ),
+                      l10n.planGroupManagerDeleteFailed,
+                    ),
+                  ),
+                );
+              },
             ),
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(12, 0, 12, 112),
+              padding: const EdgeInsets.only(bottom: 112),
               sliver: SliverToBoxAdapter(
                 child: _UngroupedGroupCard(
                   pointCount: _ungroupedCount,
@@ -317,7 +312,7 @@ class _PlanGroupManagerHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       key: const ValueKey('plan-group-summary'),
-      padding: const EdgeInsets.fromLTRB(0, 4, 0, 16),
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -380,7 +375,7 @@ class _PlanGroupCard extends StatelessWidget {
         group.anchorName != null && group.anchorName!.trim().isNotEmpty;
     return Material(
       type: MaterialType.transparency,
-      shape: Border(bottom: BorderSide(color: AppColors.divider)),
+      shape: Border(bottom: rowDividerSide),
       child: InkWell(
         onTap: onOpen,
         child: Padding(
@@ -595,7 +590,7 @@ class _UngroupedGroupCard extends StatelessWidget {
     return Material(
       key: const ValueKey('ungrouped'),
       type: MaterialType.transparency,
-      shape: Border(bottom: BorderSide(color: AppColors.divider)),
+      shape: Border(bottom: rowDividerSide),
       child: InkWell(
         onTap: onOpen,
         child: Padding(

@@ -37,6 +37,7 @@ import '../widgets/reference_thumbnail_stub.dart'
     if (dart.library.io) '../widgets/reference_thumbnail_io.dart';
 import '../settings/app_settings_updater.dart';
 import '../l10n/l10n.dart';
+import '../widgets/rules.dart';
 
 class PilgrimageMapScreen extends StatefulWidget {
   const PilgrimageMapScreen({
@@ -1216,11 +1217,13 @@ class _PointCard extends StatelessWidget {
         onNextOverlapPoint != null;
 
     // A panel on the bottom edge, like a sheet: raise with an ink top edge.
+    // No side padding: the pager's divider runs edge to edge, everything
+    // else carries the 12dp inset.
     return Container(
       padding: EdgeInsets.fromLTRB(
-        12,
+        0,
         showOverlapPager ? 6 : 12,
-        12,
+        0,
         12 + bottomInset,
       ),
       decoration: BoxDecoration(
@@ -1231,184 +1234,190 @@ class _PointCard extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (showOverlapPager) ...[
-            MapOverlapPointPager(
-              currentIndex: overlapPointIndex!,
-              total: overlapPointCount!,
-              onPrevious: onPreviousOverlapPoint!,
-              onNext: onNextOverlapPoint!,
-            ),
-            Divider(
-              key: ValueKey('map-overlap-point-divider'),
-              height: 1,
-              color: AppColors.divider,
-            ),
-            const SizedBox(height: 6),
-          ],
-          GestureDetector(
-            key: const ValueKey('map-point-card-content'),
-            behavior: HitTestBehavior.opaque,
-            onTap: onOpenDetail,
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _PointThumbnail(controller: controller, point: point),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: AppContentFade(
-                    revision: (point.id, status),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            _StatusBadge(status: status),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: CopyableText(
-                                key: ValueKey(
-                                  'map-point-card-content-${point.id}',
-                                ),
-                                text: point.name,
-                                copyLabel: l10n.pilgrimageMapCopySpotName,
-                                onTap: onOpenDetail,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0,
+          for (final child in <Widget>[
+            if (showOverlapPager) ...[
+              MapOverlapPointPager(
+                currentIndex: overlapPointIndex!,
+                total: overlapPointCount!,
+                onPrevious: onPreviousOverlapPoint!,
+                onNext: onNextOverlapPoint!,
+              ),
+              const RowDivider(key: ValueKey('map-overlap-point-divider')),
+              const SizedBox(height: 6),
+            ],
+            GestureDetector(
+              key: const ValueKey('map-point-card-content'),
+              behavior: HitTestBehavior.opaque,
+              onTap: onOpenDetail,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _PointThumbnail(controller: controller, point: point),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: AppContentFade(
+                      revision: (point.id, status),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              _StatusBadge(status: status),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: CopyableText(
+                                  key: ValueKey(
+                                    'map-point-card-content-${point.id}',
+                                  ),
+                                  text: point.name,
+                                  copyLabel: l10n.pilgrimageMapCopySpotName,
+                                  onTap: onOpenDetail,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 17,
+                                    fontWeight: FontWeight.w600,
+                                    letterSpacing: 0,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        CopyableText(
-                          text: _metaText,
-                          copyText: _copySummary,
-                          copyLabel: l10n.pilgrimageMapCopySpotInfo,
-                          onTap: onOpenDetail,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 13,
-                            letterSpacing: 0,
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12),
-          LayoutBuilder(
-            builder: (context, constraints) {
-              final navigation = SplitNavigationButton(
-                inAppLabel: point.hasCoordinate
-                    ? l10n.pilgrimageMapNavigate
-                    : l10n.pilgrimageMapCoordinatesMissing,
-                onOpenInAppNavigation: onOpenInAppNavigation,
-                onOpenExternalNavigation: onOpenExternalNavigation,
-                height: _mapPointActionExtent,
-              );
-              final showCurrent =
-                  point.hasCoordinate &&
-                  status != VisitStatus.current &&
-                  status != VisitStatus.completed;
-              final actions = <Widget>[
-                SizedBox(
-                  width: _mapPointPrimaryActionWidth,
-                  height: _mapPointActionExtent,
-                  child: IconButton.outlined(
-                    tooltip: l10n.pilgrimageMapCamera,
-                    onPressed: onOpenCamera,
-                    style: _mapPointIconButtonStyle(
-                      _mapPointPrimaryActionWidth,
-                    ),
-                    icon: SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          const Center(child: Icon(LucideIcons.camera)),
-                          if (recordCount > 0)
-                            Positioned(
-                              top: -5,
-                              right: -5,
-                              child: _MapRecordBadge(stacked: recordCount > 1),
+                          const SizedBox(height: 4),
+                          CopyableText(
+                            text: _metaText,
+                            copyText: _copySummary,
+                            copyLabel: l10n.pilgrimageMapCopySpotInfo,
+                            onTap: onOpenDetail,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 13,
+                              letterSpacing: 0,
                             ),
+                          ),
                         ],
                       ),
                     ),
                   ),
-                ),
-                const SizedBox(width: 4),
-                SizedBox(
-                  width: _mapPointPrimaryActionWidth,
+                ],
+              ),
+            ),
+            const SizedBox(height: 12),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final navigation = SplitNavigationButton(
+                  inAppLabel: point.hasCoordinate
+                      ? l10n.pilgrimageMapNavigate
+                      : l10n.pilgrimageMapCoordinatesMissing,
+                  onOpenInAppNavigation: onOpenInAppNavigation,
+                  onOpenExternalNavigation: onOpenExternalNavigation,
                   height: _mapPointActionExtent,
-                  child: IconButton.outlined(
-                    tooltip: status == VisitStatus.completed
-                        ? l10n.pilgrimageMapUndoVisit
-                        : l10n.pilgrimageMapMarkComplete,
-                    onPressed: onComplete,
-                    style: _mapPointIconButtonStyle(
-                      _mapPointPrimaryActionWidth,
-                    ),
-                    icon: Icon(
-                      status == VisitStatus.completed
-                          ? LucideIcons.undo2
-                          : LucideIcons.circleCheckBig,
-                    ),
-                  ),
-                ),
-                if (showCurrent) ...[
-                  const SizedBox(width: 4),
+                );
+                final showCurrent =
+                    point.hasCoordinate &&
+                    status != VisitStatus.current &&
+                    status != VisitStatus.completed;
+                final actions = <Widget>[
                   SizedBox(
-                    width: _mapPointActionExtent,
+                    width: _mapPointPrimaryActionWidth,
                     height: _mapPointActionExtent,
                     child: IconButton.outlined(
-                      tooltip: l10n.pilgrimageMapSetCurrent,
-                      onPressed: onSetCurrent,
-                      style: _mapPointIconButtonStyle(_mapPointActionExtent),
-                      icon: const Icon(LucideIcons.flag),
+                      tooltip: l10n.pilgrimageMapCamera,
+                      onPressed: onOpenCamera,
+                      style: _mapPointIconButtonStyle(
+                        _mapPointPrimaryActionWidth,
+                      ),
+                      icon: SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: Stack(
+                          clipBehavior: Clip.none,
+                          children: [
+                            const Center(child: Icon(LucideIcons.camera)),
+                            if (recordCount > 0)
+                              Positioned(
+                                top: -5,
+                                right: -5,
+                                child: _MapRecordBadge(
+                                  stacked: recordCount > 1,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ],
-              ];
-              final minimumWidth =
-                  _mapPointActionExtent * 2 +
-                  1 +
-                  _mapPointPrimaryActionWidth * 2 +
-                  8 +
-                  (showCurrent ? _mapPointActionExtent + 4 : 0);
-              if (constraints.maxWidth < minimumWidth) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    navigation,
-                    const SizedBox(height: 8),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: actions,
+                  const SizedBox(width: 4),
+                  SizedBox(
+                    width: _mapPointPrimaryActionWidth,
+                    height: _mapPointActionExtent,
+                    child: IconButton.outlined(
+                      tooltip: status == VisitStatus.completed
+                          ? l10n.pilgrimageMapUndoVisit
+                          : l10n.pilgrimageMapMarkComplete,
+                      onPressed: onComplete,
+                      style: _mapPointIconButtonStyle(
+                        _mapPointPrimaryActionWidth,
+                      ),
+                      icon: Icon(
+                        status == VisitStatus.completed
+                            ? LucideIcons.undo2
+                            : LucideIcons.circleCheckBig,
+                      ),
+                    ),
+                  ),
+                  if (showCurrent) ...[
+                    const SizedBox(width: 4),
+                    SizedBox(
+                      width: _mapPointActionExtent,
+                      height: _mapPointActionExtent,
+                      child: IconButton.outlined(
+                        tooltip: l10n.pilgrimageMapSetCurrent,
+                        onPressed: onSetCurrent,
+                        style: _mapPointIconButtonStyle(_mapPointActionExtent),
+                        icon: const Icon(LucideIcons.flag),
+                      ),
                     ),
                   ],
+                ];
+                final minimumWidth =
+                    _mapPointActionExtent * 2 +
+                    1 +
+                    _mapPointPrimaryActionWidth * 2 +
+                    8 +
+                    (showCurrent ? _mapPointActionExtent + 4 : 0);
+                if (constraints.maxWidth < minimumWidth) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      navigation,
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: actions,
+                      ),
+                    ],
+                  );
+                }
+                return Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Expanded(child: navigation),
+                    const SizedBox(width: 4),
+                    ...actions,
+                  ],
                 );
-              }
-              return Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(child: navigation),
-                  const SizedBox(width: 4),
-                  ...actions,
-                ],
-              );
-            },
-          ),
+              },
+            ),
+          ])
+            child is RowDivider
+                ? child
+                : Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: child,
+                  ),
         ],
       ),
     );

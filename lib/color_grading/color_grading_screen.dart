@@ -6,6 +6,7 @@ import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../data/bounded_image_decoder.dart';
+import '../widgets/rules.dart';
 import '../widgets/bounded_image.dart';
 
 import '../app_theme.dart';
@@ -383,22 +384,29 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
     }
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+      // No gutter: section rules run edge to edge, content insets itself.
+      padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
       children: [
-        _StackedPreview(
-          referenceBytes: _referenceBytes,
-          referenceError: _referenceError,
-          capturedBytes: _capturedBytes!,
-          activeParams: _activeParams,
-          showOriginal: _showOriginal || _targetParams == null,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: _StackedPreview(
+            referenceBytes: _referenceBytes,
+            referenceError: _referenceError,
+            capturedBytes: _capturedBytes!,
+            activeParams: _activeParams,
+            showOriginal: _showOriginal || _targetParams == null,
+          ),
         ),
         const SizedBox(height: 12),
-        _OriginalHoldButton(
-          enabled: _targetParams != null,
-          showOriginal: _showOriginal,
-          onChanged: (showOriginal) {
-            setState(() => _showOriginal = showOriginal);
-          },
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: _OriginalHoldButton(
+            enabled: _targetParams != null,
+            showOriginal: _showOriginal,
+            onChanged: (showOriginal) {
+              setState(() => _showOriginal = showOriginal);
+            },
+          ),
         ),
         const SizedBox(height: 12),
         _ModeSelector(
@@ -424,17 +432,22 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
           ),
         ],
         const SizedBox(height: 12),
-        FilledButton.icon(
-          onPressed: _matching ? null : _runAutoMatch,
-          icon: _matching
-              ? const SizedBox(
-                  width: 16,
-                  height: 16,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                )
-              : const Icon(LucideIcons.wandSparkles, size: 18),
-          label: Text(
-            _matching ? l10n.colorGradingMatching : l10n.colorGradingAutoMatch,
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: FilledButton.icon(
+            onPressed: _matching ? null : _runAutoMatch,
+            icon: _matching
+                ? const SizedBox(
+                    width: 16,
+                    height: 16,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
+                : const Icon(LucideIcons.wandSparkles, size: 18),
+            label: Text(
+              _matching
+                  ? l10n.colorGradingMatching
+                  : l10n.colorGradingAutoMatch,
+            ),
           ),
         ),
         if (_targetParams != null) ...[
@@ -700,10 +713,8 @@ class _ModeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 12),
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -774,10 +785,8 @@ class _ScorePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -860,10 +869,8 @@ class _SavePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

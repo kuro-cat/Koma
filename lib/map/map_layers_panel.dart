@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../app_theme.dart';
+import '../widgets/rules.dart';
 import '../plan/pilgrimage_models.dart';
 import '../l10n/l10n.dart';
 
@@ -200,12 +201,12 @@ class _MapLayersPanelState extends State<MapLayersPanel> {
             ),
           ),
         ),
-        ColoredBox(color: AppColors.ink, child: const SizedBox(height: 2)),
+        const SectionRule(),
         for (final toggle in widget.toggles)
           SwitchListTile(
             key: ValueKey('map-layer-toggle-${toggle.id}'),
             contentPadding: const EdgeInsets.symmetric(horizontal: 12),
-            shape: Border(bottom: BorderSide(color: AppColors.divider)),
+            shape: Border(bottom: rowDividerSide),
             value: _values[toggle.id] ?? toggle.value,
             onChanged: (value) => _change(toggle, value),
             secondary: Icon(toggle.icon, color: AppColors.textSecondary),

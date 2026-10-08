@@ -19,6 +19,7 @@ import '../data/user_reference_image_stub.dart'
     if (dart.library.io) '../data/user_reference_image_io.dart';
 import '../map/map_tile_config.dart';
 import '../map/map_marker_scale.dart';
+import '../widgets/rules.dart';
 import '../widgets/snackbar_helper.dart';
 import '../widgets/reference_thumbnail_stub.dart'
     if (dart.library.io) '../widgets/reference_thumbnail_io.dart';
@@ -182,7 +183,7 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
         ),
         body: ListView(
           // Sections run full width and inset their own rows 12dp.
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+          padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
           children: [
             _FindSpotsPanel(
               enabled: currentPlan != null,
@@ -190,7 +191,7 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
                   ? null
                   : () => _openAnitabiMapImport(context, currentPlan),
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
             _AddPointPanel(
               manualEnabled: currentPlan != null,
               quickManualEnabled:
@@ -592,7 +593,7 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
           ),
         ),
         body: ListView(
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+          padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
           children: [
             _FormSection(
               children: [
@@ -669,14 +670,18 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
                     });
                   },
                 ),
-                if (_results.isEmpty && _error == null) ...[
-                  const SizedBox(height: 16),
-                  Divider(height: 1, color: AppColors.divider),
-                  const SizedBox(height: 12),
-                  const _BangumiSearchHintContent(),
-                ],
               ],
             ),
+            if (_results.isEmpty && _error == null) ...[
+              // Out of the section's inset, so the divider runs edge to edge.
+              const SizedBox(height: 12),
+              const RowDivider(),
+              const SizedBox(height: 12),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 12),
+                child: _BangumiSearchHintContent(),
+              ),
+            ],
             const SizedBox(height: 12),
             if (_error != null)
               _MessageCard(
@@ -686,11 +691,7 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
             else if (_results.isNotEmpty)
               // Results hang from an ink rule as ruled rows.
               DecoratedBox(
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: AppColors.ink, width: 2),
-                  ),
-                ),
+                decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
                 child: Column(
                   children: [
                     for (final work in _results)
@@ -753,7 +754,17 @@ class _BangumiTypeFilter extends StatelessWidget {
           for (var index = 0; index < _types.length; index++) ...[
             Expanded(child: _buildTypeItem(_types[index])),
             if (index < _types.length - 1)
-              VerticalDivider(width: 1, thickness: 1, color: AppColors.ink),
+              // Two chosen types side by side keep a paper seam, so they
+              // read as two choices rather than one block.
+              VerticalDivider(
+                width: 1,
+                thickness: 1,
+                color:
+                    selectedTypes.contains(_types[index]) &&
+                        selectedTypes.contains(_types[index + 1])
+                    ? AppColors.background
+                    : AppColors.ink,
+              ),
           ],
         ],
       ),
@@ -987,7 +998,7 @@ class _AnitabiLinkInputScreenState extends State<AnitabiLinkInputScreen> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
+          padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -1003,9 +1014,7 @@ class _AnitabiLinkInputScreenState extends State<AnitabiLinkInputScreen> {
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-              ),
+              decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1121,9 +1130,7 @@ class _LinkExampleCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -1427,7 +1434,7 @@ class ManualWorkFormScreenState extends State<ManualWorkFormScreen> {
         body: Form(
           key: _formKey,
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+            padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
             children: [
               _FormSection(
                 children: [
@@ -1583,91 +1590,99 @@ class _ManualPointFillingGuideSheet extends StatelessWidget {
       key: const ValueKey('manual-point-guide-panel'),
       constraints: BoxConstraints(maxWidth: 560, maxHeight: maxHeight),
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        // Vertical only: the footer divider runs the dialog's full width.
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(
-                  LucideIcons.mapPinPlus,
-                  color: AppColors.textPrimary,
-                  size: 24,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    l10n.addPointsPointGuideTitle,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        LucideIcons.mapPinPlus,
+                        color: AppColors.textPrimary,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          l10n.addPointsPointGuideTitle,
+                          style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: l10n.commonClose,
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(LucideIcons.x, size: 20),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.addPointsPointGuideIntro,
                     style: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                      color: AppColors.textSecondary,
+                      fontSize: 13,
+                      height: 1.45,
                       letterSpacing: 0,
                     ),
                   ),
-                ),
-                IconButton(
-                  tooltip: l10n.commonClose,
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(LucideIcons.x, size: 20),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              l10n.addPointsPointGuideIntro,
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 13,
-                height: 1.45,
-                letterSpacing: 0,
+                  const SizedBox(height: 18),
+                  _FillingGuideItem(
+                    index: 1,
+                    title: l10n.addPointsWorkLabel,
+                    badge: l10n.addPointsBadgeRequired,
+                    body: l10n.addPointsPointGuideWorkBody,
+                    example: l10n.addPointsGuideWorkExample,
+                  ),
+                  _FillingGuideItem(
+                    index: 2,
+                    title: l10n.addPointsGuideNameLocationTitle,
+                    badge: l10n.addPointsBadgeRequired,
+                    body: l10n.addPointsGuideNameLocationBody,
+                    example: l10n.addPointsGuideNameLocationExample,
+                  ),
+                  _FillingGuideItem(
+                    index: 3,
+                    title: l10n.addPointsGuideSceneSourceTitle,
+                    badge: l10n.addPointsBadgeRequired,
+                    body: l10n.addPointsGuideSceneSourceBody,
+                    example: l10n.addPointsGuideSceneSourceExample,
+                  ),
+                  _FillingGuideItem(
+                    index: 4,
+                    title: l10n.addPointsNotesLabel,
+                    badge: l10n.addPointsBadgeOptional,
+                    body: l10n.addPointsGuideNotesBody,
+                    example: l10n.addPointsGuideNotesExample,
+                  ),
+                  _FillingGuideItem(
+                    index: 5,
+                    title: l10n.addPointsGuideCoordinateImageTitle,
+                    badge: l10n.addPointsBadgeCoordinatesRequired,
+                    body: l10n.addPointsGuideCoordinateImageBody,
+                    example: '35.008900, 135.771100',
+                    isLast: true,
+                  ),
+                  const SizedBox(height: 4),
+                ],
               ),
             ),
-            const SizedBox(height: 18),
-            _FillingGuideItem(
-              index: 1,
-              title: l10n.addPointsWorkLabel,
-              badge: l10n.addPointsBadgeRequired,
-              body: l10n.addPointsPointGuideWorkBody,
-              example: l10n.addPointsGuideWorkExample,
-            ),
-            _FillingGuideItem(
-              index: 2,
-              title: l10n.addPointsGuideNameLocationTitle,
-              badge: l10n.addPointsBadgeRequired,
-              body: l10n.addPointsGuideNameLocationBody,
-              example: l10n.addPointsGuideNameLocationExample,
-            ),
-            _FillingGuideItem(
-              index: 3,
-              title: l10n.addPointsGuideSceneSourceTitle,
-              badge: l10n.addPointsBadgeRequired,
-              body: l10n.addPointsGuideSceneSourceBody,
-              example: l10n.addPointsGuideSceneSourceExample,
-            ),
-            _FillingGuideItem(
-              index: 4,
-              title: l10n.addPointsNotesLabel,
-              badge: l10n.addPointsBadgeOptional,
-              body: l10n.addPointsGuideNotesBody,
-              example: l10n.addPointsGuideNotesExample,
-            ),
-            _FillingGuideItem(
-              index: 5,
-              title: l10n.addPointsGuideCoordinateImageTitle,
-              badge: l10n.addPointsBadgeCoordinatesRequired,
-              body: l10n.addPointsGuideCoordinateImageBody,
-              example: '35.008900, 135.771100',
-              isLast: true,
-            ),
-            const SizedBox(height: 4),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.only(top: 12),
-              decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: AppColors.divider)),
-              ),
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+              decoration: BoxDecoration(border: Border(top: rowDividerSide)),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1692,11 +1707,14 @@ class _ManualPointFillingGuideSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(l10n.addPointsGuideGotIt),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(l10n.addPointsGuideGotIt),
+                ),
               ),
             ),
           ],
@@ -1718,84 +1736,92 @@ class _ManualWorkFillingGuideSheet extends StatelessWidget {
       key: const ValueKey('manual-work-guide-panel'),
       constraints: BoxConstraints(maxWidth: 560, maxHeight: maxHeight),
       child: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        // Vertical only: the footer divider runs the dialog's full width.
+        padding: const EdgeInsets.symmetric(vertical: 20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Icon(
-                  LucideIcons.bookOpen,
-                  color: AppColors.textPrimary,
-                  size: 24,
-                ),
-                const SizedBox(width: 10),
-                Expanded(
-                  child: Text(
-                    l10n.addPointsWorkGuideTitle,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Icon(
+                        LucideIcons.bookOpen,
+                        color: AppColors.textPrimary,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Text(
+                          l10n.addPointsWorkGuideTitle,
+                          style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0,
+                          ),
+                        ),
+                      ),
+                      IconButton(
+                        tooltip: l10n.commonClose,
+                        onPressed: () => Navigator.of(context).pop(),
+                        icon: const Icon(LucideIcons.x, size: 20),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    l10n.addPointsWorkGuideIntro,
                     style: TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
+                      color: AppColors.textSecondary,
+                      fontSize: 13,
+                      height: 1.45,
                       letterSpacing: 0,
                     ),
                   ),
-                ),
-                IconButton(
-                  tooltip: l10n.commonClose,
-                  onPressed: () => Navigator.of(context).pop(),
-                  icon: const Icon(LucideIcons.x, size: 20),
-                ),
-              ],
-            ),
-            const SizedBox(height: 8),
-            Text(
-              l10n.addPointsWorkGuideIntro,
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 13,
-                height: 1.45,
-                letterSpacing: 0,
+                  const SizedBox(height: 18),
+                  _FillingGuideItem(
+                    index: 1,
+                    title: l10n.addPointsWorkNameLabel,
+                    badge: l10n.addPointsBadgeRequired,
+                    body: l10n.addPointsWorkGuideNameBody,
+                    example: l10n.addPointsGuideWorkExample,
+                  ),
+                  _FillingGuideItem(
+                    index: 2,
+                    title: l10n.addPointsOriginalTitleLabel,
+                    badge: l10n.addPointsBadgeOptional,
+                    body: l10n.addPointsWorkGuideOriginalTitleBody,
+                    example: 'けいおん！',
+                  ),
+                  _FillingGuideItem(
+                    index: 3,
+                    title: l10n.addPointsWorkTypeLabel,
+                    badge: l10n.addPointsBadgeRequired,
+                    body: l10n.addPointsWorkGuideTypeBody,
+                    example: l10n.addPointsGuideWorkTypeExample,
+                  ),
+                  _FillingGuideItem(
+                    index: 4,
+                    title: l10n.addPointsMainRegionLabel,
+                    badge: l10n.addPointsBadgeOptional,
+                    body: l10n.addPointsWorkGuideRegionBody,
+                    example: l10n.addPointsWorkGuideRegionExample,
+                    isLast: true,
+                  ),
+                  const SizedBox(height: 4),
+                ],
               ),
             ),
-            const SizedBox(height: 18),
-            _FillingGuideItem(
-              index: 1,
-              title: l10n.addPointsWorkNameLabel,
-              badge: l10n.addPointsBadgeRequired,
-              body: l10n.addPointsWorkGuideNameBody,
-              example: l10n.addPointsGuideWorkExample,
-            ),
-            _FillingGuideItem(
-              index: 2,
-              title: l10n.addPointsOriginalTitleLabel,
-              badge: l10n.addPointsBadgeOptional,
-              body: l10n.addPointsWorkGuideOriginalTitleBody,
-              example: 'けいおん！',
-            ),
-            _FillingGuideItem(
-              index: 3,
-              title: l10n.addPointsWorkTypeLabel,
-              badge: l10n.addPointsBadgeRequired,
-              body: l10n.addPointsWorkGuideTypeBody,
-              example: l10n.addPointsGuideWorkTypeExample,
-            ),
-            _FillingGuideItem(
-              index: 4,
-              title: l10n.addPointsMainRegionLabel,
-              badge: l10n.addPointsBadgeOptional,
-              body: l10n.addPointsWorkGuideRegionBody,
-              example: l10n.addPointsWorkGuideRegionExample,
-              isLast: true,
-            ),
-            const SizedBox(height: 4),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.only(top: 12),
-              decoration: BoxDecoration(
-                border: Border(top: BorderSide(color: AppColors.divider)),
-              ),
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+              decoration: BoxDecoration(border: Border(top: rowDividerSide)),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1820,11 +1846,14 @@ class _ManualWorkFillingGuideSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton(
-                onPressed: () => Navigator.of(context).pop(),
-                child: Text(l10n.addPointsGuideGotIt),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SizedBox(
+                width: double.infinity,
+                child: FilledButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(l10n.addPointsGuideGotIt),
+                ),
               ),
             ),
           ],
@@ -2268,7 +2297,7 @@ class _QuickManualPointFormScreenState
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+          padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
           children: [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -3002,7 +3031,7 @@ class _ManualPointFormScreenState extends State<_ManualPointFormScreen> {
         body: Form(
           key: _formKey,
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+            padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
             children: [
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -3749,9 +3778,7 @@ class _LinkedWorksPanel extends StatelessWidget {
 
     return Container(
       clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
       child: Column(
         children: [
           Material(
@@ -3844,7 +3871,7 @@ class _LinkedWorksPanel extends StatelessWidget {
               ),
             ),
           ),
-          Divider(height: 1, color: AppColors.divider),
+          const RowDivider(),
           SizedBox(
             height: 60,
             child: Row(
@@ -3859,13 +3886,7 @@ class _LinkedWorksPanel extends StatelessWidget {
                     onTap: onBangumi,
                   ),
                 ),
-                VerticalDivider(
-                  width: 1,
-                  indent: 12,
-                  endIndent: 12,
-                  thickness: 1,
-                  color: AppColors.divider,
-                ),
+                VerticalDivider(width: 1, color: AppColors.divider),
                 Expanded(
                   child: _WorkCreationAction(
                     key: const ValueKey('add-points-manual-work'),
@@ -4048,9 +4069,7 @@ class _ManualReferenceImagePicker extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -4178,9 +4197,7 @@ class _WorkResultCardState extends State<_WorkResultCard> {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.divider)),
-      ),
+      decoration: BoxDecoration(border: Border(bottom: rowDividerSide)),
       child: Row(
         children: [
           PilgrimageWorkCover(work: work),
@@ -4415,9 +4432,7 @@ class _FormSection extends StatelessWidget {
     // A section is a 2px ink rule over the page ground, not a box.
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
       child: Column(children: children),
     );
   }
@@ -4442,7 +4457,7 @@ class _FindSpotsPanel extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.zero,
             // The recommended path sits on the wash under an ink rule.
-            border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
+            border: Border(top: sectionRuleSide),
           ),
           child: Column(
             children: [
@@ -4548,38 +4563,35 @@ class _AddPointPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 10, 12, 4),
-            child: Row(children: [CapsLabel(l10n.addPointsOwnSpotsSection)]),
-          ),
-          _PointCreationAction(
-            key: const ValueKey('add-points-quick-manual-point'),
-            icon: LucideIcons.mapPinPlus,
-            title: l10n.addPointsQuickManualAddPoint,
-            subtitle: quickManualEnabled
-                ? l10n.addPointsQuickManualSubtitle
-                : l10n.addPointsAddWorkFirst,
-            enabled: quickManualEnabled,
-            onTap: onQuickManual,
-          ),
-          Divider(height: 1, color: AppColors.divider),
-          _PointCreationAction(
-            key: const ValueKey('add-points-manual-point'),
-            icon: LucideIcons.mapPinPen,
-            title: l10n.addPointsManualAddPoint,
-            subtitle: l10n.addPointsManualAddPointSubtitle,
-            enabled: manualEnabled,
-            onTap: onManual,
-          ),
-        ],
-      ),
+    // The caps name sits over the section rule; rows run edge to edge.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
+          child: CapsLabel(l10n.addPointsOwnSpotsSection),
+        ),
+        const SectionRule(),
+        _PointCreationAction(
+          key: const ValueKey('add-points-quick-manual-point'),
+          icon: LucideIcons.mapPinPlus,
+          title: l10n.addPointsQuickManualAddPoint,
+          subtitle: quickManualEnabled
+              ? l10n.addPointsQuickManualSubtitle
+              : l10n.addPointsAddWorkFirst,
+          enabled: quickManualEnabled,
+          onTap: onQuickManual,
+        ),
+        const RowDivider(),
+        _PointCreationAction(
+          key: const ValueKey('add-points-manual-point'),
+          icon: LucideIcons.mapPinPen,
+          title: l10n.addPointsManualAddPoint,
+          subtitle: l10n.addPointsManualAddPointSubtitle,
+          enabled: manualEnabled,
+          onTap: onManual,
+        ),
+      ],
     );
   }
 }

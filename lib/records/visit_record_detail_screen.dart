@@ -17,6 +17,7 @@ import '../plan/plan_group_utils.dart';
 import '../plan/reference_image_status.dart';
 import '../point_detail/point_detail_sheet.dart';
 import '../settings/app_settings_updater.dart';
+import '../widgets/rules.dart';
 import '../widgets/copyable_text.dart';
 import '../widgets/confirm_action_dialog.dart';
 import '../widgets/app_back_button.dart';
@@ -87,7 +88,7 @@ class _VisitRecordDetailScreenState extends State<VisitRecordDetailScreen> {
       body: ListView(
         key: const ValueKey('record-detail-scroll-view'),
         // Sections run full width and pad their own rows 12dp.
-        padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+        padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -821,9 +822,7 @@ class _RecordInfoDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
       child: Column(
         children: [
           InkWell(
@@ -871,25 +870,16 @@ class _RecordInfoDashboard extends StatelessWidget {
             ),
           ),
           for (final child in children) ...[
-            const _DashboardBorder(),
+            const RowDivider(),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
               child: child,
             ),
           ],
-          const _DashboardBorder(),
+          const RowDivider(),
         ],
       ),
     );
-  }
-}
-
-class _DashboardBorder extends StatelessWidget {
-  const _DashboardBorder();
-
-  @override
-  Widget build(BuildContext context) {
-    return AppHairline(color: AppColors.divider);
   }
 }
 
@@ -908,9 +898,7 @@ class _RecordActionPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     // A section: 2px ink rule on top, actions split by 1px dividers.
     return Container(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
       child: Column(
         children: [
           SizedBox(
@@ -926,7 +914,7 @@ class _RecordActionPanel extends StatelessWidget {
                     onTap: onAlign,
                   ),
                 ),
-                VerticalDivider(width: 1, color: AppColors.divider),
+                const VerticalDivider(width: 1),
                 Expanded(
                   child: _RecordAction(
                     icon: LucideIcons.wandSparkles,
@@ -938,14 +926,14 @@ class _RecordActionPanel extends StatelessWidget {
               ],
             ),
           ),
-          Divider(height: 1, color: AppColors.divider),
+          const RowDivider(),
           _RecordAction(
             icon: LucideIcons.share2,
             title: l10n.visitRecordDetailExportTitle,
             subtitle: l10n.visitRecordDetailExportSubtitle,
             onTap: onExportComparison,
           ),
-          Divider(height: 1, color: AppColors.divider),
+          const RowDivider(),
         ],
       ),
     );

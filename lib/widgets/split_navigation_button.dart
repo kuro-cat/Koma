@@ -70,13 +70,11 @@ class SplitNavigationButton extends StatelessWidget {
                 ),
               ),
             ),
-            Center(
-              child: Container(
-                key: dividerKey,
-                width: 1,
-                height: (height - 16).clamp(12, 28),
-                color: foregroundColor.withValues(alpha: 0.38),
-              ),
+            // A full-height seam between the two halves.
+            ColoredBox(
+              key: dividerKey,
+              color: AppColors.divider,
+              child: const SizedBox(width: 1),
             ),
             Expanded(
               child: _SplitNavHalf(

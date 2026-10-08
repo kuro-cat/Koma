@@ -5,6 +5,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 import '../app_theme.dart';
 import '../data/pilgrimage_repository.dart';
 import '../l10n/l10n.dart';
+import '../widgets/rules.dart';
 import '../widgets/app_back_button.dart';
 import '../widgets/app_status_banner.dart';
 import 'plan_import_package.dart';
@@ -331,67 +332,77 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
           title: Text(l10n.planLinkImportTitle),
         ),
         body: ListView(
-          padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+          // No gutter: the asset list's rule and rows run edge to edge;
+          // everything else carries the 12dp inset.
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
           children: [
-            Text(
-              l10n.planLinkImportIntro,
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 13,
-                height: 1.45,
-                letterSpacing: 0,
-              ),
-            ),
-            const SizedBox(height: 14),
-            if (!available) ...[
-              AppStatusBanner(
-                kind: AppStatusBannerKind.warning,
-                title: l10n.planLinkImportWebUnavailableTitle,
-                subtitle: l10n.planLinkImportWebUnavailableSubtitle,
-              ),
-              const SizedBox(height: 14),
-            ],
-            TextField(
-              key: const ValueKey('plan-link-input'),
-              controller: _link,
-              enabled: available && !_busy,
-              keyboardType: TextInputType.url,
-              autocorrect: false,
-              enableSuggestions: false,
-              textInputAction: TextInputAction.go,
-              onSubmitted: (_) => _start(),
-              decoration: InputDecoration(
-                labelText: l10n.planLinkImportLinkLabel,
-                hintText: 'https://github.com/…/releases/…',
-                suffixIcon: IconButton(
-                  key: const ValueKey('plan-link-paste'),
-                  tooltip: l10n.planLinkImportPaste,
-                  onPressed: available && !_busy ? _paste : null,
-                  icon: const Icon(LucideIcons.clipboardPaste),
+            for (final child in <Widget>[
+              Text(
+                l10n.planLinkImportIntro,
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 13,
+                  height: 1.45,
+                  letterSpacing: 0,
                 ),
               ),
-            ),
-            const SizedBox(height: 12),
-            FilledButton.icon(
-              key: const ValueKey('plan-link-start'),
-              onPressed: available && !_busy && _link.text.trim().isNotEmpty
-                  ? _start
-                  : null,
-              icon: const Icon(LucideIcons.download),
-              label: Text(l10n.planLinkImportReadLink),
-            ),
-            const SizedBox(height: 16),
-            ..._status(),
-            const SizedBox(height: 16),
-            Text(
-              l10n.planLinkImportHelp,
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 12,
-                height: 1.5,
-                letterSpacing: 0,
+              const SizedBox(height: 14),
+              if (!available) ...[
+                AppStatusBanner(
+                  kind: AppStatusBannerKind.warning,
+                  title: l10n.planLinkImportWebUnavailableTitle,
+                  subtitle: l10n.planLinkImportWebUnavailableSubtitle,
+                ),
+                const SizedBox(height: 14),
+              ],
+              TextField(
+                key: const ValueKey('plan-link-input'),
+                controller: _link,
+                enabled: available && !_busy,
+                keyboardType: TextInputType.url,
+                autocorrect: false,
+                enableSuggestions: false,
+                textInputAction: TextInputAction.go,
+                onSubmitted: (_) => _start(),
+                decoration: InputDecoration(
+                  labelText: l10n.planLinkImportLinkLabel,
+                  hintText: 'https://github.com/…/releases/…',
+                  suffixIcon: IconButton(
+                    key: const ValueKey('plan-link-paste'),
+                    tooltip: l10n.planLinkImportPaste,
+                    onPressed: available && !_busy ? _paste : null,
+                    icon: const Icon(LucideIcons.clipboardPaste),
+                  ),
+                ),
               ),
-            ),
+              const SizedBox(height: 12),
+              FilledButton.icon(
+                key: const ValueKey('plan-link-start'),
+                onPressed: available && !_busy && _link.text.trim().isNotEmpty
+                    ? _start
+                    : null,
+                icon: const Icon(LucideIcons.download),
+                label: Text(l10n.planLinkImportReadLink),
+              ),
+              const SizedBox(height: 16),
+              ..._status(),
+              const SizedBox(height: 16),
+              Text(
+                l10n.planLinkImportHelp,
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 12,
+                  height: 1.5,
+                  letterSpacing: 0,
+                ),
+              ),
+            ])
+              child is SectionRule || child is DecoratedBox
+                  ? child
+                  : Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: child,
+                    ),
           ],
         ),
       ),
@@ -441,18 +452,13 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          // Ruled rows under an ink rule; the page gutter is their inset.
-          ColoredBox(
-            color: AppColors.ink,
-            child: const SizedBox(height: 2, width: double.infinity),
-          ),
+          // Ruled rows under an ink rule, edge to edge, inset 12dp.
+          const SectionRule(),
           for (var i = 0; i < _assets.length; i++)
             DecoratedBox(
-              decoration: BoxDecoration(
-                border: Border(bottom: BorderSide(color: AppColors.divider)),
-              ),
+              decoration: BoxDecoration(border: Border(bottom: rowDividerSide)),
               child: ListTile(
-                contentPadding: EdgeInsets.zero,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                 key: ValueKey('plan-link-asset-$i'),
                 leading: Icon(
                   _assets[i].isPlan

@@ -22,11 +22,13 @@ import '../point_detail/point_detail_sheet.dart';
 import '../utils/selected_item_order.dart';
 import '../widgets/confirm_action_dialog.dart';
 import '../widgets/input_dialog.dart';
+import '../widgets/rules.dart';
 import '../widgets/snackbar_helper.dart';
 import '../widgets/app_back_button.dart';
 import 'pilgrimage_models.dart';
 import 'plan_group_utils.dart';
 import '../settings/app_settings_updater.dart';
+import '../widgets/menu_back_scope.dart';
 
 class NearestGroupAssignScreen extends StatefulWidget {
   const NearestGroupAssignScreen({
@@ -1018,7 +1020,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
               RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
           ),
-          builder: (context, controller, child) {
+          builder: closesOnBack((context, controller, child) {
             return Material(
               color: AppColors.surface,
               shape: RoundedRectangleBorder(
@@ -1069,7 +1071,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                 ),
               ),
             );
-          },
+          }),
           menuChildren: [
             SizedBox(
               key: const ValueKey('box-assign-group-menu'),
@@ -1186,7 +1188,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                         ),
                       ),
                     ),
-                    Divider(height: 1, color: AppColors.divider),
+                    const RowDivider(),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8, 2, 8, 4),
                       child: MenuItemButton(

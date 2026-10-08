@@ -33,6 +33,7 @@ import '../widgets/constrained_menu_anchor.dart';
 import '../widgets/copyable_text.dart';
 import '../widgets/input_dialog.dart';
 import '../widgets/responsive_button.dart';
+import '../widgets/rules.dart';
 import '../widgets/snackbar_helper.dart';
 import 'privacy_policy_screen.dart';
 
@@ -141,12 +142,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onPressed: _confirmResetSettings,
             icon: const Icon(LucideIcons.rotateCcw),
           ),
-          // Lines the key up with the 12dp page gutter below.
+          // Lines the key up with the 12dp content inset below.
           const SizedBox(width: 12),
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+        padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
         children: [
           _SettingsCard(
             key: const ValueKey('settings-appearance-card'),
@@ -946,7 +947,6 @@ class _CameraSettingsPageState extends State<_CameraSettingsPage> {
       children: [
         _SettingsSection(
           title: l10n.settingsCaptureAspectRatio,
-          titleSpacing: 6,
           children: [
             Text(
               l10n.settingsCaptureAspectRatioHint,
@@ -981,7 +981,6 @@ class _CameraSettingsPageState extends State<_CameraSettingsPage> {
         const SizedBox(height: 12),
         _SettingsSection(
           title: l10n.settingsFallbackAspectRatio,
-          titleSpacing: 6,
           children: [
             Text(
               l10n.settingsFallbackAspectRatioHint,
@@ -1084,7 +1083,6 @@ class _CameraSettingsPageState extends State<_CameraSettingsPage> {
           const SizedBox(height: 12),
           _SettingsSection(
             title: l10n.settingsPhotoLocation,
-            titleSpacing: 6,
             children: [
               _PhotoLocationStrategyDropdown(
                 value: settings.photoLocationStrategy,
@@ -1537,11 +1535,9 @@ class _AnitabiServiceSettingsPageState
       children: [
         _SettingsSection(
           title: l10n.settingsServiceAddresses,
-          titleSpacing: 4,
           children: [
             for (var index = 0; index < services.length; index += 1) ...[
-              if (index > 0)
-                Divider(height: 1, thickness: 1, color: AppColors.divider),
+              if (index > 0) const RowDivider(),
               Builder(
                 builder: (context) {
                   final service = services[index];
@@ -1609,7 +1605,6 @@ class _AnitabiServiceSettingsPageState
         const SizedBox(height: 12),
         _SettingsSection(
           title: l10n.settingsAddressAutoUpdate,
-          titleSpacing: 4,
           children: [
             Row(
               children: [
@@ -1813,20 +1808,15 @@ class _ComparisonStyleSettingsPageState
       uiScale: _settings.uiScale,
       fontScale: _settings.fontScale,
       children: [
-        _SettingsSection(
-          title: '',
-          showTitle: false,
-          children: [
-            if (_loading) ...[
-              const LinearProgressIndicator(minHeight: 2),
-              const SizedBox(height: 14),
-            ],
-            ComparisonExportConfigEditor(
-              config: _config,
-              pilgrimNameController: _pilgrimNameController,
-              onChanged: _updateConfig,
-            ),
-          ],
+        // The editor draws its own titled sections, edge to edge.
+        if (_loading) ...[
+          const LinearProgressIndicator(minHeight: 2),
+          const SizedBox(height: 14),
+        ],
+        ComparisonExportConfigEditor(
+          config: _config,
+          pilgrimNameController: _pilgrimNameController,
+          onChanged: _updateConfig,
         ),
       ],
     );
@@ -2031,7 +2021,7 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
             const SizedBox(height: 10),
             Text(l10n.settingsAnitabiServicesHint, style: _secondaryTextStyle),
             const SizedBox(height: 20),
-            Divider(height: 1, thickness: 1, color: AppColors.divider),
+            const RowDivider(),
             const SizedBox(height: 18),
             Text(
               l10n.settingsAnitabiImageSource(
@@ -2057,7 +2047,7 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
               style: _secondaryTextStyle,
             ),
             const SizedBox(height: 20),
-            Divider(height: 1, thickness: 1, color: AppColors.divider),
+            const RowDivider(),
             const SizedBox(height: 18),
             _NumberStepperSetting(
               icon: LucideIcons.cloudDownload,
@@ -2670,8 +2660,9 @@ class _CacheCleanupSettingsPageState extends State<_CacheCleanupSettingsPage> {
                 const SizedBox(height: 12),
                 const _FullReferenceCacheSection(),
                 const SizedBox(height: 16),
-                SizedBox(
+                Container(
                   width: double.infinity,
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: FilledButton.icon(
                     onPressed: _selectedPlanIds.isEmpty || _busy
                         ? null
@@ -2974,7 +2965,7 @@ class _DetailScaffold extends StatelessWidget {
         title: Text(title),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+        padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
         children: children,
       ),
     );
@@ -3059,11 +3050,20 @@ class _SettingsChrome extends StatelessWidget {
     // A section is a 2px ink rule with its rows under it, not a box.
     return Material(
       color: Colors.transparent,
-      shape: Border(top: BorderSide(color: AppColors.ink, width: 2)),
+      shape: Border(top: sectionRuleSide),
       child: padding == null ? child : Padding(padding: padding!, child: child),
     );
   }
 }
+
+// The page has no gutter, so rules run edge to edge; everything else in a
+// section carries the 12dp inset itself.
+Widget _inset(Widget child) => child is RowDivider
+    ? child
+    : Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: child,
+      );
 
 class _SettingsCard extends StatelessWidget {
   const _SettingsCard({
@@ -3080,14 +3080,8 @@ class _SettingsCard extends StatelessWidget {
     return _SettingsChrome(
       child: Column(
         children: [
-          header,
-          for (final child in children) ...[
-            ColoredBox(
-              color: AppColors.divider,
-              child: const SizedBox(height: 1, width: double.infinity),
-            ),
-            child,
-          ],
+          _inset(header),
+          for (final child in children) ...[const RowDivider(), _inset(child)],
         ],
       ),
     );
@@ -3158,20 +3152,20 @@ class _SummaryGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final outline = Theme.of(context).colorScheme.outline;
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 14),
-      child: IntrinsicHeight(
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            for (var index = 0; index < children.length; index += 1) ...[
-              if (index > 0)
-                ColoredBox(color: outline, child: const SizedBox(width: 1)),
-              Expanded(child: children[index]),
-            ],
+    // The seams run the full height between the row dividers.
+    return IntrinsicHeight(
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          for (var index = 0; index < children.length; index += 1) ...[
+            if (index > 0)
+              ColoredBox(
+                color: AppColors.divider,
+                child: const SizedBox(width: 1),
+              ),
+            Expanded(child: children[index]),
           ],
-        ),
+        ],
       ),
     );
   }
@@ -3197,7 +3191,7 @@ class _SummaryTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 18),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -3286,24 +3280,23 @@ class _SettingsSection extends StatelessWidget {
   const _SettingsSection({
     required this.title,
     required this.children,
-    this.titleSpacing = 12,
     this.showTitle = true,
   });
 
   final String title;
   final List<Widget> children;
-  final double titleSpacing;
   final bool showTitle;
 
   @override
   Widget build(BuildContext context) {
-    return _SettingsChrome(
-      padding: const EdgeInsets.fromLTRB(0, 14, 0, 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (showTitle) ...[
-            Text(
+    // The title names the section from above its rule.
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (showTitle)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+            child: Text(
               title,
               style: TextStyle(
                 color: Theme.of(context).colorScheme.onSurface,
@@ -3312,11 +3305,15 @@ class _SettingsSection extends StatelessWidget {
                 letterSpacing: 0,
               ),
             ),
-            SizedBox(height: titleSpacing),
-          ],
-          ...children,
-        ],
-      ),
+          ),
+        _SettingsChrome(
+          padding: const EdgeInsets.fromLTRB(0, 14, 0, 16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [for (final child in children) _inset(child)],
+          ),
+        ),
+      ],
     );
   }
 }
@@ -3816,7 +3813,7 @@ class _AppearancePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _SettingsChrome(
-      padding: const EdgeInsets.symmetric(vertical: 14),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       child: child,
     );
   }

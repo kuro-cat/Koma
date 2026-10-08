@@ -7,6 +7,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../app_theme.dart';
 import '../l10n/l10n.dart';
 import '../widgets/confirm_action_dialog.dart';
+import '../widgets/rules.dart';
 import '../widgets/snackbar_helper.dart';
 import '../widgets/app_back_button.dart';
 import 'pilgrimage_plan_controller.dart';
@@ -394,63 +395,68 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
         ),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
+            // The empty state's section runs edge to edge, so the gutter
+            // lives in the editor and the preview.
+            padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
             child: _isEditing
                 ? TextFieldTapRegion(
-                    child: Column(
-                      children: [
-                        _MarkdownToolbar(onAction: _applyMarkdownAction),
-                        const SizedBox(height: 12),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                l10n.planMemoContent,
-                                style: TextStyle(
-                                  color: AppColors.textPrimary,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Expanded(
-                                child: TextField(
-                                  key: const ValueKey('plan-memo-editor'),
-                                  onTapOutside: dismissKeyboardOnTapOutside,
-                                  controller: _memoController,
-                                  autofocus: true,
-                                  expands: true,
-                                  maxLines: null,
-                                  minLines: null,
-                                  keyboardType: TextInputType.multiline,
-                                  textAlignVertical: TextAlignVertical.top,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: Column(
+                        children: [
+                          _MarkdownToolbar(onAction: _applyMarkdownAction),
+                          const SizedBox(height: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  l10n.planMemoContent,
                                   style: TextStyle(
                                     color: AppColors.textPrimary,
-                                    fontSize: 15,
-                                    height: 1.5,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
                                     letterSpacing: 0,
                                   ),
-                                  decoration: InputDecoration(
-                                    hintText: l10n.planMemoHint,
-                                    hintStyle: TextStyle(
-                                      color: AppColors.textSecondary,
-                                      fontSize: 14,
+                                ),
+                                const SizedBox(height: 10),
+                                Expanded(
+                                  child: TextField(
+                                    key: const ValueKey('plan-memo-editor'),
+                                    onTapOutside: dismissKeyboardOnTapOutside,
+                                    controller: _memoController,
+                                    autofocus: true,
+                                    expands: true,
+                                    maxLines: null,
+                                    minLines: null,
+                                    keyboardType: TextInputType.multiline,
+                                    textAlignVertical: TextAlignVertical.top,
+                                    style: TextStyle(
+                                      color: AppColors.textPrimary,
+                                      fontSize: 15,
                                       height: 1.5,
-                                      fontWeight: FontWeight.w400,
                                       letterSpacing: 0,
                                     ),
-                                    // The theme draws the field: rule edge,
-                                    // 2px ink on focus.
-                                    contentPadding: const EdgeInsets.all(12),
+                                    decoration: InputDecoration(
+                                      hintText: l10n.planMemoHint,
+                                      hintStyle: TextStyle(
+                                        color: AppColors.textSecondary,
+                                        fontSize: 14,
+                                        height: 1.5,
+                                        fontWeight: FontWeight.w400,
+                                        letterSpacing: 0,
+                                      ),
+                                      // The theme draws the field: rule edge,
+                                      // 2px ink on focus.
+                                      contentPadding: const EdgeInsets.all(12),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   )
                 : memo.isEmpty
@@ -577,6 +583,7 @@ class _PlanMemoMarkdownPreview extends StatelessWidget {
   Widget build(BuildContext context) {
     final markdown = prepareMemoMarkdown(data);
     return SingleChildScrollView(
+      padding: const EdgeInsets.symmetric(horizontal: 12),
       child: MarkdownBody(
         data: markdown,
         selectable: true,
@@ -669,7 +676,7 @@ class _PlanMemoMarkdownPreview extends StatelessWidget {
         border: Border.all(color: AppColors.border),
       ),
       horizontalRuleDecoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.border, width: 1)),
+        border: Border(top: rowDividerSide),
       ),
     );
   }
@@ -830,7 +837,6 @@ class _EmptyPlanMemo extends StatelessWidget {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        final guideWidth = (constraints.maxWidth * 0.84).clamp(0.0, 420.0);
         return SingleChildScrollView(
           child: SizedBox(
             width: constraints.maxWidth,
@@ -854,65 +860,66 @@ class _EmptyPlanMemo extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                Text(
-                  l10n.planMemoEmptyBody,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Text(
+                    l10n.planMemoEmptyBody,
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
                 SizedBox(
-                  width: guideWidth,
-                  // A section: its name, a 2px ink rule, ruled rows.
+                  width: double.infinity,
+                  // A section: its name, a 2px ink rule, ruled rows, all
+                  // edge to edge with the content inset 12dp.
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Icon(
-                            LucideIcons.lightbulb,
-                            color: AppColors.textSecondary,
-                            size: 18,
-                          ),
-                          const SizedBox(width: 7),
-                          Text(
-                            l10n.planMemoSuggestionsTitle,
-                            style: TextStyle(
-                              color: AppColors.textPrimary,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0,
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
+                        child: Row(
+                          children: [
+                            Icon(
+                              LucideIcons.lightbulb,
+                              color: AppColors.textSecondary,
+                              size: 18,
                             ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      ColoredBox(
-                        color: AppColors.ink,
-                        child: const SizedBox(
-                          height: 2,
-                          width: double.infinity,
+                            const SizedBox(width: 7),
+                            Text(
+                              l10n.planMemoSuggestionsTitle,
+                              style: TextStyle(
+                                color: AppColors.textPrimary,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
+                      const SectionRule(),
                       for (final suggestion in _suggestions)
                         DecoratedBox(
                           decoration: BoxDecoration(
-                            border: Border(
-                              bottom: BorderSide(color: AppColors.divider),
-                            ),
+                            border: Border(bottom: rowDividerSide),
                           ),
-                          child: _MemoSuggestionItem(suggestion: suggestion),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12),
+                            child: _MemoSuggestionItem(suggestion: suggestion),
+                          ),
                         ),
                     ],
                   ),
                 ),
                 const SizedBox(height: 16),
-                SizedBox(
-                  width: guideWidth,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
                   child: SizedBox(
                     width: double.infinity,
                     child: FilledButton.icon(

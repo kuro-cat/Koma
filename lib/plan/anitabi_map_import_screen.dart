@@ -16,6 +16,7 @@ import '../map/map_marker_clustering.dart';
 import '../map/map_marker_scale.dart';
 import '../map/map_navigation_launcher.dart';
 import '../map/map_tile_config.dart';
+import '../widgets/rules.dart';
 import '../widgets/snackbar_helper.dart';
 import '../data/anitabi_client.dart';
 import '../data/bangumi_api_client.dart';
@@ -2728,10 +2729,8 @@ class _AnitabiPointCard extends StatelessWidget {
                   onNext: onNextOverlapPoint!,
                 ),
               ),
-              Divider(
+              const RowDivider(
                 key: ValueKey('anitabi-import-overlap-point-divider'),
-                height: 1,
-                color: AppColors.divider,
               ),
             ],
             InkWell(
@@ -3193,9 +3192,7 @@ class _EmptyImportState extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-          ),
+          decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

@@ -37,6 +37,7 @@ import 'settings/app_settings_updater.dart';
 import 'settings/settings_screen.dart';
 import 'widgets/app_scaled_route.dart';
 import 'l10n/l10n.dart';
+import 'widgets/menu_back_scope.dart';
 
 class AppShell extends StatefulWidget {
   AppShell({
@@ -581,85 +582,95 @@ class _AppShellState extends State<AppShell> {
                   palette: _settings.themePalette,
                   customAccentValue: _settings.customThemeColorValue,
                 ),
-                child: Scaffold(
-                  backgroundColor: AppColors.background,
-                  body: IndexedStack(
-                    index: _selectedIndex,
-                    children: [
-                      noPlan ??
-                          PlanScreen(
-                            isActive: _selectedIndex == 0,
-                            controller: controller!,
-                            settings: _settings,
-                            repository: widget.repository,
-                            onOpenMap: _openMap,
-                            onOpenPlanManager: _openPlanManager,
-                            onOpenAddPoints: _openAddPoints,
-                            onOpenImportExport: _openImportExport,
-                            onPickPlan: _showPlanPicker,
-                          ),
-                      noPlan ??
-                          TickerMode(
-                            enabled: _selectedIndex == 1,
-                            child: PilgrimageMapScreen(
-                              isActive: _selectedIndex == 1,
+                // Back on another tab returns to Plan before leaving the app.
+                child: PopScope(
+                  canPop: _selectedIndex == 0,
+                  onPopInvokedWithResult: (didPop, _) {
+                    // A Back that closed a menu stays on this tab.
+                    if (!didPop && !MenuBackScope.anyOpen) {
+                      setState(() => _selectedIndex = 0);
+                    }
+                  },
+                  child: Scaffold(
+                    backgroundColor: AppColors.background,
+                    body: IndexedStack(
+                      index: _selectedIndex,
+                      children: [
+                        noPlan ??
+                            PlanScreen(
+                              isActive: _selectedIndex == 0,
                               controller: controller!,
                               settings: _settings,
-                              onSettingsChanged: _saveSettings,
+                              repository: widget.repository,
+                              onOpenMap: _openMap,
+                              onOpenPlanManager: _openPlanManager,
+                              onOpenAddPoints: _openAddPoints,
+                              onOpenImportExport: _openImportExport,
+                              onPickPlan: _showPlanPicker,
                             ),
-                          ),
-                      noPlan ??
-                          RecordsScreen(
-                            controller: controller!,
-                            settings: _settings,
-                          ),
-                      SettingsScreen(
-                        settings: _settings,
-                        repository: widget.repository,
-                        onChanged: _saveSettings,
-                      ),
-                    ],
-                  ),
-                  // The theme styles the bar; a 1px ink rule sits on top,
-                  // like the rule under Tsumiki's header.
-                  bottomNavigationBar: DecoratedBox(
-                    position: DecorationPosition.foreground,
-                    decoration: BoxDecoration(
-                      border: Border(top: BorderSide(color: AppColors.ink)),
-                    ),
-                    child: NavigationBar(
-                      selectedIndex: _selectedIndex,
-                      onDestinationSelected: (index) {
-                        setState(() {
-                          _selectedIndex = index;
-                        });
-                      },
-                      destinations: [
-                        NavigationDestination(
-                          icon: Icon(LucideIcons.listTodo),
-                          selectedIcon: Icon(LucideIcons.listTodo),
-                          label: l10n.appShellNavPlan,
-                          tooltip: '',
-                        ),
-                        NavigationDestination(
-                          icon: Icon(LucideIcons.map),
-                          selectedIcon: Icon(LucideIcons.map),
-                          label: l10n.appShellNavMap,
-                          tooltip: '',
-                        ),
-                        NavigationDestination(
-                          icon: Icon(LucideIcons.images),
-                          selectedIcon: Icon(LucideIcons.images),
-                          label: l10n.appShellNavRecords,
-                          tooltip: '',
-                        ),
-                        NavigationDestination(
-                          icon: Icon(LucideIcons.settings),
-                          selectedIcon: Icon(LucideIcons.settings),
-                          label: l10n.appShellNavSettings,
-                          tooltip: '',
+                        noPlan ??
+                            TickerMode(
+                              enabled: _selectedIndex == 1,
+                              child: PilgrimageMapScreen(
+                                isActive: _selectedIndex == 1,
+                                controller: controller!,
+                                settings: _settings,
+                                onSettingsChanged: _saveSettings,
+                              ),
+                            ),
+                        noPlan ??
+                            RecordsScreen(
+                              controller: controller!,
+                              settings: _settings,
+                            ),
+                        SettingsScreen(
+                          settings: _settings,
+                          repository: widget.repository,
+                          onChanged: _saveSettings,
                         ),
                       ],
+                    ),
+                    // The theme styles the bar; a 1px ink rule sits on top,
+                    // like the rule under Tsumiki's header.
+                    bottomNavigationBar: DecoratedBox(
+                      position: DecorationPosition.foreground,
+                      decoration: BoxDecoration(
+                        border: Border(top: BorderSide(color: AppColors.ink)),
+                      ),
+                      child: NavigationBar(
+                        selectedIndex: _selectedIndex,
+                        onDestinationSelected: (index) {
+                          setState(() {
+                            _selectedIndex = index;
+                          });
+                        },
+                        destinations: [
+                          NavigationDestination(
+                            icon: Icon(LucideIcons.listTodo),
+                            selectedIcon: Icon(LucideIcons.listTodo),
+                            label: l10n.appShellNavPlan,
+                            tooltip: '',
+                          ),
+                          NavigationDestination(
+                            icon: Icon(LucideIcons.map),
+                            selectedIcon: Icon(LucideIcons.map),
+                            label: l10n.appShellNavMap,
+                            tooltip: '',
+                          ),
+                          NavigationDestination(
+                            icon: Icon(LucideIcons.images),
+                            selectedIcon: Icon(LucideIcons.images),
+                            label: l10n.appShellNavRecords,
+                            tooltip: '',
+                          ),
+                          NavigationDestination(
+                            icon: Icon(LucideIcons.settings),
+                            selectedIcon: Icon(LucideIcons.settings),
+                            label: l10n.appShellNavSettings,
+                            tooltip: '',
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

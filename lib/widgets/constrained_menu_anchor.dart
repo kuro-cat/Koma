@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'menu_back_scope.dart';
 
 class ConstrainedMenuAnchor extends StatelessWidget {
   const ConstrainedMenuAnchor({
@@ -56,7 +57,7 @@ class ConstrainedMenuAnchor extends StatelessWidget {
             minimumSize: WidgetStatePropertyAll(Size(menuWidth, 0)),
             maximumSize: WidgetStatePropertyAll(Size(menuWidth, menuHeight)),
           ),
-          builder: builder,
+          builder: closesOnBack(builder),
           menuChildren: [
             SizedBox(
               key: const ValueKey('constrained-menu-panel'),

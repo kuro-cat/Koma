@@ -634,6 +634,8 @@ class AppTheme {
         color: AppColors.divider,
         space: 1,
         thickness: 1,
+        indent: 0,
+        endIndent: 0,
       ),
     );
   }

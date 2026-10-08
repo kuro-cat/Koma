@@ -9,6 +9,7 @@ import '../data/anitabi_image_source_scope.dart';
 import '../l10n/l10n.dart';
 import '../plan/pilgrimage_models.dart';
 import '../settings/app_settings_updater.dart';
+import '../widgets/rules.dart';
 import '../widgets/image_viewer_screen.dart';
 import '../widgets/responsive_button.dart';
 import '../widgets/snackbar_helper.dart';
@@ -188,7 +189,8 @@ class _ComparisonExportSheetState extends State<ComparisonExportSheet> {
               const Divider(height: 1),
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(12, 16, 12, 18),
+                  // No gutter: the editor's rules run edge to edge.
+                  padding: const EdgeInsets.fromLTRB(0, 16, 0, 18),
                   child: AbsorbPointer(
                     absorbing: _exporting || !_settingsLoaded || _isExiting,
                     child: ComparisonExportConfigEditor(
@@ -339,7 +341,7 @@ class _SheetFooter extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.surface,
-        border: Border(top: BorderSide(color: AppColors.border)),
+        border: Border(top: rowDividerSide),
       ),
       child: Padding(
         padding: EdgeInsets.fromLTRB(12, 12, 12, 12 + bottomInset),

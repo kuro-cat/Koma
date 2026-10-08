@@ -3,6 +3,7 @@ import 'package:lucide_icons_flutter/lucide_icons.dart';
 
 import '../app_theme.dart';
 import '../l10n/l10n.dart';
+import '../widgets/rules.dart';
 import 'color_grading_params.dart';
 
 class ColorGradingParameterSummary extends StatelessWidget {
@@ -21,69 +22,80 @@ class ColorGradingParameterSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14),
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+      // The row divider runs edge to edge; the rest is inset 12dp.
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  l10n.colorGradingParameterSummaryIntensity,
-                  style: const TextStyle(
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    l10n.colorGradingParameterSummaryIntensity,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Text(
+                  '${(intensity * 100).round()}%',
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
                     fontSize: 15,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-              ),
-              Text(
-                '${(intensity * 100).round()}%',
-                style: TextStyle(
-                  color: AppColors.textPrimary,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-          Slider(
-            value: intensity,
-            min: 0,
-            max: 1,
-            divisions: 100,
-            onChanged: onIntensityChanged,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Slider(
+              value: intensity,
+              min: 0,
+              max: 1,
+              divisions: 100,
+              onChanged: onIntensityChanged,
+            ),
           ),
-          Divider(color: AppColors.divider),
+          const RowDivider(),
           const SizedBox(height: 8),
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  l10n.colorGradingParameterSummaryParameters,
-                  style: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w600,
-                    letterSpacing: 0,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    l10n.colorGradingParameterSummaryParameters,
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0,
+                    ),
                   ),
                 ),
-              ),
-              OutlinedButton.icon(
-                onPressed: () => _showParameterSheet(context),
-                style: AppButtonStyles.compactOutlinedButton(),
-                icon: const Icon(LucideIcons.slidersHorizontal, size: 18),
-                label: Text(l10n.colorGradingParameterSummaryView),
-              ),
-            ],
+                OutlinedButton.icon(
+                  onPressed: () => _showParameterSheet(context),
+                  style: AppButtonStyles.compactOutlinedButton(),
+                  icon: const Icon(LucideIcons.slidersHorizontal, size: 18),
+                  label: Text(l10n.colorGradingParameterSummaryView),
+                ),
+              ],
+            ),
           ),
           const SizedBox(height: 4),
-          Text(
-            l10n.colorGradingParameterSummaryDescription,
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 13,
-              letterSpacing: 0,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Text(
+              l10n.colorGradingParameterSummaryDescription,
+              style: TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 13,
+                letterSpacing: 0,
+              ),
             ),
           ),
         ],

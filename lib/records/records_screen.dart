@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import '../l10n/l10n.dart';
+import '../widgets/rules.dart';
 import '../widgets/app_motion.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -10,6 +11,7 @@ import '../plan/pilgrimage_models.dart';
 import '../plan/pilgrimage_plan_controller.dart';
 import '../plan/plan_group_utils.dart';
 import 'visit_record_detail_screen.dart';
+import '../widgets/menu_back_scope.dart';
 import 'visit_record_photo_stub.dart'
     if (dart.library.io) 'visit_record_photo_io.dart';
 
@@ -101,30 +103,34 @@ class _RecordsScreenState extends State<RecordsScreen> {
         key: const ValueKey('records-scroll-view'),
         slivers: [
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+            // No gutter: rules run edge to edge, content insets itself.
+            padding: const EdgeInsets.only(top: 16),
             sliver: SliverList.list(
               children: [
                 _RecordsSummary(controller: controller),
                 const SizedBox(height: 16),
-                _RecordFilters(
-                  statusFilter: _statusFilter,
-                  searchQuery: _searchQuery,
-                  activeScopeFilterCount:
-                      (_selectedWorkIds == null ? 0 : 1) +
-                      (_selectedGroupFilterIds == null ? 0 : 1),
-                  onSearchChanged: (query) {
-                    setState(() {
-                      _searchQuery = query;
-                      _resetExpandedSections();
-                    });
-                  },
-                  onStatusSelected: (filter) {
-                    setState(() {
-                      _statusFilter = filter;
-                      _resetExpandedSections();
-                    });
-                  },
-                  onOpenScopeFilters: _openScopeFilters,
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: _RecordFilters(
+                    statusFilter: _statusFilter,
+                    searchQuery: _searchQuery,
+                    activeScopeFilterCount:
+                        (_selectedWorkIds == null ? 0 : 1) +
+                        (_selectedGroupFilterIds == null ? 0 : 1),
+                    onSearchChanged: (query) {
+                      setState(() {
+                        _searchQuery = query;
+                        _resetExpandedSections();
+                      });
+                    },
+                    onStatusSelected: (filter) {
+                      setState(() {
+                        _statusFilter = filter;
+                        _resetExpandedSections();
+                      });
+                    },
+                    onOpenScopeFilters: _openScopeFilters,
+                  ),
                 ),
                 const SizedBox(height: 16),
                 _RecordsSectionHeader(
@@ -661,11 +667,7 @@ class _RecordScopeFilterSheetState extends State<_RecordScopeFilterSheet> {
               const SizedBox(height: 14),
               // Works and areas are ruled rows under one 2px ink rule.
               DecoratedBox(
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: AppColors.ink, width: 2),
-                  ),
-                ),
+                decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -730,7 +732,7 @@ class _RecordScopeEntry extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      shape: Border(bottom: BorderSide(color: AppColors.divider)),
+      shape: Border(bottom: rowDividerSide),
       child: InkWell(
         onTap: onTap,
         child: ConstrainedBox(
@@ -876,9 +878,7 @@ class _RecordScopeOptionSheetState extends State<_RecordScopeOptionSheet> {
             Container(
               padding: const EdgeInsets.fromLTRB(12, 14, 12, 6),
               decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(color: AppColors.ink, width: 2),
-                ),
+                border: Border(bottom: sectionRuleSide),
               ),
               child: CapsLabel(
                 isWork ? l10n.recordsAllWorks : l10n.recordsAllAreas,
@@ -995,9 +995,7 @@ class _RecordScopeOptionTileState extends State<_RecordScopeOptionTile> {
   Widget build(BuildContext context) {
     final showHover = widget.hoverEnabled && _hovered;
     return DecoratedBox(
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.divider)),
-      ),
+      decoration: BoxDecoration(border: Border(bottom: rowDividerSide)),
       child: MouseRegion(
         onEnter: (_) {
           if (!_hovered) {
@@ -1129,7 +1127,7 @@ class _RecordStatusPickerState extends State<_RecordStatusPicker> {
       onOpen: () => setState(() => _isOpen = true),
       onClose: () => setState(() => _isOpen = false),
       alignmentOffset: const Offset(0, 4),
-      builder: (context, controller, child) {
+      builder: closesOnBack((context, controller, child) {
         return Tooltip(
           message: l10n.recordsStatusTooltip,
           child: Material(
@@ -1179,7 +1177,7 @@ class _RecordStatusPickerState extends State<_RecordStatusPicker> {
             ),
           ),
         );
-      },
+      }),
       menuChildren: [
         Column(
           key: const ValueKey('records-status-menu'),
@@ -1420,7 +1418,7 @@ class _RecordsSectionHeader extends StatelessWidget {
         ? '$totalCount'
         : '$visibleCount/$totalCount';
     return Padding(
-      padding: const EdgeInsets.only(bottom: 6),
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
       child: Row(
         children: [
           Expanded(child: CapsLabel(l10n.recordsPhotos)),
@@ -1495,7 +1493,7 @@ class _RecordGroupHeaderState extends State<_RecordGroupHeader> {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.background,
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
+        border: Border(top: sectionRuleSide),
       ),
       child: Material(
         color: Colors.transparent,
@@ -1505,77 +1503,78 @@ class _RecordGroupHeaderState extends State<_RecordGroupHeader> {
           child: Container(
             key: ValueKey('records-group-surface-${section.id}'),
             constraints: const BoxConstraints(minHeight: 62),
-            padding: const EdgeInsets.symmetric(horizontal: 12),
             child: Column(
               children: [
                 Expanded(
-                  child: Row(
-                    children: [
-                      Icon(
-                        key: ValueKey('records-group-icon-${section.id}'),
-                        _sectionIcon(section, widget.expanded),
-                        color: AppColors.textSecondary,
-                        size: 24,
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              section.title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 17,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            Text(
-                              section.subtitle,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: AppColors.textSecondary,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 0,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '${section.entries.length}',
-                        key: ValueKey('records-group-count-${section.id}'),
-                        style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      AnimatedRotation(
-                        turns: widget.expanded ? 0.5 : 0,
-                        duration: AppMotion.durationOf(context),
-                        child: Icon(
-                          LucideIcons.chevronDown,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Row(
+                      children: [
+                        Icon(
+                          key: ValueKey('records-group-icon-${section.id}'),
+                          _sectionIcon(section, widget.expanded),
                           color: AppColors.textSecondary,
                           size: 24,
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                section.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 17,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                section.subtitle,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: AppColors.textSecondary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 0,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          '${section.entries.length}',
+                          key: ValueKey('records-group-count-${section.id}'),
+                          style: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0,
+                          ),
+                        ),
+                        const SizedBox(width: 8),
+                        AnimatedRotation(
+                          turns: widget.expanded ? 0.5 : 0,
+                          duration: AppMotion.durationOf(context),
+                          child: Icon(
+                            LucideIcons.chevronDown,
+                            color: AppColors.textSecondary,
+                            size: 24,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 if (!widget.expanded)
-                  AppHairline(
+                  RowDivider(
                     key: ValueKey('records-group-divider-${section.id}'),
-                    color: AppColors.divider,
                   ),
               ],
             ),
@@ -1609,41 +1608,50 @@ class _RecordsSummary extends StatelessWidget {
 
     // A section on the page ground: 2px ink rule on top, no frame.
     return Container(
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
       child: Stack(
         children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 14, 0, 18),
+          // The seam between the two metrics runs the section's full height.
+          IntrinsicHeight(
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 Expanded(
-                  child: _RecordsDashboardMetric(
-                    value: TextSpan(text: '${controller.visitRecords.length}'),
-                    label: l10n.recordsRecordCountLabel(
-                      controller.visitRecords.length,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 14, 12, 18),
+                    child: _RecordsDashboardMetric(
+                      value: TextSpan(
+                        text: '${controller.visitRecords.length}',
+                      ),
+                      label: l10n.recordsRecordCountLabel(
+                        controller.visitRecords.length,
+                      ),
                     ),
                   ),
                 ),
-                Container(width: 1, height: 42, color: AppColors.divider),
-                const SizedBox(width: 16),
+                ColoredBox(
+                  color: AppColors.divider,
+                  child: const SizedBox(width: 1),
+                ),
                 Expanded(
-                  child: _RecordsDashboardMetric(
-                    value: TextSpan(
-                      text: '${controller.completedCount}',
-                      children: [
-                        TextSpan(
-                          text: ' / ${controller.totalCount}',
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 14, 12, 18),
+                    child: _RecordsDashboardMetric(
+                      value: TextSpan(
+                        text: '${controller.completedCount}',
+                        children: [
+                          TextSpan(
+                            text: ' / ${controller.totalCount}',
+                            style: TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
+                      label: l10n.recordsCompleted,
                     ),
-                    label: l10n.recordsCompleted,
                   ),
                 ),
               ],
@@ -1747,7 +1755,7 @@ class _VisitRecordCard extends StatelessWidget {
     return Material(
       key: ValueKey('record-card-${record.id}'),
       color: Colors.transparent,
-      shape: Border(bottom: BorderSide(color: AppColors.divider)),
+      shape: Border(bottom: rowDividerSide),
       child: InkWell(
         onTap: onTap,
         child: ConstrainedBox(

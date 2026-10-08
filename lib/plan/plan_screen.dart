@@ -33,6 +33,8 @@ import 'pilgrimage_plan_controller.dart';
 import 'reference_cache_progress_dialog.dart';
 import 'reference_full_cache_runner.dart';
 import 'reference_image_status.dart';
+import '../widgets/menu_back_scope.dart';
+import '../widgets/rules.dart';
 
 class PlanScreen extends StatefulWidget {
   const PlanScreen({
@@ -438,10 +440,11 @@ class _PlanScreenState extends State<PlanScreen>
                 ),
                 actions: [
                   if (controller.points.isNotEmpty)
-                    TextButton(
+                    IconButton(
                       key: const ValueKey('plan-edit-button'),
+                      tooltip: l10n.planEdit,
                       onPressed: () => _setEditing(true),
-                      child: Text(l10n.planEdit),
+                      icon: const Icon(LucideIcons.squarePen),
                     ),
                   IconButton(
                     key: const ValueKey('plan-add-points-button'),
@@ -471,7 +474,7 @@ class _PlanScreenState extends State<PlanScreen>
               if (selectedGroup == null || controller.points.isEmpty)
                 Expanded(
                   child: ListView(
-                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                    padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
                     children: [
                       _WorkHeader(plan: plan),
                       _PlanActionsReveal(
@@ -497,7 +500,7 @@ class _PlanScreenState extends State<PlanScreen>
               else ...[
                 _PlanActionsReveal(
                   expanded: _showPlanActions,
-                  padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
+                  padding: EdgeInsets.zero,
                   child: KeyedSubtree(
                     key: _planActionsPanelRegionKey,
                     child: _PlanActionsPanel(
@@ -1202,10 +1205,10 @@ class _PlanActionsPanel extends StatelessWidget {
     return Container(
       key: const ValueKey('plan-actions-panel'),
       clipBehavior: Clip.antiAlias,
+      // A full-width strip under the app bar, closed by a row divider.
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(bottom: rowDividerSide),
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
@@ -1221,7 +1224,7 @@ class _PlanActionsPanel extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               _planActionRow(items.sublist(0, 2)),
-              Divider(height: 1, color: AppColors.border),
+              const RowDivider(),
               _planActionRow(items.sublist(2)),
             ],
           );
@@ -1303,11 +1306,7 @@ class _PlanActionDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 1,
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      color: AppColors.border,
-    );
+    return Container(width: 1, color: AppColors.divider);
   }
 }
 
@@ -1579,41 +1578,51 @@ class _PlanGroupControls extends StatelessWidget {
       150.0,
       maxMapHeight,
     );
+    // The controls inset 12; the map runs full width like the list.
     return Padding(
-      padding: const EdgeInsets.fromLTRB(12, 0, 12, 2),
+      padding: const EdgeInsets.only(bottom: 2),
       child: Column(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: _SortOrderControl(
-                  mode: sortMode,
-                  descending: sortDescending,
-                  onChanged: onSetSortMode,
-                  onToggleDirection: onToggleSortDirection,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: _SortOrderControl(
+                    mode: sortMode,
+                    descending: sortDescending,
+                    onChanged: onSetSortMode,
+                    onToggleDirection: onToggleSortDirection,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 8),
-              OutlinedButton.icon(
-                onPressed: onToggleMap,
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(74, 40),
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                const SizedBox(width: 8),
+                OutlinedButton.icon(
+                  onPressed: onToggleMap,
+                  style: OutlinedButton.styleFrom(
+                    minimumSize: const Size(74, 40),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                  ),
+                  icon: Icon(
+                    showMap ? LucideIcons.map : LucideIcons.map,
+                    size: 18,
+                  ),
+                  label: Text(showMap ? l10n.planHideMap : l10n.planMap),
                 ),
-                icon: Icon(
-                  showMap ? LucideIcons.map : LucideIcons.map,
-                  size: 18,
-                ),
-                label: Text(showMap ? l10n.planHideMap : l10n.planMap),
-              ),
-            ],
+              ],
+            ),
           ),
           const SizedBox(height: 8),
           if (showMap) ...[
             if (locationError != null)
-              Text(
-                locationError!,
-                style: TextStyle(color: AppColors.textSecondary, fontSize: 12),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(
+                  locationError!,
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12,
+                  ),
+                ),
               ),
             _PlanInlineMap(
               group: group,
@@ -1665,7 +1674,7 @@ class _SortOrderControl extends StatelessWidget {
           children: [
             Expanded(
               child: MenuAnchor(
-                builder: (context, controller, child) {
+                builder: closesOnBack((context, controller, child) {
                   return InkWell(
                     borderRadius: BorderRadius.zero,
                     onTap: () {
@@ -1698,7 +1707,7 @@ class _SortOrderControl extends StatelessWidget {
                       ),
                     ),
                   );
-                },
+                }),
                 menuChildren: [
                   MenuItemButton(
                     leadingIcon: const Icon(LucideIcons.listOrdered),
@@ -1715,7 +1724,7 @@ class _SortOrderControl extends StatelessWidget {
             ),
             SizedBox(
               height: 24,
-              child: VerticalDivider(width: 1, color: AppColors.border),
+              child: VerticalDivider(width: 1, color: AppColors.divider),
             ),
             Tooltip(
               message: _sortDirectionTooltip(mode, descending),
@@ -1805,23 +1814,29 @@ class _PlanInlineMapState extends State<_PlanInlineMap> {
     }
   }
 
-  /// Frames every spot of the area, or centres on it when it has one spot.
-  void _showGroup() {
+  /// Frames every spot of the area; null when it has fewer than two.
+  CameraFit? get _areaFit {
     final coordinates = [
       for (final point in widget.group.points)
         if (point.hasCoordinate) point.position,
     ];
     if (coordinates.length < 2) {
-      _mapController.move(_initialCenter, 15.2);
-      return;
+      return null;
     }
-    _mapController.fitCamera(
-      CameraFit.coordinates(
-        coordinates: coordinates,
-        padding: const EdgeInsets.all(36),
-        maxZoom: 16,
-      ),
+    return CameraFit.coordinates(
+      coordinates: coordinates,
+      padding: const EdgeInsets.all(36),
+      maxZoom: 16,
     );
+  }
+
+  void _showGroup() {
+    final fit = _areaFit;
+    if (fit == null) {
+      _mapController.move(_initialCenter, 15.2);
+    } else {
+      _mapController.fitCamera(fit);
+    }
   }
 
   PilgrimagePoint? get _selectedPoint {
@@ -1861,8 +1876,7 @@ class _PlanInlineMapState extends State<_PlanInlineMap> {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: AppColors.surface,
-          border: Border.all(color: AppColors.border),
-          borderRadius: BorderRadius.zero,
+          border: Border(top: rowDividerSide),
         ),
         child: ClipRRect(
           borderRadius: BorderRadius.zero,
@@ -1873,6 +1887,8 @@ class _PlanInlineMapState extends State<_PlanInlineMap> {
                 options: MapOptions(
                   initialCenter: _initialCenter,
                   initialZoom: 15.2,
+                  // Opening the map shows the whole area, as switching does.
+                  initialCameraFit: _areaFit,
                   minZoom: 4,
                   maxZoom: widget.settings.mapMaxZoom.toDouble(),
                   interactionOptions: const InteractionOptions(
@@ -1987,7 +2003,7 @@ class _MapCompactSummary extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.92),
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppColors.ink),
         borderRadius: BorderRadius.zero,
       ),
       child: Padding(
@@ -2163,10 +2179,8 @@ class _EmptyPlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -2331,11 +2345,9 @@ class _WorkHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.fromLTRB(0, 8, 0, 12),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.fromLTRB(12, 16, 12, 16),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
       child: Row(
         children: [
           Container(

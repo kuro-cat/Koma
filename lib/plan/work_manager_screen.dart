@@ -7,6 +7,7 @@ import '../data/bangumi_api_client.dart';
 import '../data/pilgrimage_repository.dart';
 import '../widgets/copyable_text.dart';
 import '../widgets/confirm_action_dialog.dart';
+import '../widgets/rules.dart';
 import '../widgets/snackbar_helper.dart';
 import '../widgets/app_scaled_route.dart';
 import '../widgets/app_back_button.dart';
@@ -121,7 +122,7 @@ class _WorkManagerScreenState extends State<WorkManagerScreen> {
         ),
         body: ListView(
           // Rows run full width and inset their own content 12dp.
-          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+          padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
           children: [
             _AddWorkPanel(
               onBangumi: _openBangumiSearch,
@@ -132,11 +133,7 @@ class _WorkManagerScreenState extends State<WorkManagerScreen> {
               const _EmptyWorkPanel()
             else
               DecoratedBox(
-                decoration: BoxDecoration(
-                  border: Border(
-                    top: BorderSide(color: AppColors.ink, width: 2),
-                  ),
-                ),
+                decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
                 child: Column(
                   children: [
                     for (final work in works)
@@ -277,10 +274,7 @@ class _AddWorkPanel extends StatelessWidget {
     // A section under an ink rule; the two ways in split by a seam.
     return Container(
       decoration: BoxDecoration(
-        border: Border(
-          top: BorderSide(color: AppColors.ink, width: 2),
-          bottom: BorderSide(color: AppColors.divider),
-        ),
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
       ),
       child: SizedBox(
         height: 60,
@@ -296,12 +290,8 @@ class _AddWorkPanel extends StatelessWidget {
                 onTap: onBangumi,
               ),
             ),
-            VerticalDivider(
-              width: 1,
-              indent: 12,
-              endIndent: 12,
-              color: AppColors.divider,
-            ),
+            // The seam between the two ways in runs the full height.
+            VerticalDivider(width: 1, color: AppColors.divider),
             Expanded(
               child: _AddWorkAction(
                 key: const ValueKey('work-manager-manual-work'),
@@ -418,9 +408,7 @@ class _WorkManageCardState extends State<_WorkManageCard> {
 
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 10, 0, 10),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.divider)),
-      ),
+      decoration: BoxDecoration(border: Border(bottom: rowDividerSide)),
       child: Row(
         children: [
           PilgrimageWorkCover(work: work),
@@ -619,9 +607,7 @@ class _EmptyWorkPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
-      ),
+      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

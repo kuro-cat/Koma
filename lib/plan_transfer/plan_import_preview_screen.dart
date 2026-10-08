@@ -5,6 +5,7 @@ import '../app_theme.dart';
 import '../data/pilgrimage_repository.dart';
 import '../data/reference_asset_paths.dart';
 import '../l10n/l10n.dart';
+import '../widgets/rules.dart';
 import '../widgets/app_back_button.dart';
 import '../widgets/snackbar_helper.dart';
 import 'plan_import_asset_restore.dart';
@@ -42,7 +43,7 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
         title: Text(l10n.planImportPreviewTitle),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+        padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
         children: [
           _PackageHeader(importPackage: _package),
           const SizedBox(height: 12),
@@ -56,7 +57,7 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
             title: l10n.planImportPreviewChooseContent,
             subtitle: l10n.planImportPreviewChooseContentSubtitle,
           ),
-          const _SectionRule(),
+          const SectionRule(),
           _ImportOptionTile(
             icon: LucideIcons.route,
             title: l10n.planImportPreviewPlanStructure,
@@ -95,7 +96,7 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
               title: l10n.planImportPreviewPackageNotes,
               subtitle: l10n.planImportPreviewPackageNotesSubtitle,
             ),
-            const _SectionRule(),
+            const SectionRule(),
             const SizedBox(height: 10),
             for (final warning in _package.warnings.take(6))
               Padding(
@@ -427,19 +428,6 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
-/// The 2px ink rule a section's rows hang from.
-class _SectionRule extends StatelessWidget {
-  const _SectionRule();
-
-  @override
-  Widget build(BuildContext context) {
-    return ColoredBox(
-      color: AppColors.ink,
-      child: const SizedBox(height: 2, width: double.infinity),
-    );
-  }
-}
-
 class _ImportOptionTile extends StatelessWidget {
   const _ImportOptionTile({
     required this.icon,
@@ -461,9 +449,7 @@ class _ImportOptionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.divider)),
-      ),
+      decoration: BoxDecoration(border: Border(bottom: rowDividerSide)),
       child: Row(
         children: [
           Icon(

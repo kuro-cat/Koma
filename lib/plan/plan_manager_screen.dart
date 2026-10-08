@@ -13,6 +13,8 @@ import '../widgets/route_planner_skill_hint.dart';
 import '../widgets/snackbar_helper.dart';
 import '../widgets/app_back_button.dart';
 import 'pilgrimage_models.dart';
+import '../widgets/menu_back_scope.dart';
+import '../widgets/rules.dart';
 
 Widget _cleanPlanReorderProxy(
   Widget child,
@@ -309,15 +311,22 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
               .where((plan) => plan.id == _activePlan?.id)
               .firstOrNull;
           return ListView(
-            padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
+            // Rules and rows run edge to edge; the rest insets 12.
+            padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
             children: [
-              _CreatePlanButton(
-                onPressed: _sorting || _savingOrder ? null : _createEmptyPlan,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: _CreatePlanButton(
+                  onPressed: _sorting || _savingOrder ? null : _createEmptyPlan,
+                ),
               ),
               const SizedBox(height: 4),
-              RoutePlannerSkillLink(
-                lead: l10n.planManagerSkillLead,
-                repository: widget.repository,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: RoutePlannerSkillLink(
+                  lead: l10n.planManagerSkillLead,
+                  repository: widget.repository,
+                ),
               ),
               const SizedBox(height: 10),
               if (plans.isNotEmpty) ...[
@@ -474,12 +483,7 @@ class _CreatePlanButton extends StatelessWidget {
     return OutlinedButton.icon(
       key: const ValueKey('create-plan'),
       onPressed: onPressed,
-      style: OutlinedButton.styleFrom(
-        foregroundColor: AppColors.accent,
-        backgroundColor: AppColors.surface,
-        side: BorderSide(color: AppColors.accent, width: 1.2),
-        minimumSize: const Size.fromHeight(46),
-      ),
+      style: OutlinedButton.styleFrom(minimumSize: const Size.fromHeight(48)),
       icon: const Icon(LucideIcons.plus, size: 19),
       label: Text(l10n.planManagerNewPlan),
     );
@@ -494,12 +498,15 @@ class _PlanSectionLabel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // A caps name over the list's 2px ink top rule.
-    return Container(
-      padding: const EdgeInsets.only(bottom: 6),
-      decoration: BoxDecoration(
-        border: Border(bottom: BorderSide(color: AppColors.ink, width: 2)),
-      ),
-      child: CapsLabel(label),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
+          child: CapsLabel(label),
+        ),
+        const SectionRule(),
+      ],
     );
   }
 }
@@ -543,7 +550,7 @@ class _PlanCard extends StatelessWidget {
     final cardColor = selected ? AppColors.accentWash : AppColors.surface;
 
     final header = Padding(
-      padding: EdgeInsets.fromLTRB(reorderIndex == null ? 16 : 50, 12, 4, 12),
+      padding: EdgeInsets.fromLTRB(reorderIndex == null ? 12 : 50, 12, 4, 12),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -755,7 +762,7 @@ class _PlanDetails extends StatelessWidget {
 
     return Padding(
       key: ValueKey('plan-card-details-${plan.id}'),
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -887,6 +894,7 @@ class _PlanMoreButtonState extends State<_PlanMoreButton> {
         minimumSize: WidgetStatePropertyAll(Size(_menuWidth, 0)),
         maximumSize: WidgetStatePropertyAll(Size(_menuWidth, 520)),
       ),
+      builder: closesOnBack((context, controller, child) => child!),
       menuChildren: [
         _PlanActionsMenuPanel(
           onExport: widget.onExport,
