@@ -3050,7 +3050,7 @@ class _SettingsChrome extends StatelessWidget {
     // A section is a 2px ink rule with its rows under it, not a box.
     return Material(
       color: Colors.transparent,
-      shape: Border(top: sectionRuleSide),
+      shape: Border(top: sectionRuleSide, bottom: rowDividerSide),
       child: padding == null ? child : Padding(padding: padding!, child: child),
     );
   }

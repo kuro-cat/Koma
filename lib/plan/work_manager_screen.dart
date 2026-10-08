@@ -133,7 +133,9 @@ class _WorkManagerScreenState extends State<WorkManagerScreen> {
               const _EmptyWorkPanel()
             else
               DecoratedBox(
-                decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+                decoration: BoxDecoration(
+                  border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+                ),
                 child: Column(
                   children: [
                     for (final work in works)
@@ -607,7 +609,9 @@ class _EmptyWorkPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+      decoration: BoxDecoration(
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

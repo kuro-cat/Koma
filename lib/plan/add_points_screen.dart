@@ -691,7 +691,9 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
             else if (_results.isNotEmpty)
               // Results hang from an ink rule as ruled rows.
               DecoratedBox(
-                decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+                decoration: BoxDecoration(
+                  border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+                ),
                 child: Column(
                   children: [
                     for (final work in _results)
@@ -1014,7 +1016,9 @@ class _AnitabiLinkInputScreenState extends State<AnitabiLinkInputScreen> {
             const SizedBox(height: 12),
             Container(
               padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+              decoration: BoxDecoration(
+                border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -1130,7 +1134,9 @@ class _LinkExampleCard extends StatelessWidget {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+      decoration: BoxDecoration(
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -3776,11 +3782,39 @@ class _LinkedWorksPanel extends StatelessWidget {
     final visibleWorks = works.take(5).toList(growable: false);
     final remainingCount = works.length - visibleWorks.length;
 
+    // Like every section: the caps name (with Manage works) above the rule.
     return Container(
       clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+      decoration: BoxDecoration(border: Border(bottom: rowDividerSide)),
       child: Column(
         children: [
+          InkWell(
+            onTap: onManage,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 0, 8, 2),
+              child: Row(
+                children: [
+                  Expanded(child: CapsLabel(l10n.addPointsLinkedWorks)),
+                  Text(
+                    l10n.addPointsManageWorks,
+                    style: TextStyle(
+                      color: AppColors.accentStrongForeground,
+                      fontSize: 13,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0,
+                    ),
+                  ),
+                  const SizedBox(width: 2),
+                  Icon(
+                    LucideIcons.chevronRight,
+                    color: AppColors.accentForeground,
+                    size: 20,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SectionRule(),
           Material(
             color: Colors.transparent,
             child: InkWell(
@@ -3796,8 +3830,6 @@ class _LinkedWorksPanel extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CapsLabel(l10n.addPointsLinkedWorks),
-                              const SizedBox(height: 2),
                               Text(
                                 l10n.addPointsLinkedWorksSummary(
                                   works.length,
@@ -3811,26 +3843,6 @@ class _LinkedWorksPanel extends StatelessWidget {
                               ),
                             ],
                           ),
-                        ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              l10n.addPointsManageWorks,
-                              style: TextStyle(
-                                color: AppColors.accentStrongForeground,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0,
-                              ),
-                            ),
-                            SizedBox(width: 2),
-                            Icon(
-                              LucideIcons.chevronRight,
-                              color: AppColors.accentForeground,
-                              size: 20,
-                            ),
-                          ],
                         ),
                       ],
                     ),
@@ -4069,7 +4081,9 @@ class _ManualReferenceImagePicker extends StatelessWidget {
 
     return Container(
       padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+      decoration: BoxDecoration(
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+      ),
       child: IntrinsicHeight(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -4432,7 +4446,9 @@ class _FormSection extends StatelessWidget {
     // A section is a 2px ink rule over the page ground, not a box.
     return Container(
       padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
-      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+      decoration: BoxDecoration(
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+      ),
       child: Column(children: children),
     );
   }
@@ -4457,7 +4473,7 @@ class _FindSpotsPanel extends StatelessWidget {
           decoration: BoxDecoration(
             borderRadius: BorderRadius.zero,
             // The recommended path sits on the wash under an ink rule.
-            border: Border(top: sectionRuleSide),
+            border: Border(top: sectionRuleSide, bottom: rowDividerSide),
           ),
           child: Column(
             children: [
@@ -4591,6 +4607,8 @@ class _AddPointPanel extends StatelessWidget {
           enabled: manualEnabled,
           onTap: onManual,
         ),
+        // Every section closes on a row divider.
+        const RowDivider(),
       ],
     );
   }

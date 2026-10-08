@@ -22,7 +22,9 @@ class ColorGradingParameterSummary extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14),
-      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+      decoration: BoxDecoration(
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+      ),
       // The row divider runs edge to edge; the rest is inset 12dp.
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

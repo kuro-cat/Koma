@@ -714,7 +714,9 @@ class _ModeSelector extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+      decoration: BoxDecoration(
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -786,7 +788,9 @@ class _ScorePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+      decoration: BoxDecoration(
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -870,7 +874,9 @@ class _SavePanel extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
-      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+      decoration: BoxDecoration(
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [

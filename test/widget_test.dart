@@ -1104,7 +1104,7 @@ void main() {
       tester
           .getSize(find.byKey(const ValueKey('records-completion-progress')))
           .height,
-      4,
+      3,
     );
     expect(find.byIcon(LucideIcons.folders), findsNothing);
     expect(

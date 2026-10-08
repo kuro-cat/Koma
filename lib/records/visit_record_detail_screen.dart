@@ -822,7 +822,9 @@ class _RecordInfoDashboard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+      decoration: BoxDecoration(
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+      ),
       child: Column(
         children: [
           InkWell(
@@ -898,7 +900,9 @@ class _RecordActionPanel extends StatelessWidget {
   Widget build(BuildContext context) {
     // A section: 2px ink rule on top, actions split by 1px dividers.
     return Container(
-      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+      decoration: BoxDecoration(
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+      ),
       child: Column(
         children: [
           SizedBox(

@@ -667,7 +667,9 @@ class _RecordScopeFilterSheetState extends State<_RecordScopeFilterSheet> {
               const SizedBox(height: 14),
               // Works and areas are ruled rows under one 2px ink rule.
               DecoratedBox(
-                decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+                decoration: BoxDecoration(
+                  border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+                ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
@@ -1493,7 +1495,7 @@ class _RecordGroupHeaderState extends State<_RecordGroupHeader> {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.background,
-        border: Border(top: sectionRuleSide),
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
       ),
       child: Material(
         color: Colors.transparent,
@@ -1608,7 +1610,9 @@ class _RecordsSummary extends StatelessWidget {
 
     // A section on the page ground: 2px ink rule on top, no frame.
     return Container(
-      decoration: BoxDecoration(border: Border(top: sectionRuleSide)),
+      decoration: BoxDecoration(
+        border: Border(top: sectionRuleSide, bottom: rowDividerSide),
+      ),
       child: Stack(
         children: [
           // The seam between the two metrics runs the section's full height.
@@ -1657,11 +1661,13 @@ class _RecordsSummary extends StatelessWidget {
               ],
             ),
           ),
+          // A 3px progress bar set in from the edges, so it reads as a
+          // readout rather than a heavier divider.
           Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            height: 4,
+            left: 12,
+            right: 12,
+            bottom: 6,
+            height: 3,
             child: Stack(
               children: [
                 Positioned.fill(
