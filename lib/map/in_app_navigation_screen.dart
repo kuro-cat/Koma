@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:math' as math;
-import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +20,6 @@ import 'valhalla_route_client.dart';
 import 'map_location_tracker.dart';
 import 'navigation_heading.dart';
 import '../l10n/l10n.dart';
-
-const _endRouteRed = Color(0xFFFF3B30);
 
 class NavigationLocationSample {
   const NavigationLocationSample({required this.position, this.accuracy = 0});
@@ -75,36 +72,23 @@ class _NavigationChrome {
     required this.systemOverlay,
   });
 
-  const _NavigationChrome.light()
-    : brightness = Brightness.light,
-      scaffold = const Color(0xFFF2F2F7),
-      panel = const Color(0xF7FFFFFF),
-      row = const Color(0xFFF2F2F7),
-      primaryText = const Color(0xFF1C1C1E),
-      secondaryText = const Color(0xFF8E8E93),
-      inactiveDot = const Color(0xFFC7C7CC),
-      iconButton = const Color(0xFFE5E5EA),
-      recenterFill = Colors.white,
-      detailsIconBackground = const Color(0xFFE5E5EA),
-      systemOverlay = SystemUiOverlayStyle.dark;
-
-  const _NavigationChrome.dark()
-    : brightness = Brightness.dark,
-      scaffold = const Color(0xFF1C1C1E),
-      panel = const Color(0xF21C1C1E),
-      row = const Color(0xFF2C2C2E),
-      primaryText = Colors.white,
-      secondaryText = const Color(0xFFAEAEB2),
-      inactiveDot = const Color(0xFF636366),
-      iconButton = const Color(0xFF3A3A3C),
-      recenterFill = const Color(0xFF2C2C2E),
-      detailsIconBackground = const Color(0xFF3A3A3C),
-      systemOverlay = SystemUiOverlayStyle.light;
-
+  /// Koma tokens. Callers apply the app colours for [brightness] first.
   factory _NavigationChrome.of(Brightness brightness) {
-    return brightness == Brightness.dark
-        ? const _NavigationChrome.dark()
-        : const _NavigationChrome.light();
+    return _NavigationChrome(
+      brightness: brightness,
+      scaffold: AppColors.background,
+      panel: AppColors.surface,
+      row: AppColors.surface,
+      primaryText: AppColors.textPrimary,
+      secondaryText: AppColors.textSecondary,
+      inactiveDot: AppColors.textTertiary,
+      iconButton: AppColors.surfaceMuted,
+      recenterFill: AppColors.surface,
+      detailsIconBackground: AppColors.surfaceMuted,
+      systemOverlay: brightness == Brightness.dark
+          ? SystemUiOverlayStyle.light
+          : SystemUiOverlayStyle.dark,
+    );
   }
 
   final Brightness brightness;
@@ -1124,107 +1108,103 @@ class _InstructionBanner extends StatelessWidget {
 
     return ClipRRect(
       borderRadius: BorderRadius.zero,
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: chrome.panel,
-            borderRadius: BorderRadius.zero,
-          ),
-          child: SafeArea(
-            bottom: false,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                if (zoneName.isNotEmpty)
-                  Padding(
-                    key: const ValueKey('in-app-navigation-top-zone'),
-                    padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-                    child: Center(
-                      child: _GroupNameRow(
-                        chrome: chrome,
-                        name: zoneName,
-                        centered: true,
-                      ),
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: chrome.panel,
+          border: Border(bottom: BorderSide(color: AppColors.ink)),
+        ),
+        child: SafeArea(
+          bottom: false,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (zoneName.isNotEmpty)
+                Padding(
+                  key: const ValueKey('in-app-navigation-top-zone'),
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
+                  child: Center(
+                    child: _GroupNameRow(
+                      chrome: chrome,
+                      name: zoneName,
+                      centered: true,
                     ),
                   ),
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 8, 20, 14),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: 72,
-                        child: PageView.builder(
-                          key: const ValueKey('in-app-navigation-steps'),
-                          controller: controller,
-                          onPageChanged: onIndexChanged,
-                          itemCount: steps.length,
-                          itemBuilder: (context, pageIndex) {
-                            final step = steps[pageIndex];
-                            final liveDistance = pageIndex == liveIndex
-                                ? liveDistanceMeters
-                                : null;
-                            final distanceLabel = liveDistance == null
-                                ? step.distanceLabel
-                                : _distanceLabel(liveDistance / 1000);
-                            return Row(
-                              children: [
-                                Icon(
-                                  step.icon,
-                                  size: 52,
-                                  color: chrome.primaryText,
-                                ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        distanceLabel,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: chrome.primaryText,
-                                          fontSize: 34,
-                                          height: 1.05,
-                                          fontWeight: FontWeight.w600,
-                                          letterSpacing: 0,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 2),
-                                      Text(
-                                        step.instruction,
-                                        maxLines: 1,
-                                        overflow: TextOverflow.ellipsis,
-                                        style: TextStyle(
-                                          color: chrome.primaryText,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w500,
-                                          letterSpacing: 0,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            );
-                          },
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      _StepDots(
-                        chrome: chrome,
-                        count: steps.length,
-                        index: index,
-                      ),
-                    ],
-                  ),
                 ),
-              ],
-            ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 8, 12, 14),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 72,
+                      child: PageView.builder(
+                        key: const ValueKey('in-app-navigation-steps'),
+                        controller: controller,
+                        onPageChanged: onIndexChanged,
+                        itemCount: steps.length,
+                        itemBuilder: (context, pageIndex) {
+                          final step = steps[pageIndex];
+                          final liveDistance = pageIndex == liveIndex
+                              ? liveDistanceMeters
+                              : null;
+                          final distanceLabel = liveDistance == null
+                              ? step.distanceLabel
+                              : _distanceLabel(liveDistance / 1000);
+                          return Row(
+                            children: [
+                              Icon(
+                                step.icon,
+                                size: 52,
+                                color: chrome.primaryText,
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      distanceLabel,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: chrome.primaryText,
+                                        fontSize: 34,
+                                        height: 1.05,
+                                        fontWeight: FontWeight.w600,
+                                        letterSpacing: 0,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      step.instruction,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: chrome.primaryText,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                        letterSpacing: 0,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    _StepDots(
+                      chrome: chrome,
+                      count: steps.length,
+                      index: index,
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -1263,10 +1243,7 @@ class _StepDots extends StatelessWidget {
             width: 6,
             height: 6,
             margin: const EdgeInsets.symmetric(horizontal: 3),
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: i == current ? chrome.primaryText : chrome.inactiveDot,
-            ),
+            color: i == current ? chrome.primaryText : chrome.inactiveDot,
           ),
         if (count > maxDots) ...[
           const SizedBox(width: 8),
@@ -1317,96 +1294,90 @@ class _BottomPanel extends StatelessWidget {
     return ClipRRect(
       key: const ValueKey('in-app-navigation-bottom-panel'),
       borderRadius: BorderRadius.zero,
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 18, sigmaY: 18),
-        child: DecoratedBox(
-          decoration: BoxDecoration(color: chrome.panel),
-          child: AnimatedSize(
-            duration: const Duration(milliseconds: 280),
-            curve: Curves.easeOutCubic,
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding: EdgeInsets.fromLTRB(20, 16, 16, 16 + bottomInset),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _SheetHeader(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+          color: chrome.panel,
+          border: Border(top: BorderSide(color: AppColors.ink)),
+        ),
+        child: AnimatedSize(
+          duration: const Duration(milliseconds: 280),
+          curve: Curves.easeOutCubic,
+          alignment: Alignment.topCenter,
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(12, 12, 12, 12 + bottomInset),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                _SheetHeader(
+                  chrome: chrome,
+                  headline: _stopHeadline(point, isLast: currentIsLast),
+                  metrics: metrics,
+                  expanded: expanded,
+                  onToggleExpanded: onToggleExpanded,
+                ),
+                if (expanded) ...[
+                  const SizedBox(height: 12),
+                  const _ListRule(),
+                  _InfoRow(
                     chrome: chrome,
-                    headline: _stopHeadline(point, isLast: currentIsLast),
-                    metrics: metrics,
-                    expanded: expanded,
-                    onToggleExpanded: onToggleExpanded,
+                    icon: LucideIcons.mapPin,
+                    iconColor: AppColors.background,
+                    iconBackground: AppColors.ink,
+                    title: point.name,
+                    subtitle: _destinationSubtitle(point),
                   ),
-                  if (expanded) ...[
-                    const SizedBox(height: 16),
-                    _InfoRow(
-                      chrome: chrome,
-                      icon: LucideIcons.mapPin,
-                      iconColor: Colors.white,
-                      iconBackground: _endRouteRed,
-                      title: point.name,
-                      subtitle: _destinationSubtitle(point),
-                    ),
-                    const SizedBox(height: 10),
-                    _InfoRow(
-                      key: const ValueKey('in-app-navigation-all-stops'),
-                      chrome: chrome,
-                      icon: LucideIcons.list,
-                      iconColor: chrome.primaryText,
-                      iconBackground: chrome.detailsIconBackground,
-                      title: l10n.inAppNavigationAllStops,
-                      subtitle: stops.isEmpty
-                          ? null
-                          : l10n.inAppNavigationStopCount(stops.length),
-                      onTap: onShowAllStops,
-                    ),
-                    const SizedBox(height: 16),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: OutlinedButton(
-                        key: const ValueKey('in-app-navigation-arrive'),
-                        onPressed: onArrive,
-                        style: OutlinedButton.styleFrom(
-                          foregroundColor: chrome.primaryText,
-                          side: BorderSide(color: chrome.iconButton),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                          textStyle: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0,
-                          ),
+                  _InfoRow(
+                    key: const ValueKey('in-app-navigation-all-stops'),
+                    chrome: chrome,
+                    icon: LucideIcons.list,
+                    iconColor: chrome.primaryText,
+                    iconBackground: chrome.detailsIconBackground,
+                    title: l10n.inAppNavigationAllStops,
+                    subtitle: stops.isEmpty
+                        ? null
+                        : l10n.inAppNavigationStopCount(stops.length),
+                    onTap: onShowAllStops,
+                  ),
+                  const SizedBox(height: 16),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: OutlinedButton(
+                      key: const ValueKey('in-app-navigation-arrive'),
+                      onPressed: onArrive,
+                      style: OutlinedButton.styleFrom(
+                        textStyle: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0,
                         ),
-                        child: Text(l10n.inAppNavigationArrived),
                       ),
+                      child: Text(l10n.inAppNavigationArrived),
                     ),
-                    const SizedBox(height: 10),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 52,
-                      child: FilledButton(
-                        key: const ValueKey('in-app-navigation-end-route'),
-                        onPressed: onEndRoute,
-                        style: FilledButton.styleFrom(
-                          backgroundColor: _endRouteRed,
-                          foregroundColor: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                          textStyle: const TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0,
-                          ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    height: 52,
+                    child: FilledButton(
+                      key: const ValueKey('in-app-navigation-end-route'),
+                      onPressed: onEndRoute,
+                      style: FilledButton.styleFrom(
+                        backgroundColor: AppColors.error,
+                        foregroundColor: AppColors.foregroundOn(
+                          AppColors.error,
                         ),
-                        child: Text(l10n.inAppNavigationEndRoute),
+                        textStyle: const TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0,
+                        ),
                       ),
+                      child: Text(l10n.inAppNavigationEndRoute),
                     ),
-                  ],
+                  ),
                 ],
-              ),
+              ],
             ),
           ),
         ),
@@ -1456,15 +1427,16 @@ class _SheetHeader extends StatelessWidget {
                   ? l10n.inAppNavigationCollapse
                   : l10n.inAppNavigationExpand,
               child: Material(
-                color: chrome.iconButton,
-                shape: const CircleBorder(),
+                color: AppColors.surface,
+                shape: RoundedRectangleBorder(
+                  side: BorderSide(color: AppColors.ink),
+                ),
                 child: InkWell(
                   key: ValueKey(
                     expanded
                         ? 'in-app-navigation-collapse'
                         : 'in-app-navigation-expand',
                   ),
-                  customBorder: const CircleBorder(),
                   onTap: onToggleExpanded,
                   child: SizedBox(
                     width: 40,
@@ -1585,15 +1557,15 @@ class _GroupNameRow extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          // A plain tag: raise with a rule edge, ink-2 text.
           decoration: BoxDecoration(
-            color: AppColors.accent.withValues(alpha: 0.08),
-            border: Border.all(color: AppColors.accent.withValues(alpha: 0.42)),
-            borderRadius: BorderRadius.zero,
+            color: AppColors.surface,
+            border: Border.all(color: AppColors.border),
           ),
           child: Text(
             l10n.inAppNavigationAreaBadge,
             style: TextStyle(
-              color: AppColors.accentForeground,
+              color: AppColors.textSecondary,
               fontSize: 11,
               fontWeight: FontWeight.w600,
               height: 1.15,
@@ -1642,23 +1614,22 @@ class _InfoRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // A ruled row: no fill, split from the next by a rule-2 line.
     return Material(
-      color: chrome.row,
-      borderRadius: BorderRadius.zero,
+      type: MaterialType.transparency,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.zero,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(color: AppColors.divider)),
+          ),
           child: Row(
             children: [
               Container(
                 width: 36,
                 height: 36,
-                decoration: BoxDecoration(
-                  color: iconBackground,
-                  shape: BoxShape.circle,
-                ),
+                color: iconBackground,
                 child: Icon(icon, size: 20, color: iconColor),
               ),
               const SizedBox(width: 12),
@@ -1716,12 +1687,10 @@ class _RecenterButton extends StatelessWidget {
       message: l10n.inAppNavigationRecenter,
       child: Material(
         color: chrome.recenterFill,
-        shape: const CircleBorder(),
+        shape: RoundedRectangleBorder(side: BorderSide(color: AppColors.ink)),
         elevation: 0,
-        shadowColor: Colors.black.withValues(alpha: 0.18),
         child: InkWell(
           key: const ValueKey('in-app-navigation-recenter'),
-          customBorder: const CircleBorder(),
           onTap: onTap,
           child: SizedBox(
             width: 44,
@@ -1748,7 +1717,7 @@ class _SkippedWaypointDot extends StatelessWidget {
         width: 14,
         height: 14,
         decoration: BoxDecoration(
-          color: const Color(0xFFC7C7CC),
+          color: AppColors.textTertiary,
           shape: BoxShape.circle,
           border: Border.all(color: Colors.white, width: 2),
         ),
@@ -1776,8 +1745,8 @@ class _WaypointDot extends StatelessWidget {
         ),
         child: Text(
           '$index',
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: AppColors.onAccent,
             fontSize: 11,
             fontWeight: FontWeight.w600,
             height: 1,
@@ -1798,11 +1767,12 @@ class _DestinationPin extends StatelessWidget {
         width: 32,
         height: 32,
         decoration: BoxDecoration(
-          color: _endRouteRed,
+          // Ink, not red: red means trouble. The white ring is map convention.
+          color: AppColors.ink,
           shape: BoxShape.circle,
           border: Border.all(color: Colors.white, width: 2.5),
         ),
-        child: const Icon(LucideIcons.mapPin, color: Colors.white, size: 18),
+        child: Icon(LucideIcons.mapPin, color: AppColors.background, size: 18),
       ),
     );
   }
@@ -1843,7 +1813,7 @@ class _ArrivalSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+        padding: const EdgeInsets.fromLTRB(12, 4, 12, 16),
         child: Column(
           key: const ValueKey('in-app-navigation-arrival-sheet'),
           mainAxisSize: MainAxisSize.min,
@@ -1859,15 +1829,15 @@ class _ArrivalSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
+            const _ListRule(),
             _InfoRow(
               chrome: chrome,
               icon: LucideIcons.flag,
-              iconColor: Colors.white,
-              iconBackground: isLast ? _endRouteRed : AppColors.accent,
+              iconColor: isLast ? AppColors.background : AppColors.onAccent,
+              iconBackground: isLast ? AppColors.ink : AppColors.accent,
               title: arrived.name,
               subtitle: _destinationSubtitle(arrived),
             ),
-            const SizedBox(height: 10),
             _InfoRow(
               key: const ValueKey('in-app-navigation-open-camera'),
               chrome: chrome,
@@ -1882,7 +1852,6 @@ class _ArrivalSheet extends StatelessWidget {
               onTap: onOpenCamera,
             ),
             if (nextStop != null) ...[
-              const SizedBox(height: 10),
               _InfoRow(
                 chrome: chrome,
                 icon: LucideIcons.arrowRight,
@@ -1903,11 +1872,6 @@ class _ArrivalSheet extends StatelessWidget {
                   key: const ValueKey('in-app-navigation-arrival-next'),
                   onPressed: onGoNext,
                   style: FilledButton.styleFrom(
-                    backgroundColor: AppColors.accent,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
                     textStyle: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
@@ -1927,11 +1891,8 @@ class _ArrivalSheet extends StatelessWidget {
                   key: const ValueKey('in-app-navigation-arrival-finish'),
                   onPressed: onFinish,
                   style: FilledButton.styleFrom(
-                    backgroundColor: _endRouteRed,
-                    foregroundColor: Colors.white,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
+                    backgroundColor: AppColors.error,
+                    foregroundColor: AppColors.foregroundOn(AppColors.error),
                   ),
                   child: Text(l10n.inAppNavigationEndRoute),
                 ),
@@ -1965,7 +1926,7 @@ class _AllStopsSheet extends StatelessWidget {
       child: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: maxHeight),
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(20, 4, 20, 16),
+          padding: const EdgeInsets.fromLTRB(12, 4, 12, 16),
           child: SingleChildScrollView(
             child: Column(
               key: const ValueKey('in-app-navigation-all-stops-sheet'),
@@ -1986,8 +1947,8 @@ class _AllStopsSheet extends StatelessWidget {
                   _GroupNameRow(chrome: chrome, name: zoneName),
                 ],
                 const SizedBox(height: 12),
+                const _ListRule(),
                 for (var index = 0; index < stops.length; index++) ...[
-                  if (index > 0) const SizedBox(height: 8),
                   _AllStopTile(
                     chrome: chrome,
                     index: index,
@@ -2028,10 +1989,9 @@ class _AllStopTile extends StatelessWidget {
       key: skipped
           ? ValueKey('in-app-navigation-stop-skipped-${stop.id}')
           : null,
-      padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-        color: chrome.row,
-        borderRadius: BorderRadius.zero,
+        border: Border(bottom: BorderSide(color: AppColors.divider)),
       ),
       child: Row(
         children: [
@@ -2039,18 +1999,19 @@ class _AllStopTile extends StatelessWidget {
             width: 32,
             height: 32,
             alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: skipped
-                  ? chrome.iconButton
-                  : isLast
-                  ? _endRouteRed
-                  : AppColors.accent,
-              shape: BoxShape.circle,
-            ),
+            color: skipped
+                ? chrome.iconButton
+                : isLast
+                ? AppColors.ink
+                : AppColors.accent,
             child: Text(
               '${index + 1}',
               style: TextStyle(
-                color: skipped ? chrome.secondaryText : Colors.white,
+                color: skipped
+                    ? chrome.secondaryText
+                    : isLast
+                    ? AppColors.background
+                    : AppColors.onAccent,
                 fontSize: 13,
                 fontWeight: FontWeight.w600,
               ),
@@ -2089,6 +2050,19 @@ class _AllStopTile extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+/// The 2px ink rule a list of rows hangs from.
+class _ListRule extends StatelessWidget {
+  const _ListRule();
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: AppColors.ink,
+      child: const SizedBox(height: 2, width: double.infinity),
     );
   }
 }

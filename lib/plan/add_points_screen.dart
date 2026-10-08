@@ -101,58 +101,24 @@ InputDecoration _boxedFormDecoration({
   String? hintText,
   bool reserveHelperSpace = true,
 }) {
+  // Edges, focus and error come from the theme's field style.
   return InputDecoration(
     hintText: hintText,
     hintStyle: TextStyle(
-      color: AppColors.textSecondary.withValues(alpha: 0.42),
+      color: AppColors.textTertiary,
       fontSize: 14,
       letterSpacing: 0,
     ),
     helperText: reserveHelperSpace ? ' ' : null,
-    contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.zero,
-      borderSide: BorderSide(color: AppColors.border),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.zero,
-      borderSide: BorderSide(color: AppColors.accent, width: 1.4),
-    ),
-    errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.zero,
-      borderSide: const BorderSide(color: Colors.redAccent),
-    ),
-    focusedErrorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.zero,
-      borderSide: const BorderSide(color: Colors.redAccent, width: 1.4),
-    ),
+    contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
   );
 }
 
 InputDecoration _workTypeDropdownDecoration() {
-  return InputDecoration(
+  return const InputDecoration(
     isDense: true,
-    filled: true,
-    fillColor: AppColors.surface,
-    hoverColor: AppColors.accent.withValues(alpha: 0.035),
     helperText: ' ',
-    contentPadding: const EdgeInsets.fromLTRB(14, 10, 4, 10),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.zero,
-      borderSide: BorderSide(color: AppColors.border, width: 1.4),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.zero,
-      borderSide: BorderSide(color: AppColors.accent, width: 1.4),
-    ),
-    errorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.zero,
-      borderSide: const BorderSide(color: Colors.redAccent, width: 1.4),
-    ),
-    focusedErrorBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.zero,
-      borderSide: const BorderSide(color: Colors.redAccent, width: 1.4),
-    ),
+    contentPadding: EdgeInsets.fromLTRB(12, 10, 4, 10),
   );
 }
 
@@ -215,7 +181,8 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
           title: Text(l10n.addPointsTitle),
         ),
         body: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          // Sections run full width and inset their own rows 12dp.
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
           children: [
             _FindSpotsPanel(
               enabled: currentPlan != null,
@@ -249,9 +216,12 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
                   : () => _openManualWorkForm(context, currentPlan),
             ),
             const SizedBox(height: 8),
-            RoutePlannerSkillLink(
-              lead: l10n.addPointsRoutePlannerLead,
-              repository: widget.repository,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: RoutePlannerSkillLink(
+                lead: l10n.addPointsRoutePlannerLead,
+                repository: widget.repository,
+              ),
             ),
           ],
         ),
@@ -622,7 +592,7 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
           ),
         ),
         body: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
           children: [
             _FormSection(
               children: [
@@ -647,14 +617,14 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
                                   onPressed: _clearQuery,
                                   padding: EdgeInsets.zero,
                                   constraints: const BoxConstraints.tightFor(
-                                    width: 40,
-                                    height: 46,
+                                    width: 48,
+                                    height: 48,
                                   ),
                                   icon: const Icon(LucideIcons.x, size: 19),
                                 ),
                           suffixIconConstraints: const BoxConstraints.tightFor(
-                            width: 40,
-                            height: 46,
+                            width: 48,
+                            height: 48,
                           ),
                         ),
                     textInputAction: TextInputAction.search,
@@ -667,7 +637,7 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
                   child: FilledButton.icon(
                     onPressed: _isSearching ? null : _search,
                     style: FilledButton.styleFrom(
-                      minimumSize: const Size.fromHeight(46),
+                      minimumSize: const Size.fromHeight(48),
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                     ),
                     icon: _isSearching
@@ -701,10 +671,7 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
                 ),
                 if (_results.isEmpty && _error == null) ...[
                   const SizedBox(height: 16),
-                  Divider(
-                    height: 1,
-                    color: AppColors.border.withValues(alpha: 0.65),
-                  ),
+                  Divider(height: 1, color: AppColors.divider),
                   const SizedBox(height: 12),
                   const _BangumiSearchHintContent(),
                 ],
@@ -717,18 +684,30 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
                 text: l10n.addPointsBangumiSearchFailed,
               )
             else if (_results.isNotEmpty)
-              for (final work in _results) ...[
-                _WorkResultCard(
-                  work: work,
-                  added: !widget.pickOnly && _hasWork(widget.plan, work),
-                  disabled: _isAdding,
-                  actionLabel: widget.pickOnly ? l10n.addPointsPickWork : null,
-                  onAdd: widget.pickOnly
-                      ? () => Navigator.of(context).pop(work)
-                      : () => _addWork(work),
+              // Results hang from an ink rule as ruled rows.
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(color: AppColors.ink, width: 2),
+                  ),
                 ),
-                const SizedBox(height: 8),
-              ],
+                child: Column(
+                  children: [
+                    for (final work in _results)
+                      _WorkResultCard(
+                        work: work,
+                        added: !widget.pickOnly && _hasWork(widget.plan, work),
+                        disabled: _isAdding,
+                        actionLabel: widget.pickOnly
+                            ? l10n.addPointsPickWork
+                            : null,
+                        onAdd: widget.pickOnly
+                            ? () => Navigator.of(context).pop(work)
+                            : () => _addWork(work),
+                      ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
@@ -760,22 +739,21 @@ class _BangumiTypeFilter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // A segmented control: one ink frame in the foreground, ink seams.
     return Container(
       width: double.infinity,
-      height: 40,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+      height: 48,
+      foregroundDecoration: BoxDecoration(
+        border: Border.all(color: AppColors.ink),
       ),
+      color: AppColors.surface,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           for (var index = 0; index < _types.length; index++) ...[
             Expanded(child: _buildTypeItem(_types[index])),
             if (index < _types.length - 1)
-              VerticalDivider(width: 1, thickness: 1, color: AppColors.border),
+              VerticalDivider(width: 1, thickness: 1, color: AppColors.ink),
           ],
         ],
       ),
@@ -788,46 +766,29 @@ class _BangumiTypeFilter extends StatelessWidget {
       button: true,
       selected: selected,
       child: Material(
-        color: Colors.transparent,
+        // Selected segments invert to ink.
+        color: selected ? AppColors.ink : Colors.transparent,
         child: InkWell(
           onTap: () => _toggleType(type, selected),
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 140),
-                curve: Curves.easeOut,
-                color: selected
-                    ? AppColors.accent.withValues(alpha: 0.08)
-                    : Colors.transparent,
-                alignment: Alignment.center,
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 4),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
                 child: Text(
                   type.label,
                   maxLines: 1,
                   style: TextStyle(
                     color: selected
-                        ? AppColors.accentStrongForeground
+                        ? AppColors.background
                         : AppColors.textSecondary,
-                    fontSize: 13,
+                    fontSize: 14,
                     fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
                     letterSpacing: 0,
                   ),
                 ),
               ),
-              if (selected)
-                Positioned(
-                  left: 8,
-                  right: 8,
-                  bottom: 0,
-                  child: Container(
-                    height: 3,
-                    decoration: BoxDecoration(
-                      color: AppColors.accent,
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
-                ),
-            ],
+            ),
           ),
         ),
       ),
@@ -863,14 +824,8 @@ class _BangumiTypeFilterDisclosure extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
-      ),
       child: Column(
         children: [
           Material(
@@ -878,42 +833,39 @@ class _BangumiTypeFilterDisclosure extends StatelessWidget {
             child: InkWell(
               onTap: onToggle,
               child: SizedBox(
-                height: 42,
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Text(
-                          l10n.addPointsFilterWorkTypes,
-                          style: TextStyle(
-                            color: AppColors.textPrimary,
-                            fontSize: 13,
-                            fontWeight: FontWeight.w600,
-                            letterSpacing: 0,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        l10n.addPointsSelectedTypeCount(selectedTypes.length),
+                height: 48,
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        l10n.addPointsFilterWorkTypes,
                         style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 12,
+                          color: AppColors.textPrimary,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
-                      const SizedBox(width: 6),
-                      AnimatedRotation(
-                        turns: expanded ? 0.5 : 0,
-                        duration: const Duration(milliseconds: 160),
-                        child: Icon(
-                          LucideIcons.chevronDown,
-                          size: 20,
-                          color: AppColors.textSecondary,
-                        ),
+                    ),
+                    Text(
+                      l10n.addPointsSelectedTypeCount(selectedTypes.length),
+                      style: TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 12,
+                        letterSpacing: 0,
                       ),
-                    ],
-                  ),
+                    ),
+                    const SizedBox(width: 6),
+                    AnimatedRotation(
+                      turns: expanded ? 0.5 : 0,
+                      duration: const Duration(milliseconds: 160),
+                      child: Icon(
+                        LucideIcons.chevronDown,
+                        size: 20,
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -923,7 +875,7 @@ class _BangumiTypeFilterDisclosure extends StatelessWidget {
             curve: Curves.easeOut,
             child: expanded
                 ? Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
+                    padding: const EdgeInsets.only(bottom: 4),
                     child: _BangumiTypeFilter(
                       selectedTypes: selectedTypes,
                       onChanged: onChanged,
@@ -1035,23 +987,24 @@ class _AnitabiLinkInputScreenState extends State<AnitabiLinkInputScreen> {
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+          padding: const EdgeInsets.fromLTRB(0, 12, 0, 24),
           children: [
-            Text(
-              l10n.addPointsAddingTo(widget.plan.name),
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 14,
-                letterSpacing: 0,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                l10n.addPointsAddingTo(widget.plan.name),
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 14,
+                  letterSpacing: 0,
+                ),
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 12),
             Container(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: AppColors.surface,
-                border: Border.all(color: AppColors.border),
-                borderRadius: BorderRadius.zero,
+                border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1069,65 +1022,35 @@ class _AnitabiLinkInputScreenState extends State<AnitabiLinkInputScreen> {
                   TextFormField(
                     onTapOutside: dismissKeyboardOnTapOutside,
                     controller: _linkController,
-                    decoration: InputDecoration(
-                      hintText: l10n.addPointsAnitabiLinkHint,
-                      hintStyle: TextStyle(
-                        color: AppColors.textSecondary.withValues(alpha: 0.48),
-                        fontSize: 14,
-                        letterSpacing: 0,
-                      ),
-                      helperText: ' ',
-                      suffixIcon: IconButton(
-                        key: const ValueKey('anitabi-link-input-action'),
-                        onPressed: hasLinkText
-                            ? _clearLink
-                            : _pasteLinkFromClipboard,
-                        tooltip: hasLinkText
-                            ? l10n.addPointsClearInput
-                            : l10n.addPointsPaste,
-                        padding: EdgeInsets.zero,
-                        constraints: const BoxConstraints.tightFor(
-                          width: 40,
-                          height: 40,
+                    decoration:
+                        _boxedFormDecoration(
+                          hintText: l10n.addPointsAnitabiLinkHint,
+                        ).copyWith(
+                          suffixIcon: IconButton(
+                            key: const ValueKey('anitabi-link-input-action'),
+                            onPressed: hasLinkText
+                                ? _clearLink
+                                : _pasteLinkFromClipboard,
+                            tooltip: hasLinkText
+                                ? l10n.addPointsClearInput
+                                : l10n.addPointsPaste,
+                            padding: EdgeInsets.zero,
+                            constraints: const BoxConstraints.tightFor(
+                              width: 48,
+                              height: 48,
+                            ),
+                            icon: Icon(
+                              hasLinkText
+                                  ? LucideIcons.x
+                                  : LucideIcons.clipboardPaste,
+                              size: 20,
+                            ),
+                          ),
+                          suffixIconConstraints: const BoxConstraints.tightFor(
+                            width: 48,
+                            height: 48,
+                          ),
                         ),
-                        icon: Icon(
-                          hasLinkText
-                              ? LucideIcons.x
-                              : LucideIcons.clipboardPaste,
-                          size: 20,
-                        ),
-                      ),
-                      suffixIconConstraints: const BoxConstraints.tightFor(
-                        width: 40,
-                        height: 40,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 14,
-                        vertical: 14,
-                      ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.zero,
-                        borderSide: BorderSide(color: AppColors.border),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.zero,
-                        borderSide: BorderSide(
-                          color: AppColors.accent,
-                          width: 1.4,
-                        ),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.zero,
-                        borderSide: const BorderSide(color: Colors.redAccent),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.zero,
-                        borderSide: const BorderSide(
-                          color: Colors.redAccent,
-                          width: 1.4,
-                        ),
-                      ),
-                    ),
                     keyboardType: TextInputType.url,
                     textInputAction: TextInputAction.done,
                     validator: _validateLink,
@@ -1158,7 +1081,7 @@ class _AnitabiLinkInputScreenState extends State<AnitabiLinkInputScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 12),
             _LinkExampleCard(
               siteBaseUrl: widget.settings.anitabiServiceConfig.siteBaseUrl,
             ),
@@ -1196,11 +1119,10 @@ class _LinkExampleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      width: double.infinity,
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.zero,
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1283,14 +1205,14 @@ class _ExampleLinkText extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
       decoration: BoxDecoration(
-        color: AppColors.accent.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.zero,
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.border),
       ),
       child: Text(
         text,
         softWrap: false,
         style: TextStyle(
-          color: AppColors.accentStrongForeground,
+          color: AppColors.textPrimary,
           fontSize: 13,
           fontFamily: 'monospace',
           fontWeight: FontWeight.w600,
@@ -1351,8 +1273,8 @@ class _ExampleNote extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
-        color: AppColors.surfaceMuted,
-        borderRadius: BorderRadius.zero,
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.border),
       ),
       child: Text(text, style: textStyle),
     );
@@ -1489,8 +1411,7 @@ class ManualWorkFormScreenState extends State<ManualWorkFormScreen> {
               key: const ValueKey('manual-work-filling-guide'),
               onPressed: _showFillingGuide,
               style: TextButton.styleFrom(
-                foregroundColor: AppColors.accentDark,
-                minimumSize: const Size(0, 40),
+                minimumSize: const Size(48, 48),
                 padding: const EdgeInsets.symmetric(horizontal: 10),
               ),
               child: ResponsiveButtonContent(
@@ -1506,7 +1427,7 @@ class ManualWorkFormScreenState extends State<ManualWorkFormScreen> {
         body: Form(
           key: _formKey,
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
             children: [
               _FormSection(
                 children: [
@@ -1543,9 +1464,7 @@ class ManualWorkFormScreenState extends State<ManualWorkFormScreen> {
                       data: Theme.of(context).copyWith(
                         focusColor: Colors.transparent,
                         hoverColor: Colors.transparent,
-                        highlightColor: AppColors.accent.withValues(
-                          alpha: 0.075,
-                        ),
+                        highlightColor: AppColors.surfaceMuted,
                         splashColor: Colors.transparent,
                       ),
                       child: DropdownButtonFormField<BangumiSubjectType>(
@@ -1620,17 +1539,20 @@ class ManualWorkFormScreenState extends State<ManualWorkFormScreen> {
                 ],
               ),
               const SizedBox(height: 16),
-              FilledButton.icon(
-                onPressed: _isSaving ? null : _saveWork,
-                icon: _isSaving
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(LucideIcons.check, size: 18),
-                label: Text(
-                  _isSaving ? l10n.addPointsSaving : l10n.addPointsSaveWork,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: FilledButton.icon(
+                  onPressed: _isSaving ? null : _saveWork,
+                  icon: _isSaving
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(LucideIcons.check, size: 18),
+                  label: Text(
+                    _isSaving ? l10n.addPointsSaving : l10n.addPointsSaveWork,
+                  ),
                 ),
               ),
             ],
@@ -1670,7 +1592,7 @@ class _ManualPointFillingGuideSheet extends StatelessWidget {
               children: [
                 Icon(
                   LucideIcons.mapPinPlus,
-                  color: AppColors.accentStrongForeground,
+                  color: AppColors.textPrimary,
                   size: 24,
                 ),
                 const SizedBox(width: 10),
@@ -1742,13 +1664,9 @@ class _ManualPointFillingGuideSheet extends StatelessWidget {
             const SizedBox(height: 4),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.only(top: 12),
               decoration: BoxDecoration(
-                color: AppColors.accent.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.zero,
-                border: Border.all(
-                  color: AppColors.accent.withValues(alpha: 0.28),
-                ),
+                border: Border(top: BorderSide(color: AppColors.divider)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1756,7 +1674,7 @@ class _ManualPointFillingGuideSheet extends StatelessWidget {
                   Icon(
                     LucideIcons.locateFixed,
                     size: 19,
-                    color: AppColors.accentStrongForeground,
+                    color: AppColors.textSecondary,
                   ),
                   const SizedBox(width: 9),
                   Expanded(
@@ -1809,7 +1727,7 @@ class _ManualWorkFillingGuideSheet extends StatelessWidget {
               children: [
                 Icon(
                   LucideIcons.bookOpen,
-                  color: AppColors.accentStrongForeground,
+                  color: AppColors.textPrimary,
                   size: 24,
                 ),
                 const SizedBox(width: 10),
@@ -1874,13 +1792,9 @@ class _ManualWorkFillingGuideSheet extends StatelessWidget {
             const SizedBox(height: 4),
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.only(top: 12),
               decoration: BoxDecoration(
-                color: AppColors.accent.withValues(alpha: 0.08),
-                borderRadius: BorderRadius.zero,
-                border: Border.all(
-                  color: AppColors.accent.withValues(alpha: 0.28),
-                ),
+                border: Border(top: BorderSide(color: AppColors.divider)),
               ),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1888,7 +1802,7 @@ class _ManualWorkFillingGuideSheet extends StatelessWidget {
                   Icon(
                     LucideIcons.lightbulb,
                     size: 19,
-                    color: AppColors.accentStrongForeground,
+                    color: AppColors.textSecondary,
                   ),
                   const SizedBox(width: 9),
                   Expanded(
@@ -1952,20 +1866,17 @@ class _FillingGuideItem extends StatelessWidget {
                   Positioned(
                     top: 28,
                     bottom: 0,
-                    child: Container(width: 2, color: AppColors.border),
+                    child: Container(width: 1, color: AppColors.divider),
                   ),
                 Container(
                   width: 28,
                   height: 28,
                   alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: AppColors.accent,
-                    shape: BoxShape.circle,
-                  ),
+                  color: AppColors.ink,
                   child: Text(
                     '$index',
                     style: TextStyle(
-                      color: AppColors.onAccent,
+                      color: AppColors.background,
                       fontSize: 13,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0,
@@ -2000,18 +1911,11 @@ class _FillingGuideItem extends StatelessWidget {
                           horizontal: 7,
                           vertical: 2,
                         ),
-                        decoration: BoxDecoration(
-                          color: badge == l10n.addPointsBadgeRequired
-                              ? AppColors.accent.withValues(alpha: 0.1)
-                              : AppColors.surfaceMuted,
-                          borderRadius: BorderRadius.zero,
-                        ),
+                        color: AppColors.surfaceMuted,
                         child: Text(
                           badge,
                           style: TextStyle(
-                            color: badge == l10n.addPointsBadgeRequired
-                                ? AppColors.accentStrongForeground
-                                : AppColors.textSecondary,
+                            color: AppColors.textSecondary,
                             fontSize: 11,
                             fontWeight: FontWeight.w600,
                             letterSpacing: 0,
@@ -2034,7 +1938,7 @@ class _FillingGuideItem extends StatelessWidget {
                   Text(
                     l10n.addPointsGuideExample(example),
                     style: TextStyle(
-                      color: AppColors.accentStrongForeground,
+                      color: AppColors.textPrimary,
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0,
@@ -2083,10 +1987,11 @@ class _ManualWorkTypeDropdownItemState
         alignment: Alignment.centerLeft,
         padding: EdgeInsets.fromLTRB(hovered ? 14 : 8, 0, 8, 0),
         decoration: BoxDecoration(
-          color: AppColors.accent.withValues(
-            alpha: widget.selected ? 0.10 : (hovered ? 0.05 : 0),
-          ),
-          borderRadius: BorderRadius.zero,
+          color: widget.selected
+              ? AppColors.accentWash
+              : hovered
+              ? AppColors.surfaceMuted
+              : Colors.transparent,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -2128,9 +2033,9 @@ class _ManualWorkLabeledField extends StatelessWidget {
             children: [
               TextSpan(text: label),
               if (required)
-                const TextSpan(
+                TextSpan(
                   text: ' *',
-                  style: TextStyle(color: Colors.redAccent),
+                  style: TextStyle(color: AppColors.textSecondary),
                 ),
             ],
           ),
@@ -2321,7 +2226,7 @@ class _QuickManualPointFormScreenState
     return InputDecoration(
       hintText: hintText,
       hintStyle: TextStyle(
-        color: AppColors.textSecondary.withValues(alpha: 0.42),
+        color: AppColors.textTertiary,
         fontSize: 13,
         letterSpacing: 0,
       ),
@@ -2347,8 +2252,7 @@ class _QuickManualPointFormScreenState
             key: const ValueKey('quick-point-filling-guide'),
             onPressed: _showFillingGuide,
             style: TextButton.styleFrom(
-              foregroundColor: AppColors.accentDark,
-              minimumSize: const Size(0, 40),
+              minimumSize: const Size(48, 48),
               padding: const EdgeInsets.symmetric(horizontal: 10),
             ),
             child: ResponsiveButtonContent(
@@ -2364,14 +2268,17 @@ class _QuickManualPointFormScreenState
       body: Form(
         key: _formKey,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
           children: [
-            Text(
-              l10n.addPointsAddingTo(widget.plan.name),
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 13,
-                letterSpacing: 0,
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                l10n.addPointsAddingTo(widget.plan.name),
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 13,
+                  letterSpacing: 0,
+                ),
               ),
             ),
             const SizedBox(height: 12),
@@ -2428,7 +2335,7 @@ class _QuickManualPointFormScreenState
                     Text(
                       l10n.addPointsBadgeOptional,
                       style: TextStyle(
-                        color: AppColors.textSecondary.withValues(alpha: 0.8),
+                        color: AppColors.textSecondary,
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0,
@@ -2509,18 +2416,8 @@ class _QuickManualPointFormScreenState
                         key: const ValueKey('quick-point-map-picker'),
                         onPressed: _pickCoordinateFromMap,
                         style: OutlinedButton.styleFrom(
-                          fixedSize: const Size.fromHeight(44),
+                          fixedSize: const Size.fromHeight(48),
                           padding: const EdgeInsets.symmetric(horizontal: 14),
-                          foregroundColor: AppColors.accent,
-                          backgroundColor: AppColors.accent.withValues(
-                            alpha: 0.06,
-                          ),
-                          side: BorderSide(
-                            color: AppColors.accent.withValues(alpha: 0.35),
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
                         ),
                         child: ResponsiveButtonContent(
                           icon: LucideIcons.mapPin,
@@ -2533,15 +2430,15 @@ class _QuickManualPointFormScreenState
                     ),
                     const SizedBox(width: 10),
                     SizedBox(
-                      width: 44,
-                      height: 44,
+                      width: 48,
+                      height: 48,
                       child: IconButton.outlined(
                         key: const ValueKey('quick-point-paste-coordinate'),
                         tooltip: l10n.addPointsPasteCoordinates,
                         onPressed: _pasteCoordinateFromClipboard,
                         style: IconButton.styleFrom(
                           foregroundColor: AppColors.textPrimary,
-                          side: BorderSide(color: AppColors.border),
+                          side: BorderSide(color: AppColors.ink),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero,
                           ),
@@ -2554,11 +2451,14 @@ class _QuickManualPointFormScreenState
               ],
             ),
             const SizedBox(height: 16),
-            FilledButton.icon(
-              key: const ValueKey('quick-point-submit'),
-              onPressed: _submit,
-              icon: const Icon(LucideIcons.check, size: 18),
-              label: Text(l10n.addPointsSavePoint),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: FilledButton.icon(
+                key: const ValueKey('quick-point-submit'),
+                onPressed: _submit,
+                icon: const Icon(LucideIcons.check, size: 18),
+                label: Text(l10n.addPointsSavePoint),
+              ),
             ),
           ],
         ),
@@ -2591,7 +2491,7 @@ class _QuickManualPointFillingGuideSheet extends StatelessWidget {
               children: [
                 Icon(
                   LucideIcons.mapPinPlus,
-                  color: AppColors.accentStrongForeground,
+                  color: AppColors.textPrimary,
                   size: 24,
                 ),
                 const SizedBox(width: 10),
@@ -3086,8 +2986,7 @@ class _ManualPointFormScreenState extends State<_ManualPointFormScreen> {
               key: const ValueKey('manual-point-filling-guide'),
               onPressed: _isBusy ? null : _showPointFillingGuide,
               style: TextButton.styleFrom(
-                foregroundColor: AppColors.accentDark,
-                minimumSize: const Size(0, 40),
+                minimumSize: const Size(48, 48),
                 padding: const EdgeInsets.symmetric(horizontal: 10),
               ),
               child: ResponsiveButtonContent(
@@ -3103,16 +3002,19 @@ class _ManualPointFormScreenState extends State<_ManualPointFormScreen> {
         body: Form(
           key: _formKey,
           child: ListView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
             children: [
-              Text(
-                _isEditing
-                    ? l10n.addPointsEditing(editingPoint!.name)
-                    : l10n.addPointsAddingTo(widget.plan.name),
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 13,
-                  letterSpacing: 0,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: Text(
+                  _isEditing
+                      ? l10n.addPointsEditing(editingPoint!.name)
+                      : l10n.addPointsAddingTo(widget.plan.name),
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 13,
+                    letterSpacing: 0,
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
@@ -3363,18 +3265,8 @@ class _ManualPointFormScreenState extends State<_ManualPointFormScreen> {
                           key: const ValueKey('point-form-map-picker'),
                           onPressed: _isBusy ? null : _pickCoordinateFromMap,
                           style: OutlinedButton.styleFrom(
-                            fixedSize: const Size.fromHeight(44),
+                            fixedSize: const Size.fromHeight(48),
                             padding: const EdgeInsets.symmetric(horizontal: 14),
-                            foregroundColor: AppColors.accent,
-                            backgroundColor: AppColors.accent.withValues(
-                              alpha: 0.06,
-                            ),
-                            side: BorderSide(
-                              color: AppColors.accent.withValues(alpha: 0.35),
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,
-                            ),
                           ),
                           child: ResponsiveButtonContent(
                             icon: LucideIcons.mapPin,
@@ -3387,8 +3279,8 @@ class _ManualPointFormScreenState extends State<_ManualPointFormScreen> {
                       ),
                       const SizedBox(width: 10),
                       SizedBox(
-                        width: 44,
-                        height: 44,
+                        width: 48,
+                        height: 48,
                         child: IconButton.outlined(
                           key: const ValueKey('point-form-paste-coordinate'),
                           tooltip: l10n.addPointsPasteCoordinates,
@@ -3397,7 +3289,7 @@ class _ManualPointFormScreenState extends State<_ManualPointFormScreen> {
                               : _pasteCoordinateFromClipboard,
                           style: IconButton.styleFrom(
                             foregroundColor: AppColors.textPrimary,
-                            side: BorderSide(color: AppColors.border),
+                            side: BorderSide(color: AppColors.ink),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.zero,
                             ),
@@ -3434,24 +3326,27 @@ class _ManualPointFormScreenState extends State<_ManualPointFormScreen> {
                     : _removeReferenceImage,
               ),
               const SizedBox(height: 16),
-              FilledButton.icon(
-                key: const ValueKey('point-form-save'),
-                onPressed: _isBusy || _hasUncertainNewPointSave
-                    ? null
-                    : _savePoint,
-                icon: _isSaving
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Icon(LucideIcons.check, size: 18),
-                label: Text(
-                  _isSaving
-                      ? l10n.addPointsSaving
-                      : (_isEditing
-                            ? l10n.addPointsSaveChanges
-                            : l10n.addPointsSavePoint),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: FilledButton.icon(
+                  key: const ValueKey('point-form-save'),
+                  onPressed: _isBusy || _hasUncertainNewPointSave
+                      ? null
+                      : _savePoint,
+                  icon: _isSaving
+                      ? const SizedBox(
+                          width: 18,
+                          height: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(LucideIcons.check, size: 18),
+                  label: Text(
+                    _isSaving
+                        ? l10n.addPointsSaving
+                        : (_isEditing
+                              ? l10n.addPointsSaveChanges
+                              : l10n.addPointsSavePoint),
+                  ),
                 ),
               ),
             ],
@@ -3474,7 +3369,7 @@ class _ManualPointFormScreenState extends State<_ManualPointFormScreen> {
     return InputDecoration(
       hintText: hintText,
       hintStyle: TextStyle(
-        color: AppColors.textSecondary.withValues(alpha: 0.42),
+        color: AppColors.textTertiary,
         fontSize: 13,
         letterSpacing: 0,
       ),
@@ -3555,14 +3450,13 @@ class _CoordinateLabeledField extends StatelessWidget {
         return AnimatedContainer(
           duration: const Duration(milliseconds: 120),
           constraints: const BoxConstraints(minHeight: 62),
-          padding: const EdgeInsets.fromLTRB(14, 9, 14, 8),
+          padding: const EdgeInsets.fromLTRB(12, 9, 12, 8),
           decoration: BoxDecoration(
             color: AppColors.surface,
             border: Border.all(
-              color: focused ? AppColors.accent : AppColors.border,
-              width: 1.4,
+              color: focused ? AppColors.ink : AppColors.border,
+              width: focused ? 2 : 1,
             ),
-            borderRadius: BorderRadius.zero,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -3573,9 +3467,9 @@ class _CoordinateLabeledField extends StatelessWidget {
                   children: [
                     TextSpan(text: label),
                     if (required)
-                      const TextSpan(
+                      TextSpan(
                         text: ' *',
-                        style: TextStyle(color: Colors.redAccent),
+                        style: TextStyle(color: AppColors.textSecondary),
                       ),
                   ],
                 ),
@@ -3754,13 +3648,13 @@ class _MapToolButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: selected ? AppColors.accent : AppColors.surface,
-      borderRadius: BorderRadius.zero,
+      color: selected ? AppColors.ink : AppColors.surface,
+      shape: Border.all(color: AppColors.ink),
       child: IconButton(
         tooltip: tooltip,
         onPressed: onTap,
         icon: Icon(icon),
-        color: selected ? Colors.white : AppColors.textPrimary,
+        color: selected ? AppColors.background : AppColors.textPrimary,
       ),
     );
   }
@@ -3788,16 +3682,15 @@ class _ManualPointSelectionCard extends StatelessWidget {
           );
 
     return Container(
-      margin: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomInset),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.fromLTRB(12, 0, 12, 12 + bottomInset),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppColors.ink),
       ),
       child: Row(
         children: [
-          Icon(LucideIcons.mapPinPlus, color: AppColors.accentForeground),
+          Icon(LucideIcons.mapPinPlus, color: AppColors.textSecondary),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -3869,7 +3762,7 @@ class _LinkedWorksPanel extends StatelessWidget {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(14, 12, 10, 10),
+                    padding: const EdgeInsets.fromLTRB(12, 10, 8, 10),
                     child: Row(
                       children: [
                         Expanded(
@@ -3917,17 +3810,9 @@ class _LinkedWorksPanel extends StatelessWidget {
                   ),
                   if (works.isEmpty)
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(14, 2, 14, 12),
-                      child: Container(
+                      padding: const EdgeInsets.fromLTRB(12, 2, 12, 12),
+                      child: SizedBox(
                         width: double.infinity,
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 14,
-                        ),
-                        decoration: BoxDecoration(
-                          color: AppColors.accent.withValues(alpha: 0.04),
-                          borderRadius: BorderRadius.zero,
-                        ),
                         child: Text(
                           l10n.addPointsNoLinkedWorks,
                           style: TextStyle(
@@ -3942,7 +3827,7 @@ class _LinkedWorksPanel extends StatelessWidget {
                     SizedBox(
                       height: 94,
                       child: ListView.separated(
-                        padding: const EdgeInsets.fromLTRB(14, 2, 14, 10),
+                        padding: const EdgeInsets.fromLTRB(12, 2, 12, 10),
                         scrollDirection: Axis.horizontal,
                         itemCount:
                             visibleWorks.length + (remainingCount > 0 ? 1 : 0),
@@ -3959,41 +3844,38 @@ class _LinkedWorksPanel extends StatelessWidget {
               ),
             ),
           ),
-          Divider(height: 1, color: AppColors.border.withValues(alpha: 0.55)),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: SizedBox(
-              height: 60,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Expanded(
-                    child: _WorkCreationAction(
-                      key: const ValueKey('add-points-bangumi-work'),
-                      icon: LucideIcons.search,
-                      title: l10n.addPointsAddFromBangumi,
-                      subtitle: l10n.addPointsAddFromBangumiSubtitle,
-                      onTap: onBangumi,
-                    ),
+          Divider(height: 1, color: AppColors.divider),
+          SizedBox(
+            height: 60,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: _WorkCreationAction(
+                    key: const ValueKey('add-points-bangumi-work'),
+                    icon: LucideIcons.search,
+                    title: l10n.addPointsAddFromBangumi,
+                    subtitle: l10n.addPointsAddFromBangumiSubtitle,
+                    onTap: onBangumi,
                   ),
-                  VerticalDivider(
-                    width: 9,
-                    indent: 8,
-                    endIndent: 8,
-                    thickness: 1,
-                    color: AppColors.border.withValues(alpha: 0.55),
+                ),
+                VerticalDivider(
+                  width: 1,
+                  indent: 12,
+                  endIndent: 12,
+                  thickness: 1,
+                  color: AppColors.divider,
+                ),
+                Expanded(
+                  child: _WorkCreationAction(
+                    key: const ValueKey('add-points-manual-work'),
+                    icon: LucideIcons.plus,
+                    title: l10n.addPointsManualAddWork,
+                    subtitle: l10n.addPointsManualAddWorkSubtitle,
+                    onTap: onManual,
                   ),
-                  Expanded(
-                    child: _WorkCreationAction(
-                      key: const ValueKey('add-points-manual-work'),
-                      icon: LucideIcons.plus,
-                      title: l10n.addPointsManualAddWork,
-                      subtitle: l10n.addPointsManualAddWorkSubtitle,
-                      onTap: onManual,
-                    ),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
@@ -4049,13 +3931,13 @@ class _MoreWorksIndicator extends StatelessWidget {
           margin: const EdgeInsets.only(top: 11),
           alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: AppColors.accent.withValues(alpha: 0.08),
-            shape: BoxShape.circle,
+            color: AppColors.surface,
+            border: Border.all(color: AppColors.border),
           ),
           child: Text(
             '+$count',
             style: TextStyle(
-              color: AppColors.accentStrongForeground,
+              color: AppColors.textSecondary,
               fontSize: 13,
               fontWeight: FontWeight.w600,
               letterSpacing: 0,
@@ -4090,7 +3972,7 @@ class _WorkCreationAction extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.zero,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
             children: [
               Icon(icon, color: AppColors.accentForeground, size: 22),
@@ -4165,11 +4047,9 @@ class _ManualReferenceImagePicker extends StatelessWidget {
     final placeholder = Icon(LucideIcons.image, color: AppColors.textSecondary);
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: IntrinsicHeight(
         child: Row(
@@ -4297,11 +4177,9 @@ class _WorkResultCardState extends State<_WorkResultCard> {
     final showSubtitle = subtitle.isNotEmpty;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(bottom: BorderSide(color: AppColors.divider)),
       ),
       child: Row(
         children: [
@@ -4318,19 +4196,16 @@ class _WorkResultCardState extends State<_WorkResultCard> {
                     });
                   },
                   borderRadius: BorderRadius.zero,
-                  child: Padding(
-                    padding: EdgeInsets.zero,
-                    child: Text(
-                      work.title,
-                      maxLines: _titleExpanded ? null : 2,
-                      overflow: _titleExpanded
-                          ? TextOverflow.visible
-                          : TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0,
-                      ),
+                  child: Text(
+                    work.title,
+                    maxLines: _titleExpanded ? null : 2,
+                    overflow: _titleExpanded
+                        ? TextOverflow.visible
+                        : TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0,
                     ),
                   ),
                 ),
@@ -4361,29 +4236,22 @@ class _WorkResultCardState extends State<_WorkResultCard> {
               ],
             ),
           ),
-          const SizedBox(width: 12),
-          if (widget.added)
-            FilledButton(
-              onPressed: null,
-              style: FilledButton.styleFrom(
-                minimumSize: const Size(88, 40),
-                padding: const EdgeInsets.symmetric(horizontal: 14),
-                disabledBackgroundColor: AppColors.accent.withValues(
-                  alpha: 0.10,
-                ),
-                disabledForegroundColor: AppColors.accentDark,
-              ),
-              child: Text(l10n.addPointsAdded),
-            )
-          else
-            OutlinedButton(
-              onPressed: widget.disabled ? null : widget.onAdd,
-              style: OutlinedButton.styleFrom(
-                minimumSize: const Size(88, 40),
-                padding: const EdgeInsets.symmetric(horizontal: 14),
-              ),
-              child: Text(widget.actionLabel ?? l10n.addPointsAdd),
+          const SizedBox(width: 4),
+          // Repeated on every row, so a frameless text key.
+          TextButton(
+            onPressed: widget.added || widget.disabled ? null : widget.onAdd,
+            style: TextButton.styleFrom(
+              minimumSize: const Size(64, 48),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
             ),
+            child: Text(
+              widget.added
+                  ? l10n.addPointsAdded
+                  : widget.actionLabel ?? l10n.addPointsAdd,
+              maxLines: 1,
+              softWrap: false,
+            ),
+          ),
         ],
       ),
     );
@@ -4411,8 +4279,7 @@ class _InfoPill extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: AppColors.surfaceMuted,
-        borderRadius: BorderRadius.zero,
+        color: AppColors.surface,
         border: Border.all(color: AppColors.border),
       ),
       child: Text(
@@ -4436,13 +4303,8 @@ class _MessageCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
-      ),
+    return Padding(
+      padding: const EdgeInsets.all(12),
       child: Row(
         children: [
           Icon(icon, color: AppColors.textSecondary),
@@ -4550,12 +4412,11 @@ class _FormSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // A section is a 2px ink rule over the page ground, not a box.
     return Container(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 4),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Column(children: children),
     );
@@ -4586,7 +4447,7 @@ class _FindSpotsPanel extends StatelessWidget {
           child: Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(14, 12, 12, 12),
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -4622,11 +4483,12 @@ class _FindSpotsPanel extends StatelessWidget {
                                       horizontal: 6,
                                       vertical: 2,
                                     ),
+                                    // Raise and a rule edge read on the wash.
                                     decoration: BoxDecoration(
-                                      color: AppColors.accent.withValues(
-                                        alpha: 0.10,
+                                      color: AppColors.surface,
+                                      border: Border.all(
+                                        color: AppColors.border,
                                       ),
-                                      borderRadius: BorderRadius.zero,
                                     ),
                                     child: Text(
                                       l10n.addPointsRecommended,
@@ -4687,7 +4549,6 @@ class _AddPointPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
@@ -4695,7 +4556,7 @@ class _AddPointPanel extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.fromLTRB(4, 2, 4, 10),
+            padding: const EdgeInsets.fromLTRB(12, 10, 12, 4),
             child: Row(children: [CapsLabel(l10n.addPointsOwnSpotsSection)]),
           ),
           _PointCreationAction(
@@ -4708,12 +4569,7 @@ class _AddPointPanel extends StatelessWidget {
             enabled: quickManualEnabled,
             onTap: onQuickManual,
           ),
-          Divider(
-            height: 1,
-            indent: 12,
-            endIndent: 12,
-            color: AppColors.border.withValues(alpha: 0.60),
-          ),
+          Divider(height: 1, color: AppColors.divider),
           _PointCreationAction(
             key: const ValueKey('add-points-manual-point'),
             icon: LucideIcons.mapPinPen,
@@ -4746,81 +4602,77 @@ class _PointCreationAction extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: Material(
-        color: enabled ? Colors.transparent : AppColors.surfaceMuted,
+    return Material(
+      color: Colors.transparent,
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: enabled ? onTap : null,
         borderRadius: BorderRadius.zero,
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: enabled ? onTap : null,
-          borderRadius: BorderRadius.zero,
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(minHeight: 72),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 10),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 32,
-                    child: Icon(
-                      icon,
-                      color: enabled
-                          ? AppColors.accentForeground
-                          : AppColors.textSecondary,
-                      size: 24,
-                    ),
-                  ),
-                  const SizedBox(width: 11),
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: enabled
-                                      ? AppColors.textPrimary
-                                      : AppColors.textSecondary,
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 3),
-                        Text(
-                          subtitle,
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: AppColors.textSecondary.withValues(
-                              alpha: enabled ? 1 : 0.65,
-                            ),
-                            fontSize: 13,
-                            letterSpacing: 0,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Icon(
-                    LucideIcons.chevronRight,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 72),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Row(
+              children: [
+                SizedBox(
+                  width: 32,
+                  child: Icon(
+                    icon,
                     color: enabled
                         ? AppColors.accentForeground
                         : AppColors.textSecondary,
-                    size: 22,
+                    size: 24,
                   ),
-                ],
-              ),
+                ),
+                const SizedBox(width: 11),
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: enabled
+                                    ? AppColors.textPrimary
+                                    : AppColors.textSecondary,
+                                fontSize: 15,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        subtitle,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          color: enabled
+                              ? AppColors.textSecondary
+                              : AppColors.textTertiary,
+                          fontSize: 13,
+                          letterSpacing: 0,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  LucideIcons.chevronRight,
+                  color: enabled
+                      ? AppColors.accentForeground
+                      : AppColors.textSecondary,
+                  size: 22,
+                ),
+              ],
             ),
           ),
         ),

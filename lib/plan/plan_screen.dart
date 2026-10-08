@@ -171,7 +171,6 @@ class _PlanScreenState extends State<PlanScreen>
     setState(() {
       _selectedGroupIndex = selectedIndex;
       _selectedGroupId = groupId;
-      _showMap = false;
     });
     syncLocationActivity();
     controller.setCurrentGroup(groupId);
@@ -571,11 +570,7 @@ class _PlanScreenState extends State<PlanScreen>
                     children: [
                       // Rows hang from a 2px ink rule, as Tsumiki's lists do.
                       if (displayPoints.isNotEmpty)
-                        Container(
-                          height: 2,
-                          margin: const EdgeInsets.symmetric(horizontal: 16),
-                          color: AppColors.ink,
-                        ),
+                        Container(height: 2, color: AppColors.ink),
                       Expanded(
                         child: displayPoints.isEmpty
                             ? Padding(
@@ -594,12 +589,7 @@ class _PlanScreenState extends State<PlanScreen>
                               )
                             : ReorderableListView.builder(
                                 scrollController: _pointListController,
-                                padding: const EdgeInsets.fromLTRB(
-                                  16,
-                                  0,
-                                  16,
-                                  24,
-                                ),
+                                padding: const EdgeInsets.only(bottom: 24),
                                 buildDefaultDragHandles: false,
                                 itemCount: displayPoints.length,
                                 onReorderItem: (oldIndex, newIndex) =>
@@ -1590,7 +1580,7 @@ class _PlanGroupControls extends StatelessWidget {
       maxMapHeight,
     );
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 2),
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 2),
       child: Column(
         children: [
           Row(
@@ -1811,8 +1801,27 @@ class _PlanInlineMapState extends State<_PlanInlineMap> {
     }
 
     if (widget.group.id != oldWidget.group.id) {
-      _mapController.move(_initialCenter, 15.2);
+      _showGroup();
     }
+  }
+
+  /// Frames every spot of the area, or centres on it when it has one spot.
+  void _showGroup() {
+    final coordinates = [
+      for (final point in widget.group.points)
+        if (point.hasCoordinate) point.position,
+    ];
+    if (coordinates.length < 2) {
+      _mapController.move(_initialCenter, 15.2);
+      return;
+    }
+    _mapController.fitCamera(
+      CameraFit.coordinates(
+        coordinates: coordinates,
+        padding: const EdgeInsets.all(36),
+        maxZoom: 16,
+      ),
+    );
   }
 
   PilgrimagePoint? get _selectedPoint {

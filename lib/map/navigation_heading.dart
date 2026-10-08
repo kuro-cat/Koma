@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../app_theme.dart';
 import 'map_colors.dart';
 import '../l10n/l10n.dart';
 
@@ -121,7 +122,7 @@ class NavigationLocationPuck extends StatelessWidget {
     return ValueListenableBuilder<double?>(
       valueListenable: heading,
       builder: (context, turns, _) {
-        final color = stale ? Colors.grey : MapColors.accent;
+        final color = stale ? AppColors.textTertiary : MapColors.accent;
         return Semantics(
           label: stale
               ? l10n.navigationHeadingStale

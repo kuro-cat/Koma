@@ -42,7 +42,6 @@ class AppInputDialog extends StatelessWidget {
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       backgroundColor: AppColors.surface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 420, maxHeight: maxHeight),
         child: Padding(
@@ -191,7 +190,7 @@ InputDecoration appDialogInputDecoration({
     enabledBorder: border,
     focusedBorder: OutlineInputBorder(
       borderRadius: BorderRadius.zero,
-      borderSide: BorderSide(color: AppColors.accent, width: 1.25),
+      borderSide: BorderSide(color: AppColors.ink, width: 2),
     ),
     errorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.zero,
@@ -199,7 +198,7 @@ InputDecoration appDialogInputDecoration({
     ),
     focusedErrorBorder: OutlineInputBorder(
       borderRadius: BorderRadius.zero,
-      borderSide: BorderSide(color: AppColors.error, width: 1.25),
+      borderSide: BorderSide(color: AppColors.error, width: 2),
     ),
   );
 }

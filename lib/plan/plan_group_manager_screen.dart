@@ -15,18 +15,10 @@ Widget _cleanReorderProxy(
   int index,
   Animation<double> animation,
 ) {
-  return AnimatedBuilder(
-    animation: animation,
-    builder: (context, child) {
-      final elevation = Curves.easeOut.transform(animation.value) * 10;
-      return Material(
-        color: Colors.transparent,
-        shadowColor: Colors.black.withValues(alpha: 0.18),
-        elevation: elevation,
-        borderRadius: BorderRadius.zero,
-        child: child,
-      );
-    },
+  // A lifted row stands forward with an ink frame, never a shadow.
+  return Material(
+    color: AppColors.surface,
+    shape: RoundedRectangleBorder(side: BorderSide(color: AppColors.ink)),
     child: child,
   );
 }
@@ -91,7 +83,7 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
         body: CustomScrollView(
           slivers: [
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
               sliver: SliverToBoxAdapter(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -107,7 +99,7 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               sliver: SliverReorderableList(
                 itemCount: groups.length,
                 onReorderItem: _reorderGroups,
@@ -171,7 +163,7 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
               ),
             ),
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 112),
+              padding: const EdgeInsets.fromLTRB(12, 0, 12, 112),
               sliver: SliverToBoxAdapter(
                 child: _UngroupedGroupCard(
                   pointCount: _ungroupedCount,
@@ -325,7 +317,7 @@ class _PlanGroupManagerHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       key: const ValueKey('plan-group-summary'),
-      padding: const EdgeInsets.fromLTRB(4, 4, 4, 16),
+      padding: const EdgeInsets.fromLTRB(0, 4, 0, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -386,15 +378,13 @@ class _PlanGroupCard extends StatelessWidget {
         : l10n.planGroupManagerUnordered;
     final hasAnchor =
         group.anchorName != null && group.anchorName!.trim().isNotEmpty;
-    final surface = isEmpty ? AppColors.surfaceMuted : AppColors.surface;
-
     return Material(
-      color: surface,
+      type: MaterialType.transparency,
       shape: Border(bottom: BorderSide(color: AppColors.divider)),
       child: InkWell(
         onTap: onOpen,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+          padding: const EdgeInsets.symmetric(vertical: 10),
           child: Row(
             children: [
               ReorderableDragStartListener(
@@ -431,10 +421,7 @@ class _PlanGroupCard extends StatelessWidget {
                         ),
                         if (isEmpty) ...[
                           const SizedBox(width: 6),
-                          _GroupMetaChip(
-                            label: l10n.planGroupManagerEmpty,
-                            muted: true,
-                          ),
+                          _GroupMetaChip(label: l10n.planGroupManagerEmpty),
                         ],
                       ],
                     ),
@@ -458,10 +445,7 @@ class _PlanGroupCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(width: 8),
-                        _GroupMetaChip(
-                          label: orderLabel,
-                          accent: group.orderMode == PlanGroupOrderMode.manual,
-                        ),
+                        _GroupMetaChip(label: orderLabel),
                       ],
                     ),
                   ],
@@ -490,7 +474,7 @@ class _PlanGroupCard extends StatelessWidget {
                 itemBuilder: (context) => [
                   PopupMenuItem(
                     value: 'rename',
-                    height: 42,
+                    height: 48,
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: _GroupActionRow(
                       icon: LucideIcons.edit,
@@ -499,7 +483,7 @@ class _PlanGroupCard extends StatelessWidget {
                   ),
                   PopupMenuItem(
                     value: 'anchor',
-                    height: 42,
+                    height: 48,
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: _GroupActionRow(
                       icon: LucideIcons.flag,
@@ -508,7 +492,7 @@ class _PlanGroupCard extends StatelessWidget {
                   ),
                   PopupMenuItem(
                     value: 'order',
-                    height: 42,
+                    height: 48,
                     padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: _GroupActionRow(
                       icon: LucideIcons.arrowUpDown,
@@ -520,7 +504,7 @@ class _PlanGroupCard extends StatelessWidget {
                   const PopupMenuDivider(),
                   PopupMenuItem(
                     value: 'delete',
-                    height: 42,
+                    height: 48,
                     padding: EdgeInsets.symmetric(horizontal: 8),
                     child: _GroupActionRow(
                       icon: LucideIcons.trash2,
@@ -538,34 +522,25 @@ class _PlanGroupCard extends StatelessWidget {
   }
 }
 
+/// A plain fact tag: raise with a rule edge and ink-2 text, so it reads on
+/// any row ground.
 class _GroupMetaChip extends StatelessWidget {
-  const _GroupMetaChip({
-    required this.label,
-    this.muted = false,
-    this.accent = false,
-  });
+  const _GroupMetaChip({required this.label});
 
   final String label;
-  final bool muted;
-  final bool accent;
 
   @override
   Widget build(BuildContext context) {
-    final color = accent
-        ? AppColors.accent
-        : muted
-        ? AppColors.textSecondary
-        : AppColors.textSecondary;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.12),
-        borderRadius: BorderRadius.zero,
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.border),
       ),
       child: Text(
         label,
         style: TextStyle(
-          color: color,
+          color: AppColors.textSecondary,
           fontSize: 11,
           fontWeight: FontWeight.w600,
           letterSpacing: 0,
@@ -619,16 +594,19 @@ class _UngroupedGroupCard extends StatelessWidget {
     final hasPoints = pointCount > 0;
     return Material(
       key: const ValueKey('ungrouped'),
-      color: AppColors.surfaceMuted,
+      type: MaterialType.transparency,
       shape: Border(bottom: BorderSide(color: AppColors.divider)),
       child: InkWell(
         onTap: onOpen,
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(10, 14, 6, 14),
+          padding: const EdgeInsets.fromLTRB(0, 10, 12, 10),
           child: Row(
             children: [
-              Icon(LucideIcons.inbox, color: AppColors.textSecondary),
-              const SizedBox(width: 12),
+              // Lines up with the drag grips above.
+              SizedBox(
+                width: 42,
+                child: Icon(LucideIcons.inbox, color: AppColors.textSecondary),
+              ),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

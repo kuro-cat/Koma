@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' show RenderParagraph;
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -859,14 +860,14 @@ void main() {
           .first,
     );
     final pickerShape = pickerMaterial.shape! as RoundedRectangleBorder;
-    expect(pickerShape.side.color, AppColors.border);
+    expect(pickerShape.side.color, AppColors.ink);
     final menuDivider = tester.widget<Divider>(
       find.descendant(
         of: find.byKey(const ValueKey('box-assign-group-menu')),
         matching: find.byType(Divider),
       ),
     );
-    expect(menuDivider.color, AppColors.border);
+    expect(menuDivider.color, AppColors.divider);
 
     final selectedOption = tester.widget<MenuItemButton>(
       find.byKey(
@@ -1053,8 +1054,10 @@ void main() {
     expect(title.style?.fontWeight, FontWeight.w600);
     expect(find.byTooltip('搜索记录（待接入）'), findsNothing);
     expect(
-      tester.getSize(find.byKey(const ValueKey('records-status-filter'))),
-      const Size(124, 44),
+      tester
+          .getSize(find.byKey(const ValueKey('records-status-filter')))
+          .height,
+      44,
     );
     expect(find.byKey(const ValueKey('records-search-field')), findsOneWidget);
     expect(
@@ -1072,7 +1075,7 @@ void main() {
     );
     final statusFilterShape =
         statusFilterSurface.shape! as RoundedRectangleBorder;
-    expect(statusFilterShape.side.color, AppColors.border);
+    expect(statusFilterShape.side.color, AppColors.ink);
     expect(statusFilterShape.side.style, BorderStyle.solid);
     expect(statusFilterShape.side.width, 1);
     final scopeFilterButton = tester.widget<IconButton>(
@@ -1082,7 +1085,7 @@ void main() {
       scopeFilterButton.style?.backgroundColor?.resolve({}),
       AppColors.surface,
     );
-    expect(scopeFilterButton.style?.side?.resolve({})?.color, AppColors.border);
+    expect(scopeFilterButton.style?.side?.resolve({})?.color, AppColors.ink);
     expect(
       tester
           .widgetList<NavigationDestination>(find.byType(NavigationDestination))
@@ -1143,26 +1146,10 @@ void main() {
     expect(recordMetaRect.top - recordTitleRect.bottom, closeTo(6, 0.1));
     expect(capturedRowRect.top - recordMetaRect.bottom, closeTo(10, 0.1));
     expect(
-      tester.getSize(
-        find.byKey(
-          const ValueKey('records-group-count-sample-group-uji-station'),
-        ),
+      find.byKey(
+        const ValueKey('records-group-count-sample-group-uji-station'),
       ),
-      const Size.square(30),
-    );
-    final countDecoration = tester.widget<DecoratedBox>(
-      find
-          .descendant(
-            of: find.byKey(
-              const ValueKey('records-group-count-sample-group-uji-station'),
-            ),
-            matching: find.byType(DecoratedBox),
-          )
-          .first,
-    );
-    expect(
-      (countDecoration.decoration as BoxDecoration).shape,
-      BoxShape.circle,
+      findsOneWidget,
     );
     final groupSurfaceRect = tester.getRect(
       find.byKey(
@@ -1179,7 +1166,7 @@ void main() {
       ),
       findsNothing,
     );
-    expect(firstRecordRect.top - groupSurfaceRect.bottom, closeTo(4, 0.1));
+    expect(firstRecordRect.top - groupSurfaceRect.bottom, closeTo(0, 0.1));
     expect(
       find.ancestor(
         of: find.byKey(
@@ -1260,6 +1247,14 @@ void main() {
 
     await tester.tap(find.text('记录').last);
     await tester.pumpAndSettle();
+    // The search hint shows in full, not ellipsized.
+    final hint = tester.renderObject<RenderParagraph>(
+      find.descendant(
+        of: find.byKey(const ValueKey('records-search-field')),
+        matching: find.text('搜索记录'),
+      ),
+    );
+    expect(hint.didExceedMaxLines, isFalse);
     await tester.drag(
       find.byKey(const ValueKey('records-scroll-view')),
       const Offset(0, -320),
@@ -1278,9 +1273,25 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('选择状态'), findsOneWidget);
     expect(find.textContaining('个状态'), findsNothing);
+    // Menu items keep to one line: the longest label is as tall as the
+    // shortest.
     expect(
-      tester.getSize(find.byKey(const ValueKey('records-status-menu'))).width,
-      tester.getSize(find.byKey(const ValueKey('records-status-filter'))).width,
+      tester
+          .getSize(
+            find.descendant(
+              of: find.byKey(const ValueKey('records-status-option-pending')),
+              matching: find.text('未完成'),
+            ),
+          )
+          .height,
+      tester
+          .getSize(
+            find.descendant(
+              of: find.byKey(const ValueKey('records-status-option-all')),
+              matching: find.text('全部'),
+            ),
+          )
+          .height,
     );
     expect(
       find.descendant(
@@ -3000,7 +3011,12 @@ void main() {
       ),
       findsOneWidget,
     );
-    expect(tester.getSize(moreButton), const Size.square(34));
+    expect(tester.getSize(moreButton), const Size.square(48));
+    // The count shows in full at phone width, clear of the more key.
+    expect(
+      tester.getRect(find.byKey(ValueKey('work-point-count-${work.id}'))).right,
+      lessThanOrEqualTo(tester.getTopLeft(moreButton).dx),
+    );
     final moreMenu = tester.widget<PopupMenuButton<String>>(moreButton);
     expect(moreMenu.style?.side?.resolve({}), isNull);
     expect(find.byKey(const ValueKey('work-action-delete')), findsNothing);

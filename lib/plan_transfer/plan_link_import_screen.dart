@@ -331,7 +331,7 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
           title: Text(l10n.planLinkImportTitle),
         ),
         body: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
           children: [
             Text(
               l10n.planLinkImportIntro,
@@ -363,7 +363,6 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
               decoration: InputDecoration(
                 labelText: l10n.planLinkImportLinkLabel,
                 hintText: 'https://github.com/…/releases/…',
-                border: const OutlineInputBorder(),
                 suffixIcon: IconButton(
                   key: const ValueKey('plan-link-paste'),
                   tooltip: l10n.planLinkImportPaste,
@@ -442,10 +441,18 @@ class _PlanLinkImportScreenState extends State<PlanLinkImportScreen> {
             ),
           ),
           const SizedBox(height: 8),
+          // Ruled rows under an ink rule; the page gutter is their inset.
+          ColoredBox(
+            color: AppColors.ink,
+            child: const SizedBox(height: 2, width: double.infinity),
+          ),
           for (var i = 0; i < _assets.length; i++)
-            Card(
-              margin: const EdgeInsets.only(bottom: 8),
+            DecoratedBox(
+              decoration: BoxDecoration(
+                border: Border(bottom: BorderSide(color: AppColors.divider)),
+              ),
               child: ListTile(
+                contentPadding: EdgeInsets.zero,
                 key: ValueKey('plan-link-asset-$i'),
                 leading: Icon(
                   _assets[i].isPlan

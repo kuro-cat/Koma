@@ -86,20 +86,21 @@ class _VisitRecordDetailScreenState extends State<VisitRecordDetailScreen> {
       ),
       body: ListView(
         key: const ValueKey('record-detail-scroll-view'),
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        // Sections run full width and pad their own rows 12dp.
+        padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
         children: [
-          _RecordComparisonPanel(
-            record: _record,
-            referenceImagePath: referenceImagePath,
-            referenceImageUrl: referenceImageUrl,
-            settings: widget.settings,
-            controller: widget.controller,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: _RecordComparisonPanel(
+              record: _record,
+              referenceImagePath: referenceImagePath,
+              referenceImageUrl: referenceImageUrl,
+              settings: widget.settings,
+              controller: widget.controller,
+            ),
           ),
           const SizedBox(height: 16),
-          if (resolvedPoint == null) ...[
-            const _OrphanRecordNotice(),
-            const SizedBox(height: 12),
-          ],
+          if (resolvedPoint == null) const _OrphanRecordNotice(),
           _RecordInfoDashboard(
             title: resolvedPoint?.name ?? _record.displayPointNameSnapshot,
             subtitle: resolvedPoint == null
@@ -131,7 +132,7 @@ class _VisitRecordDetailScreenState extends State<VisitRecordDetailScreen> {
               ],
             ],
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 16),
           _RecordActionPanel(
             onAlign: () => _openAlignment(context),
             onColorGrading: () => _openColorGrading(context),
@@ -269,7 +270,6 @@ class _VisitRecordDetailScreenState extends State<VisitRecordDetailScreen> {
                             ? ConfirmActionDialog.dangerColor
                             : Colors.transparent;
                       }),
-                      side: BorderSide(color: AppColors.border, width: 1.5),
                       onChanged: (value) =>
                           setState(() => deleteFiles = value ?? false),
                       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -783,13 +783,8 @@ class _OrphanRecordNotice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.warning.withValues(alpha: 0.08),
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.warning.withValues(alpha: 0.35)),
-      ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 12),
       child: Row(
         children: [
           Icon(LucideIcons.link2Off, color: AppColors.warning, size: 19),
@@ -827,9 +822,7 @@ class _RecordInfoDashboard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Column(
         children: [
@@ -837,7 +830,7 @@ class _RecordInfoDashboard extends StatelessWidget {
             onTap: onHeaderTap,
             borderRadius: BorderRadius.zero,
             child: Padding(
-              padding: const EdgeInsets.all(14),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -877,18 +870,14 @@ class _RecordInfoDashboard extends StatelessWidget {
               ),
             ),
           ),
-          const _DashboardBorder(),
-          Padding(
-            padding: const EdgeInsets.all(14),
-            child: Column(
-              children: [
-                for (var index = 0; index < children.length; index += 1) ...[
-                  if (index > 0) const _DashboardBorder(verticalMargin: 9),
-                  children[index],
-                ],
-              ],
+          for (final child in children) ...[
+            const _DashboardBorder(),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+              child: child,
             ),
-          ),
+          ],
+          const _DashboardBorder(),
         ],
       ),
     );
@@ -896,17 +885,11 @@ class _RecordInfoDashboard extends StatelessWidget {
 }
 
 class _DashboardBorder extends StatelessWidget {
-  const _DashboardBorder({this.verticalMargin = 0});
-
-  final double verticalMargin;
+  const _DashboardBorder();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 1,
-      margin: EdgeInsets.symmetric(vertical: verticalMargin),
-      color: AppColors.border.withValues(alpha: 0.65),
-    );
+    return AppHairline(color: AppColors.divider);
   }
 }
 
@@ -923,12 +906,10 @@ class _RecordActionPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // A section: 2px ink rule on top, actions split by 1px dividers.
     return Container(
-      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Column(
         children: [
@@ -945,12 +926,7 @@ class _RecordActionPanel extends StatelessWidget {
                     onTap: onAlign,
                   ),
                 ),
-                VerticalDivider(
-                  width: 9,
-                  indent: 8,
-                  endIndent: 8,
-                  color: AppColors.border,
-                ),
+                VerticalDivider(width: 1, color: AppColors.divider),
                 Expanded(
                   child: _RecordAction(
                     icon: LucideIcons.wandSparkles,
@@ -962,13 +938,14 @@ class _RecordActionPanel extends StatelessWidget {
               ],
             ),
           ),
-          Divider(height: 9, indent: 8, endIndent: 8, color: AppColors.border),
+          Divider(height: 1, color: AppColors.divider),
           _RecordAction(
             icon: LucideIcons.share2,
             title: l10n.visitRecordDetailExportTitle,
             subtitle: l10n.visitRecordDetailExportSubtitle,
             onTap: onExportComparison,
           ),
+          Divider(height: 1, color: AppColors.divider),
         ],
       ),
     );
@@ -999,7 +976,7 @@ class _RecordAction extends StatelessWidget {
         child: SizedBox(
           height: 56,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             child: Row(
               children: [
                 Icon(icon, size: 20, color: AppColors.textPrimary),

@@ -301,7 +301,7 @@ class PointDetailSheet extends StatelessWidget {
         height: sheetHeight,
         child: SingleChildScrollView(
           child: Padding(
-            padding: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomInset),
+            padding: EdgeInsets.fromLTRB(12, 0, 12, 16 + bottomInset),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,

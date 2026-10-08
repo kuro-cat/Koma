@@ -1713,7 +1713,7 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
               : PreferredSize(
                   preferredSize: const Size.fromHeight(58),
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(16, 0, 8, 12),
+                    padding: const EdgeInsets.fromLTRB(12, 0, 4, 12),
                     child: Row(
                       children: [
                         Expanded(
@@ -2004,8 +2004,8 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
                       ),
                     Positioned(
                       top: 12,
-                      left: 16,
-                      right: 16,
+                      left: 12,
+                      right: 12,
                       child: _ImportSummary(
                         isLoading: _isLoading,
                         isImporting: _isImporting,
@@ -2424,8 +2424,7 @@ class _ImportSummary extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppColors.ink),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -2439,7 +2438,7 @@ class _ImportSummary extends StatelessWidget {
                   child: CircularProgressIndicator(strokeWidth: 2),
                 )
               else
-                Icon(LucideIcons.map, color: AppColors.accentForeground),
+                Icon(LucideIcons.map, color: AppColors.textSecondary),
               const SizedBox(width: 10),
               Expanded(
                 child: AppContentFade(
@@ -2711,13 +2710,10 @@ class _AnitabiPointCard extends StatelessWidget {
     }
 
     return Padding(
-      padding: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomInset),
+      padding: EdgeInsets.fromLTRB(12, 0, 12, 12 + bottomInset),
       child: Material(
         color: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
-          side: BorderSide(color: AppColors.border),
-        ),
+        shape: Border.all(color: AppColors.ink),
         clipBehavior: Clip.antiAlias,
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -2735,16 +2731,14 @@ class _AnitabiPointCard extends StatelessWidget {
               Divider(
                 key: ValueKey('anitabi-import-overlap-point-divider'),
                 height: 1,
-                indent: 14,
-                endIndent: 14,
-                color: AppColors.border,
+                color: AppColors.divider,
               ),
             ],
             InkWell(
               key: ValueKey('anitabi-point-card-${point.id}'),
               onTap: openDetail,
               child: Padding(
-                padding: const EdgeInsets.all(14),
+                padding: const EdgeInsets.all(12),
                 child: Column(
                   children: [
                     Row(
@@ -2964,7 +2958,7 @@ class _AnitabiPointDetailSheet extends StatelessWidget {
       child: ConstrainedBox(
         constraints: BoxConstraints(maxHeight: maxHeight),
         child: SingleChildScrollView(
-          padding: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomInset),
+          padding: EdgeInsets.fromLTRB(12, 0, 12, 12 + bottomInset),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -3048,7 +3042,7 @@ class _AnitabiPointDetailSheet extends StatelessWidget {
               const SizedBox(height: 18),
               SizedBox(
                 width: double.infinity,
-                height: 44,
+                height: 48,
                 child: FilledButton(
                   onPressed: imported || isImporting
                       ? null
@@ -3144,16 +3138,15 @@ class _NoPointSelectedCard extends StatelessWidget {
         : l10n.anitabiMapImportNoImageSpots(expectedCount ?? 0);
 
     return Container(
-      margin: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomInset),
-      padding: const EdgeInsets.all(16),
+      margin: EdgeInsets.fromLTRB(12, 0, 12, 12 + bottomInset),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppColors.ink),
       ),
       child: Row(
         children: [
-          Icon(LucideIcons.pointer, color: AppColors.accentForeground),
+          Icon(LucideIcons.pointer, color: AppColors.textSecondary),
           SizedBox(width: 10),
           Expanded(
             child: Text(
@@ -3196,14 +3189,12 @@ class _EmptyImportState extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
+      padding: const EdgeInsets.fromLTRB(0, 16, 0, 24),
       children: [
         Container(
-          padding: const EdgeInsets.all(18),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.zero,
-            border: Border.all(color: AppColors.border),
+            border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -3212,13 +3203,13 @@ class _EmptyImportState extends StatelessWidget {
                 children: [
                   Icon(
                     LucideIcons.clapperboard,
-                    color: AppColors.accentForeground,
+                    color: AppColors.textSecondary,
                   ),
                   const SizedBox(width: 8),
                   Text(
                     l10n.anitabiMapImportNoWorks,
                     style: TextStyle(
-                      color: AppColors.accentStrongForeground,
+                      color: AppColors.textPrimary,
                       fontSize: 18,
                       fontWeight: FontWeight.w600,
                       letterSpacing: 0,
@@ -3235,7 +3226,7 @@ class _EmptyImportState extends StatelessWidget {
                   key: const ValueKey('import-empty-search-button'),
                   onPressed: onSearch,
                   style: FilledButton.styleFrom(
-                    minimumSize: const Size.fromHeight(46),
+                    minimumSize: const Size.fromHeight(48),
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                   ),
                   icon: const Icon(LucideIcons.search, size: 20),
@@ -3248,7 +3239,7 @@ class _EmptyImportState extends StatelessWidget {
                 child: OutlinedButton.icon(
                   onPressed: onPasteLink,
                   style: OutlinedButton.styleFrom(
-                    minimumSize: const Size.fromHeight(46),
+                    minimumSize: const Size.fromHeight(48),
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                   ),
                   icon: const Icon(LucideIcons.link, size: 20),
@@ -3306,19 +3297,12 @@ class _ImportWorkGuideStep extends StatelessWidget {
                     left: 8,
                     top: 10,
                     bottom: 0,
-                    child: Container(width: 2, color: AppColors.border),
+                    child: Container(width: 1, color: AppColors.divider),
                   ),
                 Positioned(
                   left: 4,
                   top: 5,
-                  child: Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: AppColors.accent,
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
+                  child: Container(width: 10, height: 10, color: AppColors.ink),
                 ),
               ],
             ),

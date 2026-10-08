@@ -198,12 +198,11 @@ void main() {
         var toggle = tester.widget<SwitchListTile>(finder);
         expect(toggle.value, isFalse);
         expect(toggle.onChanged, isNotNull);
-        expect(toggle.thumbColor!.resolve({}), AppColors.accentForeground);
-        expect(
-          toggle.trackOutlineColor!.resolve({}),
-          AppColors.accentForeground,
-        );
-        expect(toggle.thumbColor!.resolve({WidgetState.disabled}), isNull);
+        // Off but enabled: the theme's full-ink knob, not a faded one. The
+        // accent is kept for the on state.
+        expect(toggle.thumbColor, isNull);
+        final switchTheme = Theme.of(tester.element(finder)).switchTheme;
+        expect(switchTheme.thumbColor!.resolve({}), AppColors.ink);
         toggle.onChanged!(true);
         await tester.pump();
         toggle = tester.widget<SwitchListTile>(finder);

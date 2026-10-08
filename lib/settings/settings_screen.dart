@@ -141,11 +141,12 @@ class _SettingsScreenState extends State<SettingsScreen> {
             onPressed: _confirmResetSettings,
             icon: const Icon(LucideIcons.rotateCcw),
           ),
-          const SizedBox(width: 16),
+          // Lines the key up with the 12dp page gutter below.
+          const SizedBox(width: 12),
         ],
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
         children: [
           _SettingsCard(
             key: const ValueKey('settings-appearance-card'),
@@ -1540,7 +1541,7 @@ class _AnitabiServiceSettingsPageState
           children: [
             for (var index = 0; index < services.length; index += 1) ...[
               if (index > 0)
-                Divider(height: 1, thickness: 1, color: AppColors.border),
+                Divider(height: 1, thickness: 1, color: AppColors.divider),
               Builder(
                 builder: (context) {
                   final service = services[index];
@@ -2030,7 +2031,7 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
             const SizedBox(height: 10),
             Text(l10n.settingsAnitabiServicesHint, style: _secondaryTextStyle),
             const SizedBox(height: 20),
-            Divider(height: 1, thickness: 1, color: AppColors.surfaceMuted),
+            Divider(height: 1, thickness: 1, color: AppColors.divider),
             const SizedBox(height: 18),
             Text(
               l10n.settingsAnitabiImageSource(
@@ -2056,7 +2057,7 @@ class _DataSourceSettingsPageState extends State<_DataSourceSettingsPage> {
               style: _secondaryTextStyle,
             ),
             const SizedBox(height: 20),
-            Divider(height: 1, thickness: 1, color: AppColors.surfaceMuted),
+            Divider(height: 1, thickness: 1, color: AppColors.divider),
             const SizedBox(height: 18),
             _NumberStepperSetting(
               icon: LucideIcons.cloudDownload,
@@ -2206,31 +2207,42 @@ class _MapDisplaySettingsPageState extends State<_MapDisplaySettingsPage> {
         _SettingsSection(
           title: l10n.settingsBaseMapBrightness,
           children: [
-            Row(
-              children: [
-                for (final appearance in MapAppearance.values) ...[
-                  if (appearance != MapAppearance.values.first)
-                    const SizedBox(width: 10),
-                  Expanded(
-                    child: _ModeButton(
-                      key: ValueKey('map-appearance-${appearance.name}'),
-                      icon: switch (appearance) {
-                        MapAppearance.automatic => LucideIcons.smartphone,
-                        MapAppearance.light => LucideIcons.sun,
-                        MapAppearance.dark => LucideIcons.moon,
-                      },
-                      label: switch (appearance) {
-                        MapAppearance.automatic => l10n.settingsFollowTheme,
-                        MapAppearance.light => l10n.settingsLight,
-                        MapAppearance.dark => l10n.settingsDark,
-                      },
-                      selected: settings.mapAppearance == appearance,
-                      onTap: () =>
-                          _update(settings.copyWith(mapAppearance: appearance)),
-                    ),
-                  ),
-                ],
-              ],
+            // One ink frame with ink dividers, like the theme mode row.
+            DecoratedBox(
+              position: DecorationPosition.foreground,
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.ink),
+              ),
+              child: IntrinsicHeight(
+                child: Row(
+                  children: [
+                    for (final appearance in MapAppearance.values) ...[
+                      if (appearance != MapAppearance.values.first)
+                        Container(width: 1, color: AppColors.ink),
+                      Expanded(
+                        child: _ModeButton(
+                          framed: false,
+                          key: ValueKey('map-appearance-${appearance.name}'),
+                          icon: switch (appearance) {
+                            MapAppearance.automatic => LucideIcons.smartphone,
+                            MapAppearance.light => LucideIcons.sun,
+                            MapAppearance.dark => LucideIcons.moon,
+                          },
+                          label: switch (appearance) {
+                            MapAppearance.automatic => l10n.settingsFollowTheme,
+                            MapAppearance.light => l10n.settingsLight,
+                            MapAppearance.dark => l10n.settingsDark,
+                          },
+                          selected: settings.mapAppearance == appearance,
+                          onTap: () => _update(
+                            settings.copyWith(mapAppearance: appearance),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             ),
             const SizedBox(height: 8),
             Text(
@@ -2962,7 +2974,7 @@ class _DetailScaffold extends StatelessWidget {
         title: Text(title),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
         children: children,
       ),
     );
@@ -3101,7 +3113,7 @@ class _SettingsCardHeader extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(18, 16, 16, 16),
+        padding: const EdgeInsets.symmetric(vertical: 14),
         child: Row(
           children: [
             Icon(icon, color: scheme.onSurfaceVariant, size: 30),
@@ -3248,7 +3260,7 @@ class _SummarySwitchTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(18, 12, 16, 12),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
           Icon(icon, color: AppColors.textSecondary, size: 30),
@@ -3286,7 +3298,7 @@ class _SettingsSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _SettingsChrome(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(0, 14, 0, 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -3544,25 +3556,12 @@ class _CacheTargetCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 38,
-            height: 38,
-            decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.zero,
-            ),
-            child: Icon(icon, color: AppColors.accentForeground, size: 21),
-          ),
+          Icon(icon, color: AppColors.textSecondary, size: 22),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -3602,11 +3601,11 @@ class _CustomAspectRatioOption extends StatelessWidget {
             color: selected ? AppColors.accentForeground : AppColors.border,
           ),
         ),
-        child: Center(
+        child: FittedBox(
+          fit: BoxFit.scaleDown,
           child: Text(
             l10n.settingsCustom,
             maxLines: 1,
-            overflow: TextOverflow.ellipsis,
             style: TextStyle(
               color: selected ? AppColors.onAccent : AppColors.textPrimary,
               fontSize: 13,
@@ -3768,34 +3767,38 @@ class _AspectRatioOption extends StatelessWidget {
                   const SizedBox(width: 4),
                 ],
                 Flexible(
-                  child: Text(
-                    ratio.shortLabel,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: selected
-                          ? AppColors.onAccent
-                          : AppColors.textPrimary,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0,
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Text(
+                      ratio.shortLabel,
+                      maxLines: 1,
+                      style: TextStyle(
+                        color: selected
+                            ? AppColors.onAccent
+                            : AppColors.textPrimary,
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        letterSpacing: 0,
+                      ),
                     ),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 2),
-            Text(
-              ratio.settingHintLabel,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-              style: TextStyle(
-                color: selected
-                    ? AppColors.onAccent.withValues(alpha: 0.86)
-                    : AppColors.textSecondary,
-                fontSize: 10,
-                fontWeight: FontWeight.w600,
-                letterSpacing: 0,
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                ratio.settingHintLabel,
+                maxLines: 1,
+                style: TextStyle(
+                  color: selected
+                      ? AppColors.onAccent.withValues(alpha: 0.86)
+                      : AppColors.textSecondary,
+                  fontSize: 10,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0,
+                ),
               ),
             ),
           ],
@@ -3812,7 +3815,10 @@ class _AppearancePanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _SettingsChrome(padding: const EdgeInsets.all(14), child: child);
+    return _SettingsChrome(
+      padding: const EdgeInsets.symmetric(vertical: 14),
+      child: child,
+    );
   }
 }
 
@@ -3953,11 +3959,7 @@ class _ThemeColorButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final foreground = AppColors.isDark
-        ? AppColors.foregroundOn(color)
-        : color.computeLuminance() > 0.55
-        ? AppColors.textPrimary
-        : Colors.white;
+    final foreground = AppColors.foregroundOn(color);
     return InkWell(
       borderRadius: BorderRadius.zero,
       onTap: onTap,
@@ -4090,9 +4092,7 @@ class _CustomThemeColorDialogState extends State<_CustomThemeColorDialog> {
             child: Text(
               _hexFromColor(_color),
               style: TextStyle(
-                color: _color.computeLuminance() > 0.5
-                    ? AppColors.textPrimary
-                    : Colors.white,
+                color: AppColors.foregroundOn(_color),
                 fontSize: 14,
                 fontWeight: FontWeight.w600,
                 letterSpacing: 0,
@@ -4433,15 +4433,17 @@ class _ModeButton extends StatelessWidget {
               Icon(icon, color: foreground, size: 18),
               const SizedBox(width: 6),
               Flexible(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: foreground,
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                    letterSpacing: 0,
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    style: TextStyle(
+                      color: foreground,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0,
+                    ),
                   ),
                 ),
               ),
@@ -4610,16 +4612,21 @@ class _FontSizeButton extends StatelessWidget {
         child: Container(
           height: 44,
           alignment: Alignment.center,
+          padding: const EdgeInsets.symmetric(horizontal: 4),
           color: selected ? AppColors.ink : AppColors.surface,
-          child: Text(
-            label,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              color: selected ? AppColors.background : AppColors.textSecondary,
-              fontSize: 13,
-              fontWeight: FontWeight.w500,
-              letterSpacing: 0,
+          child: FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Text(
+              label,
+              maxLines: 1,
+              style: TextStyle(
+                color: selected
+                    ? AppColors.background
+                    : AppColors.textSecondary,
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                letterSpacing: 0,
+              ),
             ),
           ),
         ),

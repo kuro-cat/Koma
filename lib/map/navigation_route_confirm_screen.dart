@@ -18,8 +18,6 @@ import 'map_tile_config.dart';
 import 'valhalla_route_client.dart';
 import '../l10n/l10n.dart';
 
-const _endRouteRed = Color(0xFFFF3B30);
-
 typedef NavigationLocationResolver = Future<LatLng> Function();
 
 class NavigationRouteConfirmScreen extends StatefulWidget {
@@ -235,14 +233,15 @@ class _NavigationRouteConfirmScreenState
               stops: remainingStops,
             ),
           ),
+          // The panel under the map: raise with an ink top edge, like a sheet.
           Material(
             color: AppColors.surface,
             elevation: 0,
-            shadowColor: Colors.black.withValues(alpha: 0.12),
+            shape: Border(top: BorderSide(color: AppColors.ink)),
             child: SafeArea(
               top: false,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -490,15 +489,15 @@ class _GroupNameRow extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+          // A plain tag: raise with a rule edge, ink-2 text.
           decoration: BoxDecoration(
-            color: AppColors.accent.withValues(alpha: 0.08),
-            border: Border.all(color: AppColors.accent.withValues(alpha: 0.42)),
-            borderRadius: BorderRadius.zero,
+            color: AppColors.surface,
+            border: Border.all(color: AppColors.border),
           ),
           child: Text(
             l10n.navigationRouteConfirmAreaBadge,
             style: TextStyle(
-              color: AppColors.accentForeground,
+              color: AppColors.textSecondary,
               fontSize: 11,
               fontWeight: FontWeight.w600,
               height: 1.15,
@@ -666,8 +665,8 @@ class _WaypointDot extends StatelessWidget {
         ),
         child: Text(
           '$index',
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: AppColors.onAccent,
             fontSize: 11,
             fontWeight: FontWeight.w600,
             height: 1,
@@ -688,11 +687,12 @@ class _DestinationPin extends StatelessWidget {
         width: 28,
         height: 28,
         decoration: BoxDecoration(
-          color: _endRouteRed,
+          // Ink, not red: red means trouble. The white ring is map convention.
+          color: AppColors.ink,
           shape: BoxShape.circle,
           border: Border.all(color: Colors.white, width: 2.5),
         ),
-        child: const Icon(LucideIcons.mapPin, color: Colors.white, size: 16),
+        child: Icon(LucideIcons.mapPin, color: AppColors.background, size: 16),
       ),
     );
   }

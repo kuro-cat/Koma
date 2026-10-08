@@ -383,7 +383,7 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
     }
 
     return ListView(
-      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+      padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
       children: [
         _StackedPreview(
           referenceBytes: _referenceBytes,
@@ -430,10 +430,7 @@ class _ColorGradingScreenState extends State<ColorGradingScreen> {
               ? const SizedBox(
                   width: 16,
                   height: 16,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white,
-                  ),
+                  child: CircularProgressIndicator(strokeWidth: 2),
                 )
               : const Icon(LucideIcons.wandSparkles, size: 18),
           label: Text(
@@ -474,37 +471,29 @@ class _StackedPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
-      ),
-      child: Column(
-        children: [
-          _PreviewPane(
-            label: l10n.colorGradingReference,
-            child: referenceBytes == null
-                ? referenceError == null
-                      ? Center(child: Text(l10n.colorGradingNoReference))
-                      : BoundedImageError(error: referenceError!)
-                : BoundedImage(bytes: referenceBytes!),
-          ),
-          const SizedBox(height: 8),
-          _PreviewPane(
-            label: showOriginal
-                ? l10n.colorGradingOriginal
-                : l10n.colorGradingGraded,
-            child: showOriginal
-                ? BoundedImage(bytes: capturedBytes)
-                : _GradedPhotoPreview(
-                    capturedBytes: capturedBytes,
-                    params: activeParams,
-                  ),
-          ),
-        ],
-      ),
+    return Column(
+      children: [
+        _PreviewPane(
+          label: l10n.colorGradingReference,
+          child: referenceBytes == null
+              ? referenceError == null
+                    ? Center(child: Text(l10n.colorGradingNoReference))
+                    : BoundedImageError(error: referenceError!)
+              : BoundedImage(bytes: referenceBytes!),
+        ),
+        const SizedBox(height: 8),
+        _PreviewPane(
+          label: showOriginal
+              ? l10n.colorGradingOriginal
+              : l10n.colorGradingGraded,
+          child: showOriginal
+              ? BoundedImage(bytes: capturedBytes)
+              : _GradedPhotoPreview(
+                  capturedBytes: capturedBytes,
+                  params: activeParams,
+                ),
+        ),
+      ],
     );
   }
 }
@@ -639,7 +628,7 @@ class _PreviewPane extends StatelessWidget {
                 top: 8,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: Colors.black54,
+                    color: AppColors.cameraDarkSurface.withValues(alpha: 0.7),
                     borderRadius: BorderRadius.zero,
                   ),
                   child: Padding(
@@ -711,11 +700,9 @@ class _ModeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -739,23 +726,12 @@ class _ModeSelector extends StatelessWidget {
                   selected: selectedMode == mode,
                   showCheckmark: false,
                   onSelected: (_) => onChanged(mode),
-                  selectedColor: AppColors.accent,
-                  backgroundColor: AppColors.surface,
-                  side: BorderSide(
-                    color: selectedMode == mode
-                        ? AppColors.accent
-                        : AppColors.border,
-                  ),
+                  // Ground and edges come from the chip theme.
                   labelStyle: TextStyle(
-                    color: selectedMode == mode
-                        ? Colors.white
-                        : AppColors.textPrimary,
+                    color: AppColors.textPrimary,
                     fontSize: 13,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0,
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
                   ),
                 ),
             ],
@@ -798,11 +774,9 @@ class _ScorePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.symmetric(vertical: 14),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -856,7 +830,7 @@ class _ScoreValue extends StatelessWidget {
           Text(
             '$score',
             style: TextStyle(
-              color: AppColors.accentStrongForeground,
+              color: AppColors.textPrimary,
               fontSize: 22,
               fontWeight: FontWeight.w600,
               letterSpacing: 0,
@@ -886,11 +860,9 @@ class _SavePanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.symmetric(vertical: 14),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -919,10 +891,7 @@ class _SavePanel extends StatelessWidget {
                 ? const SizedBox(
                     width: 16,
                     height: 16,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
+                    child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : const Icon(LucideIcons.save, size: 18),
             label: Text(

@@ -299,7 +299,7 @@ void main() {
               find.byKey(const ValueKey('map-overlap-point-divider')),
             )
             .color,
-        AppColors.border,
+        AppColors.divider,
       );
       expect(
         tester.widget<MarkerLayer>(find.byType(MarkerLayer)).markers.last.key,

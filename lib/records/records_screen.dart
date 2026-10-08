@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import '../l10n/l10n.dart';
 import '../widgets/app_motion.dart';
@@ -99,7 +101,7 @@ class _RecordsScreenState extends State<RecordsScreen> {
         key: const ValueKey('records-scroll-view'),
         slivers: [
           SliverPadding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 0),
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
             sliver: SliverList.list(
               children: [
                 _RecordsSummary(controller: controller),
@@ -129,13 +131,12 @@ class _RecordsScreenState extends State<RecordsScreen> {
                   visibleCount: records.length,
                   totalCount: controller.visitRecords.length,
                 ),
-                const SizedBox(height: 4),
               ],
             ),
           ),
           if (records.isEmpty)
             SliverPadding(
-              padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
+              padding: const EdgeInsets.fromLTRB(12, 4, 12, 0),
               sliver: SliverToBoxAdapter(
                 child: _EmptyRecords(
                   hasAnyRecords: controller.visitRecords.isNotEmpty,
@@ -165,23 +166,16 @@ class _RecordsScreenState extends State<RecordsScreen> {
                     ),
                   ),
                   if (_expandedSectionIds.contains(section.id))
-                    SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(16, 4, 16, 0),
-                      sliver: SliverList.builder(
-                        itemCount: section.entries.length,
-                        itemBuilder: (context, index) {
-                          final entry = section.entries[index];
-                          return Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
-                            child: _VisitRecordCard(
-                              record: entry.record,
-                              point: entry.point,
-                              onTap: () =>
-                                  _openRecordDetail(context, entry.record),
-                            ),
-                          );
-                        },
-                      ),
+                    SliverList.builder(
+                      itemCount: section.entries.length,
+                      itemBuilder: (context, index) {
+                        final entry = section.entries[index];
+                        return _VisitRecordCard(
+                          record: entry.record,
+                          point: entry.point,
+                          onTap: () => _openRecordDetail(context, entry.record),
+                        );
+                      },
                     ),
                 ],
               ),
@@ -482,14 +476,13 @@ class _RecordFilters extends StatelessWidget {
       children: [
         SizedBox(
           key: const ValueKey('records-status-filter'),
-          width: 124,
           height: _recordsToolbarControlHeight,
           child: _RecordStatusPicker(
             statusFilter: statusFilter,
             onSelected: onStatusSelected,
           ),
         ),
-        const SizedBox(width: 12),
+        const SizedBox(width: 8),
         Expanded(
           child: SizedBox(
             height: _recordsToolbarControlHeight,
@@ -506,13 +499,16 @@ class _RecordFilters extends StatelessWidget {
           child: Badge(
             isLabelVisible: activeScopeFilterCount > 0,
             label: Text('$activeScopeFilterCount'),
+            // An active filter is a selection, so the accent, not red.
+            backgroundColor: AppColors.accent,
+            textColor: AppColors.onAccent,
             child: IconButton.outlined(
               key: const ValueKey('records-scope-filter-button'),
               tooltip: l10n.recordsScopeFilterTooltip,
               onPressed: onOpenScopeFilters,
               style: IconButton.styleFrom(
                 backgroundColor: AppColors.surface,
-                side: BorderSide(color: AppColors.border),
+                side: BorderSide(color: AppColors.ink),
               ),
               icon: const Icon(LucideIcons.slidersHorizontal),
             ),
@@ -616,85 +612,98 @@ class _RecordScopeFilterSheetState extends State<_RecordScopeFilterSheet> {
           maxHeight: MediaQuery.sizeOf(context).height * 0.72,
         ),
         child: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(16, 4, 16, 16),
+          padding: const EdgeInsets.fromLTRB(0, 4, 0, 16),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      l10n.recordsFilterTitle,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                        letterSpacing: 0,
+              Padding(
+                padding: const EdgeInsets.only(left: 12, right: 4),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Text(
+                        l10n.recordsFilterTitle,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0,
+                        ),
                       ),
                     ),
-                  ),
-                  TextButton(
-                    key: const ValueKey('records-scope-clear'),
-                    onPressed: () => setState(() {
-                      _workIds = null;
-                      _groupIds = null;
-                    }),
-                    child: Text(l10n.recordsClear),
-                  ),
-                ],
-              ),
-              Text(
-                l10n.recordsScopeSummary(
-                  _workIds?.length ?? 0,
-                  _groupIds?.length ?? 0,
-                ),
-                key: const ValueKey('records-scope-summary'),
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
-                  letterSpacing: 0,
+                    TextButton(
+                      key: const ValueKey('records-scope-clear'),
+                      onPressed: () => setState(() {
+                        _workIds = null;
+                        _groupIds = null;
+                      }),
+                      child: Text(l10n.recordsClear),
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 18),
-              Text(
-                l10n.recordsWorks,
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              _RecordScopeEntry(
-                key: const ValueKey('records-scope-work-entry'),
-                label: _workIds == null
-                    ? l10n.recordsAllWorks
-                    : l10n.recordsWorksPicked(_workIds!.length),
-                onTap: _openWorkFilters,
-              ),
-              const SizedBox(height: 16),
-              Text(
-                l10n.recordsAreas,
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const SizedBox(height: 8),
-              _RecordScopeEntry(
-                key: const ValueKey('records-scope-group-entry'),
-                label: _groupIds == null
-                    ? l10n.recordsAllAreas
-                    : l10n.recordsAreasPicked(_groupIds!.length),
-                onTap: _openGroupFilters,
-              ),
-              const SizedBox(height: 28),
-              FilledButton(
-                key: const ValueKey('records-scope-apply'),
-                onPressed: () => Navigator.of(context).pop(
-                  _RecordScopeSelection(
-                    workIds: _copyFilter(_workIds),
-                    groupIds: _copyFilter(_groupIds),
-                  ),
-                ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Text(
-                  _workIds == null && _groupIds == null
-                      ? l10n.recordsApplyAll
-                      : l10n.recordsApplySelected,
+                  l10n.recordsScopeSummary(
+                    _workIds?.length ?? 0,
+                    _groupIds?.length ?? 0,
+                  ),
+                  key: const ValueKey('records-scope-summary'),
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                    letterSpacing: 0,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 14),
+              // Works and areas are ruled rows under one 2px ink rule.
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(color: AppColors.ink, width: 2),
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    _RecordScopeEntry(
+                      key: const ValueKey('records-scope-work-entry'),
+                      title: l10n.recordsWorks,
+                      label: _workIds == null
+                          ? l10n.recordsAllWorks
+                          : l10n.recordsWorksPicked(_workIds!.length),
+                      onTap: _openWorkFilters,
+                    ),
+                    _RecordScopeEntry(
+                      key: const ValueKey('records-scope-group-entry'),
+                      title: l10n.recordsAreas,
+                      label: _groupIds == null
+                          ? l10n.recordsAllAreas
+                          : l10n.recordsAreasPicked(_groupIds!.length),
+                      onTap: _openGroupFilters,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                child: FilledButton(
+                  key: const ValueKey('records-scope-apply'),
+                  onPressed: () => Navigator.of(context).pop(
+                    _RecordScopeSelection(
+                      workIds: _copyFilter(_workIds),
+                      groupIds: _copyFilter(_groupIds),
+                    ),
+                  ),
+                  child: Text(
+                    _workIds == null && _groupIds == null
+                        ? l10n.recordsApplyAll
+                        : l10n.recordsApplySelected,
+                  ),
                 ),
               ),
             ],
@@ -707,49 +716,52 @@ class _RecordScopeFilterSheetState extends State<_RecordScopeFilterSheet> {
 
 class _RecordScopeEntry extends StatelessWidget {
   const _RecordScopeEntry({
+    required this.title,
     required this.label,
     required this.onTap,
     super.key,
   });
 
+  final String title;
   final String label;
   final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-        side: BorderSide(color: AppColors.border),
-      ),
-      clipBehavior: Clip.antiAlias,
+      color: Colors.transparent,
+      shape: Border(bottom: BorderSide(color: AppColors.divider)),
       child: InkWell(
         onTap: onTap,
-        child: SizedBox(
-          height: 48,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 48),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             child: Row(
               children: [
-                Icon(
-                  LucideIcons.checkCircle,
-                  color: AppColors.accentForeground,
-                  size: 20,
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0,
+                  ),
                 ),
-                const SizedBox(width: 10),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Text(
                     label,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: const TextStyle(
+                    textAlign: TextAlign.end,
+                    style: TextStyle(
+                      color: AppColors.textSecondary,
                       fontSize: 14,
-                      fontWeight: FontWeight.w600,
                       letterSpacing: 0,
                     ),
                   ),
                 ),
+                const SizedBox(width: 4),
                 Icon(LucideIcons.chevronRight, color: AppColors.textSecondary),
               ],
             ),
@@ -861,15 +873,15 @@ class _RecordScopeOptionSheetState extends State<_RecordScopeOptionSheet> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 14, 16, 8),
-              child: Text(
-                isWork ? l10n.recordsAllWorks : l10n.recordsAllAreas,
-                style: const TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0,
+            Container(
+              padding: const EdgeInsets.fromLTRB(12, 14, 12, 6),
+              decoration: BoxDecoration(
+                border: Border(
+                  bottom: BorderSide(color: AppColors.ink, width: 2),
                 ),
+              ),
+              child: CapsLabel(
+                isWork ? l10n.recordsAllWorks : l10n.recordsAllAreas,
               ),
             ),
             Expanded(
@@ -911,7 +923,7 @@ class _RecordScopeOptionSheetState extends State<_RecordScopeOptionSheet> {
             ColoredBox(
               color: AppColors.background,
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 16),
+                padding: const EdgeInsets.fromLTRB(12, 10, 12, 16),
                 child: Row(
                   children: [
                     Expanded(
@@ -982,8 +994,10 @@ class _RecordScopeOptionTileState extends State<_RecordScopeOptionTile> {
   @override
   Widget build(BuildContext context) {
     final showHover = widget.hoverEnabled && _hovered;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.divider)),
+      ),
       child: MouseRegion(
         onEnter: (_) {
           if (!_hovered) {
@@ -1001,19 +1015,17 @@ class _RecordScopeOptionTileState extends State<_RecordScopeOptionTile> {
             clipBehavior: Clip.none,
             fit: StackFit.expand,
             children: [
-              Positioned(
-                left: 0,
-                top: 6,
-                right: 0,
-                bottom: 6,
+              Positioned.fill(
                 child: AnimatedContainer(
                   key: widget.decorationKey,
                   duration: const Duration(milliseconds: 200),
                   curve: Curves.easeOutCubic,
                   decoration: BoxDecoration(
-                    color: AppColors.accent.withValues(
-                      alpha: widget.selected ? 0.10 : (showHover ? 0.05 : 0),
-                    ),
+                    color: widget.selected
+                        ? AppColors.accentWash
+                        : AppColors.accentWash.withValues(
+                            alpha: showHover ? 0.5 : 0,
+                          ),
                     borderRadius: BorderRadius.zero,
                   ),
                 ),
@@ -1036,27 +1048,16 @@ class _RecordScopeOptionTileState extends State<_RecordScopeOptionTile> {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Row(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.accent.withValues(alpha: 0.08),
-                            border: Border.all(
-                              color: AppColors.accent.withValues(alpha: 0.42),
-                            ),
-                            borderRadius: BorderRadius.zero,
-                          ),
-                          child: Text(
-                            widget.badgeLabel,
-                            style: TextStyle(
-                              color: AppColors.accentForeground,
-                              fontSize: 11,
-                              fontWeight: FontWeight.w600,
-                              height: 1.15,
-                              letterSpacing: 0,
-                            ),
+                        // Ink-2 text with no fill reads on the plain row and
+                        // on the selected wash alike.
+                        Text(
+                          widget.badgeLabel,
+                          style: TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            height: 1.15,
+                            letterSpacing: 0,
                           ),
                         ),
                         const SizedBox(width: 10),
@@ -1077,8 +1078,6 @@ class _RecordScopeOptionTileState extends State<_RecordScopeOptionTile> {
                           value: widget.selected,
                           onChanged: (value) =>
                               widget.onChanged(value ?? false),
-                          shape: const CircleBorder(),
-                          side: BorderSide(color: AppColors.border, width: 1.5),
                           visualDensity: VisualDensity.compact,
                           materialTapTargetSize:
                               MaterialTapTargetSize.shrinkWrap,
@@ -1120,27 +1119,16 @@ class _RecordStatusPickerState extends State<_RecordStatusPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final accentColor = Theme.of(context).colorScheme.primary;
-    final statusLabel = _options
-        .firstWhere((option) => option.$1 == widget.statusFilter)
-        .$2;
+    const labelStyle = TextStyle(
+      fontSize: 13,
+      fontWeight: FontWeight.w600,
+      letterSpacing: 0,
+    );
     return MenuAnchor(
       key: const ValueKey('records-status-menu-anchor'),
       onOpen: () => setState(() => _isOpen = true),
       onClose: () => setState(() => _isOpen = false),
       alignmentOffset: const Offset(0, 4),
-      style: MenuStyle(
-        padding: const WidgetStatePropertyAll(EdgeInsets.zero),
-        backgroundColor: WidgetStatePropertyAll(AppColors.surface),
-        elevation: const WidgetStatePropertyAll(8),
-        shadowColor: WidgetStatePropertyAll(
-          AppColors.textPrimary.withValues(alpha: 0.14),
-        ),
-        side: WidgetStatePropertyAll(BorderSide(color: AppColors.border)),
-        shape: const WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-        ),
-      ),
       builder: (context, controller, child) {
         return Tooltip(
           message: l10n.recordsStatusTooltip,
@@ -1149,7 +1137,7 @@ class _RecordStatusPickerState extends State<_RecordStatusPicker> {
             color: AppColors.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.zero,
-              side: BorderSide(color: AppColors.border),
+              side: BorderSide(color: AppColors.ink),
             ),
             clipBehavior: Clip.antiAlias,
             child: InkWell(
@@ -1164,28 +1152,25 @@ class _RecordStatusPickerState extends State<_RecordStatusPicker> {
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Icon(
                       LucideIcons.listFilter,
-                      color: AppColors.accentForeground,
+                      color: AppColors.textPrimary,
                       size: 20,
                     ),
                     const SizedBox(width: 6),
-                    Expanded(
-                      child: Text(
-                        statusLabel,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0,
-                        ),
-                      ),
+                    _WidestLabelText(
+                      text: _options
+                          .firstWhere((o) => o.$1 == widget.statusFilter)
+                          .$2,
+                      labels: [for (final option in _options) option.$2],
+                      style: labelStyle,
                     ),
+                    const SizedBox(width: 4),
                     Icon(
                       _isOpen ? LucideIcons.chevronUp : LucideIcons.chevronDown,
-                      color: AppColors.accentStrongForeground,
+                      color: AppColors.textPrimary,
                       size: 20,
                     ),
                   ],
@@ -1196,84 +1181,97 @@ class _RecordStatusPickerState extends State<_RecordStatusPicker> {
         );
       },
       menuChildren: [
-        SizedBox(
+        Column(
           key: const ValueKey('records-status-menu'),
-          width: 124,
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(8, 0, 8, 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(8, 14, 8, 10),
-                  child: Text(
-                    l10n.recordsSelectStatus,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      letterSpacing: 0,
-                    ),
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.fromLTRB(14, 12, 14, 6),
+              child: Text(
+                l10n.recordsSelectStatus,
+                maxLines: 1,
+                softWrap: false,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                  letterSpacing: 0,
+                ),
+              ),
+            ),
+            for (final option in _options)
+              MenuItemButton(
+                key: ValueKey('records-status-option-${option.$3}'),
+                onPressed: () => widget.onSelected(option.$1),
+                leadingIcon: option.$1 == widget.statusFilter
+                    ? Icon(
+                        LucideIcons.check,
+                        color: AppColors.accentForeground,
+                        size: 19,
+                      )
+                    : const SizedBox(width: 19),
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(
+                    option.$1 == widget.statusFilter
+                        ? AppColors.accentWash
+                        : Colors.transparent,
+                  ),
+                  foregroundColor: WidgetStatePropertyAll(
+                    option.$1 == widget.statusFilter
+                        ? AppColors.accentForeground
+                        : AppColors.textPrimary,
+                  ),
+                  overlayColor: option.$1 == widget.statusFilter
+                      ? const WidgetStatePropertyAll(Colors.transparent)
+                      : null,
+                ),
+                child: Text(
+                  option.$2,
+                  maxLines: 1,
+                  softWrap: false,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0,
                   ),
                 ),
-                for (final option in _options)
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 2),
-                    child: MenuItemButton(
-                      key: ValueKey('records-status-option-${option.$3}'),
-                      onPressed: () => widget.onSelected(option.$1),
-                      leadingIcon: option.$1 == widget.statusFilter
-                          ? Icon(
-                              LucideIcons.check,
-                              color: AppColors.accentForeground,
-                              size: 19,
-                            )
-                          : const SizedBox(width: 19),
-                      style: ButtonStyle(
-                        minimumSize: const WidgetStatePropertyAll(
-                          Size.fromHeight(42),
-                        ),
-                        padding: const WidgetStatePropertyAll(
-                          EdgeInsets.symmetric(horizontal: 10),
-                        ),
-                        backgroundColor: WidgetStatePropertyAll(
-                          option.$1 == widget.statusFilter
-                              ? accentColor.withValues(alpha: 0.09)
-                              : Colors.transparent,
-                        ),
-                        foregroundColor: WidgetStatePropertyAll(
-                          option.$1 == widget.statusFilter
-                              ? AppColors.accentForeground
-                              : AppColors.textPrimary,
-                        ),
-                        overlayColor: WidgetStateProperty.resolveWith((states) {
-                          if (option.$1 == widget.statusFilter) {
-                            return Colors.transparent;
-                          }
-                          return states.contains(WidgetState.hovered)
-                              ? accentColor.withValues(alpha: 0.035)
-                              : Colors.transparent;
-                        }),
-                        shape: WidgetStatePropertyAll(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                        ),
-                      ),
-                      child: Text(
-                        option.$2,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w600,
-                          letterSpacing: 0,
-                        ),
-                      ),
-                    ),
-                  ),
-              ],
-            ),
-          ),
+              ),
+          ],
         ),
       ],
+    );
+  }
+}
+
+/// [text] in a box as wide as the longest of [labels], so the status key
+/// never truncates and keeps its width when the choice changes.
+class _WidestLabelText extends StatelessWidget {
+  const _WidestLabelText({
+    required this.text,
+    required this.labels,
+    required this.style,
+  });
+
+  final String text;
+  final List<String> labels;
+  final TextStyle style;
+
+  @override
+  Widget build(BuildContext context) {
+    final resolved = DefaultTextStyle.of(context).style.merge(style);
+    var width = 0.0;
+    for (final label in labels) {
+      final painter = TextPainter(
+        text: TextSpan(text: label, style: resolved),
+        textDirection: Directionality.of(context),
+        textScaler: MediaQuery.textScalerOf(context),
+        maxLines: 1,
+      )..layout();
+      width = math.max(width, painter.width);
+      painter.dispose();
+    }
+    return SizedBox(
+      width: width.ceilToDouble(),
+      child: Text(text, maxLines: 1, softWrap: false, style: style),
     );
   }
 }
@@ -1333,10 +1331,6 @@ class _ExpandedRecordFiltersState extends State<_ExpandedRecordFilters> {
         controller: _searchController,
         decoration: InputDecoration(
           hintText: l10n.recordsSearchHint,
-          hintStyle: TextStyle(
-            color: AppColors.textSecondary.withValues(alpha: 0.42),
-            letterSpacing: 0,
-          ),
           prefixIcon: const Icon(
             LucideIcons.search,
             key: ValueKey('records-search-prefix-icon'),
@@ -1358,26 +1352,25 @@ class _ExpandedRecordFiltersState extends State<_ExpandedRecordFilters> {
             width: 40,
             height: 42,
           ),
-          suffixIcon: SizedBox(
-            width: 40,
-            child: _searchController.text.isEmpty
-                ? const SizedBox.shrink()
-                : IconButton(
-                    key: const ValueKey('records-search-clear-button'),
-                    tooltip: l10n.recordsClearSearchTooltip,
-                    padding: EdgeInsets.zero,
-                    constraints: const BoxConstraints.tightFor(
-                      width: 40,
-                      height: 42,
-                    ),
-                    onPressed: () {
-                      _searchController.clear();
-                      widget.onSearchChanged('');
-                      setState(() {});
-                    },
-                    icon: const Icon(LucideIcons.x, size: 18),
+          // No empty slot while there is nothing to clear, so the hint
+          // keeps the full width.
+          suffixIcon: _searchController.text.isEmpty
+              ? null
+              : IconButton(
+                  key: const ValueKey('records-search-clear-button'),
+                  tooltip: l10n.recordsClearSearchTooltip,
+                  padding: EdgeInsets.zero,
+                  constraints: const BoxConstraints.tightFor(
+                    width: 40,
+                    height: 42,
                   ),
-          ),
+                  onPressed: () {
+                    _searchController.clear();
+                    widget.onSearchChanged('');
+                    setState(() {});
+                  },
+                  icon: const Icon(LucideIcons.x, size: 18),
+                ),
         ),
         textAlignVertical: TextAlignVertical.center,
         onChanged: (value) {
@@ -1426,28 +1419,14 @@ class _RecordsSectionHeader extends StatelessWidget {
     final suffix = visibleCount == totalCount
         ? '$totalCount'
         : '$visibleCount/$totalCount';
-    return Row(
-      children: [
-        Expanded(
-          child: Text(
-            l10n.recordsPhotos,
-            style: const TextStyle(
-              fontSize: 17,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0,
-            ),
-          ),
-        ),
-        Text(
-          suffix,
-          style: TextStyle(
-            color: AppColors.textSecondary,
-            fontSize: 13,
-            fontWeight: FontWeight.w600,
-            letterSpacing: 0,
-          ),
-        ),
-      ],
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 6),
+      child: Row(
+        children: [
+          Expanded(child: CapsLabel(l10n.recordsPhotos)),
+          Text(suffix, style: AppType.capsStyle),
+        ],
+      ),
     );
   }
 }
@@ -1511,108 +1490,94 @@ class _RecordGroupHeaderState extends State<_RecordGroupHeader> {
   @override
   Widget build(BuildContext context) {
     final section = widget.section;
-    return ColoredBox(
-      color: AppColors.background,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            onTap: widget.onToggleExpanded,
-            borderRadius: BorderRadius.zero,
-            child: Container(
-              key: ValueKey('records-group-surface-${section.id}'),
-              constraints: const BoxConstraints(minHeight: 64),
-              padding: const EdgeInsets.symmetric(horizontal: 2),
-              child: Column(
-                children: [
-                  Expanded(
-                    child: Row(
-                      children: [
-                        Icon(
-                          key: ValueKey('records-group-icon-${section.id}'),
-                          _sectionIcon(section, widget.expanded),
-                          color: AppColors.accentForeground,
-                          size: 27,
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                section.title,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w600,
-                                  letterSpacing: 0,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                section.subtitle,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: AppColors.textSecondary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  letterSpacing: 0,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        SizedBox.square(
-                          key: ValueKey('records-group-count-${section.id}'),
-                          dimension: 30,
-                          child: DecoratedBox(
-                            decoration: BoxDecoration(
-                              color: AppColors.accent.withValues(alpha: 0.08),
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: FittedBox(
-                                fit: BoxFit.scaleDown,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(5),
-                                  child: Text(
-                                    '${section.entries.length}',
-                                    style: TextStyle(
-                                      color: AppColors.accentStrongForeground,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                      letterSpacing: 0,
-                                    ),
-                                  ),
-                                ),
+    // Each area is a section: a 2px ink rule on the page ground, its records
+    // ruled rows beneath.
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
+      ),
+      child: Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: widget.onToggleExpanded,
+          borderRadius: BorderRadius.zero,
+          child: Container(
+            key: ValueKey('records-group-surface-${section.id}'),
+            constraints: const BoxConstraints(minHeight: 62),
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: Column(
+              children: [
+                Expanded(
+                  child: Row(
+                    children: [
+                      Icon(
+                        key: ValueKey('records-group-icon-${section.id}'),
+                        _sectionIcon(section, widget.expanded),
+                        color: AppColors.textSecondary,
+                        size: 24,
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              section.title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 17,
+                                fontWeight: FontWeight.w600,
+                                letterSpacing: 0,
                               ),
                             ),
-                          ),
+                            const SizedBox(height: 2),
+                            Text(
+                              section.subtitle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: AppColors.textSecondary,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: 0,
+                              ),
+                            ),
+                          ],
                         ),
-                        const SizedBox(width: 8),
-                        AnimatedRotation(
-                          turns: widget.expanded ? 0.5 : 0,
-                          duration: AppMotion.durationOf(context),
-                          child: Icon(
-                            LucideIcons.chevronDown,
-                            color: AppColors.textSecondary,
-                            size: 24,
-                          ),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        '${section.entries.length}',
+                        key: ValueKey('records-group-count-${section.id}'),
+                        style: TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0,
                         ),
-                      ],
-                    ),
+                      ),
+                      const SizedBox(width: 8),
+                      AnimatedRotation(
+                        turns: widget.expanded ? 0.5 : 0,
+                        duration: AppMotion.durationOf(context),
+                        child: Icon(
+                          LucideIcons.chevronDown,
+                          color: AppColors.textSecondary,
+                          size: 24,
+                        ),
+                      ),
+                    ],
                   ),
-                  if (!widget.expanded)
-                    AppHairline(
-                      key: ValueKey('records-group-divider-${section.id}'),
-                    ),
-                ],
-              ),
+                ),
+                if (!widget.expanded)
+                  AppHairline(
+                    key: ValueKey('records-group-divider-${section.id}'),
+                    color: AppColors.divider,
+                  ),
+              ],
             ),
           ),
         ),
@@ -1642,32 +1607,27 @@ class _RecordsSummary extends StatelessWidget {
         ? 0.0
         : (controller.completedCount / controller.totalCount).clamp(0.0, 1.0);
 
+    // A section on the page ground: 2px ink rule on top, no frame.
     return Container(
-      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Stack(
         children: [
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.fromLTRB(0, 14, 0, 18),
             child: Row(
               children: [
                 Expanded(
                   child: _RecordsDashboardMetric(
-                    value: TextSpan(
-                      text: '${controller.visitRecords.length}',
-                      style: TextStyle(color: AppColors.accentForeground),
-                    ),
+                    value: TextSpan(text: '${controller.visitRecords.length}'),
                     label: l10n.recordsRecordCountLabel(
                       controller.visitRecords.length,
                     ),
                   ),
                 ),
-                Container(width: 1, height: 42, color: AppColors.border),
-                const SizedBox(width: 24),
+                Container(width: 1, height: 42, color: AppColors.divider),
+                const SizedBox(width: 16),
                 Expanded(
                   child: _RecordsDashboardMetric(
                     value: TextSpan(
@@ -1697,9 +1657,7 @@ class _RecordsSummary extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned.fill(
-                  child: ColoredBox(
-                    color: AppColors.accent.withValues(alpha: 0.12),
-                  ),
+                  child: ColoredBox(color: AppColors.surfaceMuted),
                 ),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -1785,20 +1743,17 @@ class _VisitRecordCard extends StatelessWidget {
         ? ''
         : ' / ${episodeParts.join('・')}';
     final photoPath = resolveVisitRecordDisplayPhotoPath(record);
+    // A ruled row: page ground, 1px divider beneath, no frame.
     return Material(
       key: ValueKey('record-card-${record.id}'),
-      color: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-        side: BorderSide(color: AppColors.border),
-      ),
-      clipBehavior: Clip.antiAlias,
+      color: Colors.transparent,
+      shape: Border(bottom: BorderSide(color: AppColors.divider)),
       child: InkWell(
         onTap: onTap,
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 112),
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
             child: Row(
               children: [
                 ClipRRect(
@@ -1935,14 +1890,14 @@ class _EmptyRecords extends StatelessWidget {
       liveRegion: true,
       child: Padding(
         key: const ValueKey('records-empty-state'),
-        padding: const EdgeInsets.fromLTRB(16, 28, 16, 36),
+        padding: const EdgeInsets.fromLTRB(0, 28, 0, 36),
         child: Center(
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 380),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(icon, color: AppColors.accentForeground, size: 42),
+                Icon(icon, color: AppColors.textSecondary, size: 42),
                 const SizedBox(height: 14),
                 Text(
                   title,
@@ -2021,10 +1976,7 @@ class _GradedBadge extends StatelessWidget {
         child: Container(
           width: 26,
           height: 26,
-          decoration: BoxDecoration(
-            color: AppColors.surface.withValues(alpha: 0.9),
-            shape: BoxShape.circle,
-          ),
+          color: AppColors.surface.withValues(alpha: 0.9),
           child: Icon(
             LucideIcons.wandSparkles,
             size: 15,

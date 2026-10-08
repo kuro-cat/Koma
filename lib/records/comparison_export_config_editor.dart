@@ -53,7 +53,7 @@ class ComparisonExportConfigEditor extends StatelessWidget {
             color: AppColors.surface,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.zero,
-              side: BorderSide(color: AppColors.border),
+              side: BorderSide(color: AppColors.ink),
             ),
             child: InkWell(
               key: const ValueKey('comparison-encoding-selector'),
@@ -87,8 +87,8 @@ class ComparisonExportConfigEditor extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 20),
-        const _SectionDivider(),
-        const SizedBox(height: 18),
+        const _SectionRule(),
+        const SizedBox(height: 14),
         ComparisonMetadataSection(
           config: config,
           pilgrimNameController: pilgrimNameController,
@@ -286,15 +286,14 @@ class _OutputWidthSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Segmented control: one ink frame in the foreground, 1px ink seams.
     return Container(
       width: double.infinity,
       height: 40,
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+      foregroundDecoration: BoxDecoration(
+        border: Border.all(color: AppColors.ink),
       ),
+      color: AppColors.surface,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -308,11 +307,7 @@ class _OutputWidthSelector extends StatelessWidget {
               ),
             ),
             if (index < _fixedWidths.length - 1)
-              VerticalDivider(
-                width: 1,
-                thickness: 1,
-                color: AppColors.surfaceMuted,
-              ),
+              VerticalDivider(width: 1, thickness: 1, color: AppColors.ink),
           ],
         ],
       ),
@@ -341,42 +336,27 @@ class _OutputWidthOption extends StatelessWidget {
         color: Colors.transparent,
         child: InkWell(
           onTap: onTap,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 140),
-                color: selected
-                    ? AppColors.accent.withValues(alpha: 0.08)
-                    : Colors.transparent,
-                alignment: Alignment.center,
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  style: TextStyle(
-                    color: selected
-                        ? AppColors.accentStrongForeground
-                        : AppColors.textSecondary,
-                    fontSize: 12,
-                    fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
-                    letterSpacing: 0,
-                  ),
+          // The selected segment inverts to ink.
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 140),
+            color: selected ? AppColors.ink : Colors.transparent,
+            alignment: Alignment.center,
+            padding: const EdgeInsets.symmetric(horizontal: 4),
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Text(
+                label,
+                maxLines: 1,
+                style: TextStyle(
+                  color: selected
+                      ? AppColors.background
+                      : AppColors.textSecondary,
+                  fontSize: 12,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
+                  letterSpacing: 0,
                 ),
               ),
-              if (selected)
-                Positioned(
-                  left: 8,
-                  right: 8,
-                  bottom: 0,
-                  child: Container(
-                    height: 3,
-                    decoration: BoxDecoration(
-                      color: AppColors.accent,
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
-                ),
-            ],
+            ),
           ),
         ),
       ),
@@ -491,8 +471,8 @@ class ComparisonMetadataSection extends StatelessWidget {
               onChanged(config.copyWith(showColorGradingParams: value)),
         ),
         const SizedBox(height: 20),
-        const _SectionDivider(),
-        const SizedBox(height: 18),
+        const _SectionRule(),
+        const SizedBox(height: 14),
         _SectionLabel(l10n.comparisonExportConfigEditorContent),
         const SizedBox(height: 10),
         LayoutBuilder(
@@ -554,7 +534,7 @@ class _MetadataFilterChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final foreground = selected
-        ? AppColors.accentDark
+        ? AppColors.textPrimary
         : AppColors.textSecondary;
     return FilterChip(
       key: ValueKey('comparison-metadata-${field.name}'),
@@ -575,12 +555,10 @@ class _MetadataFilterChip extends StatelessWidget {
           ),
         ),
       ),
+      // Ground, edge and shape come from the chip theme: raise with a rule
+      // edge, or the accent wash with an ink frame when selected.
       selected: selected,
       showCheckmark: false,
-      selectedColor: AppColors.accent.withValues(alpha: 0.08),
-      backgroundColor: AppColors.surface,
-      side: BorderSide(color: selected ? AppColors.accent : AppColors.border),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
       visualDensity: VisualDensity.compact,
       onSelected: (_) => onSelected(),
@@ -604,26 +582,19 @@ InputDecoration _comparisonTextFieldDecoration({
   required bool enabled,
 }) {
   return InputDecoration(
+    // Edges, focus and hint colour come from the theme's field grammar.
     hintText: hintText,
     hintStyle: TextStyle(
-      color: AppColors.textSecondary.withValues(alpha: 0.42),
+      color: AppColors.textTertiary,
       fontSize: 14,
       letterSpacing: 0,
     ),
     filled: true,
     fillColor: enabled ? AppColors.surface : AppColors.surfaceMuted,
     contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.zero,
-      borderSide: BorderSide(color: AppColors.border),
-    ),
     disabledBorder: OutlineInputBorder(
       borderRadius: BorderRadius.zero,
-      borderSide: BorderSide(color: AppColors.border.withValues(alpha: 0.65)),
-    ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.zero,
-      borderSide: BorderSide(color: AppColors.accent, width: 1.4),
+      borderSide: BorderSide(color: AppColors.border),
     ),
   );
 }
@@ -655,14 +626,12 @@ class _ColorOption extends StatelessWidget {
           curve: Curves.easeOut,
           constraints: const BoxConstraints(minWidth: 76, minHeight: 40),
           padding: const EdgeInsets.symmetric(horizontal: 10),
+          // Chip grammar: rule edge, or the accent wash in an ink frame.
           decoration: BoxDecoration(
-            color: selected
-                ? AppColors.accent.withValues(alpha: 0.08)
-                : Colors.transparent,
+            color: selected ? AppColors.accentWash : AppColors.surface,
             borderRadius: BorderRadius.zero,
             border: Border.all(
-              color: selected ? AppColors.accent : AppColors.border,
-              width: selected ? 1.4 : 1,
+              color: selected ? AppColors.ink : AppColors.border,
             ),
           ),
           child: Row(
@@ -673,7 +642,6 @@ class _ColorOption extends StatelessWidget {
                 height: 20,
                 decoration: BoxDecoration(
                   color: color,
-                  shape: BoxShape.circle,
                   border: Border.all(
                     color: color == Colors.white
                         ? AppColors.border
@@ -706,9 +674,7 @@ class _ColorOption extends StatelessWidget {
               Text(
                 label,
                 style: TextStyle(
-                  color: selected
-                      ? AppColors.accentStrongForeground
-                      : AppColors.textPrimary,
+                  color: AppColors.textPrimary,
                   fontSize: 13,
                   fontWeight: selected ? FontWeight.w600 : FontWeight.w500,
                   letterSpacing: 0,
@@ -745,7 +711,17 @@ class _SectionDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Divider(height: 1, thickness: 1, color: AppColors.surfaceMuted);
+    return Divider(height: 1, thickness: 1, color: AppColors.divider);
+  }
+}
+
+/// The 2px ink rule that opens a section.
+class _SectionRule extends StatelessWidget {
+  const _SectionRule();
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(height: 2, thickness: 2, color: AppColors.ink);
   }
 }
 

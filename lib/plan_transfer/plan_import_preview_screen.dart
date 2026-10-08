@@ -42,18 +42,21 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
         title: Text(l10n.planImportPreviewTitle),
       ),
       body: ListView(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+        padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
         children: [
           _PackageHeader(importPackage: _package),
-          const SizedBox(height: 16),
-          _StatsGrid(importPackage: _package),
+          const SizedBox(height: 12),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            child: _StatsGrid(importPackage: _package),
+          ),
           const SizedBox(height: 18),
           _SectionTitle(
             icon: LucideIcons.listChecks,
             title: l10n.planImportPreviewChooseContent,
             subtitle: l10n.planImportPreviewChooseContentSubtitle,
           ),
-          const SizedBox(height: 10),
+          const _SectionRule(),
           _ImportOptionTile(
             icon: LucideIcons.route,
             title: l10n.planImportPreviewPlanStructure,
@@ -62,7 +65,6 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
             enabled: false,
             onChanged: null,
           ),
-          const SizedBox(height: 8),
           _ImportOptionTile(
             icon: LucideIcons.folders,
             title: l10n.planImportPreviewRecords,
@@ -75,7 +77,6 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
             enabled: !_importing && _package.hasVisitRecords,
             onChanged: (value) => setState(() => _includeRecords = value),
           ),
-          const SizedBox(height: 8),
           _ImportOptionTile(
             icon: LucideIcons.images,
             title: l10n.planImportPreviewAssets,
@@ -94,10 +95,11 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
               title: l10n.planImportPreviewPackageNotes,
               subtitle: l10n.planImportPreviewPackageNotesSubtitle,
             ),
+            const _SectionRule(),
             const SizedBox(height: 10),
             for (final warning in _package.warnings.take(6))
               Padding(
-                padding: const EdgeInsets.only(bottom: 6),
+                padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
                 child: Text(
                   warning,
                   style: TextStyle(
@@ -112,7 +114,7 @@ class _PlanImportPreviewScreenState extends State<PlanImportPreviewScreen> {
       ),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
           child: FilledButton.icon(
             onPressed: _importing ? null : _importSelected,
             icon: _importing
@@ -259,27 +261,11 @@ class _PackageHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       child: Row(
         children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.zero,
-            ),
-            child: Icon(
-              LucideIcons.package,
-              color: AppColors.accentStrongForeground,
-            ),
-          ),
+          Icon(LucideIcons.package, color: AppColors.textSecondary),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -373,9 +359,10 @@ class _StatChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+      // Raise with a rule edge: paper-2 vanished on the paper ground.
       decoration: BoxDecoration(
-        color: AppColors.surfaceMuted,
-        borderRadius: BorderRadius.zero,
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.border),
       ),
       child: Text(
         '$label $value',
@@ -403,36 +390,52 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, color: AppColors.accentStrongForeground, size: 20),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: AppColors.textSecondary, size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 12,
-                  letterSpacing: 0,
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12,
+                    letterSpacing: 0,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
+    );
+  }
+}
+
+/// The 2px ink rule a section's rows hang from.
+class _SectionRule extends StatelessWidget {
+  const _SectionRule();
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: AppColors.ink,
+      child: const SizedBox(height: 2, width: double.infinity),
     );
   }
 }
@@ -457,19 +460,15 @@ class _ImportOptionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.fromLTRB(12, 10, 4, 10),
       decoration: BoxDecoration(
-        color: enabled ? AppColors.surface : AppColors.surfaceMuted,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(bottom: BorderSide(color: AppColors.divider)),
       ),
       child: Row(
         children: [
           Icon(
             icon,
-            color: enabled
-                ? AppColors.accentStrongForeground
-                : AppColors.textSecondary,
+            color: enabled ? AppColors.textPrimary : AppColors.textSecondary,
           ),
           const SizedBox(width: 12),
           Expanded(

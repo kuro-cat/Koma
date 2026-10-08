@@ -68,7 +68,7 @@ class ConfirmActionDialog extends StatelessWidget {
   final List<String> emphasizedValues;
   final Widget? additionalContent;
 
-  static const dangerColor = Color(0xFFF44348);
+  static Color get dangerColor => AppColors.error;
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +88,6 @@ class ConfirmActionDialog extends StatelessWidget {
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       backgroundColor: AppColors.surface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 420, maxHeight: maxHeight),
         child: SingleChildScrollView(
@@ -114,34 +113,26 @@ class ConfirmActionDialog extends StatelessWidget {
                   additionalContent!,
                 ],
                 const SizedBox(height: 14),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: dangerColor.withValues(alpha: 0.08),
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  child: Row(
-                    children: [
-                      const Icon(
-                        LucideIcons.triangleAlert,
-                        color: dangerColor,
-                        size: 17,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
+                Row(
+                  children: [
+                    Icon(
+                      LucideIcons.triangleAlert,
+                      color: dangerColor,
+                      size: 17,
+                    ),
+                    const SizedBox(width: 8),
+                    Expanded(
+                      child: Text(
                         l10n.confirmActionIrreversible,
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: dangerColor,
                           fontSize: 13,
                           fontWeight: FontWeight.w600,
                           letterSpacing: 0,
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 16),
                 AppDialogActionRow(
@@ -178,7 +169,6 @@ class InfoActionDialog extends StatelessWidget {
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       backgroundColor: AppColors.surface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 420, maxHeight: maxHeight),
         child: SingleChildScrollView(
@@ -247,7 +237,6 @@ class _StandardConfirmDialog extends StatelessWidget {
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
       backgroundColor: AppColors.surface,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: ConstrainedBox(
         constraints: BoxConstraints(maxWidth: 420, maxHeight: maxHeight),
         child: SingleChildScrollView(
@@ -274,36 +263,26 @@ class _StandardConfirmDialog extends StatelessWidget {
                 ],
                 if (notice != null) ...[
                   const SizedBox(height: 16),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 12,
-                      vertical: 10,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.accent.withValues(alpha: 0.08),
-                      borderRadius: BorderRadius.zero,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          LucideIcons.info,
-                          color: AppColors.accentForeground,
-                          size: 17,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            notice!,
-                            style: TextStyle(
-                              color: AppColors.accentStrongForeground,
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              letterSpacing: 0,
-                            ),
+                  Row(
+                    children: [
+                      Icon(
+                        LucideIcons.info,
+                        color: AppColors.textSecondary,
+                        size: 17,
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          notice!,
+                          style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            letterSpacing: 0,
                           ),
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ],
                 const SizedBox(height: 16),
@@ -357,7 +336,9 @@ class AppDialogActionRow extends StatelessWidget {
       second: FilledButton(
         onPressed: onConfirm,
         style: FilledButton.styleFrom(
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.foregroundOn(
+            confirmColor ?? AppColors.accent,
+          ),
           backgroundColor: confirmColor ?? AppColors.accent,
           minimumSize: const Size.fromHeight(48),
           padding: const EdgeInsets.symmetric(horizontal: 10),

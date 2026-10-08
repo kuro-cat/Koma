@@ -309,7 +309,7 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
               .where((plan) => plan.id == _activePlan?.id)
               .firstOrNull;
           return ListView(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+            padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
             children: [
               _CreatePlanButton(
                 onPressed: _sorting || _savingOrder ? null : _createEmptyPlan,
@@ -614,7 +614,7 @@ class _PlanCard extends StatelessWidget {
                 const SizedBox(height: 6),
                 SizedBox(
                   key: ValueKey('plan-card-work-row-${plan.id}'),
-                  height: 18,
+                  height: expanded && works.isNotEmpty ? null : 22,
                   child: works.isEmpty
                       ? Align(
                           alignment: Alignment.centerLeft,
@@ -629,7 +629,7 @@ class _PlanCard extends StatelessWidget {
                             ),
                           ),
                         )
-                      : _PlanWorkTags(works: works),
+                      : _PlanWorkTags(works: works, expanded: expanded),
                 ),
               ],
             ),
@@ -1055,12 +1055,25 @@ class _PlanActionButton extends StatelessWidget {
 }
 
 class _PlanWorkTags extends StatelessWidget {
-  const _PlanWorkTags({required this.works});
+  const _PlanWorkTags({required this.works, this.expanded = false});
 
   final List<PilgrimageWork> works;
 
+  /// An opened plan lists every work in full.
+  final bool expanded;
+
   @override
   Widget build(BuildContext context) {
+    if (expanded) {
+      return Wrap(
+        key: const ValueKey('plan-work-tags'),
+        spacing: 5,
+        runSpacing: 5,
+        children: [
+          for (final work in works) _PlanWorkTag(work: work, full: true),
+        ],
+      );
+    }
     const visibleCount = 3;
     final visibleWorks = works.take(visibleCount).toList(growable: false);
     final remainingCount = works.length - visibleWorks.length;
@@ -1092,23 +1105,28 @@ class _PlanWorkTags extends StatelessWidget {
   }
 }
 
-/// A Tsumiki tag: the work's name on mist, no colour coding.
+/// A Tsumiki tag: the work's name on raise with a rule edge, so it reads on
+/// the plain, wash and mist rows alike. No colour coding.
 class _PlanWorkTag extends StatelessWidget {
-  const _PlanWorkTag({required this.work});
+  const _PlanWorkTag({required this.work, this.full = false});
 
   final PilgrimageWork work;
+  final bool full;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.fromLTRB(6, 3, 6, 3),
-      color: AppColors.surfaceMuted,
+      padding: const EdgeInsets.fromLTRB(6, 4, 6, 4),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.border),
+      ),
       child: Text(
         work.title,
-        maxLines: 1,
+        maxLines: full ? 2 : 1,
         overflow: TextOverflow.ellipsis,
         style: TextStyle(
-          color: AppColors.textSecondary,
+          color: AppColors.textPrimary,
           fontSize: 12,
           height: 1,
           fontWeight: FontWeight.w500,

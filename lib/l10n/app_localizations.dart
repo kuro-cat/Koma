@@ -7681,7 +7681,7 @@ abstract class AppLocalizations {
   /// No description provided for @recordsSearchHint.
   ///
   /// In zh, this message translates to:
-  /// **'搜索点位、作品、场景'**
+  /// **'搜索记录'**
   String get recordsSearchHint;
 
   /// No description provided for @recordsClearSearchTooltip.

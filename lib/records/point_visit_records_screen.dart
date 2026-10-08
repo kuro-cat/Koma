@@ -44,7 +44,8 @@ class PointVisitRecordsScreen extends StatelessWidget {
                 title: Text(l10n.pointVisitRecordsTitle),
               ),
               body: ListView(
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                // Sections and rows run full width and pad themselves 12dp.
+                padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
                 children: [
                   _PointRecordsHeader(
                     point: resolvedPoint,
@@ -55,15 +56,12 @@ class PointVisitRecordsScreen extends StatelessWidget {
                     const _EmptyPointRecords()
                   else ...[
                     const _PointRecordsListLabel(),
-                    const SizedBox(height: 8),
-                    for (final record in records) ...[
+                    for (final record in records)
                       _PointVisitRecordCard(
                         record: record,
                         onTap: () =>
                             _openRecordDetail(context, record, resolvedPoint),
                       ),
-                      const SizedBox(height: 10),
-                    ],
                   ],
                 ],
               ),
@@ -102,22 +100,17 @@ class _PointRecordsHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Row(
         children: [
           Container(
             width: 44,
             height: 44,
-            decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.zero,
-            ),
-            child: Icon(LucideIcons.folders, color: AppColors.accentForeground),
+            color: AppColors.surfaceMuted,
+            child: Icon(LucideIcons.folders, color: AppColors.textSecondary),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -157,7 +150,7 @@ class _PointRecordsHeader extends StatelessWidget {
               Text(
                 '$count',
                 style: TextStyle(
-                  color: AppColors.accentStrongForeground,
+                  color: AppColors.textPrimary,
                   fontSize: 26,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0,
@@ -167,7 +160,7 @@ class _PointRecordsHeader extends StatelessWidget {
               Text(
                 l10n.pointVisitRecordsCountUnit(count),
                 style: TextStyle(
-                  color: AppColors.accentStrongForeground,
+                  color: AppColors.textSecondary,
                   fontSize: 13,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0,
@@ -186,13 +179,8 @@ class _EmptyPointRecords extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(18),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceMuted,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 18),
       child: Column(
         children: [
           Icon(LucideIcons.images, color: AppColors.textSecondary, size: 34),
@@ -216,27 +204,13 @@ class _PointRecordsListLabel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.zero,
-      child: Row(
-        children: [
-          Icon(
-            LucideIcons.calendarClock,
-            color: AppColors.accentForeground,
-            size: 15,
-          ),
-          const SizedBox(width: 6),
-          Text(
-            l10n.pointVisitRecordsListLabel,
-            style: TextStyle(
-              color: AppColors.textPrimary,
-              fontSize: 13,
-              fontWeight: FontWeight.w600,
-              letterSpacing: 0,
-            ),
-          ),
-        ],
+    // The list's caps name, hung over its 2px ink rule.
+    return Container(
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 6),
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.ink, width: 2)),
       ),
+      child: CapsLabel(l10n.pointVisitRecordsListLabel),
     );
   }
 }
@@ -298,57 +272,51 @@ class _PointVisitRecordCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final photoPath = resolveVisitRecordDisplayPhotoPath(record);
+    // A ruled row: page ground, 1px divider beneath, thumbnail inset 12dp.
     return Material(
-      color: AppColors.surface,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-        side: BorderSide(color: AppColors.border),
-      ),
-      clipBehavior: Clip.antiAlias,
+      color: Colors.transparent,
+      shape: Border(bottom: BorderSide(color: AppColors.divider)),
       child: InkWell(
         onTap: onTap,
-        child: IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(width: 104, child: VisitRecordPhoto(path: photoPath)),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      _RecordCapturedAtText(capturedAt: record.capturedAt),
-                      const SizedBox(height: 8),
-                      Wrap(
-                        spacing: 6,
-                        runSpacing: 6,
-                        children: [
-                          _RecordMetaChip(
-                            icon: LucideIcons.layers,
-                            label: referenceModeDisplayLabel(
-                              record.referenceMode,
-                            ),
-                          ),
-                          if (record.hasColorGrading)
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(width: 104, child: VisitRecordPhoto(path: photoPath)),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _RecordCapturedAtText(capturedAt: record.capturedAt),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 12,
+                          runSpacing: 6,
+                          children: [
                             _RecordMetaChip(
-                              icon: LucideIcons.wandSparkles,
-                              label: l10n.pointVisitRecordsColorMatched,
+                              icon: LucideIcons.layers,
+                              label: referenceModeDisplayLabel(
+                                record.referenceMode,
+                              ),
                             ),
-                        ],
-                      ),
-                    ],
+                            if (record.hasColorGrading)
+                              _RecordMetaChip(
+                                icon: LucideIcons.wandSparkles,
+                                label: l10n.pointVisitRecordsColorMatched,
+                              ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(right: 10),
-                child: Icon(
-                  LucideIcons.chevronRight,
-                  color: AppColors.textSecondary,
-                ),
-              ),
-            ],
+                Icon(LucideIcons.chevronRight, color: AppColors.textSecondary),
+              ],
+            ),
           ),
         ),
       ),
@@ -364,13 +332,9 @@ class _RecordMetaChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 28,
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceMuted,
-        borderRadius: BorderRadius.zero,
-      ),
+    // Ink-2 with no fill: a mist tag would vanish on the paper row.
+    return SizedBox(
+      height: 20,
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,

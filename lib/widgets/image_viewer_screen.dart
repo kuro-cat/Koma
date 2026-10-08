@@ -169,7 +169,6 @@ class ImageViewerScreen extends StatelessWidget {
                 );
               },
             ),
-      backgroundColor: const Color(0xFF2C2C2E),
     );
   }
 
@@ -557,11 +556,8 @@ class _WebSaveSheet extends StatelessWidget {
         children: [
           const SizedBox(height: 12),
           ListTile(
-            leading: const Icon(LucideIcons.download, color: Colors.white),
-            title: Text(
-              l10n.imageViewerSaveImage,
-              style: const TextStyle(color: Colors.white),
-            ),
+            leading: const Icon(LucideIcons.download),
+            title: Text(l10n.imageViewerSaveImage),
             onTap: onSave,
           ),
           const SizedBox(height: 12),
@@ -588,19 +584,14 @@ class _MobileSaveSheet extends StatelessWidget {
         children: [
           const SizedBox(height: 12),
           ListTile(
-            leading: const Icon(LucideIcons.share, color: Colors.white),
-            title: Text(
-              l10n.imageViewerShare,
-              style: const TextStyle(color: Colors.white),
-            ),
+            leading: const Icon(LucideIcons.share),
+            title: Text(l10n.imageViewerShare),
             onTap: onShare,
           ),
+          const Divider(height: 1),
           ListTile(
-            leading: const Icon(LucideIcons.download, color: Colors.white),
-            title: Text(
-              l10n.imageViewerSaveToPhotos,
-              style: const TextStyle(color: Colors.white),
-            ),
+            leading: const Icon(LucideIcons.download),
+            title: Text(l10n.imageViewerSaveToPhotos),
             onTap: onSaveToGallery,
           ),
           const SizedBox(height: 12),

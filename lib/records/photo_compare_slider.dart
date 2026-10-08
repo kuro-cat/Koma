@@ -151,10 +151,7 @@ class _PhotoCompareSliderState extends State<PhotoCompareSlider> {
                         DecoratedBox(
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.zero,
-                            border: Border.all(
-                              color: AppColors.accent,
-                              width: 2,
-                            ),
+                            border: Border.all(color: AppColors.ink, width: 2),
                           ),
                         ),
                     ],
@@ -195,14 +192,13 @@ class _DividerHandle extends StatelessWidget {
         Container(
           width: 34,
           height: 34,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            shape: BoxShape.circle,
-          ),
+          // Fixed light-on-photo colours: the handle sits on the image, not
+          // on the page ground, so it does not follow the theme.
+          color: Colors.white,
           child: const Icon(
             LucideIcons.chevronsLeftRight,
             size: 18,
-            color: Color(0xFF1F2328),
+            color: AppColors.cameraDarkSurface,
           ),
         ),
       ],
@@ -220,7 +216,7 @@ class _CornerLabel extends StatelessWidget {
     return ExcludeSemantics(
       child: DecoratedBox(
         decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.55),
+          color: AppColors.cameraDarkSurface.withValues(alpha: 0.7),
           borderRadius: BorderRadius.zero,
         ),
         child: Padding(

@@ -189,7 +189,7 @@ class _MapLayersPanelState extends State<MapLayersPanel> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: EdgeInsets.fromLTRB(20, widget.framed ? 16 : 0, 20, 4),
+          padding: EdgeInsets.fromLTRB(12, widget.framed ? 12 : 0, 12, 8),
           child: Text(
             widget.title,
             style: TextStyle(
@@ -200,10 +200,12 @@ class _MapLayersPanelState extends State<MapLayersPanel> {
             ),
           ),
         ),
+        ColoredBox(color: AppColors.ink, child: const SizedBox(height: 2)),
         for (final toggle in widget.toggles)
           SwitchListTile(
             key: ValueKey('map-layer-toggle-${toggle.id}'),
-            contentPadding: const EdgeInsets.symmetric(horizontal: 20),
+            contentPadding: const EdgeInsets.symmetric(horizontal: 12),
+            shape: Border(bottom: BorderSide(color: AppColors.divider)),
             value: _values[toggle.id] ?? toggle.value,
             onChanged: (value) => _change(toggle, value),
             secondary: Icon(toggle.icon, color: AppColors.textSecondary),
@@ -236,11 +238,8 @@ class _MapLayersPanelState extends State<MapLayersPanel> {
     return Material(
       color: AppColors.surface,
       elevation: 0,
-      shadowColor: Colors.black.withValues(alpha: 0.18),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.zero,
-        side: BorderSide(color: AppColors.border),
-      ),
+      shadowColor: Colors.transparent,
+      shape: RoundedRectangleBorder(side: BorderSide(color: AppColors.ink)),
       clipBehavior: Clip.antiAlias,
       child: SingleChildScrollView(child: content),
     );

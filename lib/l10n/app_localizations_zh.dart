@@ -4173,7 +4173,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get recordsSelectStatus => '选择状态';
 
   @override
-  String get recordsSearchHint => '搜索点位、作品、场景';
+  String get recordsSearchHint => '搜索记录';
 
   @override
   String get recordsClearSearchTooltip => '清空搜索';

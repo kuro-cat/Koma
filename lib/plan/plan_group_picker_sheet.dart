@@ -34,75 +34,85 @@ Future<void> showPlanGroupPickerSheet({
               ),
               child: ListView(
                 shrinkWrap: true,
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+                padding: const EdgeInsets.only(bottom: 24),
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              l10n.planGroupPickerTitle,
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0,
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                l10n.planGroupPickerTitle,
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w600,
+                                  letterSpacing: 0,
+                                ),
                               ),
-                            ),
-                            const SizedBox(height: 3),
-                            Text(
-                              l10n.planGroupPickerCount(pickerGroups.length),
-                              style: TextStyle(
-                                color: AppColors.textSecondary,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w500,
-                                letterSpacing: 0,
+                              const SizedBox(height: 3),
+                              Text(
+                                l10n.planGroupPickerCount(pickerGroups.length),
+                                style: TextStyle(
+                                  color: AppColors.textSecondary,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  letterSpacing: 0,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
-                      if (onCreateGroup != null)
-                        IconButton(
-                          key: const ValueKey('plan-group-picker-create'),
-                          tooltip: l10n.planGroupPickerNewGroup,
-                          onPressed: () async {
-                            final created = await onCreateGroup();
-                            if (created == null || !context.mounted) {
-                              return;
-                            }
-                            setSheetState(() {
-                              pickerGroups
-                                ..removeWhere((group) => group.id == created.id)
-                                ..add(
-                                  PlanGroupBucket(
-                                    id: created.id,
-                                    name: created.name,
-                                    group: created,
-                                    points: const [],
-                                    completedCount: 0,
-                                  ),
-                                )
-                                ..sort((a, b) {
-                                  if (a.isUngrouped) {
-                                    return 1;
-                                  }
-                                  if (b.isUngrouped) {
-                                    return -1;
-                                  }
-                                  return compareGroupsByPlanOrder(
-                                    a.group!,
-                                    b.group!,
-                                  );
-                                });
-                            });
-                          },
-                          icon: const Icon(LucideIcons.folderPlus),
-                        ),
-                    ],
+                        if (onCreateGroup != null)
+                          IconButton(
+                            key: const ValueKey('plan-group-picker-create'),
+                            tooltip: l10n.planGroupPickerNewGroup,
+                            onPressed: () async {
+                              final created = await onCreateGroup();
+                              if (created == null || !context.mounted) {
+                                return;
+                              }
+                              setSheetState(() {
+                                pickerGroups
+                                  ..removeWhere(
+                                    (group) => group.id == created.id,
+                                  )
+                                  ..add(
+                                    PlanGroupBucket(
+                                      id: created.id,
+                                      name: created.name,
+                                      group: created,
+                                      points: const [],
+                                      completedCount: 0,
+                                    ),
+                                  )
+                                  ..sort((a, b) {
+                                    if (a.isUngrouped) {
+                                      return 1;
+                                    }
+                                    if (b.isUngrouped) {
+                                      return -1;
+                                    }
+                                    return compareGroupsByPlanOrder(
+                                      a.group!,
+                                      b.group!,
+                                    );
+                                  });
+                              });
+                            },
+                            icon: const Icon(LucideIcons.folderPlus),
+                          ),
+                      ],
+                    ),
                   ),
-                  const SizedBox(height: 14),
+                  const SizedBox(height: 12),
+                  // The areas hang from a 2px ink rule, as ruled rows.
+                  ColoredBox(
+                    color: AppColors.ink,
+                    child: const SizedBox(height: 2),
+                  ),
                   for (final group in pickerGroups)
                     _PlanGroupPickerTile(
                       group: group,
@@ -149,13 +159,12 @@ class _PlanGroupPickerTile extends StatelessWidget {
               .toDouble();
     final completed =
         group.points.isNotEmpty && group.completedCount >= group.points.length;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 4),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.divider)),
+      ),
       child: Material(
-        color: selected
-            ? accentColor.withValues(alpha: 0.08)
-            : Colors.transparent,
-        borderRadius: BorderRadius.zero,
+        color: selected ? AppColors.accentWash : Colors.transparent,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           key: ValueKey('plan-group-picker-option-${group.name}'),
@@ -184,7 +193,7 @@ class _PlanGroupPickerTile extends StatelessWidget {
                     ),
                   ),
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 8, 12, 8),
+                  padding: const EdgeInsets.fromLTRB(12, 8, 12, 8),
                   child: Row(
                     children: [
                       if (completed)
@@ -229,11 +238,11 @@ class _PlanGroupPickerTile extends StatelessWidget {
                                 color: accentColor,
                                 size: 28,
                               ),
-                              const Padding(
-                                padding: EdgeInsets.only(top: 2),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 2),
                                 child: Icon(
                                   LucideIcons.check,
-                                  color: Colors.white,
+                                  color: AppColors.foregroundOn(accentColor),
                                   size: 14,
                                 ),
                               ),
@@ -387,7 +396,7 @@ Future<String?> showPlanGroupSelectionSheet({
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -413,10 +422,14 @@ Future<String?> showPlanGroupSelectionSheet({
                     ),
                   ),
                   const SizedBox(height: 12),
+                  ColoredBox(
+                    color: AppColors.ink,
+                    child: const SizedBox(height: 2),
+                  ),
                   Expanded(
                     child: ListView(
                       key: const ValueKey('plan-point-group-options-list'),
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      padding: EdgeInsets.zero,
                       children: [
                         for (final option in pickerOptions)
                           _PlanGroupSelectionTile(
@@ -428,9 +441,9 @@ Future<String?> showPlanGroupSelectionSheet({
                     ),
                   ),
                   if (onCreateOption != null) ...[
-                    Divider(height: 1, color: AppColors.border),
+                    Divider(height: 1, color: AppColors.ink),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
+                      padding: const EdgeInsets.fromLTRB(4, 8, 12, 12),
                       child: Material(
                         color: Colors.transparent,
                         child: InkWell(
@@ -494,11 +507,12 @@ class _PlanGroupSelectionTileState extends State<_PlanGroupSelectionTile> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 2),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border(bottom: BorderSide(color: AppColors.divider)),
+      ),
       child: Material(
         color: Colors.transparent,
-        borderRadius: BorderRadius.zero,
         clipBehavior: Clip.antiAlias,
         child: MouseRegion(
           onEnter: (_) => setState(() => _hovered = true),
@@ -514,18 +528,17 @@ class _PlanGroupSelectionTileState extends State<_PlanGroupSelectionTile> {
                 child: AnimatedContainer(
                   duration: const Duration(milliseconds: 120),
                   curve: Curves.easeOut,
-                  height: 36,
                   width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: widget.selected
-                        ? AppColors.accent.withValues(alpha: 0.08)
-                        : _hovered
-                        ? AppColors.accent.withValues(alpha: 0.05)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.zero,
-                  ),
+                  height: 44,
+                  alignment: Alignment.centerLeft,
+                  // The whole row takes the wash: no inset highlight box.
+                  color: widget.selected
+                      ? AppColors.accentWash
+                      : _hovered
+                      ? AppColors.surfaceMuted
+                      : Colors.transparent,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Row(
                       children: [
                         Icon(

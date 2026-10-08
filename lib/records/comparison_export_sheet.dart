@@ -188,7 +188,7 @@ class _ComparisonExportSheetState extends State<ComparisonExportSheet> {
               const Divider(height: 1),
               Expanded(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 18),
+                  padding: const EdgeInsets.fromLTRB(12, 16, 12, 18),
                   child: AbsorbPointer(
                     absorbing: _exporting || !_settingsLoaded || _isExiting,
                     child: ComparisonExportConfigEditor(
@@ -298,7 +298,7 @@ class _SheetHeader extends StatelessWidget {
     return InkWell(
       onTap: exporting ? null : () => Navigator.of(context).pop(),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 8, 20, 10),
+        padding: const EdgeInsets.fromLTRB(12, 8, 4, 10),
         child: Row(
           children: [
             Expanded(
@@ -342,7 +342,7 @@ class _SheetFooter extends StatelessWidget {
         border: Border(top: BorderSide(color: AppColors.border)),
       ),
       child: Padding(
-        padding: EdgeInsets.fromLTRB(20, 12, 20, 12 + bottomInset),
+        padding: EdgeInsets.fromLTRB(12, 12, 12, 12 + bottomInset),
         child: ResponsiveTwoButtonRow(
           spacing: 12,
           stackBelowWidth: 250,
@@ -359,10 +359,7 @@ class _SheetFooter extends StatelessWidget {
                 ? const SizedBox(
                     width: 18,
                     height: 18,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      color: Colors.white,
-                    ),
+                    child: CircularProgressIndicator(strokeWidth: 2),
                   )
                 : ResponsiveButtonContent(
                     icon: LucideIcons.download,

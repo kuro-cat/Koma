@@ -356,14 +356,15 @@ class _MapToolButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // A standalone key on the map: ink frame, inverts to ink when on.
     return Material(
-      color: selected ? AppColors.accent : AppColors.surface,
-      borderRadius: BorderRadius.zero,
+      color: selected ? AppColors.ink : AppColors.surface,
+      shape: Border.all(color: AppColors.ink),
       child: IconButton(
         tooltip: tooltip,
         onPressed: onTap,
         icon: Icon(icon),
-        color: selected ? Colors.white : AppColors.textPrimary,
+        color: selected ? AppColors.background : AppColors.textPrimary,
       ),
     );
   }
@@ -401,16 +402,15 @@ class _AnchorSelectionCard extends StatelessWidget {
         : joinLabels([groupNameForPoint(point), point.displaySubtitle]);
 
     return Container(
-      margin: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomInset),
-      padding: const EdgeInsets.all(14),
+      margin: EdgeInsets.fromLTRB(12, 0, 12, 12 + bottomInset),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border.all(color: AppColors.ink),
       ),
       child: Row(
         children: [
-          Icon(LucideIcons.flag, color: AppColors.accentForeground, size: 28),
+          Icon(LucideIcons.flag, color: AppColors.textSecondary, size: 28),
           const SizedBox(width: 12),
           Expanded(
             child: Column(

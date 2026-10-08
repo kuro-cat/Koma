@@ -184,10 +184,8 @@ class AppStatusBanner extends StatelessWidget {
     final palette = AppStatusBannerPalette.of(kind);
     return Material(
       color: palette.background,
-      elevation: kind == AppStatusBannerKind.running ? 8 : 2,
-      shadowColor: Colors.black.withValues(
-        alpha: AppColors.isDark ? 0.45 : 0.18,
-      ),
+      elevation: 0,
+      shadowColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.zero,
@@ -274,49 +272,39 @@ class AppStatusBannerPalette {
   final Color iconColor;
   final Color action;
 
+  /// A popup on raise with a 1px ink frame. Only the icon carries the
+  /// signal: accent for running and done, ochre for warnings, red for errors.
   factory AppStatusBannerPalette.of(AppStatusBannerKind kind) {
-    final isDark = AppColors.isDark;
     final surface = AppColors.surface;
+    final ink = AppColors.ink;
     return switch (kind) {
       AppStatusBannerKind.running => AppStatusBannerPalette(
         background: surface,
-        border: AppColors.border,
-        iconFill: AppColors.accent.withValues(alpha: isDark ? 0.22 : 0.12),
-        iconColor: AppColors.accent,
-        action: AppColors.accent,
+        border: ink,
+        iconFill: AppColors.accentWash,
+        iconColor: AppColors.accentForeground,
+        action: ink,
       ),
       AppStatusBannerKind.success => AppStatusBannerPalette(
-        background: isDark
-            ? Color.alphaBlend(
-                AppColors.accent.withValues(alpha: 0.28),
-                surface,
-              )
-            : const Color(0xFFE8F6F1),
-        border: AppColors.accent.withValues(alpha: isDark ? 0.55 : 0.38),
+        background: surface,
+        border: ink,
         iconFill: AppColors.accent,
-        iconColor: Colors.white,
-        action: AppColors.accent,
+        iconColor: AppColors.onAccent,
+        action: ink,
       ),
       AppStatusBannerKind.warning => AppStatusBannerPalette(
-        background: isDark
-            ? Color.alphaBlend(
-                AppColors.warning.withValues(alpha: 0.28),
-                surface,
-              )
-            : const Color(0xFFFFF6E5),
-        border: AppColors.warning.withValues(alpha: isDark ? 0.58 : 0.42),
-        iconFill: isDark ? AppColors.warning : const Color(0xFFE2A336),
-        iconColor: Colors.white,
-        action: isDark ? AppColors.warning : const Color(0xFFD48806),
+        background: surface,
+        border: ink,
+        iconFill: AppColors.warning,
+        iconColor: AppColors.foregroundOn(AppColors.warning),
+        action: ink,
       ),
       AppStatusBannerKind.error => AppStatusBannerPalette(
-        background: isDark
-            ? Color.alphaBlend(AppColors.error.withValues(alpha: 0.28), surface)
-            : const Color(0xFFFDECEC),
-        border: AppColors.error.withValues(alpha: isDark ? 0.58 : 0.42),
+        background: surface,
+        border: ink,
         iconFill: AppColors.error,
-        iconColor: Colors.white,
-        action: AppColors.error,
+        iconColor: AppColors.foregroundOn(AppColors.error),
+        action: ink,
       ),
     };
   }
@@ -342,10 +330,7 @@ class _StatusIcon extends StatelessWidget {
       width: 32,
       height: 32,
       alignment: Alignment.center,
-      decoration: ShapeDecoration(
-        color: palette.iconFill,
-        shape: const CircleBorder(),
-      ),
+      color: palette.iconFill,
       child: Icon(resolved, size: 18, color: palette.iconColor),
     );
   }
@@ -373,7 +358,7 @@ class _ActionButton extends StatelessWidget {
         foregroundColor: color,
         side: BorderSide(color: color),
         padding: const EdgeInsets.symmetric(horizontal: 10),
-        minimumSize: const Size(0, 30),
+        minimumSize: const Size(44, AppButtonStyles.compactHeight),
         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
         visualDensity: VisualDensity.compact,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -423,7 +408,7 @@ class AppStatusBannerProgressLine extends StatelessWidget {
               key: barKey,
               value: value,
               minHeight: 4,
-              backgroundColor: AppColors.border.withValues(alpha: 0.7),
+              backgroundColor: AppColors.surfaceMuted,
               color: AppColors.accent,
             ),
           ),

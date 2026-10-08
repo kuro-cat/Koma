@@ -188,7 +188,7 @@ void main() {
     );
   }
 
-  testWidgets('renders light-mode apple-style navigation chrome', (
+  testWidgets('renders light-mode navigation chrome', (
     tester,
   ) async {
     await pumpScreen(tester);
@@ -539,7 +539,8 @@ void main() {
     final scaffold = tester.widget<Scaffold>(
       find.byKey(const ValueKey('in-app-navigation-screen')),
     );
-    expect(scaffold.backgroundColor, const Color(0xFF1C1C1E));
+    // Night sea paper, the Koma dark ground.
+    expect(scaffold.backgroundColor, const Color(0xFF0F1A1C));
     expect(find.text('右转进入表参道'), findsOneWidget);
     expect(find.textContaining('终点: 宇治桥'), findsOneWidget);
   });

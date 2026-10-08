@@ -120,7 +120,8 @@ class _WorkManagerScreenState extends State<WorkManagerScreen> {
           title: Text(l10n.workManagerTitle),
         ),
         body: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          // Rows run full width and inset their own content 12dp.
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
           children: [
             _AddWorkPanel(
               onBangumi: _openBangumiSearch,
@@ -130,18 +131,27 @@ class _WorkManagerScreenState extends State<WorkManagerScreen> {
             if (works.isEmpty)
               const _EmptyWorkPanel()
             else
-              for (final work in works) ...[
-                _WorkManageCard(
-                  work: work,
-                  pointCount: _plan.points
-                      .where((point) => point.work.id == work.id)
-                      .length,
-                  anitabiTotal: _anitabiTotalFor(work),
-                  disabled: _isSaving,
-                  onDelete: () => _confirmDeleteWork(work),
+              DecoratedBox(
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(color: AppColors.ink, width: 2),
+                  ),
                 ),
-                const SizedBox(height: 8),
-              ],
+                child: Column(
+                  children: [
+                    for (final work in works)
+                      _WorkManageCard(
+                        work: work,
+                        pointCount: _plan.points
+                            .where((point) => point.work.id == work.id)
+                            .length,
+                        anitabiTotal: _anitabiTotalFor(work),
+                        disabled: _isSaving,
+                        onDelete: () => _confirmDeleteWork(work),
+                      ),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
@@ -264,15 +274,16 @@ class _AddWorkPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // A section under an ink rule; the two ways in split by a seam.
     return Container(
-      padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(
+          top: BorderSide(color: AppColors.ink, width: 2),
+          bottom: BorderSide(color: AppColors.divider),
+        ),
       ),
       child: SizedBox(
-        height: 56,
+        height: 60,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -286,10 +297,10 @@ class _AddWorkPanel extends StatelessWidget {
               ),
             ),
             VerticalDivider(
-              width: 9,
-              indent: 8,
-              endIndent: 8,
-              color: AppColors.border,
+              width: 1,
+              indent: 12,
+              endIndent: 12,
+              color: AppColors.divider,
             ),
             Expanded(
               child: _AddWorkAction(
@@ -330,9 +341,9 @@ class _AddWorkAction extends StatelessWidget {
         onTap: onTap,
         borderRadius: BorderRadius.zero,
         child: SizedBox(
-          height: 56,
+          height: 60,
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
             child: Row(
               children: [
                 Icon(icon, size: 20, color: AppColors.textPrimary),
@@ -360,7 +371,7 @@ class _AddWorkAction extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                           color: AppColors.textSecondary,
-                          fontSize: 11,
+                          fontSize: 12,
                           letterSpacing: 0,
                         ),
                       ),
@@ -406,11 +417,9 @@ class _WorkManageCardState extends State<_WorkManageCard> {
     final showSubtitle = subtitle.isNotEmpty;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+      padding: const EdgeInsets.fromLTRB(12, 10, 0, 10),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(bottom: BorderSide(color: AppColors.divider)),
       ),
       child: Row(
         children: [
@@ -463,7 +472,7 @@ class _WorkManageCardState extends State<_WorkManageCard> {
               ],
             ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 4),
           PopupMenuButton<String>(
             key: ValueKey('work-manage-more-${work.id}'),
             tooltip: l10n.workManagerMoreActions,
@@ -475,8 +484,8 @@ class _WorkManageCardState extends State<_WorkManageCard> {
             offset: const Offset(0, 6),
             constraints: const BoxConstraints(minWidth: 200, maxWidth: 320),
             style: IconButton.styleFrom(
-              minimumSize: const Size.square(34),
-              maximumSize: const Size.square(34),
+              minimumSize: const Size.square(48),
+              maximumSize: const Size.square(48),
               padding: EdgeInsets.zero,
               tapTargetSize: MaterialTapTargetSize.shrinkWrap,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.zero),
@@ -486,7 +495,7 @@ class _WorkManageCardState extends State<_WorkManageCard> {
               PopupMenuItem<String>(
                 key: const ValueKey('work-action-delete'),
                 value: 'delete',
-                height: 44,
+                height: 48,
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 child: Row(
                   children: [
@@ -553,20 +562,20 @@ class _WorkBadges extends StatelessWidget {
     final isBangumiWork = work.bangumiId != null;
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
+      // The count leads so a narrow row never scrolls it out of view.
       child: Row(
         children: [
-          if (work.displayBangumiSubjectType != null) ...[
-            _WorkManageBadge(label: work.displayBangumiSubjectType!.label),
-            const SizedBox(width: 6),
-          ],
-          _WorkManageBadge(
-            label: isBangumiWork ? 'Bangumi' : l10n.workManagerManualBadge,
-            emphasized: isBangumiWork,
-          ),
-          const SizedBox(width: 6),
           _WorkManageBadge(
             key: ValueKey('work-point-count-${work.id}'),
             label: _pointLabel,
+          ),
+          if (work.displayBangumiSubjectType != null) ...[
+            const SizedBox(width: 6),
+            _WorkManageBadge(label: work.displayBangumiSubjectType!.label),
+          ],
+          const SizedBox(width: 6),
+          _WorkManageBadge(
+            label: isBangumiWork ? 'Bangumi' : l10n.workManagerManualBadge,
           ),
         ],
       ),
@@ -574,39 +583,26 @@ class _WorkBadges extends StatelessWidget {
   }
 }
 
+/// A plain status tag: facts are ink-2, never the accent.
 class _WorkManageBadge extends StatelessWidget {
-  const _WorkManageBadge({
-    required this.label,
-    this.emphasized = false,
-    super.key,
-  });
+  const _WorkManageBadge({required this.label, super.key});
 
   final String label;
-  final bool emphasized;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
       decoration: BoxDecoration(
-        color: emphasized
-            ? AppColors.accent.withValues(alpha: 0.08)
-            : AppColors.surfaceMuted,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(
-          color: emphasized
-              ? AppColors.accent.withValues(alpha: 0.42)
-              : AppColors.border,
-        ),
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.border),
       ),
       child: Text(
         label,
         maxLines: 1,
         softWrap: false,
         style: TextStyle(
-          color: emphasized
-              ? AppColors.accentStrongForeground
-              : AppColors.textSecondary,
+          color: AppColors.textSecondary,
           fontSize: 11,
           fontWeight: FontWeight.w600,
           letterSpacing: 0,
@@ -622,23 +618,21 @@ class _EmptyWorkPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(LucideIcons.clapperboard, color: AppColors.accentForeground),
+              Icon(LucideIcons.clapperboard, color: AppColors.textSecondary),
               const SizedBox(width: 8),
               Text(
                 l10n.workManagerEmptyTitle,
                 style: TextStyle(
-                  color: AppColors.accentStrongForeground,
+                  color: AppColors.textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   letterSpacing: 0,
@@ -701,19 +695,12 @@ class _WorkOnboardingStep extends StatelessWidget {
                     left: 8,
                     top: 10,
                     bottom: 0,
-                    child: Container(width: 2, color: AppColors.border),
+                    child: Container(width: 1, color: AppColors.divider),
                   ),
                 Positioned(
                   left: 4,
                   top: 5,
-                  child: Container(
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: AppColors.accent,
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
+                  child: Container(width: 10, height: 10, color: AppColors.ink),
                 ),
               ],
             ),

@@ -1011,11 +1011,9 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
           style: MenuStyle(
             padding: const WidgetStatePropertyAll(EdgeInsets.zero),
             backgroundColor: WidgetStatePropertyAll(AppColors.surface),
-            elevation: const WidgetStatePropertyAll(8),
-            shadowColor: WidgetStatePropertyAll(
-              AppColors.textPrimary.withValues(alpha: 0.16),
-            ),
-            side: WidgetStatePropertyAll(BorderSide(color: AppColors.border)),
+            elevation: const WidgetStatePropertyAll(0),
+            shadowColor: const WidgetStatePropertyAll(Colors.transparent),
+            side: WidgetStatePropertyAll(BorderSide(color: AppColors.ink)),
             shape: const WidgetStatePropertyAll(
               RoundedRectangleBorder(borderRadius: BorderRadius.zero),
             ),
@@ -1024,7 +1022,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
             return Material(
               color: AppColors.surface,
               shape: RoundedRectangleBorder(
-                side: BorderSide(color: AppColors.border),
+                side: BorderSide(color: AppColors.ink),
                 borderRadius: BorderRadius.zero,
               ),
               clipBehavior: Clip.antiAlias,
@@ -1042,7 +1040,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                 child: SizedBox(
                   height: AppButtonStyles.compactHeight,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: Row(
                       children: [
                         const Icon(LucideIcons.folder, size: 19),
@@ -1085,7 +1083,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 14, 16, 10),
+                      padding: const EdgeInsets.fromLTRB(12, 12, 12, 8),
                       child: Row(
                         children: [
                           Expanded(
@@ -1136,14 +1134,14 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                                       : const SizedBox(width: 19),
                                   style: ButtonStyle(
                                     minimumSize: const WidgetStatePropertyAll(
-                                      Size.fromHeight(42),
+                                      Size.fromHeight(48),
                                     ),
                                     padding: const WidgetStatePropertyAll(
                                       EdgeInsets.symmetric(horizontal: 10),
                                     ),
                                     backgroundColor: WidgetStatePropertyAll(
                                       group.id == widget.selectedGroup?.id
-                                          ? accentColor.withValues(alpha: 0.09)
+                                          ? AppColors.accentWash
                                           : Colors.transparent,
                                     ),
                                     overlayColor:
@@ -1164,7 +1162,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                                         }),
                                     foregroundColor: WidgetStatePropertyAll(
                                       group.id == widget.selectedGroup?.id
-                                          ? accentColor
+                                          ? AppColors.accentForeground
                                           : AppColors.textPrimary,
                                     ),
                                     shape: WidgetStatePropertyAll(
@@ -1188,12 +1186,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                         ),
                       ),
                     ),
-                    Divider(
-                      height: 1,
-                      indent: 16,
-                      endIndent: 16,
-                      color: AppColors.border,
-                    ),
+                    Divider(height: 1, color: AppColors.divider),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8, 2, 8, 4),
                       child: MenuItemButton(
@@ -1211,7 +1204,7 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
                         ),
                         style: ButtonStyle(
                           minimumSize: const WidgetStatePropertyAll(
-                            Size.fromHeight(42),
+                            Size.fromHeight(48),
                           ),
                           foregroundColor: WidgetStatePropertyAll(accentColor),
                           overlayColor: WidgetStateProperty.resolveWith(
@@ -1334,8 +1327,7 @@ class _BoxAssignPanel extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.96),
-        border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.zero,
+        border: Border.all(color: AppColors.ink),
       ),
       child: Padding(
         padding: const EdgeInsets.all(10),
@@ -1487,8 +1479,7 @@ class _NearestAssignPanel extends StatelessWidget {
     return DecoratedBox(
       decoration: BoxDecoration(
         color: AppColors.surface.withValues(alpha: 0.96),
-        border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.zero,
+        border: Border.all(color: AppColors.ink),
       ),
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
@@ -1628,10 +1619,7 @@ class _NearestAssignPointCard extends StatelessWidget {
       padding: EdgeInsets.fromLTRB(12, 0, 12, 12 + bottomInset),
       child: Material(
         color: AppColors.surface,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
-          side: BorderSide(color: AppColors.border),
-        ),
+        shape: Border.all(color: AppColors.ink),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           onTap: onOpenDetail,
@@ -1694,7 +1682,7 @@ class _NearestAssignPointCard extends StatelessWidget {
                                   l10n.nearestGroupAssignOutOfRange,
                         style: TextStyle(
                           color: assignable
-                              ? AppColors.accentStrongForeground
+                              ? AppColors.textSecondary
                               : AppColors.warning,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -1708,7 +1696,7 @@ class _NearestAssignPointCard extends StatelessWidget {
                 Icon(
                   assignable ? LucideIcons.circleCheckBig : LucideIcons.info,
                   color: assignable
-                      ? AppColors.accentStrongForeground
+                      ? AppColors.textSecondary
                       : AppColors.warning,
                   size: 20,
                 ),
@@ -1738,8 +1726,7 @@ class _NearestAssignHintCard extends StatelessWidget {
       child: DecoratedBox(
         decoration: BoxDecoration(
           color: AppColors.surface,
-          border: Border.all(color: AppColors.border),
-          borderRadius: BorderRadius.zero,
+          border: Border.all(color: AppColors.ink),
         ),
         child: Padding(
           padding: const EdgeInsets.all(12),

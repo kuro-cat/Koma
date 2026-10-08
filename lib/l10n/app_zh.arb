@@ -2480,7 +2480,7 @@
   "recordsStatusPending": "未完成",
   "recordsStatusTooltip": "按状态筛选",
   "recordsSelectStatus": "选择状态",
-  "recordsSearchHint": "搜索点位、作品、场景",
+  "recordsSearchHint": "搜索记录",
   "recordsClearSearchTooltip": "清空搜索",
   "recordsPhotos": "巡礼照片",
   "recordsRecordCountLabel": "{count, plural, other{条巡礼记录}}",

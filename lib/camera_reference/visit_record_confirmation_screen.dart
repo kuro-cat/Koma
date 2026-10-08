@@ -449,7 +449,7 @@ class _VisitRecordConfirmationScreenState
           title: Text(l10n.visitRecordConfirmationTitle),
         ),
         body: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 24),
           children: [
             Text(
               widget.point.name,
@@ -781,12 +781,14 @@ class _InfoPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // A one-row section: 2px ink rule on top, a divider beneath, no frame.
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.symmetric(vertical: 12),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(
+          top: BorderSide(color: AppColors.ink, width: 2),
+          bottom: BorderSide(color: AppColors.divider),
+        ),
       ),
       child: Row(
         children: [
@@ -823,13 +825,8 @@ class _SavingProgressPanel extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.surfaceMuted,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10),
       child: Row(
         children: [
           const SizedBox(

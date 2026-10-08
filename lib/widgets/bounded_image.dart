@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../app_theme.dart';
 import '../l10n/l10n.dart';
 import '../data/anitabi_image_fetcher.dart';
 import '../data/bounded_image_decoder.dart';
@@ -151,7 +152,7 @@ class BoundedImage extends StatelessWidget {
     frameBuilder: (context, child, frame, synchronous) => frame != null
         ? child
         : target.maxEdge <= 512
-        ? const ColoredBox(color: Color(0xffeeeeee))
+        ? ColoredBox(color: AppColors.surfaceMuted)
         : LayoutBuilder(
             builder: (context, constraints) => Center(
               child: constraints.maxHeight < 64 || constraints.maxWidth < 100

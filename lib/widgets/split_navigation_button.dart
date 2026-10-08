@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
+import '../app_theme.dart';
 import '../l10n/l10n.dart';
 
 class SplitNavigationButton extends StatelessWidget {
@@ -24,17 +25,13 @@ class SplitNavigationButton extends StatelessWidget {
   final Key externalKey;
   final Key dividerKey;
 
-  static final _overlayColor = WidgetStateProperty.resolveWith<Color?>((
-    states,
-  ) {
-    if (states.contains(WidgetState.pressed)) {
-      return Colors.white.withValues(alpha: 0.18);
-    }
-    if (states.contains(WidgetState.hovered)) {
-      return Colors.white.withValues(alpha: 0.1);
-    }
-    return Colors.transparent;
-  });
+  // Like the primary key, a pressed half inverts to ink.
+  static WidgetStateProperty<Color?> get _overlayColor =>
+      WidgetStateProperty.resolveWith<Color?>(
+        (states) => states.contains(WidgetState.pressed)
+            ? AppColors.ink
+            : Colors.transparent,
+      );
 
   @override
   Widget build(BuildContext context) {

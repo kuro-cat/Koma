@@ -20,11 +20,9 @@ class ColorGradingParameterSummary extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.symmetric(vertical: 14),
       decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink, width: 2)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -43,7 +41,7 @@ class ColorGradingParameterSummary extends StatelessWidget {
               Text(
                 '${(intensity * 100).round()}%',
                 style: TextStyle(
-                  color: AppColors.accentStrongForeground,
+                  color: AppColors.textPrimary,
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
                 ),
@@ -57,7 +55,7 @@ class ColorGradingParameterSummary extends StatelessWidget {
             divisions: 100,
             onChanged: onIntensityChanged,
           ),
-          Divider(color: AppColors.border),
+          Divider(color: AppColors.divider),
           const SizedBox(height: 8),
           Row(
             children: [
@@ -222,7 +220,7 @@ class _ColorGradingParameterSheet extends StatelessWidget {
       child: SizedBox(
         height: MediaQuery.sizeOf(context).height * 0.74,
         child: ListView.separated(
-          padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+          padding: const EdgeInsets.fromLTRB(12, 4, 12, 24),
           itemCount: items.length + 1,
           separatorBuilder: (_, index) => index == 0
               ? const SizedBox(height: 10)
@@ -300,7 +298,7 @@ class _ParameterRow extends StatelessWidget {
             value: activeT,
             minHeight: 7,
             backgroundColor: AppColors.surfaceMuted,
-            color: AppColors.accent,
+            color: AppColors.textSecondary,
           ),
         ),
       ],

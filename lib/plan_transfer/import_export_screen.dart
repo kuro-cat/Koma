@@ -85,7 +85,7 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
           title: Text(l10n.importExportTitle),
         ),
         body: ListView(
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
           children: [
             _PlanExportSummary(plan: widget.plan),
             const SizedBox(height: 16),
@@ -96,7 +96,7 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
                   ? l10n.importExportImportSubtitleIos
                   : l10n.importExportImportSubtitle,
             ),
-            const SizedBox(height: 10),
+            const _SectionRule(),
             _ActionTile(
               icon: _importing
                   ? LucideIcons.hourglass
@@ -116,7 +116,6 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
                   ? _showExternalIosImportHelp
                   : _importFromFile,
             ),
-            const SizedBox(height: 10),
             _ActionTile(
               icon: LucideIcons.link,
               title: l10n.importExportImportFromLink,
@@ -124,7 +123,6 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
               enabled: !_exporting && !_importing,
               onTap: _importFromLink,
             ),
-            const SizedBox(height: 10),
             RoutePlannerSkillCard(repository: widget.repository),
             const SizedBox(height: 20),
             _SectionTitle(
@@ -132,7 +130,7 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
               title: l10n.importExportPackageSection,
               subtitle: l10n.importExportPackageSubtitle,
             ),
-            const SizedBox(height: 10),
+            const _SectionRule(),
             _BackupOptions(
               mode: _mode,
               includeFullReferenceCache: _includeFullReferenceCache,
@@ -155,7 +153,7 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
               title: 'Google My Maps',
               subtitle: l10n.importExportMyMapsSubtitle,
             ),
-            const SizedBox(height: 10),
+            const _SectionRule(),
             _ActionTile(
               icon: _exporting ? LucideIcons.hourglass : LucideIcons.table2,
               title: l10n.importExportMyMapsExport,
@@ -622,27 +620,11 @@ class _PlanExportSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(14),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
-      ),
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
       child: Row(
         children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.zero,
-            ),
-            child: Icon(
-              LucideIcons.archive,
-              color: AppColors.accentStrongForeground,
-            ),
-          ),
+          Icon(LucideIcons.archive, color: AppColors.textSecondary),
           const SizedBox(width: 12),
           Expanded(
             child: Column(
@@ -690,36 +672,52 @@ class _SectionTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Icon(icon, color: AppColors.accentStrongForeground, size: 20),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0,
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 0, 12, 8),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Icon(icon, color: AppColors.textSecondary, size: 20),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                subtitle,
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 12,
-                  letterSpacing: 0,
+                const SizedBox(height: 2),
+                Text(
+                  subtitle,
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 12,
+                    letterSpacing: 0,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
+    );
+  }
+}
+
+/// The 2px ink rule a section's rows hang from.
+class _SectionRule extends StatelessWidget {
+  const _SectionRule();
+
+  @override
+  Widget build(BuildContext context) {
+    return ColoredBox(
+      color: AppColors.ink,
+      child: const SizedBox(height: 2, width: double.infinity),
     );
   }
 }
@@ -747,13 +745,8 @@ class _BackupOptions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: AppColors.border),
-      ),
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -788,16 +781,6 @@ class _BackupOptions extends StatelessWidget {
             type: MaterialType.transparency,
             child: SwitchListTile(
               key: const ValueKey('export-include-reference-cache'),
-              thumbColor: WidgetStateProperty.resolveWith((states) {
-                if (states.contains(WidgetState.disabled)) return null;
-                return states.contains(WidgetState.selected)
-                    ? AppColors.onAccent
-                    : AppColors.accentForeground;
-              }),
-              trackOutlineColor: WidgetStateProperty.resolveWith((states) {
-                if (states.contains(WidgetState.disabled)) return null;
-                return AppColors.accentForeground;
-              }),
               contentPadding: EdgeInsets.zero,
               title: Text(
                 l10n.importExportIncludeFullReference,
@@ -896,16 +879,14 @@ class _ActionTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: enabled ? AppColors.surface : AppColors.surfaceMuted,
-      borderRadius: BorderRadius.zero,
+      type: MaterialType.transparency,
       child: InkWell(
         borderRadius: BorderRadius.zero,
         onTap: enabled ? onTap : null,
         child: Container(
-          padding: const EdgeInsets.all(12),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.zero,
-            border: Border.all(color: AppColors.border),
+            border: Border(bottom: BorderSide(color: AppColors.divider)),
           ),
           child: Row(
             children: [
@@ -925,7 +906,7 @@ class _ActionTile extends StatelessWidget {
                       style: TextStyle(
                         color: enabled
                             ? AppColors.textPrimary
-                            : AppColors.textSecondary,
+                            : AppColors.textTertiary,
                         fontWeight: FontWeight.w600,
                         letterSpacing: 0,
                       ),
@@ -944,7 +925,9 @@ class _ActionTile extends StatelessWidget {
               ),
               Icon(
                 LucideIcons.chevronRight,
-                color: enabled ? AppColors.textSecondary : AppColors.border,
+                color: enabled
+                    ? AppColors.textSecondary
+                    : AppColors.textTertiary,
               ),
             ],
           ),

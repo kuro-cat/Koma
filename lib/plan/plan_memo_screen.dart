@@ -394,7 +394,7 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
         ),
         body: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 12, 16, 24),
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 24),
             child: _isEditing
                 ? TextFieldTapRegion(
                     child: Column(
@@ -441,33 +441,9 @@ class _PlanMemoScreenState extends State<PlanMemoScreen> {
                                       fontWeight: FontWeight.w400,
                                       letterSpacing: 0,
                                     ),
-                                    filled: true,
-                                    fillColor: AppColors.surface,
-                                    contentPadding: const EdgeInsets.fromLTRB(
-                                      16,
-                                      16,
-                                      16,
-                                      16,
-                                    ),
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.zero,
-                                      borderSide: BorderSide(
-                                        color: AppColors.border,
-                                      ),
-                                    ),
-                                    enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.zero,
-                                      borderSide: BorderSide(
-                                        color: AppColors.border,
-                                      ),
-                                    ),
-                                    focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.zero,
-                                      borderSide: BorderSide(
-                                        color: AppColors.accent,
-                                        width: 1.5,
-                                      ),
-                                    ),
+                                    // The theme draws the field: rule edge,
+                                    // 2px ink on focus.
+                                    contentPadding: const EdgeInsets.all(12),
                                   ),
                                 ),
                               ),
@@ -543,14 +519,9 @@ class _MarkdownToolbar extends StatelessWidget {
       ),
     ];
 
-    return Container(
+    // A strip of frameless keys; the field below carries the edge.
+    return SizedBox(
       width: double.infinity,
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        border: Border.all(color: AppColors.border),
-        borderRadius: BorderRadius.zero,
-      ),
-      padding: const EdgeInsets.all(8),
       child: SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -560,8 +531,8 @@ class _MarkdownToolbar extends StatelessWidget {
               Tooltip(
                 message: tool.tooltip,
                 child: SizedBox(
-                  width: 36,
-                  height: 36,
+                  width: 44,
+                  height: 44,
                   child: IconButton(
                     padding: EdgeInsets.zero,
                     visualDensity: VisualDensity.compact,
@@ -570,7 +541,7 @@ class _MarkdownToolbar extends StatelessWidget {
                   ),
                 ),
               ),
-              if (tool != tools.last) const SizedBox(width: 6),
+              if (tool != tools.last) const SizedBox(width: 2),
             ],
           ],
         ),
@@ -867,18 +838,10 @@ class _EmptyPlanMemo extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const SizedBox(height: 20),
-                Container(
-                  width: 72,
-                  height: 72,
-                  decoration: BoxDecoration(
-                    color: AppColors.accent.withValues(alpha: 0.10),
-                    borderRadius: BorderRadius.zero,
-                  ),
-                  child: Icon(
-                    LucideIcons.stickyNote,
-                    color: AppColors.accentStrongForeground,
-                    size: 34,
-                  ),
+                Icon(
+                  LucideIcons.stickyNote,
+                  color: AppColors.textSecondary,
+                  size: 34,
                 ),
                 const SizedBox(height: 16),
                 Text(
@@ -904,52 +867,47 @@ class _EmptyPlanMemo extends StatelessWidget {
                 const SizedBox(height: 20),
                 SizedBox(
                   width: guideWidth,
-                  child: Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.fromLTRB(14, 12, 14, 10),
-                    decoration: BoxDecoration(
-                      color: AppColors.surfaceMuted,
-                      borderRadius: BorderRadius.zero,
-                      border: Border.all(color: AppColors.border),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Icon(
-                              LucideIcons.lightbulb,
-                              color: AppColors.accentForeground,
-                              size: 18,
+                  // A section: its name, a 2px ink rule, ruled rows.
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            LucideIcons.lightbulb,
+                            color: AppColors.textSecondary,
+                            size: 18,
+                          ),
+                          const SizedBox(width: 7),
+                          Text(
+                            l10n.planMemoSuggestionsTitle,
+                            style: TextStyle(
+                              color: AppColors.textPrimary,
+                              fontSize: 13,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0,
                             ),
-                            const SizedBox(width: 7),
-                            Text(
-                              l10n.planMemoSuggestionsTitle,
-                              style: TextStyle(
-                                color: AppColors.accentStrongForeground,
-                                fontSize: 13,
-                                fontWeight: FontWeight.w600,
-                                letterSpacing: 0,
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 8),
-                        for (
-                          var index = 0;
-                          index < _suggestions.length;
-                          index++
-                        ) ...[
-                          _MemoSuggestionItem(suggestion: _suggestions[index]),
-                          if (index < _suggestions.length - 1)
-                            const Divider(
-                              height: 1,
-                              indent: 42,
-                              color: Color(0xB3FFFFFF),
-                            ),
+                          ),
                         ],
-                      ],
-                    ),
+                      ),
+                      const SizedBox(height: 8),
+                      ColoredBox(
+                        color: AppColors.ink,
+                        child: const SizedBox(
+                          height: 2,
+                          width: double.infinity,
+                        ),
+                      ),
+                      for (final suggestion in _suggestions)
+                        DecoratedBox(
+                          decoration: BoxDecoration(
+                            border: Border(
+                              bottom: BorderSide(color: AppColors.divider),
+                            ),
+                          ),
+                          child: _MemoSuggestionItem(suggestion: suggestion),
+                        ),
+                    ],
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -988,17 +946,11 @@ class _MemoSuggestionItem extends StatelessWidget {
       height: 56,
       child: Row(
         children: [
-          Container(
+          SizedBox(
             width: 34,
-            height: 34,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: AppColors.accent.withValues(alpha: 0.08),
-              shape: BoxShape.circle,
-            ),
             child: Icon(
               suggestion.icon,
-              color: AppColors.accentForeground,
+              color: AppColors.textSecondary,
               size: 18,
             ),
           ),

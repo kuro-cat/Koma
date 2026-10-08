@@ -1036,7 +1036,7 @@ class _MapGroupFilterBar extends StatelessWidget {
     return Material(
       key: const ValueKey('map-group-filter-bar'),
       color: MapColors.surface.withValues(alpha: 0.94),
-      borderRadius: BorderRadius.zero,
+      shape: RoundedRectangleBorder(side: BorderSide(color: AppColors.ink)),
       child: InkWell(
         borderRadius: BorderRadius.zero,
         onTap: onTap,
@@ -1084,7 +1084,7 @@ class _MapFloatingIconButton extends StatelessWidget {
       message: tooltip,
       child: Material(
         color: MapColors.surface.withValues(alpha: 0.94),
-        borderRadius: BorderRadius.zero,
+        shape: RoundedRectangleBorder(side: BorderSide(color: AppColors.ink)),
         child: InkWell(
           borderRadius: BorderRadius.zero,
           onTap: onTap,
@@ -1215,13 +1215,17 @@ class _PointCard extends StatelessWidget {
         onPreviousOverlapPoint != null &&
         onNextOverlapPoint != null;
 
+    // A panel on the bottom edge, like a sheet: raise with an ink top edge.
     return Container(
-      margin: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomInset),
-      padding: EdgeInsets.fromLTRB(16, showOverlapPager ? 6 : 16, 16, 16),
+      padding: EdgeInsets.fromLTRB(
+        12,
+        showOverlapPager ? 6 : 12,
+        12,
+        12 + bottomInset,
+      ),
       decoration: BoxDecoration(
         color: MapColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: MapColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink)),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -1237,7 +1241,7 @@ class _PointCard extends StatelessWidget {
             Divider(
               key: ValueKey('map-overlap-point-divider'),
               height: 1,
-              color: MapColors.border,
+              color: AppColors.divider,
             ),
             const SizedBox(height: 6),
           ],
@@ -1495,7 +1499,7 @@ class _MapRecordBadge extends StatelessWidget {
       decoration: BoxDecoration(
         color: MapColors.surface,
         borderRadius: BorderRadius.zero,
-        border: Border.all(color: MapColors.accent.withValues(alpha: 0.42)),
+        border: Border.all(color: AppColors.ink),
       ),
       child: Icon(
         stacked ? LucideIcons.images : LucideIcons.image,
@@ -1515,17 +1519,15 @@ class _EmptyMapCard extends StatelessWidget {
 
     return Container(
       key: const ValueKey('map-empty-card'),
-      margin: EdgeInsets.fromLTRB(16, 0, 16, 16 + bottomInset),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.fromLTRB(12, 12, 12, 12 + bottomInset),
       decoration: BoxDecoration(
         color: MapColors.surface,
-        borderRadius: BorderRadius.zero,
-        border: Border.all(color: MapColors.border),
+        border: Border(top: BorderSide(color: AppColors.ink)),
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(LucideIcons.map, color: MapColors.accent),
+          Icon(LucideIcons.map, color: AppColors.textSecondary),
           const SizedBox(width: 10),
           Expanded(
             child: Column(
@@ -1535,7 +1537,7 @@ class _EmptyMapCard extends StatelessWidget {
                 Text(
                   l10n.pilgrimageMapEmptyTitle,
                   style: TextStyle(
-                    color: MapColors.accentDark,
+                    color: AppColors.textPrimary,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                     letterSpacing: 0,
@@ -1573,22 +1575,15 @@ class _StatusBadge extends StatelessWidget {
       VisitStatus.pending => l10n.pilgrimageMapStatusPending,
     };
 
-    final color = switch (status) {
-      VisitStatus.current => MapColors.accent,
-      VisitStatus.completed => AppColors.textSecondary,
-      VisitStatus.pending => AppColors.warning,
-    };
+    final current = status == VisitStatus.current;
 
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.1),
-        borderRadius: BorderRadius.zero,
-      ),
+      color: current ? AppColors.accentWash : AppColors.surfaceMuted,
       child: Text(
         text,
         style: TextStyle(
-          color: color,
+          color: current ? AppColors.accentForeground : AppColors.textSecondary,
           fontSize: 12,
           fontWeight: FontWeight.w600,
           letterSpacing: 0,

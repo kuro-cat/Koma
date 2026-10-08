@@ -120,12 +120,11 @@ class _RoutePlannerSkillCardState extends State<RoutePlannerSkillCard> {
       key: const ValueKey('route-planner-skill-card'),
       borderRadius: BorderRadius.zero,
       onTap: () => openRoutePlannerSkillGuide(context),
+      // A ruled row: it sits in a list of rows, so no frame of its own.
       child: Container(
-        padding: const EdgeInsets.fromLTRB(14, 8, 14, 14),
+        padding: const EdgeInsets.fromLTRB(12, 4, 0, 10),
         decoration: BoxDecoration(
-          color: AppColors.accent.withValues(alpha: 0.08),
-          borderRadius: BorderRadius.zero,
-          border: Border.all(color: AppColors.accent.withValues(alpha: 0.35)),
+          border: Border(bottom: BorderSide(color: AppColors.divider)),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -159,26 +158,27 @@ class _RoutePlannerSkillCardState extends State<RoutePlannerSkillCard> {
               ],
             ),
             const SizedBox(height: 6),
-            Text(
-              routePlannerSkillDescription,
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 12,
-                height: 1.45,
-                letterSpacing: 0,
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: Text(
+                routePlannerSkillDescription,
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 12,
+                  height: 1.45,
+                  letterSpacing: 0,
+                ),
               ),
             ),
             const SizedBox(height: 10),
-            Center(
-              child: Text(
-                l10n.routePlannerSkillHintTapForGuide,
-                key: const ValueKey('route-planner-skill-open'),
-                style: TextStyle(
-                  color: AppColors.accentStrongForeground,
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0,
-                ),
+            Text(
+              l10n.routePlannerSkillHintTapForGuide,
+              key: const ValueKey('route-planner-skill-open'),
+              style: TextStyle(
+                color: AppColors.accentForeground,
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                letterSpacing: 0,
               ),
             ),
           ],
