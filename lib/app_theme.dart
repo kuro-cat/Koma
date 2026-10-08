@@ -594,19 +594,20 @@ class AppTheme {
         backgroundColor: raise,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
-        indicatorColor: ink,
+        // The current tab carries the chosen theme colour.
+        indicatorColor: AppColors.accent,
         indicatorShape: const RoundedRectangleBorder(),
         iconTheme: WidgetStateProperty.resolveWith(
           (states) => IconThemeData(
             color: states.contains(WidgetState.selected)
-                ? paper
+                ? AppColors.onAccent
                 : AppColors.textSecondary,
           ),
         ),
         labelTextStyle: WidgetStateProperty.resolveWith(
           (states) => states.contains(WidgetState.selected)
               ? textTheme.labelMedium?.copyWith(
-                  color: ink,
+                  color: AppColors.accentForeground,
                   fontWeight: FontWeight.w600,
                 )
               : textTheme.labelMedium?.copyWith(color: AppColors.textSecondary),
