@@ -223,7 +223,7 @@ void main() {
     final planTitle = tester.widget<Text>(
       find.descendant(of: find.byType(AppBar), matching: find.text('示例计划')),
     );
-    expect(planTitle.style?.fontSize, 20);
+    expect(planTitle.style?.fontSize, 24);
     expect(planTitle.style?.fontWeight, FontWeight.w600);
     expect(
       tester.widget<AppBar>(find.byType(AppBar)).toolbarHeight,

@@ -426,7 +426,7 @@ class _PlanScreenState extends State<PlanScreen>
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                            fontSize: 20,
+                            fontSize: 24,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
