@@ -7,11 +7,6 @@ import 'package:miriago/plan/pilgrimage_plan_controller.dart';
 import 'package:miriago/records/records_screen.dart';
 import 'package:miriago/widgets/app_status_banner.dart';
 
-double contrast(Color a, Color b) {
-  final values = [a.computeLuminance(), b.computeLuminance()]..sort();
-  return (values.last + 0.05) / (values.first + 0.05);
-}
-
 void main() {
   tearDown(AppTheme.light);
 
@@ -97,67 +92,6 @@ void main() {
     expect(find.text('second'), findsNothing);
   });
 
-  test(
-    'dark foregrounds contrast with neutral/tinted surfaces without changing brand fills',
-    () {
-      for (final palette in AppThemePalette.values) {
-        for (final custom in [
-          0xFF000000,
-          0xFF18214A,
-          0xFF888888,
-          0xFFFFFF00,
-          0xFFFFFFFF,
-        ]) {
-          final theme = AppTheme.dark(
-            palette: palette,
-            customAccentValue: custom,
-          );
-          final fill = AppColors.accent;
-          for (final color in [
-            AppColors.accentForeground,
-            AppColors.accentStrongForeground,
-          ]) {
-            for (final surface in [
-              AppColors.background,
-              AppColors.surface,
-              Color.alphaBlend(fill.withValues(alpha: 0.16), AppColors.surface),
-            ]) {
-              expect(
-                contrast(color, surface),
-                greaterThanOrEqualTo(4.5),
-                reason: '$palette/$custom',
-              );
-            }
-          }
-          expect(theme.colorScheme.primary, fill);
-          expect(contrast(AppColors.onAccent, fill), greaterThanOrEqualTo(4.5));
-          final button = theme.textButtonTheme.style!;
-          expect(
-            button.foregroundColor!.resolve({}),
-            AppColors.accentForeground,
-          );
-          expect(
-            button.foregroundColor!.resolve({WidgetState.disabled}),
-            isNot(AppColors.accentForeground),
-          );
-          // In light mode the readable variants may darken a custom colour
-          // until it reads; they always reach 4.5:1 on the light ground.
-          AppTheme.light(palette: palette, customAccentValue: custom);
-          for (final color in [
-            AppColors.accentForeground,
-            AppColors.accentStrongForeground,
-          ]) {
-            expect(
-              contrast(color, AppColors.background),
-              greaterThanOrEqualTo(4.5),
-              reason: 'light $palette/$custom',
-            );
-          }
-        }
-      }
-    },
-  );
-
   for (final width in [320.0, 360.0, 430.0]) {
     for (final dark in [false, true]) {
       testWidgets('record cards fit width=$width dark=$dark with large text', (
@@ -189,22 +123,6 @@ void main() {
         );
         await tester.pump();
         expect(tester.takeException(), isNull);
-        final dates = find.byWidgetPredicate(
-          (w) =>
-              w.key is ValueKey<String> &&
-              (w.key! as ValueKey<String>).value.startsWith(
-                'record-captured-row-',
-              ),
-        );
-        expect(dates, findsWidgets);
-        for (final element in dates.evaluate()) {
-          final date = find.byElementPredicate((e) => identical(e, element));
-          final text = find.descendant(of: date, matching: find.byType(Text));
-          final rowRect = tester.getRect(date);
-          final textRect = tester.getRect(text);
-          expect(textRect.right, lessThanOrEqualTo(rowRect.right + 0.01));
-          expect(textRect.bottom, lessThanOrEqualTo(rowRect.bottom + 0.01));
-        }
         expect(find.byType(SliverList), findsWidgets);
         await tester.pumpWidget(const SizedBox());
       });

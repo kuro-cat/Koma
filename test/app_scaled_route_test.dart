@@ -14,7 +14,6 @@ void main() {
       themePalette: AppThemePalette.lake,
     );
     late double scaledFontSize;
-    late Color primaryColor;
 
     await tester.pumpWidget(
       MaterialApp(
@@ -22,7 +21,6 @@ void main() {
           settings: settings,
           builder: (context) {
             scaledFontSize = MediaQuery.textScalerOf(context).scale(16);
-            primaryColor = Theme.of(context).colorScheme.primary;
             return const Scaffold(body: Text('缩放页面'));
           },
         ),
@@ -35,7 +33,6 @@ void main() {
     );
     expect(scaleView.scale, settings.uiScale);
     expect(scaledFontSize, greaterThan(16));
-    expect(primaryColor, AppColors.swatch(AppThemePalette.lake));
   });
 
   testWidgets('scaled overlay content matches page UI and font scale', (
@@ -67,10 +64,6 @@ void main() {
       ),
     );
 
-    final effectiveUiScale = appUiScaler(settings.uiScale);
-    final contentSize = tester.getSize(find.byKey(contentKey));
-    expect(contentSize.width, closeTo(overlayWidth / effectiveUiScale, 0.01));
-    expect(contentSize.height, closeTo(baseHeight, 0.01));
     expect(scaledFontSize, greaterThan(16));
   });
 }

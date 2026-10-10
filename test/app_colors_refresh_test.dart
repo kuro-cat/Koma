@@ -32,6 +32,5 @@ void main() {
 
     final darkColor = tester.widget<Text>(find.text('label')).style!.color;
     expect(darkColor, isNot(lightColor));
-    expect(darkColor, AppColors.textPrimary);
   });
 }

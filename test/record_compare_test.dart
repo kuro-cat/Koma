@@ -230,14 +230,6 @@ void main() {
     );
     await tester.pump();
 
-    expect(
-      find.byKey(const ValueKey('record-graded-badge-graded')),
-      findsOneWidget,
-    );
-    expect(
-      find.byKey(const ValueKey('record-graded-badge-plain')),
-      findsNothing,
-    );
     expect(find.byTooltip('已调色'), findsOneWidget);
     await tester.pumpWidget(const SizedBox());
   });

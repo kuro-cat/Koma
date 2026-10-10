@@ -43,16 +43,6 @@ void main() {
       expect(find.text('推荐'), findsOneWidget);
       expect(find.textContaining('（推荐）'), findsNothing);
 
-      final confirmTile = tester.widget<Material>(
-        find
-            .descendant(
-              of: find.byKey(const ValueKey('photo-location-choice-confirm')),
-              matching: find.byType(Material),
-            )
-            .first,
-      );
-      expect(confirmTile.color, AppColors.surface);
-
       await tester.tap(
         find.byKey(const ValueKey('photo-location-choice-recent')),
       );

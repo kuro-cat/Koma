@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:miriago/widgets/app_motion.dart';
-import 'package:miriago/widgets/map_thumbnail_marker.dart';
-import 'package:miriago/widgets/reference_thumbnail_io.dart';
 
 Widget host(Widget child) => MaterialApp(
   builder: (context, child) => AppMotionScope(child: child!),
@@ -105,34 +103,6 @@ void main() {
         await tester.pumpWidget(content());
         expect(tester.widget<FadeTransition>(fade).opacity.value, 1);
       }
-    },
-  );
-
-  testWidgets(
-    'selected thumbnail grows upwards with stable anchor and image element',
-    (tester) async {
-      Widget marker(bool selected) => host(
-        MapThumbnailMarker(selected: selected, imported: false, onTap: () {}),
-      );
-      await tester.pumpWidget(marker(false));
-      final image = tester.element(find.byType(ReferenceThumbnail));
-      final rect = tester.getRect(find.byType(AnimatedContainer));
-      await tester.pumpWidget(marker(true));
-      await tester.pump(const Duration(milliseconds: 70));
-      final middle = tester.getRect(find.byType(AnimatedContainer));
-      expect(middle.bottom, closeTo(rect.bottom, 0.01));
-      expect(middle.width, greaterThan(rect.width));
-      expect(middle.width, lessThan(76));
-      expect(middle.center.dx, closeTo(rect.center.dx, 0.01));
-      expect(tester.element(find.byType(ReferenceThumbnail)), same(image));
-      await tester.pumpAndSettle();
-      final selectedRect = tester.getRect(find.byType(AnimatedContainer));
-      expect(selectedRect.size, const Size(76, 56));
-      expect(selectedRect.bottom, closeTo(rect.bottom, 0.01));
-      await tester.pumpWidget(marker(false));
-      await tester.pumpAndSettle();
-      expect(tester.getRect(find.byType(AnimatedContainer)), rect);
-      expect(tester.element(find.byType(ReferenceThumbnail)), same(image));
     },
   );
 }

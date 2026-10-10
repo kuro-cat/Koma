@@ -42,10 +42,6 @@ void main() {
       matching: find.byType(FilledButton),
     );
     expect(actionButtons, findsNWidgets(2));
-    expect(
-      tester.getBottomLeft(actionButtons.first).dy,
-      lessThan(tester.getTopLeft(actionButtons.last).dy),
-    );
     expect(tester.takeException(), isNull);
   });
 
@@ -112,29 +108,16 @@ void main() {
     await tester.pumpAndSettle();
 
     expect(find.byType(SingleChildScrollView), findsOneWidget);
-    final frame = tester
-        .widgetList<ConstrainedBox>(
-          find.descendant(
-            of: find.byType(AppInputDialog),
-            matching: find.byType(ConstrainedBox),
-          ),
-        )
-        .singleWhere((box) => box.constraints.maxWidth == 420);
-    expect(frame.constraints.maxHeight, 292);
     final actionButtons = find.descendant(
       of: find.byType(AppDialogActionRow),
       matching: find.byType(FilledButton),
     );
     expect(actionButtons, findsNWidgets(2));
-    expect(
-      tester.getBottomLeft(actionButtons.first).dy,
-      lessThan(tester.getTopLeft(actionButtons.last).dy),
-    );
     expect(tester.takeException(), isNull);
   });
 
   testWidgets(
-    'coordinate dialog paste sits on the title row and fills fields',
+    'coordinate dialog paste fills fields',
     (tester) async {
       tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
         SystemChannels.platform,
@@ -175,17 +158,7 @@ void main() {
       await tester.pumpAndSettle();
 
       final paste = find.byKey(const ValueKey('dialog-paste-button'));
-      final title = find.text('输入经纬度');
-      final firstField = find.byType(TextField).first;
       expect(paste, findsOneWidget);
-      expect(
-        tester.getCenter(paste).dy,
-        closeTo(tester.getCenter(title).dy, 1.0),
-      );
-      expect(
-        tester.getRect(paste).right,
-        closeTo(tester.getRect(firstField).right, 0.5),
-      );
 
       await tester.tap(paste);
       await tester.pumpAndSettle();

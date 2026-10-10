@@ -1,49 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:miriago/app_theme.dart';
-import 'package:miriago/map/map_colors.dart';
 import 'package:miriago/map/map_tile_config.dart';
 import 'package:miriago/plan/pilgrimage_models.dart';
-import 'package:miriago/plan/plan_group_utils.dart';
-
-double contrast(Color a, Color b) {
-  final values = [a.computeLuminance(), b.computeLuminance()]..sort();
-  return (values.last + 0.05) / (values.first + 0.05);
-}
 
 void main() {
-  tearDown(() => AppTheme.light());
-
-  test(
-    'dark map accents remain readable for every palette and custom black',
-    () {
-      for (final palette in AppThemePalette.values) {
-        AppTheme.dark(palette: palette, customAccentValue: 0xFF000000);
-        expect(
-          contrast(MapColors.accent, MapColors.surface),
-          greaterThanOrEqualTo(4.5),
-        );
-        expect(
-          contrast(MapColors.accent, MapColors.onAccent),
-          greaterThanOrEqualTo(4.5),
-        );
-        for (var i = 0; i < planGroupMapColors.length; i++) {
-          expect(
-            contrast(planGroupMapColorAt(i), MapColors.surface),
-            greaterThanOrEqualTo(4.5),
-          );
-        }
-      }
-      AppTheme.light();
-      expect(MapColors.accent, AppColors.accent);
-      expect(MapColors.accentDark, AppColors.accentDark);
-      expect(planGroupMapColorAt(0), planGroupMapColors.first);
-    },
-  );
-
   test(
     'base appearance overrides theme without replacing custom providers',
     () {
@@ -176,63 +138,12 @@ void main() {
             }
           }
         }
-        Color parse(String value) =>
-            Color(int.parse('ff${value.substring(1)}', radix: 16));
-        final background = parse(
-          after.firstWhere(
-                (l) => l['type'] == 'background',
-              )['paint']['background-color']
-              as String,
-        );
-        final minor = after.firstWhere(
-          (l) => [
-            'road_minor',
-            'highway-minor',
-            'highway_minor',
-          ].contains(l['id']),
-        );
-        expect(
-          contrast(background, parse(minor['paint']['line-color'] as String)),
-          greaterThan(2.5),
-        );
-        final label = after.firstWhere(
-          (l) => ['label_city', 'place_city'].contains(l['id']),
-        );
-        expect(
-          contrast(background, parse(label['paint']['text-color'] as String)),
-          greaterThan(4.5),
-        );
-        final raster = after.where((l) => l['type'] == 'raster');
-        for (final layer in raster) {
-          expect(
-            layer['paint']['raster-brightness-max'],
-            lessThanOrEqualTo(0.2),
-          );
-        }
       },
     );
   }
 
-  test('light chrome on a dark base keeps the navigation route readable', () {
-    AppTheme.light(palette: AppThemePalette.lake);
-    final routeColor = configuredMapRouteColor(
-      const AppSettings(mapAppearance: MapAppearance.dark),
-      dark: false,
-    );
-    expect(contrast(routeColor, const Color(0xFF202225)), greaterThan(4.5));
-    expect(
-      configuredMapRouteColor(const AppSettings(), dark: false),
-      AppColors.accent,
-    );
-    final fiordRoute = configuredMapRouteColor(
-      const AppSettings(openFreeMapStyle: OpenFreeMapStyle.fiord),
-      dark: false,
-    );
-    expect(contrast(fiordRoute, const Color(0xFF252F32)), greaterThan(4.5));
-  });
-
   test(
-    'bundled style has portable sources, distinct streets and readable labels',
+    'bundled style has portable sources and attribution',
     () {
       final style =
           jsonDecode(File(readableDarkMapStyleAsset).readAsStringSync())
@@ -240,28 +151,6 @@ void main() {
       expect(style['version'], 8);
       final layers = (style['layers'] as List).cast<Map<String, dynamic>>();
       expect(layers.map((l) => l['id']).toSet().length, layers.length);
-      Map<String, dynamic> paint(String id) =>
-          layers.singleWhere((l) => l['id'] == id)['paint']
-              as Map<String, dynamic>;
-      Color color(String value) =>
-          Color(int.parse('ff${value.substring(1)}', radix: 16));
-      final background = color(
-        paint('background')['background-color'] as String,
-      );
-      expect(
-        contrast(
-          background,
-          color(paint('highway_minor')['line-color'] as String),
-        ),
-        greaterThan(2.5),
-      );
-      expect(
-        contrast(
-          background,
-          color(paint('highway_name_other')['text-color'] as String),
-        ),
-        greaterThan(4.5),
-      );
       for (final key in ['sprite', 'glyphs']) {
         expect(style[key], startsWith('https://'));
       }

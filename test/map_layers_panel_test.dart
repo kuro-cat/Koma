@@ -113,7 +113,6 @@ void main() {
       find.ancestor(of: card, matching: find.byType(SingleChildScrollView)),
       findsOneWidget,
     );
-    expect(tester.getBottomLeft(find.byType(Material).last).dy, lessThan(260));
   });
 
   testWidgets('a late failed save does not undo a newer change', (

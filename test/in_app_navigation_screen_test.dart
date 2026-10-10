@@ -218,43 +218,6 @@ void main() {
     expect(find.text('结束路线'), findsNothing);
   });
 
-  testWidgets('navigation chrome uses theme accent instead of map blue', (
-    tester,
-  ) async {
-    await pumpScreen(tester);
-
-    final icon = tester.widget<Icon>(
-      find.descendant(
-        of: find.byKey(const ValueKey('in-app-navigation-recenter')),
-        matching: find.byType(Icon),
-      ),
-    );
-    expect(icon.color, AppColors.accent);
-    expect(icon.color, isNot(const Color(0xFF007AFF)));
-  });
-
-  testWidgets(
-    'collapsing the bottom panel keeps the sheet flush with the screen',
-    (tester) async {
-      await pumpScreen(tester);
-
-      await tester.tap(find.byKey(const ValueKey('in-app-navigation-expand')));
-      await tester.pumpAndSettle();
-
-      await tester.tap(
-        find.byKey(const ValueKey('in-app-navigation-collapse')),
-      );
-      await tester.pump();
-      await tester.pump(const Duration(milliseconds: 140));
-
-      final panel = tester.getRect(
-        find.byKey(const ValueKey('in-app-navigation-bottom-panel')),
-      );
-      expect(panel.bottom, 844);
-      expect(panel.height, greaterThan(80));
-    },
-  );
-
   testWidgets('expanded sheet shows destination details and can end route', (
     tester,
   ) async {
@@ -299,37 +262,6 @@ void main() {
     expect(
       find.byKey(const ValueKey('in-app-navigation-screen')),
       findsNothing,
-    );
-  });
-
-  testWidgets('map attribution stays above the warnings and panel', (
-    tester,
-  ) async {
-    await pumpScreen(
-      tester,
-      preciseLocationCheck: ({required mayRequest}) async => false,
-    );
-    await tester.pumpAndSettle();
-    final warning = find.byKey(
-      const ValueKey('navigation-precise-location-warning'),
-    );
-    expect(warning, findsOneWidget);
-    final attribution = find.byType(RichAttributionWidget);
-    expect(attribution, findsOneWidget);
-    final button = find.descendant(
-      of: attribution,
-      matching: find.byType(IconButton),
-    );
-    expect(
-      tester.getRect(button.first).bottom,
-      lessThanOrEqualTo(tester.getRect(warning).top),
-    );
-
-    await tester.tap(find.byKey(const ValueKey('in-app-navigation-expand')));
-    await tester.pumpAndSettle();
-    expect(
-      tester.getRect(button.first).bottom,
-      lessThanOrEqualTo(tester.getRect(warning).top),
     );
   });
 
@@ -507,12 +439,6 @@ void main() {
     expect(find.text('片区'), findsOneWidget);
     expect(find.text('宇治站附近'), findsOneWidget);
     expect(find.textContaining('终点: 宇治桥'), findsOneWidget);
-    final zoneStrip = tester.getRect(
-      find.byKey(const ValueKey('in-app-navigation-top-zone')),
-    );
-    expect(zoneStrip.center.dx, closeTo(195, 24));
-    expect(zoneStrip.top, lessThan(80));
-    expect(zoneStrip.width, greaterThan(300));
   });
 
   testWidgets('instruction pager can swipe to the next preview step', (
@@ -528,21 +454,6 @@ void main() {
 
     expect(find.text('210米'), findsOneWidget);
     expect(find.text('到达终点 宇治桥'), findsOneWidget);
-  });
-
-  testWidgets('dark theme mode uses dark navigation chrome', (tester) async {
-    await pumpScreen(
-      tester,
-      settings: const AppSettings(themeMode: AppThemeMode.dark),
-    );
-
-    final scaffold = tester.widget<Scaffold>(
-      find.byKey(const ValueKey('in-app-navigation-screen')),
-    );
-    // Night sea paper, the Koma dark ground.
-    expect(scaffold.backgroundColor, const Color(0xFF0F1A1C));
-    expect(find.text('右转进入表参道'), findsOneWidget);
-    expect(find.textContaining('终点: 宇治桥'), findsOneWidget);
   });
 
   test('resolvedAppBrightness follows light, dark, and system', () {

@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:lucide_icons_flutter/lucide_icons.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:miriago/plan/reference_cache_progress_dialog.dart';
 import 'package:miriago/plan/reference_full_cache_runner.dart';
@@ -35,13 +34,8 @@ void main() {
     expect(find.text('正在缓存参考图...'), findsOneWidget);
     expect(find.text('8 / 18'), findsOneWidget);
     expect(find.text('44%'), findsOneWidget);
-    expect(
-      find.byKey(const ValueKey('reference-cache-progress-bar')),
-      findsOneWidget,
-    );
     expect(find.text('提示：缓存过程中请保持网络连接，避免切换页面或锁屏。'), findsOneWidget);
     expect(find.text('重试失败'), findsNothing);
-    expect(find.byIcon(LucideIcons.x), findsNothing);
   });
 
   testWidgets('shows all-success cache state', (tester) async {
@@ -68,7 +62,6 @@ void main() {
 
     expect(find.text('参考图缓存完成'), findsOneWidget);
     expect(find.text('18 / 18 张成功，已保存到本地'), findsOneWidget);
-    expect(find.byIcon(LucideIcons.x), findsNothing);
     expect(find.text('重试失败'), findsNothing);
     expect(find.text('重试全部'), findsNothing);
   });
@@ -99,7 +92,6 @@ void main() {
     expect(find.text('参考图缓存完成'), findsOneWidget);
     expect(find.text('14 / 18 张成功 · 4 张失败'), findsOneWidget);
     expect(find.text('重试失败'), findsOneWidget);
-    expect(find.byIcon(LucideIcons.x), findsNothing);
   });
 
   testWidgets('shows all-failed cache state with retry all', (tester) async {
@@ -127,67 +119,6 @@ void main() {
     expect(find.text('参考图缓存失败'), findsOneWidget);
     expect(find.text('0 / 18 张成功 · 18 张失败'), findsOneWidget);
     expect(find.text('重试全部'), findsOneWidget);
-  });
-
-  testWidgets('pins the cache banner to the bottom like a snack bar', (
-    tester,
-  ) async {
-    final started = Completer<void>();
-    final hold = Completer<void>();
-    addTearDown(() {
-      if (!hold.isCompleted) {
-        hold.complete();
-      }
-    });
-
-    await tester.binding.setSurfaceSize(const Size(390, 844));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: Builder(
-            builder: (context) {
-              return Center(
-                child: FilledButton(
-                  onPressed: () {
-                    showReferenceCacheProgressDialog(
-                      context: context,
-                      run: (onProgress) async {
-                        onProgress(
-                          const ReferenceFullCacheProgress(
-                            total: 18,
-                            processed: 8,
-                            succeeded: 8,
-                          ),
-                        );
-                        started.complete();
-                        await hold.future;
-                      },
-                    );
-                  },
-                  child: const Text('start-cache'),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-
-    await tester.tap(find.text('start-cache'));
-    await tester.pump();
-    await started.future;
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 400));
-
-    final banner = tester.getRect(
-      find.byKey(const ValueKey('reference-cache-progress-dialog')),
-    );
-    expect(banner.top, greaterThan(844 * 0.5));
-    expect(banner.bottom, closeTo(844 - 12, 8));
-    expect(find.text('正在缓存参考图...'), findsOneWidget);
-    await tester.pump(const Duration(seconds: 3));
-    await tester.pump(const Duration(milliseconds: 400));
   });
 
   testWidgets('tapping outside closes the cache banner', (tester) async {

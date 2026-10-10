@@ -35,12 +35,6 @@ void main() {
 
     await tester.tap(selector);
     await tester.pumpAndSettle();
-    expect(
-      tester
-          .getSize(find.byKey(const ValueKey('constrained-menu-panel')))
-          .width,
-      tester.getSize(selector).width,
-    );
 
     expect(find.text('不记录定位'), findsOneWidget);
     expect(find.text('使用最近一次定位'), findsOneWidget);

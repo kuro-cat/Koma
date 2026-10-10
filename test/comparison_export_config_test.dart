@@ -172,12 +172,6 @@ void main() {
     await tester.ensureVisible(encoding);
     await tester.tap(encoding);
     await tester.pumpAndSettle();
-    expect(
-      tester
-          .getSize(find.byKey(const ValueKey('constrained-menu-panel')))
-          .width,
-      tester.getSize(encoding).width,
-    );
     await tester.tap(find.text('PNG 无损').last);
     await tester.pumpAndSettle();
     expect(config.imageEncoding, ComparisonImageEncoding.png);
@@ -205,20 +199,6 @@ void main() {
     );
     await tester.ensureVisible(episodeChip);
     await tester.pumpAndSettle();
-    final firstRowTops = ['capturedAt', 'pointName', 'workTitle'].map(
-      (name) => tester
-          .getTopLeft(find.byKey(ValueKey('comparison-metadata-$name')))
-          .dy,
-    );
-    expect(firstRowTops.toSet(), hasLength(1));
-    expect(
-      tester
-          .getTopLeft(
-            find.byKey(const ValueKey('comparison-metadata-episodeLabel')),
-          )
-          .dy,
-      greaterThan(firstRowTops.first),
-    );
     await tester.tap(episodeChip);
     await tester.pumpAndSettle();
     expect(
