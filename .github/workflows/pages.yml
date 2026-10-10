@@ -1,0 +1,47 @@
+name: Pages
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'site/**'
+      - 'docs/privacy.md'
+      - 'icon.jpg'
+      - 'assets/mascot/**'
+      - '.github/workflows/pages.yml'
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Shared files live once in the repo and are copied into the site.
+      - name: Assemble site
+        run: |
+          cp docs/privacy.md site/privacy.md
+          cp icon.jpg site/icon.jpg
+          cp assets/mascot/koma_loading.webp assets/mascot/koma_still.webp site/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4

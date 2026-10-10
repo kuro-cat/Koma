@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Koma: anime pilgrimage planner</title>
+<meta name="description" content="Koma turns an anime's real locations into a walkable plan and lines your camera up with the original frame. Free, open source, for Android.">
+<meta property="og:title" content="Koma">
+<meta property="og:description" content="Plan an anime pilgrimage. Shoot the frame.">
+<meta property="og:image" content="https://kuro-cat.github.io/Koma/icon.jpg">
+<link rel="icon" href="icon.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,400..700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #F2F5F5; --raise: #FBFCFC; --mist: #E2E9EA;
+    --ink: #152022; --ink-2: #475759; --ink-3: #5D6D6F;
+    --rule: #CBD5D7; --rule-2: #DDE5E6;
+    --accent: #2F6F80; --on-accent: #FFFFFF; --wash: #E3EDEF;
+    --art: #FFFFFF;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --paper: #0F1A1C; --raise: #1C2D30; --mist: #172628;
+      --ink: #E4ECEC; --ink-2: #A3B3B4; --ink-3: #8C9D9E;
+      --rule: #2C4043; --rule-2: #223436;
+      --accent: #6FB3C4; --on-accent: #0F1A1C; --wash: #1D3236;
+    }
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font: 400 17px/1.55 "Archivo", system-ui, sans-serif;
+    font-variant-numeric: tabular-nums;
+  }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  ::selection { background: var(--accent); color: var(--on-accent); }
+  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+
+  header { border-bottom: 1px solid var(--ink); background: var(--paper); }
+  header .wrap { display: flex; align-items: center; gap: 12px; height: 60px; }
+  .mark { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+  .mark img { width: 32px; height: 32px; border: 1px solid var(--rule); background: #fff; }
+  .mark b { font-weight: 700; font-size: 20px; letter-spacing: -0.01em; }
+  header nav { margin-left: auto; display: flex; gap: 20px; }
+  header nav a { color: var(--ink-2); text-decoration: none; font-weight: 500; }
+  header nav a:hover { color: var(--ink); }
+
+  .caps {
+    font-stretch: 75%; font-weight: 600; text-transform: uppercase;
+    letter-spacing: 0.08em; font-size: 13px; color: var(--ink);
+  }
+
+  .hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; padding-block: 56px 48px; }
+  .hero h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.04; letter-spacing: -0.035em; font-weight: 700; margin: 12px 0 18px; }
+  .hero p { font-size: 19px; color: var(--ink-2); max-width: 34em; margin: 0 0 28px; }
+  .keys { display: flex; flex-wrap: wrap; gap: 12px; }
+  .key {
+    display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 20px;
+    border: 1px solid var(--ink); background: var(--raise); color: var(--ink);
+    font: 600 16px/1 "Archivo", sans-serif; text-decoration: none;
+    transition: background .12s ease-out, color .12s ease-out;
+  }
+  .key:hover { background: var(--ink); color: var(--paper); }
+  .key.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+  .key.primary:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+  .note { margin-top: 14px; font-size: 14px; color: var(--ink-3); }
+  .art { background: var(--art); border: 1px solid var(--rule); display: flex; justify-content: center; padding: 18px 0 0; }
+  .art img { width: min(100%, 300px); height: auto; display: block; }
+
+  section { padding: 44px 0; }
+  section > .wrap > h2 { font-size: 30px; letter-spacing: -0.02em; margin: 6px 0 20px; font-weight: 700; }
+  .rule { border-top: 2px solid var(--ink); }
+
+  .shots { display: grid; grid-auto-flow: column; grid-auto-columns: 232px; gap: 16px; overflow-x: auto; padding-bottom: 12px; scroll-snap-type: x mandatory; }
+  .shots figure { margin: 0; scroll-snap-align: start; }
+  .shots img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); background: var(--raise); }
+  .shots figcaption { font-size: 14px; color: var(--ink-2); margin-top: 8px; }
+
+  .steps { list-style: none; margin: 0; padding: 0; }
+  .steps li { display: grid; grid-template-columns: 120px 1fr; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--rule-2); }
+  .steps li:last-child { border-bottom: 0; }
+  .steps h3 { margin: 0 0 4px; font-size: 19px; font-weight: 600; }
+  .steps p { margin: 0; color: var(--ink-2); }
+
+  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--ink); background: var(--raise); }
+  .facts div { padding: 18px 20px; border-left: 1px solid var(--rule-2); }
+  .facts div:first-child { border-left: 0; }
+  .facts p { margin: 6px 0 0; color: var(--ink-2); font-size: 15px; }
+
+  .credits p { color: var(--ink-2); max-width: 46em; }
+
+  footer { border-top: 1px solid var(--ink); padding: 22px 0 40px; font-size: 14px; color: var(--ink-3); }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+  footer a { color: var(--ink-2); }
+
+  @media (max-width: 760px) {
+    .hero { grid-template-columns: 1fr; padding-top: 24px; gap: 28px; }
+    .art { order: -1; }
+    .art img { width: min(70%, 260px); }
+    .steps li { grid-template-columns: 1fr; gap: 4px; }
+    .facts { grid-template-columns: 1fr; }
+    .facts div { border-left: 0; border-top: 1px solid var(--rule-2); }
+    .facts div:first-child { border-top: 0; }
+    header nav a.optional { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .key { transition: none; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="mark" href="./"><img src="icon.jpg" alt=""><b>Koma</b></a>
+    <nav>
+      <a class="optional" href="#screens">Screens</a>
+      <a href="https://github.com/kuro-cat/Koma">GitHub</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap hero">
+    <div>
+      <span class="caps">Anime pilgrimage · Android</span>
+      <h1>Plan the trip.<br>Shoot the frame.</h1>
+      <p>Koma turns an anime's real locations into a walkable plan, then lines your camera up with the original frame so your photo matches the scene.</p>
+      <div class="keys">
+        <a class="key primary" href="https://github.com/kuro-cat/Koma/releases/latest">Download for Android</a>
+        <a class="key" href="https://github.com/kuro-cat/Koma">View source</a>
+      </div>
+      <p class="note">Free and open source. Android 7.0 or later. English and Chinese.</p>
+    </div>
+    <div class="art">
+      <picture>
+        <source srcset="koma_still.webp" media="(prefers-reduced-motion: reduce)">
+        <img src="koma_loading.webp" width="480" height="704" alt="Koma-chan, the Koma mascot, holding a camera up to her eye">
+      </picture>
+    </div>
+  </div>
+
+  <section id="screens" class="rule">
+    <div class="wrap">
+      <span class="caps">Screens</span>
+      <h2>Frames first, everywhere</h2>
+      <div class="shots">
+        <figure><img src="screenshots/01-plan.webp" width="720" height="1584" loading="lazy" alt="Plan tab listing spots with their anime frames"><figcaption>Every spot shows its anime frame.</figcaption></figure>
+        <figure><img src="screenshots/02-plan-map.webp" width="720" height="1584" loading="lazy" alt="Plan tab with the area map open"><figcaption>Areas on a map, next to the list.</figcaption></figure>
+        <figure><img src="screenshots/05-import.webp" width="720" height="1584" loading="lazy" alt="Import map with anime frames pinned to their locations"><figcaption>Find an anime and import its spots.</figcaption></figure>
+        <figure><img src="screenshots/03-spot.webp" width="720" height="1584" loading="lazy" alt="Spot sheet with scene details and actions"><figcaption>Route there, then shoot.</figcaption></figure>
+        <figure><img src="screenshots/04-map.webp" width="720" height="1584" loading="lazy" alt="Map tab with the current area and next stop"><figcaption>The map keeps your next stop in view.</figcaption></figure>
+        <figure><img src="screenshots/06-plans.webp" width="720" height="1584" loading="lazy" alt="All plans with a plan's details opened"><figcaption>Plans with their works and progress.</figcaption></figure>
+        <figure><img src="screenshots/07-appearance.webp" width="720" height="1584" loading="lazy" alt="Appearance settings with theme colours"><figcaption>Light, dark and five theme colours.</figcaption></figure>
+        <figure><img src="screenshots/08-plan-dark.webp" width="720" height="1584" loading="lazy" alt="Plan tab in dark mode"><figcaption>Dark mode for night trips.</figcaption></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="rule">
+    <div class="wrap">
+      <span class="caps">How it works</span>
+      <h2>From episode to photo</h2>
+      <ol class="steps">
+        <li><span class="caps">Find</span><div><h3>Search an anime, or paste an Anitabi link</h3><p>Koma shows every known location on a map, each with its frame from the show. Box-select a district to import it into an area in one go.</p></div></li>
+        <li><span class="caps">Plan</span><div><h3>Group spots into areas and pick the next stop</h3><p>Reorder, mark visits, write notes, and cache the frames before you leave so the camera works with no signal.</p></div></li>
+        <li><span class="caps">Shoot</span><div><h3>Match the frame on the live camera</h3><p>The anime frame sits over the viewfinder at the opacity you choose, or stacked above it, down to the ultrawide lens.</p></div></li>
+        <li><span class="caps">Compare</span><div><h3>Align, crop, colour-match and share</h3><p>Line your photo up with the frame, crop it to match, match the colours, and export a side-by-side comparison. Originals are never changed.</p></div></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="rule">
+    <div class="wrap">
+      <div class="facts">
+        <div><span class="caps">Your data</span><p>Plans, photos and records stay on your phone. No account, no ads, no tracking.</p></div>
+        <div><span class="caps">Portable</span><p>Move plans between phones as <code>.sjhplan</code> files, records and photos included.</p></div>
+        <div><span class="caps">Open source</span><p>MIT licensed. Read the code, file issues, or build it yourself on GitHub.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="rule credits">
+    <div class="wrap">
+      <span class="caps">Credits</span>
+      <h2>Built on others' work</h2>
+      <p>Koma is a fork of <a href="https://github.com/BilyHurington/MiriaGo">MiriaGo</a> by BilyHurington and contributors. Spots and frames come from <a href="https://anitabi.cn">Anitabi</a> and its contributors, work search from <a href="https://bgm.tv">Bangumi</a>, and maps from <a href="https://openfreemap.org">OpenFreeMap</a> and OpenStreetMap contributors. Anime frames belong to their rights holders; Koma only fetches and caches them on your device.</p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Koma · MIT License</span>
+    <a href="privacy.html">Privacy policy</a>
+    <a href="https://github.com/kuro-cat/Koma/issues">Report an issue</a>
+  </div>
+</footer>
+</body>
+</html>

@@ -23,6 +23,15 @@ Koma (コマ, one frame of film or anime) is a fork of [MiriaGo](https://github.
 
 The UI is in English and Chinese and follows the phone's language.
 
+Website: **[kuro-cat.github.io/Koma](https://kuro-cat.github.io/Koma/)**
+
+<p align="center">
+  <img src="site/screenshots/01-plan.webp" alt="Plan tab with anime frames" width="200">
+  <img src="site/screenshots/05-import.webp" alt="Import map with frames on the map" width="200">
+  <img src="site/screenshots/02-plan-map.webp" alt="Plan tab with the area map" width="200">
+  <img src="site/screenshots/03-spot.webp" alt="Spot sheet" width="200">
+</p>
+
 ## Changes from MiriaGo
 
 I maintain Koma for my own Android phone. Upstream MiriaGo also targets iOS and desktop; that code is still here, but I don't test it. Notable changes:
