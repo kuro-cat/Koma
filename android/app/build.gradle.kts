@@ -48,7 +48,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "app.miriago.miriago"
+        applicationId = "io.github.kurocat.koma"
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode

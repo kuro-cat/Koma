@@ -19,7 +19,7 @@ String darkMapStyleAsset(OpenFreeMapStyle style) =>
     ? readableDarkMapStyleAsset
     : 'assets/maps/${style.name}_dark.json';
 const openStreetMapTileUrl = 'https://tile.openstreetmap.org/{z}/{x}/{y}.png';
-const mapUserAgentPackageName = 'app.miriago.miriago';
+const mapUserAgentPackageName = 'io.github.kurocat.koma';
 
 class OpenFreeMapStyleOption {
   const OpenFreeMapStyleOption({

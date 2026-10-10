@@ -59,7 +59,7 @@ I maintain Koma for my own Android phone. Upstream MiriaGo also targets iOS and 
 **Navigation**
 - Back on the Map, Records or Settings tab returns to Plan instead of closing the app, and Back closes an open dropdown first.
 
-The Android package ID is still `app.miriago.miriago`, so Koma installs over MiriaGo and keeps its data.
+Koma installs as its own app (`io.github.kurocat.koma`), next to MiriaGo if you have it. To bring your plans over, export them from MiriaGo as `.sjhplan` packages and import them in Koma.
 
 ## Install
 
