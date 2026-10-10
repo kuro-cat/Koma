@@ -3,7 +3,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import 'desktop/tauri_bridge.dart';
 
-const miriagoAppVersion = '1.0.0+1';
+const miriagoAppVersion = '3.0.0+25';
 
 Future<String> loadAppVersionLabel({
   bool? desktopLauncherAvailable,
