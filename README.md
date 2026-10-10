@@ -63,7 +63,9 @@ Koma installs as its own app (`io.github.kurocat.koma`), next to MiriaGo if you 
 
 ## Install
 
-There are no published releases yet. Build an APK yourself (see below) and install it with `adb`.
+Download the latest `Koma-<version>.apk` from [Releases](https://github.com/kuro-cat/Koma/releases) and open it on your phone. Android will ask you to allow installs from your browser or file manager the first time. Koma needs Android 7.0 or later.
+
+Updates install over the previous version and keep your data. Every release is signed with the same key, so an APK from anywhere else won't install over it.
 
 ## Develop
 
