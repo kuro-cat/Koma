@@ -429,7 +429,6 @@
   "settingsCurrentVersion": "当前版本",
   "settingsLoading": "读取中",
   "settingsAuthor": "作者",
-  "settingsContactEmail": "联系邮箱",
   "settingsSourceRepository": "开源仓库",
   "settingsLicense": "开源许可",
   "settingsPrivacyPolicy": "隐私政策",
@@ -3264,5 +3263,6 @@
   "planEdit": "编辑",
   "planEditDone": "完成",
   "planEditMarkVisited": "已到访",
-  "anitabiMapImportBoxArea": "区域"
+  "anitabiMapImportBoxArea": "区域",
+  "settingsBasedOn": "基于"
 }

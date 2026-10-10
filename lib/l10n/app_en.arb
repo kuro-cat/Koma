@@ -201,7 +201,6 @@
   "settingsCurrentVersion": "Current version",
   "settingsLoading": "Loading...",
   "settingsAuthor": "Author",
-  "settingsContactEmail": "Contact email",
   "settingsSourceRepository": "Source repository",
   "settingsLicense": "Open source license",
   "settingsPrivacyPolicy": "Privacy policy",
@@ -1620,5 +1619,6 @@
   "planEdit": "Edit",
   "planEditDone": "Done",
   "planEditMarkVisited": "Visited",
-  "anitabiMapImportBoxArea": "Area"
+  "anitabiMapImportBoxArea": "Area",
+  "settingsBasedOn": "Based on"
 }

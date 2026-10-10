@@ -2860,8 +2860,8 @@ class _AboutSettingsPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CopyableText(
-                        text: 'MiriaGo',
-                        copyLabel: 'MiriaGo',
+                        text: 'Koma',
+                        copyLabel: 'Koma',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
@@ -2884,17 +2884,18 @@ class _AboutSettingsPage extends StatelessWidget {
             _AboutInfoTile(
               icon: LucideIcons.user,
               label: l10n.settingsAuthor,
-              value: 'BilyHurington',
-            ),
-            _AboutInfoTile(
-              icon: LucideIcons.mail,
-              label: l10n.settingsContactEmail,
-              value: 'bilyhurington@gmail.com',
+              value: 'kuro-cat',
             ),
             _AboutInfoTile(
               icon: LucideIcons.code,
               label: l10n.settingsSourceRepository,
-              value: 'github.com/BilyHurington/MiriaGo',
+              value: 'github.com/kuro-cat/Koma',
+            ),
+            _AboutInfoTile(
+              icon: LucideIcons.gitFork,
+              label: l10n.settingsBasedOn,
+              value:
+                  'MiriaGo · BilyHurington\ngithub.com/BilyHurington/MiriaGo',
             ),
             _AboutInfoTile(
               icon: LucideIcons.scale,

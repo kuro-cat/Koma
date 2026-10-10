@@ -755,9 +755,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsAuthor => 'Author';
 
   @override
-  String get settingsContactEmail => 'Contact email';
-
-  @override
   String get settingsSourceRepository => 'Source repository';
 
   @override
@@ -6048,4 +6045,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get anitabiMapImportBoxArea => 'Area';
+
+  @override
+  String get settingsBasedOn => 'Based on';
 }

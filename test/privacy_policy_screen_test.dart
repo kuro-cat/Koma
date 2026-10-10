@@ -60,8 +60,8 @@ void main() {
       await tester.pumpAndSettle();
       final markdown = tester.widget<Markdown>(find.byType(Markdown));
       expect(markdown.data, bundledPolicy);
-      expect(markdown.data, contains('# MiriaGo Privacy Policy'));
-      expect(markdown.data, contains('# MiriaGo 隐私政策'));
+      expect(markdown.data, contains('# Koma Privacy Policy'));
+      expect(markdown.data, contains('# Koma 隐私政策'));
       expect(markdown.selectable, isTrue);
       expect(markdown.onTapLink, isNull);
       expect(find.byType(Image), findsNothing);

@@ -679,9 +679,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsAuthor => '作者';
 
   @override
-  String get settingsContactEmail => '联系邮箱';
-
-  @override
   String get settingsSourceRepository => '开源仓库';
 
   @override
@@ -5369,4 +5366,7 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get anitabiMapImportBoxArea => '区域';
+
+  @override
+  String get settingsBasedOn => '基于';
 }

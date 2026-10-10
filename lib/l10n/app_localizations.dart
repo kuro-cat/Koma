@@ -1308,12 +1308,6 @@ abstract class AppLocalizations {
   /// **'作者'**
   String get settingsAuthor;
 
-  /// No description provided for @settingsContactEmail.
-  ///
-  /// In zh, this message translates to:
-  /// **'联系邮箱'**
-  String get settingsContactEmail;
-
   /// No description provided for @settingsSourceRepository.
   ///
   /// In zh, this message translates to:
@@ -9809,6 +9803,12 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'区域'**
   String get anitabiMapImportBoxArea;
+
+  /// No description provided for @settingsBasedOn.
+  ///
+  /// In zh, this message translates to:
+  /// **'基于'**
+  String get settingsBasedOn;
 }
 
 class _AppLocalizationsDelegate
