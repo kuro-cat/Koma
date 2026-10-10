@@ -1650,7 +1650,6 @@
   "appShellLoadFailed": "计划加载失败",
   "appShellLoading": "正在加载巡礼计划",
   "appShellLoadFailedHint": "请稍后重试。",
-  "appShellLoadingHint": "准备今日点位和当前目标。",
   "mainOpenDirectoryFailed": "无法打开目录：{error}",
   "@mainOpenDirectoryFailed": {
     "placeholders": {

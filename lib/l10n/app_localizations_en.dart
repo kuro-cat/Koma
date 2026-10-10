@@ -3155,9 +3155,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get appShellLoadFailedHint => 'Please try again later.';
 
   @override
-  String get appShellLoadingHint => 'Preparing today\'s spots and next stop.';
-
-  @override
   String mainOpenDirectoryFailed(String error) {
     return 'Couldn\'t open the folder: $error';
   }

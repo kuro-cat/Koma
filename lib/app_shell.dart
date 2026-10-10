@@ -746,73 +746,132 @@ class _NoPlanState extends StatelessWidget {
   }
 }
 
-class _PlanLoadState extends StatelessWidget {
+/// Koma-chan while the plan loads. She animates unless the system asks for
+/// less motion or loading failed; a caption and thin bar appear only when
+/// loading is slow, so a normal launch shows her and nothing else.
+class _PlanLoadState extends StatefulWidget {
   const _PlanLoadState({required this.error, required this.onRetry});
 
   final Object? error;
   final VoidCallback onRetry;
 
   @override
+  State<_PlanLoadState> createState() => _PlanLoadStateState();
+}
+
+class _PlanLoadStateState extends State<_PlanLoadState> {
+  bool _slow = false;
+  late final Timer _slowTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _slowTimer = Timer(
+      const Duration(milliseconds: 500),
+      () => setState(() => _slow = true),
+    );
+  }
+
+  @override
+  void dispose() {
+    _slowTimer.cancel();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final error = widget.error;
     final hasError = error != null;
+    final still = hasError || MediaQuery.disableAnimationsOf(context);
+    // The art is drawn on white: the screen is white in light mode, matching
+    // the system splash, and the art sits on a white panel in dark mode.
+    final mascot = Image.asset(
+      still
+          ? 'assets/mascot/koma_still.webp'
+          : 'assets/mascot/koma_loading.webp',
+      key: const ValueKey('koma-loading-mascot'),
+      height: 260,
+      gaplessPlayback: true,
+      filterQuality: FilterQuality.medium,
+    );
 
     return Scaffold(
+      backgroundColor: AppColors.isDark ? AppColors.background : Colors.white,
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                hasError ? LucideIcons.circleAlert : LucideIcons.route,
-                color: hasError ? AppColors.error : AppColors.accentForeground,
-                size: 40,
-              ),
-              const SizedBox(height: 12),
-              Text(
-                hasError ? l10n.appShellLoadFailed : l10n.appShellLoading,
-                style: const TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w600,
-                  letterSpacing: 0,
-                ),
-              ),
-              const SizedBox(height: 8),
-              Text(
-                hasError
-                    ? l10n.appShellLoadFailedHint
-                    : l10n.appShellLoadingHint,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 14,
-                  letterSpacing: 0,
-                ),
-              ),
-              if (hasError && kDebugMode) ...[
-                const SizedBox(height: 10),
-                SelectableText(
-                  error.toString(),
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: AppColors.error,
-                    fontSize: 12,
+              if (AppColors.isDark)
+                ColoredBox(
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(12),
+                    child: mascot,
+                  ),
+                )
+              else
+                mascot,
+              const SizedBox(height: 20),
+              if (hasError) ...[
+                Text(
+                  l10n.appShellLoadFailed,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
                     letterSpacing: 0,
                   ),
                 ),
-              ],
-              const SizedBox(height: 16),
-              if (hasError)
+                const SizedBox(height: 8),
+                Text(
+                  l10n.appShellLoadFailedHint,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 14,
+                    letterSpacing: 0,
+                  ),
+                ),
+                if (kDebugMode) ...[
+                  const SizedBox(height: 10),
+                  SelectableText(
+                    error.toString(),
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: AppColors.error,
+                      fontSize: 12,
+                      letterSpacing: 0,
+                    ),
+                  ),
+                ],
+                const SizedBox(height: 16),
                 OutlinedButton.icon(
-                  onPressed: onRetry,
+                  onPressed: widget.onRetry,
                   icon: const Icon(LucideIcons.refreshCw, size: 18),
                   label: Text(l10n.commonRetry),
-                )
-              else
-                const SizedBox(
-                  width: 22,
-                  height: 22,
-                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+              ] else
+                AnimatedOpacity(
+                  opacity: _slow ? 1 : 0,
+                  duration: const Duration(milliseconds: 200),
+                  child: Column(
+                    children: [
+                      Text(
+                        l10n.appShellLoading,
+                        style: TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 14,
+                          letterSpacing: 0,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      const SizedBox(
+                        width: 120,
+                        child: LinearProgressIndicator(minHeight: 2),
+                      ),
+                    ],
+                  ),
                 ),
             ],
           ),

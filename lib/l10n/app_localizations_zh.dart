@@ -2794,9 +2794,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get appShellLoadFailedHint => '请稍后重试。';
 
   @override
-  String get appShellLoadingHint => '准备今日点位和当前目标。';
-
-  @override
   String mainOpenDirectoryFailed(String error) {
     return '无法打开目录：$error';
   }

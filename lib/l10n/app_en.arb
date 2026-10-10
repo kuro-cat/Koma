@@ -853,7 +853,6 @@
   "appShellLoadFailed": "Couldn't load plans",
   "appShellLoading": "Loading pilgrimage plans",
   "appShellLoadFailedHint": "Please try again later.",
-  "appShellLoadingHint": "Preparing today's spots and next stop.",
   "mainOpenDirectoryFailed": "Couldn't open the folder: {error}",
   "mainStartupFailed": "Koma failed to start",
   "mainStartupFailedHint": "Your data has not been deleted. Retry, or open the log folder and check startup.log.",

@@ -5186,12 +5186,6 @@ abstract class AppLocalizations {
   /// **'请稍后重试。'**
   String get appShellLoadFailedHint;
 
-  /// No description provided for @appShellLoadingHint.
-  ///
-  /// In zh, this message translates to:
-  /// **'准备今日点位和当前目标。'**
-  String get appShellLoadingHint;
-
   /// No description provided for @mainOpenDirectoryFailed.
   ///
   /// In zh, this message translates to:
