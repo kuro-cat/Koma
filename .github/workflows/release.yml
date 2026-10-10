@@ -45,12 +45,12 @@ jobs:
           done
           umask 077
           mkdir -p android/app
-          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/miriago-release.jks
+          printf '%s' "$ANDROID_KEYSTORE_BASE64" | base64 --decode > android/app/koma-release.jks
           {
             printf 'storePassword=%s\n' "$ANDROID_KEYSTORE_PASSWORD"
             printf 'keyPassword=%s\n' "$ANDROID_KEY_PASSWORD"
             printf 'keyAlias=%s\n' "$ANDROID_KEY_ALIAS"
-            printf 'storeFile=miriago-release.jks\n'
+            printf 'storeFile=koma-release.jks\n'
           } > android/key.properties
 
       - name: Get packages
@@ -67,20 +67,20 @@ jobs:
 
       - name: Remove signing material
         if: always()
-        run: rm -f android/app/miriago-release.jks android/key.properties
+        run: rm -f android/app/koma-release.jks android/key.properties
 
       - name: Rename APK
-        run: cp build/app/outputs/flutter-apk/app-release.apk "MiriaGo-${GITHUB_REF_NAME:-manual}.apk"
+        run: cp build/app/outputs/flutter-apk/app-release.apk "Koma-${GITHUB_REF_NAME:-manual}.apk"
 
       - name: Upload APK artifact
         uses: actions/upload-artifact@v4
         with:
-          name: miriago-apk
-          path: MiriaGo-*.apk
+          name: koma-apk
+          path: Koma-*.apk
 
       - name: Create GitHub Release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # v2.6.2
         with:
-          files: MiriaGo-${{ github.ref_name }}.apk
+          files: Koma-${{ github.ref_name }}.apk
           generate_release_notes: true

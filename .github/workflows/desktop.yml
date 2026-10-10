@@ -1,10 +1,8 @@
 name: Desktop Launcher
 
+# Manual only until Koma supports this platform; tag releases build Android.
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'v*'
 
 permissions:
   contents: write
