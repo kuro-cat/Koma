@@ -126,7 +126,7 @@ class ValhallaRouteClient {
             headers: const {
               'Accept': 'application/json',
               'Content-Type': 'application/json',
-              'X-Client-Id': 'MiriaGo',
+              'X-Client-Id': 'Koma',
             },
             body: jsonEncode({
               'locations': [
@@ -188,7 +188,7 @@ class ValhallaRouteClient {
             Uri.parse('$normalized/status'),
             headers: const {
               'Accept': 'application/json',
-              'X-Client-Id': 'MiriaGo',
+              'X-Client-Id': 'Koma',
             },
           )
           .timeout(timeout);

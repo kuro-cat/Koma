@@ -14,7 +14,7 @@ import 'plan_transfer_background.dart';
 PlanLinkService createPlanLinkService() => _IoPlanLinkService();
 
 /// GitHub asks API clients to name themselves.
-const _userAgent = 'MiriaGo';
+const _userAgent = 'Koma';
 
 class _IoPlanLinkService implements PlanLinkService {
   @override

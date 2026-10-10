@@ -25,10 +25,10 @@ Map<String, Object?> _subject(int id) => {
 };
 
 void _expectConfiguredAuthentication(http.Request request) {
-  // Compare as a boolean so assertion failures cannot print the credential.
+  // Koma calls Bangumi anonymously: no token, cookie or credentials.
   expect(
-    request.headers['authorization'] == 'Bearer ${BangumiConfig.apiToken}',
-    isTrue,
+    request.headers.keys.any((key) => key.toLowerCase() == 'authorization'),
+    isFalse,
   );
   expect(
     request.headers.keys.any((key) => key.toLowerCase() == 'cookie'),
@@ -45,7 +45,7 @@ void main() {
     {BangumiSubjectType.book, BangumiSubjectType.game},
   ]) {
     test(
-      'configured authentication still excludes nsfw with ${types.length} type filters',
+      'anonymous requests still exclude nsfw with ${types.length} type filters',
       () async {
         final transport = MockClient((request) async {
           _expectConfiguredAuthentication(request);

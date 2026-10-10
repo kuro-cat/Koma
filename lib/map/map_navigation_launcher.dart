@@ -92,14 +92,14 @@ Uri walkingNavigationUri(PilgrimagePoint point, NavigationApp app) {
       'mode': 'walk',
       'coordinate': 'wgs84',
       'callnative': '1',
-      'src': 'MiriaGo',
+      'src': 'Koma',
     }),
     NavigationApp.baiduMaps => Uri.http('api.map.baidu.com', '/direction', {
       'destination': 'latlng:$latitude,$longitude|name:$destinationName',
       'mode': 'walking',
       'coord_type': 'wgs84',
       'output': 'html',
-      'src': 'webapp.miriago.miriago',
+      'src': 'webapp.koma.koma',
     }),
   };
 }

@@ -54,7 +54,7 @@ void main() {
       expect(uri.queryParameters['mode'], 'walk');
       expect(uri.queryParameters['coordinate'], 'wgs84');
       expect(uri.queryParameters['callnative'], '1');
-      expect(uri.queryParameters['src'], 'MiriaGo');
+      expect(uri.queryParameters['src'], 'Koma');
     });
 
     test('builds Baidu walking URL with WGS84 coordinates', () {
@@ -70,7 +70,7 @@ void main() {
       expect(uri.queryParameters['mode'], 'walking');
       expect(uri.queryParameters['coord_type'], 'wgs84');
       expect(uri.queryParameters['output'], 'html');
-      expect(uri.queryParameters['src'], 'webapp.miriago.miriago');
+      expect(uri.queryParameters['src'], 'webapp.koma.koma');
     });
 
     test(

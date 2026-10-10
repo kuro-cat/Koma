@@ -11,7 +11,7 @@ void main() {
     late Map<String, dynamic> requestBody;
     final client = MockClient((request) async {
       expect(request.url.toString(), 'https://route.example/route');
-      expect(request.headers['X-Client-Id'], 'MiriaGo');
+      expect(request.headers['X-Client-Id'], 'Koma');
       requestBody = jsonDecode(request.body) as Map<String, dynamic>;
       return http.Response(
         jsonEncode(

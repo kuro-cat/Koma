@@ -39,7 +39,6 @@ class BangumiApiClient {
         .post(
           uri,
           headers: {
-            'Authorization': 'Bearer ${BangumiConfig.apiToken}',
             'Content-Type': 'application/json',
             if (!kIsWeb) 'User-Agent': BangumiConfig.userAgent,
           },
@@ -85,7 +84,6 @@ class BangumiApiClient {
         .get(
           Uri.parse('${BangumiConfig.apiBaseUrl}/v0/subjects/$bangumiId'),
           headers: {
-            'Authorization': 'Bearer ${BangumiConfig.apiToken}',
             if (!kIsWeb) 'User-Agent': BangumiConfig.userAgent,
           },
         )
