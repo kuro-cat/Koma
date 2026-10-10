@@ -3,111 +3,80 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Koma: anime pilgrimage planner</title>
+<meta name="color-scheme" content="light">
+<title>Koma: an Android app for 聖地巡礼</title>
 <meta name="description" content="Koma turns an anime's real locations into a walkable plan and lines your camera up with the original frame. Free, open source, for Android.">
 <meta property="og:title" content="Koma">
-<meta property="og:description" content="Plan an anime pilgrimage. Shoot the frame.">
+<meta property="og:description" content="An Android app for visiting the real places shown in anime and photographing them to match the scene.">
 <meta property="og:image" content="https://kuro-cat.github.io/Koma/icon.jpg">
 <link rel="icon" href="icon.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 <style>
-  :root {
-    --paper: #F2F5F5; --raise: #FBFCFC; --mist: #E2E9EA;
-    --ink: #152022; --ink-2: #475759; --ink-3: #5D6D6F;
-    --rule: #CBD5D7; --rule-2: #DDE5E6;
-    --accent: #2F6F80; --on-accent: #FFFFFF; --wash: #E3EDEF;
-    --art: #FFFFFF;
-  }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --paper: #0F1A1C; --raise: #1C2D30; --mist: #172628;
-      --ink: #E4ECEC; --ink-2: #A3B3B4; --ink-3: #8C9D9E;
-      --rule: #2C4043; --rule-2: #223436;
-      --accent: #6FB3C4; --on-accent: #0F1A1C; --wash: #1D3236;
-    }
-  }
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0; background: var(--paper); color: var(--ink);
-    font: 400 17px/1.55 "Archivo", system-ui, sans-serif;
-    font-variant-numeric: tabular-nums;
-  }
-  a { color: var(--accent); text-underline-offset: 3px; }
-  ::selection { background: var(--accent); color: var(--on-accent); }
-  .wrap { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
-
-  header { border-bottom: 1px solid var(--ink); background: var(--paper); }
-  header .wrap { display: flex; align-items: center; gap: 12px; height: 60px; }
-  .mark { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
-  .mark img { width: 32px; height: 32px; border: 1px solid var(--rule); background: #fff; }
-  .mark b { font-weight: 700; font-size: 20px; letter-spacing: -0.01em; }
-  header nav { margin-left: auto; display: flex; gap: 20px; }
-  header nav a { color: var(--ink-2); text-decoration: none; font-weight: 500; }
-  header nav a:hover { color: var(--ink); }
-
-  .caps {
-    font-stretch: 75%; font-weight: 600; text-transform: uppercase;
-    letter-spacing: 0.08em; font-size: 13px; color: var(--ink);
-  }
-
-  .hero { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: center; padding-block: 56px 48px; }
-  .hero h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.04; letter-spacing: -0.035em; font-weight: 700; margin: 12px 0 18px; }
-  .hero p { font-size: 19px; color: var(--ink-2); max-width: 34em; margin: 0 0 28px; }
+  .hero { display: grid; grid-template-columns: 1fr 300px; gap: 56px; align-items: center; padding-block: 64px 56px; }
+  .hero h1 { font-size: 44px; line-height: 1.06; letter-spacing: -0.03em; margin: 0 0 20px; }
+  .hero .jp { color: var(--accent); }
+  .lede { font-size: 20px; color: var(--ink-2); max-width: 28em; margin: 0 0 32px; }
   .keys { display: flex; flex-wrap: wrap; gap: 12px; }
-  .key {
-    display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 20px;
-    border: 1px solid var(--ink); background: var(--raise); color: var(--ink);
-    font: 600 16px/1 "Archivo", sans-serif; text-decoration: none;
-    transition: background .12s ease-out, color .12s ease-out;
-  }
-  .key:hover { background: var(--ink); color: var(--paper); }
-  .key.primary { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-  .key.primary:hover { background: var(--ink); border-color: var(--ink); color: var(--paper); }
-  .note { margin-top: 14px; font-size: 14px; color: var(--ink-3); }
-  .art { background: var(--art); border: 1px solid var(--rule); display: flex; justify-content: center; padding: 18px 0 0; }
-  .art img { width: min(100%, 300px); height: auto; display: block; }
+  .note { margin: 16px 0 0; font-size: 14px; color: var(--ink-3); }
+  .art { border: 1px solid var(--ink); background: #fff; padding-top: 16px; }
+  .art img { display: block; width: 100%; height: auto; }
 
-  section { padding: 44px 0; }
-  section > .wrap > h2 { font-size: 30px; letter-spacing: -0.02em; margin: 6px 0 20px; font-weight: 700; }
-  .rule { border-top: 2px solid var(--ink); }
+  /* The facts read as one ruled row under the hero, split by seams. */
+  .facts { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 2px solid var(--ink); border-bottom: 1px solid var(--rule-2); }
+  .facts div { padding: 16px 20px 20px; border-left: 1px solid var(--rule-2); }
+  .facts div:first-child { padding-left: 0; border-left: 0; }
+  .facts p { margin: 6px 0 0; color: var(--ink-2); font-size: 15px; }
 
-  .shots { display: grid; grid-auto-flow: column; grid-auto-columns: 232px; gap: 16px; overflow-x: auto; padding-bottom: 12px; scroll-snap-type: x mandatory; }
-  .shots figure { margin: 0; scroll-snap-align: start; }
+  /* Sections: the name on the left, the content on the right, under one rule. */
+  section { margin-top: 72px; }
+  section > .wrap { display: grid; grid-template-columns: 280px minmax(0, 1fr); gap: 0 40px; border-top: 2px solid var(--ink); padding-top: 20px; }
+  section h2 { font-size: 30px; line-height: 1.15; letter-spacing: -0.02em; margin: 0; }
+
+  /* Steps hang off one ink line, each on a square node. */
+  .timeline { list-style: none; margin: 0; padding: 0; }
+  .timeline li { position: relative; padding: 0 0 44px 40px; }
+  .timeline li::before { content: ""; position: absolute; left: 7px; top: 12px; bottom: -12px; width: 2px; background: var(--ink); }
+  .timeline li:last-child { padding-bottom: 20px; border-bottom: 1px solid var(--rule-2); }
+  .timeline li:last-child::before { display: none; }
+  .timeline li::after { content: ""; position: absolute; left: 0; top: 4px; width: 16px; height: 16px; background: var(--ink); }
+  .timeline h3 { margin: 4px 0 4px; font-size: 20px; }
+  .timeline p { margin: 0; color: var(--ink-2); max-width: 36em; }
+
+  .shots { display: flex; gap: 16px; margin-top: 20px; overflow-x: auto; scrollbar-width: thin; }
+  .shots figure { margin: 0; flex: 0 0 192px; }
   .shots img { width: 100%; height: auto; display: block; border: 1px solid var(--rule); background: var(--raise); }
   .shots figcaption { font-size: 14px; color: var(--ink-2); margin-top: 8px; }
 
-  .steps { list-style: none; margin: 0; padding: 0; }
-  .steps li { display: grid; grid-template-columns: 120px 1fr; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--rule-2); }
-  .steps li:last-child { border-bottom: 0; }
-  .steps h3 { margin: 0 0 4px; font-size: 19px; font-weight: 600; }
-  .steps p { margin: 0; color: var(--ink-2); }
+  .credits .body { padding-bottom: 20px; border-bottom: 1px solid var(--rule-2); }
+  .credits p { color: var(--ink-2); max-width: 36em; margin: 0; }
 
-  .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; border: 1px solid var(--ink); background: var(--raise); }
-  .facts div { padding: 18px 20px; border-left: 1px solid var(--rule-2); }
-  .facts div:first-child { border-left: 0; }
-  .facts p { margin: 6px 0 0; color: var(--ink-2); font-size: 15px; }
+  footer { margin-top: 72px; }
 
-  .credits p { color: var(--ink-2); max-width: 46em; }
-
-  footer { border-top: 1px solid var(--ink); padding: 22px 0 40px; font-size: 14px; color: var(--ink-3); }
-  footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 22px; }
-  footer a { color: var(--ink-2); }
-
-  @media (max-width: 760px) {
-    .hero { grid-template-columns: 1fr; padding-top: 24px; gap: 28px; }
-    .art { order: -1; }
-    .art img { width: min(70%, 260px); }
-    .steps li { grid-template-columns: 1fr; gap: 4px; }
-    .facts { grid-template-columns: 1fr; }
-    .facts div { border-left: 0; border-top: 1px solid var(--rule-2); }
-    .facts div:first-child { border-top: 0; }
-    header nav a.optional { display: none; }
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr 200px; gap: 28px; padding-block: 40px; }
+    .hero h1 { font-size: 36px; }
+    .facts { grid-template-columns: 1fr 1fr; }
+    .facts div:nth-child(odd) { padding-left: 0; border-left: 0; }
+    .facts div:nth-child(n+3) { border-top: 1px solid var(--rule-2); }
+    section > .wrap { grid-template-columns: minmax(0, 1fr); }
+    section h2 { font-size: 22px; margin-bottom: 24px; }
   }
-  @media (prefers-reduced-motion: reduce) {
-    .key { transition: none; }
+  @media (max-width: 640px) {
+    .hero { grid-template-columns: 1fr; padding-block: 32px 40px; }
+    .hero h1 { font-size: 32px; }
+    .lede { font-size: 16px; margin-bottom: 24px; }
+    .art { order: -1; width: 180px; }
+    .facts { grid-template-columns: 1fr; }
+    .facts div, .facts div:first-child { padding: 14px 0 16px; border-left: 0; }
+    .facts div + div { border-top: 1px solid var(--rule-2); }
+    .timeline li { padding-left: 32px; }
+    .shots { margin-right: -20px; padding-right: 20px; }
+    .shots figure { flex-basis: 150px; }
+    section, footer { margin-top: 48px; }
+    header nav a.optional { display: none; }
   }
 </style>
 </head>
@@ -116,7 +85,7 @@
   <div class="wrap">
     <a class="mark" href="./"><img src="icon.jpg" alt=""><b>Koma</b></a>
     <nav>
-      <a class="optional" href="#screens">Screens</a>
+      <a class="optional" href="#how">How it works</a>
       <a href="https://github.com/kuro-cat/Koma">GitHub</a>
     </nav>
   </div>
@@ -125,68 +94,76 @@
 <main>
   <div class="wrap hero">
     <div>
-      <span class="caps">Anime pilgrimage · Android</span>
-      <h1>Plan the trip.<br>Shoot the frame.</h1>
-      <p>Koma turns an anime's real locations into a walkable plan, then lines your camera up with the original frame so your photo matches the scene.</p>
+      <h1>An Android app for <span lang="ja" class="jp">聖地巡礼</span></h1>
+      <p class="lede">Search for an anime to see its real-world locations on a map, each with the frame it appears in. Add them to a plan, walk between them, and take your photo with the frame laid over the camera.</p>
       <div class="keys">
-        <a class="key primary" href="https://github.com/kuro-cat/Koma/releases/latest">Download for Android</a>
+        <a class="key primary" href="https://github.com/kuro-cat/Koma/releases/latest/download/Koma.apk">Download for Android</a>
         <a class="key" href="https://github.com/kuro-cat/Koma">View source</a>
       </div>
       <p class="note">Free and open source. Android 7.0 or later. English and Chinese.</p>
     </div>
-    <div class="art">
-      <picture>
-        <source srcset="koma_still.webp" media="(prefers-reduced-motion: reduce)">
-        <img src="koma_loading.webp" width="480" height="704" alt="Koma-chan, the Koma mascot, holding a camera up to her eye">
-      </picture>
-    </div>
+    <picture class="art">
+      <source srcset="koma_still.webp" media="(prefers-reduced-motion: reduce)">
+      <img src="koma_loading.webp" width="480" height="704" alt="Koma-chan, the Koma mascot, holding a camera up to her eye">
+    </picture>
   </div>
 
-  <section id="screens" class="rule">
-    <div class="wrap">
-      <span class="caps">Screens</span>
-      <h2>Frames first, everywhere</h2>
-      <div class="shots">
-        <figure><img src="screenshots/01-plan.webp" width="720" height="1584" loading="lazy" alt="Plan tab listing spots with their anime frames"><figcaption>Every spot shows its anime frame.</figcaption></figure>
-        <figure><img src="screenshots/02-plan-map.webp" width="720" height="1584" loading="lazy" alt="Plan tab with the area map open"><figcaption>Areas on a map, next to the list.</figcaption></figure>
-        <figure><img src="screenshots/05-import.webp" width="720" height="1584" loading="lazy" alt="Import map with anime frames pinned to their locations"><figcaption>Find an anime and import its spots.</figcaption></figure>
-        <figure><img src="screenshots/03-spot.webp" width="720" height="1584" loading="lazy" alt="Spot sheet with scene details and actions"><figcaption>Route there, then shoot.</figcaption></figure>
-        <figure><img src="screenshots/04-map.webp" width="720" height="1584" loading="lazy" alt="Map tab with the current area and next stop"><figcaption>The map keeps your next stop in view.</figcaption></figure>
-        <figure><img src="screenshots/06-plans.webp" width="720" height="1584" loading="lazy" alt="All plans with a plan's details opened"><figcaption>Plans with their works and progress.</figcaption></figure>
-        <figure><img src="screenshots/07-appearance.webp" width="720" height="1584" loading="lazy" alt="Appearance settings with theme colours"><figcaption>Light, dark and five theme colours.</figcaption></figure>
-        <figure><img src="screenshots/08-plan-dark.webp" width="720" height="1584" loading="lazy" alt="Plan tab in dark mode"><figcaption>Dark mode for night trips.</figcaption></figure>
-      </div>
-    </div>
-  </section>
+  <div class="wrap facts">
+    <div><span class="caps">Your data</span><p>Plans, photos and records stay on your phone. No account, no ads, no tracking.</p></div>
+    <div><span class="caps">Portable</span><p>Move plans between phones as <code>.sjhplan</code> files, records and photos included.</p></div>
+    <div><span class="caps">Open source</span><p>MIT licensed. Read the code, file issues, or build it yourself on GitHub.</p></div>
+    <div><span class="caps">Themes</span><p>Light and dark, with five accent colours or one of your own.</p></div>
+  </div>
 
-  <section class="rule">
+  <section id="how">
     <div class="wrap">
-      <span class="caps">How it works</span>
-      <h2>From episode to photo</h2>
-      <ol class="steps">
-        <li><span class="caps">Find</span><div><h3>Search an anime, or paste an Anitabi link</h3><p>Koma shows every known location on a map, each with its frame from the show. Box-select a district to import it into an area in one go.</p></div></li>
-        <li><span class="caps">Plan</span><div><h3>Group spots into areas and pick the next stop</h3><p>Reorder, mark visits, write notes, and cache the frames before you leave so the camera works with no signal.</p></div></li>
-        <li><span class="caps">Shoot</span><div><h3>Match the frame on the live camera</h3><p>The anime frame sits over the viewfinder at the opacity you choose, or stacked above it, down to the ultrawide lens.</p></div></li>
-        <li><span class="caps">Compare</span><div><h3>Align, crop, colour-match and share</h3><p>Line your photo up with the frame, crop it to match, match the colours, and export a side-by-side comparison. Originals are never changed.</p></div></li>
+      <h2>How it works</h2>
+      <ol class="timeline">
+        <li>
+          <span class="caps">Find</span>
+          <h3>Search an anime, or paste an Anitabi link</h3>
+          <p>Koma shows every known location on a map, each with its frame from the show. Box-select a district to import it into an area in one go.</p>
+          <div class="shots">
+            <figure><img src="screenshots/05-import.webp" width="720" height="1584" loading="lazy" alt="Import map with anime frames pinned to their locations"><figcaption>Importing spots from Anitabi.</figcaption></figure>
+          </div>
+        </li>
+        <li>
+          <span class="caps">Plan</span>
+          <h3>Group spots into areas and pick the next stop</h3>
+          <p>Reorder, mark visits, write notes, and cache the frames before you leave so the camera works with no signal.</p>
+          <div class="shots">
+            <figure><img src="screenshots/01-plan.webp" width="720" height="1584" loading="lazy" alt="Plan tab listing spots with their anime frames"><figcaption>A plan's spots, each with its frame.</figcaption></figure>
+            <figure><img src="screenshots/02-plan-map.webp" width="720" height="1584" loading="lazy" alt="Plan tab with the area map open"><figcaption>The same plan with its map open.</figcaption></figure>
+            <figure><img src="screenshots/06-plans.webp" width="720" height="1584" loading="lazy" alt="All plans with a plan's details opened"><figcaption>All plans.</figcaption></figure>
+          </div>
+        </li>
+        <li>
+          <span class="caps">Go</span>
+          <h3>Walk to the next stop</h3>
+          <p>The map tab shows the current area and your next stop. A spot's sheet gives walking directions or opens the spot in your maps app.</p>
+          <div class="shots">
+            <figure><img src="screenshots/04-map.webp" width="720" height="1584" loading="lazy" alt="Map tab with the current area and next stop"><figcaption>The map tab with the next stop.</figcaption></figure>
+            <figure><img src="screenshots/03-spot.webp" width="720" height="1584" loading="lazy" alt="Spot sheet with scene details and actions"><figcaption>A spot's details.</figcaption></figure>
+          </div>
+        </li>
+        <li>
+          <span class="caps">Shoot</span>
+          <h3>Take the photo with the frame over the camera</h3>
+          <p>The anime frame sits over the viewfinder at the opacity you choose, or stacked above it, down to the ultrawide lens.</p>
+        </li>
+        <li>
+          <span class="caps">Compare</span>
+          <h3>Line up and compare your photos</h3>
+          <p>Line your photo up with the frame, crop it to match, match the colours, and export a side-by-side comparison. Originals are never changed.</p>
+        </li>
       </ol>
     </div>
   </section>
 
-  <section class="rule">
+  <section class="credits">
     <div class="wrap">
-      <div class="facts">
-        <div><span class="caps">Your data</span><p>Plans, photos and records stay on your phone. No account, no ads, no tracking.</p></div>
-        <div><span class="caps">Portable</span><p>Move plans between phones as <code>.sjhplan</code> files, records and photos included.</p></div>
-        <div><span class="caps">Open source</span><p>MIT licensed. Read the code, file issues, or build it yourself on GitHub.</p></div>
-      </div>
-    </div>
-  </section>
-
-  <section class="rule credits">
-    <div class="wrap">
-      <span class="caps">Credits</span>
-      <h2>Built on others' work</h2>
-      <p>Koma is a fork of <a href="https://github.com/BilyHurington/MiriaGo">MiriaGo</a> by BilyHurington and contributors. Spots and frames come from <a href="https://anitabi.cn">Anitabi</a> and its contributors, work search from <a href="https://bgm.tv">Bangumi</a>, and maps from <a href="https://openfreemap.org">OpenFreeMap</a> and OpenStreetMap contributors. Anime frames belong to their rights holders; Koma only fetches and caches them on your device.</p>
+      <h2>Credits</h2>
+      <div class="body"><p>Koma is a fork of <a href="https://github.com/BilyHurington/MiriaGo">MiriaGo</a> by BilyHurington and contributors. Spots and frames come from <a href="https://anitabi.cn">Anitabi</a> and its contributors, work search from <a href="https://bgm.tv">Bangumi</a>, and maps from <a href="https://openfreemap.org">OpenFreeMap</a> and OpenStreetMap contributors. Anime frames belong to their rights holders; Koma only fetches and caches them on your device.</p></div>
     </div>
   </section>
 </main>

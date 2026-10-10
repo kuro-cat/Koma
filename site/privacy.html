@@ -3,33 +3,33 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
 <title>Koma privacy policy</title>
 <link rel="icon" href="icon.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..100,400..700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
 <style>
-  :root { --paper: #F2F5F5; --ink: #152022; --ink-2: #475759; --rule: #CBD5D7; --accent: #2F6F80; }
-  @media (prefers-color-scheme: dark) {
-    :root { --paper: #0F1A1C; --ink: #E4ECEC; --ink-2: #A3B3B4; --rule: #2C4043; --accent: #6FB3C4; }
-  }
-  body { margin: 0; background: var(--paper); color: var(--ink); font: 400 16px/1.6 "Archivo", system-ui, sans-serif; }
-  header { border-bottom: 1px solid var(--ink); }
-  header div, main { max-width: 760px; margin: 0 auto; padding: 0 20px; }
-  header div { height: 56px; display: flex; align-items: center; }
-  header a { color: var(--ink); font-weight: 700; text-decoration: none; }
-  main { padding-bottom: 48px; }
-  a { color: var(--accent); text-underline-offset: 3px; }
-  h1 { font-size: 32px; letter-spacing: -0.02em; margin: 32px 0 8px; }
-  h2 { font-size: 20px; margin: 28px 0 8px; padding-top: 12px; border-top: 2px solid var(--ink); }
-  hr { border: 0; border-top: 1px solid var(--rule); margin: 40px 0; }
+  main { width: min(1000px, 100% - 40px); margin: 0 auto 72px; }
+  main > * { max-width: 720px; }
+  h1 { font-size: 32px; line-height: 1.1; letter-spacing: -0.02em; margin: 40px 0 12px; }
+  h2 { font-size: 20px; margin: 36px 0 10px; padding-top: 14px; border-top: 2px solid var(--ink); }
+  h3 { font-size: 16px; margin: 24px 0 6px; }
+  hr { border: 0; border-top: 1px solid var(--rule-2); margin: 40px 0; }
   li { margin: 4px 0; }
   code { font-size: 0.92em; }
   p, li { color: var(--ink-2); }
+  strong { color: var(--ink); font-weight: 600; }
 </style>
 </head>
 <body>
-<header><div><a href="./">← Koma</a></div></header>
+<header>
+  <div class="wrap">
+    <a class="mark" href="./"><img src="icon.jpg" alt=""><b>Koma</b></a>
+    <nav><a href="https://github.com/kuro-cat/Koma">GitHub</a></nav>
+  </div>
+</header>
 <main id="policy"><p>Loading the privacy policy…</p></main>
 <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
 <script>
@@ -45,5 +45,12 @@
         '<p>The policy could not be loaded. Read it on <a href="https://github.com/kuro-cat/Koma/blob/main/docs/privacy.md">GitHub</a>.</p>';
     });
 </script>
+<footer>
+  <div class="wrap">
+    <span>Koma · MIT License</span>
+    <a href="./">Home</a>
+    <a href="https://github.com/kuro-cat/Koma/issues">Report an issue</a>
+  </div>
+</footer>
 </body>
 </html>
