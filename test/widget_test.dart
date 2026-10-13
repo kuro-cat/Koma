@@ -1963,7 +1963,16 @@ void main() {
 
     expect(find.byKey(const ValueKey('create-first-plan')), findsOneWidget);
 
+    // Cancelling the info form creates nothing.
     await tester.tap(find.byKey(const ValueKey('create-first-plan')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('取消'));
+    await tester.pumpAndSettle();
+    expect(await repository.loadPlans(), isEmpty);
+
+    await tester.tap(find.byKey(const ValueKey('create-first-plan')));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('保存'));
     await tester.pumpAndSettle();
 
     expect(find.byKey(const ValueKey('create-first-plan')), findsNothing);
@@ -2161,9 +2170,19 @@ void main() {
     await tester.tap(find.widgetWithText(OutlinedButton, '新建计划'));
     await tester.pumpAndSettle();
 
+    // A new plan starts from its info form, filled with a default name.
+    final fields = find.descendant(
+      of: find.byType(Dialog),
+      matching: find.byType(TextField),
+    );
+    expect(tester.widget<TextField>(fields.first).controller!.text, '新巡礼计划 2');
+    await tester.enterText(fields.at(1), '宇治');
+    await tester.tap(find.text('保存'));
+    await tester.pumpAndSettle();
+
     // The current plan is listed once, marked as current on the wash.
     expect(find.text('新巡礼计划 2'), findsOneWidget);
-    expect(find.textContaining('未设置区域  /  0 个点位  /  0 部作品'), findsOneWidget);
+    expect(find.textContaining('宇治  /  0 个点位  /  0 部作品'), findsOneWidget);
     expect(find.byKey(const ValueKey('plan-status-current')), findsOneWidget);
     expect(find.text('暂无作品'), findsOneWidget);
     final planCards = find.byWidgetPredicate(

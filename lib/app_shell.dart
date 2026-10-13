@@ -201,10 +201,14 @@ class _AppShellState extends State<AppShell> {
 
   Future<void> _createFirstPlan() async {
     try {
-      await widget.repository.createPlan(
-        name: l10n.planManagerNewPlanName(1),
-        area: l10n.planManagerAreaNotSet,
+      final created = await createPlanFromInfoForm(
+        context,
+        widget.repository,
+        defaultName: l10n.planManagerNewPlanName(1),
       );
+      if (created == null) {
+        return;
+      }
     } on Object {
       if (mounted) {
         ScaffoldMessenger.of(context).showStatusSnack(
@@ -304,10 +308,14 @@ class _AppShellState extends State<AppShell> {
     }
     try {
       if (choice.create) {
-        await widget.repository.createPlan(
-          name: l10n.planManagerNewPlanName(plans.length + 1),
-          area: l10n.planManagerAreaNotSet,
+        final created = await createPlanFromInfoForm(
+          context,
+          widget.repository,
+          defaultName: l10n.planManagerNewPlanName(plans.length + 1),
         );
+        if (created == null) {
+          return;
+        }
       } else if (choice.planId != currentId) {
         await widget.repository.setActivePlan(choice.planId!);
       } else {

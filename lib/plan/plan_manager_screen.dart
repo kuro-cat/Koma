@@ -120,12 +120,14 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
   }
 
   Future<void> _createEmptyPlan() async {
-    final planNumber = (_plans?.length ?? 0) + 1;
-    await widget.repository.createPlan(
-      name: l10n.planManagerNewPlanName(planNumber),
-      area: l10n.planManagerAreaNotSet,
+    final created = await createPlanFromInfoForm(
+      context,
+      widget.repository,
+      defaultName: l10n.planManagerNewPlanName((_plans?.length ?? 0) + 1),
     );
-    await _loadPlans();
+    if (created != null) {
+      await _loadPlans();
+    }
   }
 
   Future<void> _deletePlan(PilgrimagePlan plan) async {
@@ -161,7 +163,12 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
     // The dialog owns its controllers so they outlive its exit animation.
     final result = await showDialog<_PlanInfoFormResult>(
       context: context,
-      builder: (context) => _PlanInfoDialog(plan: plan),
+      builder: (context) => _PlanInfoDialog(
+        title: l10n.planManagerEditInfo,
+        name: plan.name,
+        area: plan.area,
+        memo: plan.memo,
+      ),
     );
     if (result == null || result.name.isEmpty) {
       return;
@@ -381,19 +388,51 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
   }
 }
 
-class _PlanInfoDialog extends StatefulWidget {
-  const _PlanInfoDialog({required this.plan});
+/// Asks for a new plan's info, then creates it. Null when cancelled.
+Future<PilgrimagePlan?> createPlanFromInfoForm(
+  BuildContext context,
+  PilgrimageRepository repository, {
+  required String defaultName,
+}) async {
+  final result = await showDialog<_PlanInfoFormResult>(
+    context: context,
+    builder: (context) =>
+        _PlanInfoDialog(title: l10n.planManagerNewPlan, name: defaultName),
+  );
+  if (result == null) {
+    return null;
+  }
+  final plan = await repository.createPlan(
+    name: result.name.isEmpty ? defaultName : result.name,
+    area: result.area.isEmpty ? l10n.planManagerAreaNotSet : result.area,
+  );
+  if (result.memo.isEmpty) {
+    return plan;
+  }
+  return repository.updatePlanMemo(planId: plan.id, memo: result.memo);
+}
 
-  final PilgrimagePlan plan;
+class _PlanInfoDialog extends StatefulWidget {
+  const _PlanInfoDialog({
+    required this.title,
+    required this.name,
+    this.area = '',
+    this.memo = '',
+  });
+
+  final String title;
+  final String name;
+  final String area;
+  final String memo;
 
   @override
   State<_PlanInfoDialog> createState() => _PlanInfoDialogState();
 }
 
 class _PlanInfoDialogState extends State<_PlanInfoDialog> {
-  late final _nameController = TextEditingController(text: widget.plan.name);
-  late final _areaController = TextEditingController(text: widget.plan.area);
-  late final _memoController = TextEditingController(text: widget.plan.memo);
+  late final _nameController = TextEditingController(text: widget.name);
+  late final _areaController = TextEditingController(text: widget.area);
+  late final _memoController = TextEditingController(text: widget.memo);
 
   @override
   void dispose() {
@@ -416,7 +455,7 @@ class _PlanInfoDialogState extends State<_PlanInfoDialog> {
   @override
   Widget build(BuildContext context) {
     return AppInputDialog(
-      title: l10n.planManagerEditInfo,
+      title: widget.title,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
