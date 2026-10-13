@@ -28,7 +28,6 @@ import '../data/reference_image_cache_stub.dart'
     as reference_image_cache;
 import '../widgets/copyable_text.dart';
 import '../widgets/confirm_action_dialog.dart';
-import '../widgets/input_dialog.dart';
 import '../widgets/auto_caching_reference_thumbnail.dart';
 import '../widgets/image_viewer_screen.dart';
 import '../widgets/image_load_limiter.dart';
@@ -43,6 +42,8 @@ import '../utils/selected_item_order.dart';
 import 'add_points_screen.dart';
 import 'nearest_group_assign_screen.dart';
 import 'pilgrimage_models.dart';
+import 'area_name_dialog.dart';
+import '../data/place_names.dart';
 import 'pilgrimage_work_dropdown.dart';
 import 'plan_group_picker_sheet.dart';
 import 'plan_group_utils.dart';
@@ -1010,7 +1011,9 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
         ),
       ],
       onCreateOption: () async {
-        final created = await _createGroupForAssignment();
+        final created = await _createGroupForAssignment(
+          _pointsInSelection().map((point) => point.position),
+        );
         return created == null
             ? null
             : PlanGroupSelectionOption(id: created.id, title: created.name);
@@ -1304,7 +1307,11 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
           PlanGroupSelectionOption(id: group.id, title: group.name),
       ],
       onCreateOption: () async {
-        final created = await _createGroupForAssignment();
+        final created = await _createGroupForAssignment(
+          _importedPlan.points
+              .where((point) => pointIds.contains(point.id))
+              .map((point) => point.position),
+        );
         return created == null
             ? null
             : PlanGroupSelectionOption(id: created.id, title: created.name);
@@ -1354,10 +1361,14 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
     }
   }
 
-  Future<PilgrimagePlanGroup?> _createGroupForAssignment() async {
-    final name = await showDialog<String>(
-      context: context,
-      builder: (context) => const _ImportedPointsCreateGroupDialog(),
+  /// Names a new area, offering the cities of the spots at [positions].
+  Future<PilgrimagePlanGroup?> _createGroupForAssignment(
+    Iterable<LatLng> positions,
+  ) async {
+    final name = await showAreaNameDialog(
+      context,
+      suggestions: cityNamesFor(positions.toList()),
+      fieldKey: const ValueKey('anitabi-import-group-name-field'),
     );
     final trimmedName = name?.trim();
     if (trimmedName == null || trimmedName.isEmpty || !mounted) {
@@ -2261,61 +2272,6 @@ class _ImportOrganizeDialog extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _ImportedPointsCreateGroupDialog extends StatefulWidget {
-  const _ImportedPointsCreateGroupDialog();
-
-  @override
-  State<_ImportedPointsCreateGroupDialog> createState() =>
-      _ImportedPointsCreateGroupDialogState();
-}
-
-class _ImportedPointsCreateGroupDialogState
-    extends State<_ImportedPointsCreateGroupDialog> {
-  final _controller = TextEditingController();
-  String? _errorText;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _submit() {
-    final name = _controller.text.trim();
-    if (name.isEmpty) {
-      setState(() => _errorText = l10n.anitabiMapImportAreaNameEmpty);
-      return;
-    }
-    Navigator.of(context).pop(name);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AppInputDialog(
-      title: l10n.anitabiMapImportNewArea,
-      content: AppDialogField(
-        label: l10n.anitabiMapImportAreaName,
-        child: TextField(
-          onTapOutside: dismissKeyboardOnTapOutside,
-          key: const ValueKey('anitabi-import-group-name-field'),
-          controller: _controller,
-          autofocus: true,
-          decoration: appDialogInputDecoration(errorText: _errorText),
-          textInputAction: TextInputAction.done,
-          onChanged: (_) {
-            if (_errorText != null) {
-              setState(() => _errorText = null);
-            }
-          },
-          onSubmitted: (_) => _submit(),
-        ),
-      ),
-      confirmLabel: l10n.anitabiMapImportCreate,
-      onConfirm: _submit,
     );
   }
 }

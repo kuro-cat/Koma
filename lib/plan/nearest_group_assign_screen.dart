@@ -21,11 +21,12 @@ import '../data/user_reference_image_stub.dart'
 import '../point_detail/point_detail_sheet.dart';
 import '../utils/selected_item_order.dart';
 import '../widgets/confirm_action_dialog.dart';
-import '../widgets/input_dialog.dart';
 import '../widgets/rules.dart';
 import '../widgets/snackbar_helper.dart';
 import '../widgets/app_back_button.dart';
 import 'pilgrimage_models.dart';
+import 'area_name_dialog.dart';
+import '../data/place_names.dart';
 import 'plan_group_utils.dart';
 import '../settings/app_settings_updater.dart';
 import '../widgets/menu_back_scope.dart';
@@ -763,9 +764,12 @@ class _BoxGroupAssignScreenState extends State<BoxGroupAssignScreen> {
   }
 
   Future<void> _createGroup() async {
-    final name = await showDialog<String>(
-      context: context,
-      builder: (context) => const _BoxAssignCreateGroupDialog(),
+    final name = await showAreaNameDialog(
+      context,
+      suggestions: cityNamesFor(
+        _selectedBoxPoints.map((point) => point.position).toList(),
+      ),
+      fieldKey: const ValueKey('box-assign-group-name-field'),
     );
     final trimmedName = name?.trim();
     if (trimmedName == null || trimmedName.isEmpty || !mounted) {
@@ -1239,61 +1243,6 @@ class _BoxAssignGroupPickerState extends State<_BoxAssignGroupPicker> {
           ],
         );
       },
-    );
-  }
-}
-
-class _BoxAssignCreateGroupDialog extends StatefulWidget {
-  const _BoxAssignCreateGroupDialog();
-
-  @override
-  State<_BoxAssignCreateGroupDialog> createState() =>
-      _BoxAssignCreateGroupDialogState();
-}
-
-class _BoxAssignCreateGroupDialogState
-    extends State<_BoxAssignCreateGroupDialog> {
-  final _controller = TextEditingController();
-  String? _errorText;
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  void _submit() {
-    final name = _controller.text.trim();
-    if (name.isEmpty) {
-      setState(() => _errorText = l10n.nearestGroupAssignAreaNameEmpty);
-      return;
-    }
-    Navigator.of(context).pop(name);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AppInputDialog(
-      title: l10n.nearestGroupAssignNewArea,
-      content: AppDialogField(
-        label: l10n.nearestGroupAssignAreaName,
-        child: TextField(
-          onTapOutside: dismissKeyboardOnTapOutside,
-          key: const ValueKey('box-assign-group-name-field'),
-          controller: _controller,
-          autofocus: true,
-          decoration: appDialogInputDecoration(errorText: _errorText),
-          textInputAction: TextInputAction.done,
-          onChanged: (_) {
-            if (_errorText != null) {
-              setState(() => _errorText = null);
-            }
-          },
-          onSubmitted: (_) => _submit(),
-        ),
-      ),
-      confirmLabel: l10n.nearestGroupAssignCreate,
-      onConfirm: _submit,
     );
   }
 }

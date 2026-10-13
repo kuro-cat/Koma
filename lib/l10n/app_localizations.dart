@@ -2862,6 +2862,12 @@ abstract class AppLocalizations {
   /// **'新建片区'**
   String get planGroupPickerNewGroup;
 
+  /// No description provided for @planGroupPickerSuggested.
+  ///
+  /// In zh, this message translates to:
+  /// **'推荐'**
+  String get planGroupPickerSuggested;
+
   /// No description provided for @planManagerSwitchFailed.
   ///
   /// In zh, this message translates to:
@@ -3485,18 +3491,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'片区名不能为空'**
   String get nearestGroupAssignAreaNameEmpty;
-
-  /// No description provided for @nearestGroupAssignAreaName.
-  ///
-  /// In zh, this message translates to:
-  /// **'片区名称'**
-  String get nearestGroupAssignAreaName;
-
-  /// No description provided for @nearestGroupAssignCreate.
-  ///
-  /// In zh, this message translates to:
-  /// **'创建'**
-  String get nearestGroupAssignCreate;
 
   /// No description provided for @nearestGroupAssignEndBox.
   ///
@@ -4220,30 +4214,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'稍后'**
   String get anitabiMapImportLater;
-
-  /// No description provided for @anitabiMapImportAreaNameEmpty.
-  ///
-  /// In zh, this message translates to:
-  /// **'片区名不能为空'**
-  String get anitabiMapImportAreaNameEmpty;
-
-  /// No description provided for @anitabiMapImportNewArea.
-  ///
-  /// In zh, this message translates to:
-  /// **'新建片区'**
-  String get anitabiMapImportNewArea;
-
-  /// No description provided for @anitabiMapImportAreaName.
-  ///
-  /// In zh, this message translates to:
-  /// **'片区名称'**
-  String get anitabiMapImportAreaName;
-
-  /// No description provided for @anitabiMapImportCreate.
-  ///
-  /// In zh, this message translates to:
-  /// **'创建'**
-  String get anitabiMapImportCreate;
 
   /// No description provided for @anitabiMapImportImportedSpot.
   ///

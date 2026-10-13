@@ -8,7 +8,6 @@ import '../map/map_colors.dart';
 import '../data/pilgrimage_repository.dart';
 import '../widgets/auto_caching_reference_thumbnail.dart';
 import '../widgets/confirm_action_dialog.dart';
-import '../widgets/input_dialog.dart';
 import '../widgets/reference_thumbnail_stub.dart'
     if (dart.library.io) '../widgets/reference_thumbnail_io.dart';
 import '../widgets/snackbar_helper.dart';
@@ -29,6 +28,9 @@ import 'plan_group_picker_sheet.dart';
 import 'plan_group_utils.dart';
 import 'plan_memo_screen.dart';
 import 'pilgrimage_models.dart';
+import 'area_name_dialog.dart';
+import 'area_suggestion.dart';
+import '../data/place_names.dart';
 import 'pilgrimage_plan_controller.dart';
 import 'reference_cache_progress_dialog.dart';
 import 'reference_full_cache_runner.dart';
@@ -723,6 +725,9 @@ class _PlanScreenState extends State<PlanScreen>
   Future<void> _moveSelected() async {
     const ungrouped = '__ungrouped__';
     final pointIds = {..._selectedIds};
+    final movingPoints = controller.points
+        .where((point) => pointIds.contains(point.id) && point.hasCoordinate)
+        .toList();
     final picked = await showPlanGroupSelectionSheet(
       context: context,
       title: l10n.pointManagerMoveToGroup,
@@ -736,8 +741,15 @@ class _PlanScreenState extends State<PlanScreen>
         for (final group in sortGroupsByPlanOrder(controller.plan.groups))
           PlanGroupSelectionOption(id: group.id, title: group.name),
       ],
+      suggestedOptionId: suggestAreaForSpots(
+        controller.plan,
+        movingPoints,
+      ).then((group) => group?.id),
       onCreateOption: () async {
-        final created = await _createGroupFromPointDetail(context);
+        final created = await _createGroupFromPointDetail(
+          context,
+          spots: movingPoints,
+        );
         return created == null
             ? null
             : PlanGroupSelectionOption(id: created.id, title: created.name);
@@ -927,7 +939,7 @@ class _PlanScreenState extends State<PlanScreen>
         controller.completedPointIds,
       ),
       onMoveToGroup: controller.movePointToGroup,
-      onCreateGroup: () => _createGroupFromPointDetail(context),
+      onCreateGroup: () => _createGroupFromPointDetail(context, spots: [point]),
       records: controller.recordsForPoint(point.id),
       onOpenRecords: () => _openPointRecords(context, point),
       onOpenRecord: (record) => _openRecordDetail(context, record),
@@ -939,12 +951,17 @@ class _PlanScreenState extends State<PlanScreen>
     );
   }
 
+  /// Names and creates an area, offering the cities of [spots] as names.
   Future<PilgrimagePlanGroup?> _createGroupFromPointDetail(
-    BuildContext context,
-  ) async {
-    final name = await showDialog<String>(
-      context: context,
-      builder: (context) => const _PlanPointCreateGroupDialog(),
+    BuildContext context, {
+    List<PilgrimagePoint> spots = const [],
+  }) async {
+    final name = await showAreaNameDialog(
+      context,
+      suggestions: spots.isEmpty
+          ? null
+          : cityNamesFor(spots.map((spot) => spot.position).toList()),
+      fieldKey: const ValueKey('plan-point-group-name-field'),
     );
     final trimmedName = name?.trim();
     if (trimmedName == null || trimmedName.isEmpty || !mounted) {
@@ -1097,46 +1114,6 @@ class _PlanScreenState extends State<PlanScreen>
     }
 
     ScaffoldMessenger.of(context).showStatusSnack(kind: kind, title: message);
-  }
-}
-
-class _PlanPointCreateGroupDialog extends StatefulWidget {
-  const _PlanPointCreateGroupDialog();
-
-  @override
-  State<_PlanPointCreateGroupDialog> createState() =>
-      _PlanPointCreateGroupDialogState();
-}
-
-class _PlanPointCreateGroupDialogState
-    extends State<_PlanPointCreateGroupDialog> {
-  final _nameController = TextEditingController();
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AppInputDialog(
-      title: l10n.planNewArea,
-      content: AppDialogField(
-        label: l10n.planAreaName,
-        child: TextField(
-          onTapOutside: dismissKeyboardOnTapOutside,
-          key: const ValueKey('plan-point-group-name-field'),
-          controller: _nameController,
-          autofocus: true,
-          decoration: appDialogInputDecoration(),
-          textInputAction: TextInputAction.done,
-          onSubmitted: (value) => Navigator.of(context).pop(value),
-        ),
-      ),
-      confirmLabel: l10n.planCreate,
-      onConfirm: () => Navigator.of(context).pop(_nameController.text),
-    );
   }
 }
 

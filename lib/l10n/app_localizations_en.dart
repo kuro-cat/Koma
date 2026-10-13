@@ -1645,6 +1645,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planGroupPickerNewGroup => 'New area';
 
   @override
+  String get planGroupPickerSuggested => 'Suggested';
+
+  @override
   String get planManagerSwitchFailed =>
       'Couldn\'t switch plans. Please try again later.';
 
@@ -2039,12 +2042,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get nearestGroupAssignAreaNameEmpty => 'Area name can\'t be empty';
-
-  @override
-  String get nearestGroupAssignAreaName => 'Area name';
-
-  @override
-  String get nearestGroupAssignCreate => 'Create';
 
   @override
   String get nearestGroupAssignEndBox => 'End selection';
@@ -2542,18 +2539,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get anitabiMapImportLater => 'Later';
-
-  @override
-  String get anitabiMapImportAreaNameEmpty => 'Area name can\'t be empty';
-
-  @override
-  String get anitabiMapImportNewArea => 'New area';
-
-  @override
-  String get anitabiMapImportAreaName => 'Area name';
-
-  @override
-  String get anitabiMapImportCreate => 'Create';
 
   @override
   String get anitabiMapImportImportedSpot => 'Imported spot';

@@ -8,6 +8,7 @@ import '../data/user_reference_image_stub.dart'
 import '../map/navigation_route_confirm_screen.dart';
 import '../widgets/snackbar_helper.dart';
 import '../map/map_navigation_launcher.dart';
+import '../plan/area_suggestion.dart';
 import '../plan/pilgrimage_models.dart';
 import '../plan/pilgrimage_plan_controller.dart';
 import '../plan/plan_group_picker_sheet.dart';
@@ -256,6 +257,11 @@ class PointDetailSheet extends StatelessWidget {
       context: context,
       title: l10n.pointDetailMoveToArea,
       subtitle: l10n.pointDetailMoveToAreaHint,
+      suggestedOptionId: planController == null
+          ? null
+          : suggestAreaForSpots(planController!.plan, [
+              point,
+            ]).then((group) => group?.id),
       selectedOptionId: point.groupId ?? ungroupedOptionId,
       options: [
         PlanGroupSelectionOption(

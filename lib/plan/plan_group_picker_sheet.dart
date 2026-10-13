@@ -356,6 +356,7 @@ Future<String?> showPlanGroupSelectionSheet({
   required List<PlanGroupSelectionOption> options,
   required String selectedOptionId,
   Future<PlanGroupSelectionOption?> Function()? onCreateOption,
+  Future<String?>? suggestedOptionId,
 }) {
   final pickerOptions = [...options];
   return showModalBottomSheet<String>(
@@ -420,17 +421,33 @@ Future<String?> showPlanGroupSelectionSheet({
                   const SizedBox(height: 12),
                   const SectionRule(),
                   Expanded(
-                    child: ListView(
-                      key: const ValueKey('plan-point-group-options-list'),
-                      padding: EdgeInsets.zero,
-                      children: [
-                        for (final option in pickerOptions)
-                          _PlanGroupSelectionTile(
-                            option: option,
-                            selected: option.id == selectedOptionId,
-                            onTap: () => Navigator.of(context).pop(option.id),
-                          ),
-                      ],
+                    child: FutureBuilder<String?>(
+                      future: suggestedOptionId,
+                      builder: (context, snapshot) {
+                        // The suggested area leads the list, unless the spot
+                        // is already in it.
+                        final suggested = snapshot.data == selectedOptionId
+                            ? null
+                            : snapshot.data;
+                        final ordered = [
+                          ...pickerOptions.where((o) => o.id == suggested),
+                          ...pickerOptions.where((o) => o.id != suggested),
+                        ];
+                        return ListView(
+                          key: const ValueKey('plan-point-group-options-list'),
+                          padding: EdgeInsets.zero,
+                          children: [
+                            for (final option in ordered)
+                              _PlanGroupSelectionTile(
+                                option: option,
+                                selected: option.id == selectedOptionId,
+                                suggested: option.id == suggested,
+                                onTap: () =>
+                                    Navigator.of(context).pop(option.id),
+                              ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                   if (onCreateOption != null) ...[
@@ -484,10 +501,12 @@ class _PlanGroupSelectionTile extends StatefulWidget {
     required this.option,
     required this.selected,
     required this.onTap,
+    this.suggested = false,
   });
 
   final PlanGroupSelectionOption option;
   final bool selected;
+  final bool suggested;
   final VoidCallback onTap;
 
   @override
@@ -557,6 +576,17 @@ class _PlanGroupSelectionTileState extends State<_PlanGroupSelectionTile> {
                             ),
                           ),
                         ),
+                        if (widget.suggested)
+                          Text(
+                            l10n.planGroupPickerSuggested,
+                            key: const ValueKey('plan-point-group-suggested'),
+                            style: TextStyle(
+                              color: AppColors.accentStrongForeground,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              letterSpacing: 0,
+                            ),
+                          ),
                       ],
                     ),
                   ),

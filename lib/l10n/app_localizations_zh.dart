@@ -1500,6 +1500,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planGroupPickerNewGroup => '新建片区';
 
   @override
+  String get planGroupPickerSuggested => '推荐';
+
+  @override
   String get planManagerSwitchFailed => '切换计划失败，请稍后重试。';
 
   @override
@@ -1844,12 +1847,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get nearestGroupAssignAreaNameEmpty => '片区名不能为空';
-
-  @override
-  String get nearestGroupAssignAreaName => '片区名称';
-
-  @override
-  String get nearestGroupAssignCreate => '创建';
 
   @override
   String get nearestGroupAssignEndBox => '结束框选';
@@ -2260,18 +2257,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get anitabiMapImportLater => '稍后';
-
-  @override
-  String get anitabiMapImportAreaNameEmpty => '片区名不能为空';
-
-  @override
-  String get anitabiMapImportNewArea => '新建片区';
-
-  @override
-  String get anitabiMapImportAreaName => '片区名称';
-
-  @override
-  String get anitabiMapImportCreate => '创建';
 
   @override
   String get anitabiMapImportImportedSpot => '已导入点位';
