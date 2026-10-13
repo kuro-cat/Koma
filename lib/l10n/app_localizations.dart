@@ -4785,6 +4785,18 @@ abstract class AppLocalizations {
   /// **'{succeeded} / {total} 张成功，已保存到本地'**
   String referenceCacheProgressSuccessSummary(int succeeded, int total);
 
+  /// No description provided for @referenceCacheProgressCancelledTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'已取消缓存'**
+  String get referenceCacheProgressCancelledTitle;
+
+  /// No description provided for @referenceCacheProgressCancelledSummary.
+  ///
+  /// In zh, this message translates to:
+  /// **'已保存 {succeeded} / {total} 张，再次缓存可继续。'**
+  String referenceCacheProgressCancelledSummary(int succeeded, int total);
+
   /// No description provided for @referenceCacheProgressPartialSummary.
   ///
   /// In zh, this message translates to:

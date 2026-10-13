@@ -789,6 +789,18 @@
   "referenceCacheProgressDone": "Reference images cached",
   "referenceCacheProgressFailedTitle": "Couldn't cache reference images",
   "referenceCacheProgressSuccessSummary": "{succeeded} / {total} succeeded, saved on this device",
+  "referenceCacheProgressCancelledTitle": "Caching cancelled",
+  "referenceCacheProgressCancelledSummary": "{succeeded} / {total} saved. Cache again to get the rest.",
+  "@referenceCacheProgressCancelledSummary": {
+    "placeholders": {
+      "succeeded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "referenceCacheProgressPartialSummary": "{succeeded} / {total} succeeded · {failed} failed",
   "referenceFullCacheRunnerNothing": "This plan has no reference images to cache",
   "referenceFullCacheRunnerDone": "Cached {succeeded}/{total} full reference images",

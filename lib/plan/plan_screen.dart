@@ -1100,6 +1100,7 @@ class _PlanScreenState extends State<PlanScreen>
           imageSource: imageSource,
           maxConcurrent: maxConcurrent,
           onProgress: onProgress,
+          isCancelled: () => task.cancelled,
         );
       },
     );

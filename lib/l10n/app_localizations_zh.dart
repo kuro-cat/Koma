@@ -2567,6 +2567,14 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get referenceCacheProgressCancelledTitle => '已取消缓存';
+
+  @override
+  String referenceCacheProgressCancelledSummary(int succeeded, int total) {
+    return '已保存 $succeeded / $total 张，再次缓存可继续。';
+  }
+
+  @override
   String referenceCacheProgressPartialSummary(
     int succeeded,
     int total,

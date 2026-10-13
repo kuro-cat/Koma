@@ -2900,6 +2900,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String get referenceCacheProgressCancelledTitle => 'Caching cancelled';
+
+  @override
+  String referenceCacheProgressCancelledSummary(int succeeded, int total) {
+    return '$succeeded / $total saved. Cache again to get the rest.';
+  }
+
+  @override
   String referenceCacheProgressPartialSummary(
     int succeeded,
     int total,

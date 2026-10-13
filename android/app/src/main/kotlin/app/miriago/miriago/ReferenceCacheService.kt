@@ -24,12 +24,15 @@ class ReferenceCacheService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val notification = progressNotification(
-            this,
-            intent?.getStringExtra(EXTRA_TITLE).orEmpty(),
-            0,
-            0,
-        )
+        if (intent?.action == ACTION_CANCEL) {
+            // Dart stops starting new downloads and then calls finish(). With
+            // no Dart side left there is nothing to wait for.
+            onCancel?.invoke() ?: stopSelf()
+            return START_NOT_STICKY
+        }
+        title = intent?.getStringExtra(EXTRA_TITLE).orEmpty()
+        cancelLabel = intent?.getStringExtra(EXTRA_CANCEL_LABEL).orEmpty()
+        val notification = progressNotification(this, 0, 0)
         ServiceCompat.startForeground(
             this,
             PROGRESS_ID,
@@ -58,18 +61,28 @@ class ReferenceCacheService : Service() {
         private const val PROGRESS_ID = 0x5E1D
         private const val RESULT_ID = 0x5E1E
         private const val EXTRA_TITLE = "title"
+        private const val EXTRA_CANCEL_LABEL = "cancelLabel"
+        private const val ACTION_CANCEL = "app.miriago.miriago.CANCEL_REFERENCE_CACHE"
 
-        fun start(context: Context, channelName: String, title: String) {
+        /** Set by the activity: tells Dart the user tapped Cancel. */
+        var onCancel: (() -> Unit)? = null
+
+        private var title = ""
+        private var cancelLabel = ""
+
+        fun start(context: Context, channelName: String, title: String, cancelLabel: String) {
             ensureChannel(context, channelName)
             NotificationManagerCompat.from(context).cancel(RESULT_ID)
             ContextCompat.startForegroundService(
                 context,
-                Intent(context, ReferenceCacheService::class.java).putExtra(EXTRA_TITLE, title),
+                Intent(context, ReferenceCacheService::class.java)
+                    .putExtra(EXTRA_TITLE, title)
+                    .putExtra(EXTRA_CANCEL_LABEL, cancelLabel),
             )
         }
 
-        fun update(context: Context, title: String, processed: Int, total: Int) {
-            notify(context, PROGRESS_ID, progressNotification(context, title, processed, total))
+        fun update(context: Context, processed: Int, total: Int) {
+            notify(context, PROGRESS_ID, progressNotification(context, processed, total))
         }
 
         fun finish(context: Context, title: String, text: String) {
@@ -87,7 +100,6 @@ class ReferenceCacheService : Service() {
 
         private fun progressNotification(
             context: Context,
-            title: String,
             processed: Int,
             total: Int,
         ): Notification = builder(context, title)
@@ -96,6 +108,16 @@ class ReferenceCacheService : Service() {
             .setProgress(total, processed, total == 0)
             .setOngoing(true)
             .setOnlyAlertOnce(true)
+            .addAction(
+                0,
+                cancelLabel,
+                PendingIntent.getService(
+                    context,
+                    0,
+                    Intent(context, ReferenceCacheService::class.java).setAction(ACTION_CANCEL),
+                    PendingIntent.FLAG_IMMUTABLE,
+                ),
+            )
             .build()
 
         private fun builder(context: Context, title: String) =

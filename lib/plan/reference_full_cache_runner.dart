@@ -63,6 +63,7 @@ Future<PilgrimagePlan> cacheFullReferenceImages({
   required ValueChangedProgress onProgress,
   AnitabiImageSource imageSource = AnitabiImageSource.auto,
   int maxConcurrent = 10,
+  bool Function()? isCancelled,
 }) async {
   final points = pointsNeedingFullReferenceCache(plan.points);
   if (points.isEmpty) {
@@ -81,6 +82,11 @@ Future<PilgrimagePlan> cacheFullReferenceImages({
     items: points,
     maxConcurrent: maxConcurrent,
     task: (point, _) async {
+      // Once cancelled, the remaining points are skipped; downloads already
+      // running finish and are kept.
+      if (isCancelled?.call() ?? false) {
+        return _FullReferenceCacheResult.skipped(point.id);
+      }
       try {
         final path = await reference_image_cache.cacheReferenceFullImage(
           point,
@@ -98,6 +104,7 @@ Future<PilgrimagePlan> cacheFullReferenceImages({
       }
     },
     onResult: (result) {
+      if (result.skipped) return;
       processed += 1;
       if (result.referenceFullImagePath == null) {
         failed += 1;
@@ -152,6 +159,7 @@ class _FullReferenceCacheResult {
   const _FullReferenceCacheResult._({
     required this.pointId,
     required this.referenceFullImagePath,
+    this.skipped = false,
   });
 
   factory _FullReferenceCacheResult.succeeded({
@@ -171,6 +179,15 @@ class _FullReferenceCacheResult {
     );
   }
 
+  factory _FullReferenceCacheResult.skipped(String pointId) {
+    return _FullReferenceCacheResult._(
+      pointId: pointId,
+      referenceFullImagePath: null,
+      skipped: true,
+    );
+  }
+
   final String pointId;
   final String? referenceFullImagePath;
+  final bool skipped;
 }

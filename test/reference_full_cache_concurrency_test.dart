@@ -187,4 +187,66 @@ void main() {
       expect(await File(kept.referenceFullImagePath!).exists(), isTrue);
     },
   );
+
+  test(
+    'cancelling keeps images already saved and does not count the rest as failed',
+    () async {
+      final directory = await Directory.systemTemp.createTemp(
+        'miriago_full_cancel_',
+      );
+      final previous = PathProviderPlatform.instance;
+      PathProviderPlatform.instance = _Paths(directory.path);
+      addTearDown(() async {
+        PathProviderPlatform.instance = previous;
+        await directory.delete(recursive: true);
+      });
+      const count = 10;
+      final plan = samplePilgrimagePlan.copyWith(
+        points: [
+          for (var i = 0; i < count; i++)
+            samplePilgrimagePlan.points.first.copyWith(
+              id: 'cancel-$i',
+              source: PointSource.anitabi,
+              referenceImageUrl: 'https://example.com/$i.jpg',
+              referenceFullImagePath: null,
+            ),
+        ],
+      );
+      final repository = SamplePilgrimageRepository(plans: [plan]);
+      final progress = <ReferenceFullCacheProgress>[];
+      var cancelled = false;
+      var requests = 0;
+      final result = await http.runWithClient(
+        () => cacheFullReferenceImages(
+          plan: plan,
+          repository: repository,
+          maxConcurrent: 1,
+          onPlanUpdated: (_) {},
+          onProgress: (value) {
+            progress.add(value);
+            if (value.succeeded == 3) cancelled = true;
+          },
+          isCancelled: () => cancelled,
+        ),
+        () => MockClient((request) async {
+          requests++;
+          return http.Response.bytes([0xFF, 0xD8, 0xFF, 0xD9], 200);
+        }),
+      );
+
+      expect(requests, 3);
+      expect(progress.last.done, isTrue);
+      expect(progress.last.total, count);
+      expect(progress.last.succeeded, 3);
+      expect(progress.last.failed, 0);
+      final saved = (await repository.loadActivePlan()).points
+          .where((p) => p.referenceFullImagePath != null)
+          .map((p) => p.id);
+      expect(saved, ['cancel-0', 'cancel-1', 'cancel-2']);
+      expect(
+        result.points.where((p) => p.referenceFullImagePath != null),
+        hasLength(3),
+      );
+    },
+  );
 }

@@ -81,6 +81,7 @@ class MainActivity : FlutterActivity() {
     }
 
     override fun cleanUpFlutterEngine(flutterEngine: FlutterEngine) {
+        ReferenceCacheService.onCancel = null
         mapHeading?.onCancel(null)
         EventChannel(flutterEngine.dartExecutor.binaryMessenger, "miriago/map_heading")
             .setStreamHandler(null)
@@ -193,10 +194,12 @@ class MainActivity : FlutterActivity() {
             result.success(openGoogleMapsWalking(latitude, longitude))
         }
 
-        MethodChannel(
+        val referenceCacheChannel = MethodChannel(
             flutterEngine.dartExecutor.binaryMessenger,
             "seichi/reference_cache_service"
-        ).setMethodCallHandler { call, result ->
+        )
+        ReferenceCacheService.onCancel = { referenceCacheChannel.invokeMethod("cancel", null) }
+        referenceCacheChannel.setMethodCallHandler { call, result ->
             val title = call.argument<String>("title").orEmpty()
             when (call.method) {
                 "start" -> {
@@ -214,12 +217,12 @@ class MainActivity : FlutterActivity() {
                     ReferenceCacheService.start(
                         this,
                         call.argument<String>("channelName").orEmpty(),
-                        title
+                        title,
+                        call.argument<String>("cancelLabel").orEmpty()
                     )
                 }
                 "update" -> ReferenceCacheService.update(
                     this,
-                    title,
                     call.argument<Int>("processed") ?: 0,
                     call.argument<Int>("total") ?: 0
                 )

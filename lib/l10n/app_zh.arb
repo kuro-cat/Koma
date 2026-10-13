@@ -1475,6 +1475,18 @@
       }
     }
   },
+  "referenceCacheProgressCancelledTitle": "已取消缓存",
+  "referenceCacheProgressCancelledSummary": "已保存 {succeeded} / {total} 张，再次缓存可继续。",
+  "@referenceCacheProgressCancelledSummary": {
+    "placeholders": {
+      "succeeded": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
   "referenceCacheProgressPartialSummary": "{succeeded} / {total} 张成功 · {failed} 张失败",
   "@referenceCacheProgressPartialSummary": {
     "placeholders": {

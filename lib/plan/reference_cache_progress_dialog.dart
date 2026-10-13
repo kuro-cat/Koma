@@ -28,6 +28,9 @@ class ReferenceCacheTask extends ChangeNotifier {
   PilgrimagePlan? updatedPlan;
   bool isRunning = false;
   bool hasError = false;
+
+  /// Set by [cancel]; the run stops starting new downloads.
+  bool cancelled = false;
   Future<void> _finished = Future.value();
   Future<void> get finished => _finished;
 
@@ -37,6 +40,7 @@ class ReferenceCacheTask extends ChangeNotifier {
     _finished = done.future;
     isRunning = true;
     hasError = false;
+    cancelled = false;
     updatedPlan = null;
     progress = ReferenceFullCacheProgress(total: progress?.total ?? 0);
     notifyListeners();
@@ -44,8 +48,24 @@ class ReferenceCacheTask extends ChangeNotifier {
     return _finished;
   }
 
+  ReferenceCacheStatus get status {
+    final progress = this.progress;
+    if (isRunning || progress == null) return ReferenceCacheStatus.running;
+    if (hasError) return ReferenceCacheStatus.failed;
+    if (cancelled) return ReferenceCacheStatus.cancelled;
+    if (progress.failed == 0) return ReferenceCacheStatus.success;
+    if (progress.succeeded == 0) return ReferenceCacheStatus.failed;
+    return ReferenceCacheStatus.partial;
+  }
+
+  void cancel() {
+    if (!isRunning || cancelled) return;
+    cancelled = true;
+    notifyListeners();
+  }
+
   Future<void> _execute(ReferenceCacheRun run, Completer<void> done) async {
-    _notification.start();
+    _notification.start(this);
     try {
       await run((value) {
         progress = value;
@@ -56,7 +76,7 @@ class ReferenceCacheTask extends ChangeNotifier {
       hasError = true;
     } finally {
       isRunning = false;
-      _notification.finish(progress, interrupted: hasError);
+      _notification.finish(this);
       notifyListeners();
       done.complete();
     }
@@ -69,16 +89,34 @@ class ReferenceCacheTask extends ChangeNotifier {
 /// locked, and its progress and result notifications.
 class _CacheNotification {
   static const _channel = MethodChannel('seichi/reference_cache_service');
+
+  /// Tasks the notification's Cancel button stops.
+  static final _running = <ReferenceCacheTask>{};
+  static var _handlerSet = false;
+
   int? _lastPercent;
 
   bool get _supported =>
       !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
 
-  void start() {
+  void start(ReferenceCacheTask task) {
     _lastPercent = null;
+    if (!_supported) return;
+    _running.add(task);
+    if (!_handlerSet) {
+      _handlerSet = true;
+      _channel.setMethodCallHandler((call) async {
+        if (call.method == 'cancel') {
+          for (final task in _running.toList()) {
+            task.cancel();
+          }
+        }
+      });
+    }
     _send('start', {
       'channelName': l10n.planCacheReferences,
       'title': l10n.referenceCacheProgressRunning,
+      'cancelLabel': l10n.commonCancel,
     });
   }
 
@@ -90,35 +128,24 @@ class _CacheNotification {
     if (percent == _lastPercent) return;
     _lastPercent = percent;
     _send('update', {
-      'title': l10n.referenceCacheProgressRunning,
       'processed': progress.processed,
       'total': progress.total,
     });
   }
 
-  void finish(
-    ReferenceFullCacheProgress? progress, {
-    required bool interrupted,
-  }) {
-    final failed =
-        interrupted ||
-        progress == null ||
-        (progress.failed > 0 && progress.succeeded == 0);
+  void finish(ReferenceCacheTask task) {
+    _running.remove(task);
+    final status = task.status;
+    final progress = task.progress;
     _send('finish', {
-      'title': failed
-          ? l10n.referenceCacheProgressFailedTitle
-          : l10n.referenceCacheProgressDone,
-      'text': interrupted || progress == null
+      'title': _titleFor(status),
+      'text': task.hasError || progress == null
           ? l10n.referenceCacheProgressInterrupted
-          : progress.failed == 0
-          ? l10n.referenceCacheProgressSuccessSummary(
-              progress.succeeded,
-              progress.total,
-            )
-          : l10n.referenceCacheProgressPartialSummary(
-              progress.succeeded,
-              progress.total,
-              progress.failed,
+          : _subtitleFor(
+              status: status,
+              total: progress.total,
+              succeeded: progress.succeeded,
+              failed: progress.failed,
             ),
     });
   }
@@ -169,7 +196,7 @@ class ReferenceCacheProgressDialog extends StatefulWidget {
       _ReferenceCacheProgressDialogState();
 }
 
-enum _CacheDialogStatus { running, success, partial, failed }
+enum ReferenceCacheStatus { running, success, partial, failed, cancelled }
 
 class _ReferenceCacheProgressDialogState
     extends State<ReferenceCacheProgressDialog> {
@@ -190,15 +217,7 @@ class _ReferenceCacheProgressDialogState
     listenable: _task,
     builder: (context, _) {
       final progress = _task.progress;
-      final status = _task.isRunning || progress == null
-          ? _CacheDialogStatus.running
-          : _task.hasError
-          ? _CacheDialogStatus.failed
-          : progress.failed == 0
-          ? _CacheDialogStatus.success
-          : progress.succeeded == 0
-          ? _CacheDialogStatus.failed
-          : _CacheDialogStatus.partial;
+      final status = _task.status;
       return _CacheProgressCard(
         status: status,
         total: progress?.total ?? 0,
@@ -208,8 +227,8 @@ class _ReferenceCacheProgressDialogState
         interrupted: _task.hasError,
         onClose: () => Navigator.of(context).pop(),
         onRetry:
-            status == _CacheDialogStatus.partial ||
-                status == _CacheDialogStatus.failed
+            status == ReferenceCacheStatus.partial ||
+                status == ReferenceCacheStatus.failed
             ? () => _task.start(widget.run)
             : null,
       );
@@ -229,7 +248,7 @@ class _CacheProgressCard extends StatelessWidget {
     this.interrupted = false,
   });
 
-  final _CacheDialogStatus status;
+  final ReferenceCacheStatus status;
   final int total;
   final int processed;
   final int succeeded;
@@ -240,7 +259,7 @@ class _CacheProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final running = status == _CacheDialogStatus.running;
+    final running = status == ReferenceCacheStatus.running;
     final fraction = total == 0 ? 0.0 : (processed / total).clamp(0.0, 1.0);
     final secondaryStyle = TextStyle(
       color: AppColors.textSecondary,
@@ -249,8 +268,8 @@ class _CacheProgressCard extends StatelessWidget {
       letterSpacing: 0,
     );
     final retryLabel = switch (status) {
-      _CacheDialogStatus.failed => l10n.referenceCacheProgressRetryAll,
-      _CacheDialogStatus.partial => l10n.referenceCacheProgressRetryFailed,
+      ReferenceCacheStatus.failed => l10n.referenceCacheProgressRetryAll,
+      ReferenceCacheStatus.partial => l10n.referenceCacheProgressRetryFailed,
       _ => null,
     };
 
@@ -278,7 +297,7 @@ class _CacheProgressCard extends StatelessWidget {
                 _titleFor(status),
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: status == _CacheDialogStatus.failed
+                  color: status == ReferenceCacheStatus.failed
                       ? AppColors.error
                       : AppColors.textPrimary,
                   fontSize: 18,
@@ -342,28 +361,31 @@ class _CacheProgressCard extends StatelessWidget {
   }
 }
 
-String _titleFor(_CacheDialogStatus status) {
+String _titleFor(ReferenceCacheStatus status) {
   return switch (status) {
-    _CacheDialogStatus.running => l10n.referenceCacheProgressRunning,
-    _CacheDialogStatus.success => l10n.referenceCacheProgressDone,
-    _CacheDialogStatus.partial => l10n.referenceCacheProgressDone,
-    _CacheDialogStatus.failed => l10n.referenceCacheProgressFailedTitle,
+    ReferenceCacheStatus.running => l10n.referenceCacheProgressRunning,
+    ReferenceCacheStatus.success => l10n.referenceCacheProgressDone,
+    ReferenceCacheStatus.partial => l10n.referenceCacheProgressDone,
+    ReferenceCacheStatus.failed => l10n.referenceCacheProgressFailedTitle,
+    ReferenceCacheStatus.cancelled => l10n.referenceCacheProgressCancelledTitle,
   };
 }
 
 String _subtitleFor({
-  required _CacheDialogStatus status,
+  required ReferenceCacheStatus status,
   required int total,
   required int succeeded,
   required int failed,
 }) {
   return switch (status) {
-    _CacheDialogStatus.running => '$succeeded / $total',
-    _CacheDialogStatus.success => l10n.referenceCacheProgressSuccessSummary(
+    ReferenceCacheStatus.running => '$succeeded / $total',
+    ReferenceCacheStatus.success => l10n.referenceCacheProgressSuccessSummary(
       succeeded,
       total,
     ),
-    _CacheDialogStatus.partial || _CacheDialogStatus.failed =>
+    ReferenceCacheStatus.partial || ReferenceCacheStatus.failed =>
       l10n.referenceCacheProgressPartialSummary(succeeded, total, failed),
+    ReferenceCacheStatus.cancelled =>
+      l10n.referenceCacheProgressCancelledSummary(succeeded, total),
   };
 }
