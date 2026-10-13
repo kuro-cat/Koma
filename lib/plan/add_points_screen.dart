@@ -418,6 +418,10 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
     BangumiSubjectType.game,
   };
   Object? _error;
+
+  /// The last query that finished without an error, to say when it found
+  /// nothing.
+  String? _searchedQuery;
   bool _isSearching = false;
   bool _isAdding = false;
   bool _didAdd = false;
@@ -470,6 +474,7 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
 
       setState(() {
         _results = results;
+        _searchedQuery = query;
       });
     } catch (error) {
       if (!mounted) {
@@ -479,6 +484,7 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
       setState(() {
         _error = error;
         _results = const [];
+        _searchedQuery = null;
       });
     } finally {
       if (mounted) {
@@ -559,6 +565,7 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
                   child: TextField(
                     onTapOutside: dismissKeyboardOnTapOutside,
                     controller: _queryController,
+                    autofocus: true,
                     decoration:
                         _boxedFormDecoration(
                           hintText: l10n.addPointsWorkNameSearchHint,
@@ -643,6 +650,14 @@ class BangumiWorkSearchScreenState extends State<BangumiWorkSearchScreen> {
               _MessageCard(
                 icon: LucideIcons.circleAlert,
                 text: l10n.addPointsBangumiSearchFailed,
+              )
+            else if (_results.isEmpty &&
+                _searchedQuery != null &&
+                !_isSearching)
+              _MessageCard(
+                key: const ValueKey('bangumi-search-no-results'),
+                icon: LucideIcons.searchX,
+                text: l10n.addPointsBangumiNoResults(_searchedQuery!),
               )
             else if (_results.isNotEmpty)
               // Results hang from an ink rule as ruled rows.
@@ -4283,7 +4298,7 @@ class _InfoPill extends StatelessWidget {
 }
 
 class _MessageCard extends StatelessWidget {
-  const _MessageCard({required this.icon, required this.text});
+  const _MessageCard({required this.icon, required this.text, super.key});
 
   final IconData icon;
   final String text;

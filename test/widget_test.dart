@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:lucide_icons_flutter/lucide_icons.dart';
 
@@ -2456,6 +2458,36 @@ void main() {
     await tester.pump();
     expect(tester.widget<TextField>(searchField).controller?.text, isEmpty);
     expect(clearButton, findsNothing);
+  });
+
+  testWidgets('Bangumi search says when nothing was found', (tester) async {
+    final repository = SamplePilgrimageRepository(plans: const []);
+    final plan = await repository.createPlan(name: '搜索测试', area: '东京');
+    await tester.pumpWidget(
+      MaterialApp(
+        home: BangumiWorkSearchScreen(
+          plan: plan,
+          repository: repository,
+          bangumiApiClient: BangumiApiClient(
+            httpClient: MockClient(
+              (request) async => request.url.host == 'graphql.anilist.co'
+                  ? http.Response('{"data":{"Page":{"media":[]}}}', 200)
+                  : http.Response('{"data":[]}', 200),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+    final noResults = find.byKey(const ValueKey('bangumi-search-no-results'));
+    expect(noResults, findsNothing);
+
+    await tester.enterText(find.byType(TextField), 'Nothing Like This');
+    await tester.testTextInput.receiveAction(TextInputAction.search);
+    await tester.pumpAndSettle();
+
+    expect(noResults, findsOneWidget);
+    expect(find.textContaining('Nothing Like This'), findsWidgets);
   });
 
   testWidgets('adds a manual work to an empty plan', (tester) async {

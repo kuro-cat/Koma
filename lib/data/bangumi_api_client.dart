@@ -23,6 +23,9 @@ class BangumiApiClient {
     }
   }
 
+  /// Searches Bangumi. Bangumi only knows Japanese and Chinese titles, so a
+  /// search in Latin script that finds nothing ("Tamayura", "Your Name") is
+  /// retried with the Japanese titles AniList gives for it.
   Future<List<PilgrimageWork>> searchSubjects(
     String keyword, {
     required Set<BangumiSubjectType> types,
@@ -31,7 +34,58 @@ class BangumiApiClient {
     if (query.isEmpty) {
       return const [];
     }
+    final results = await _searchBangumi(query, types: types);
+    if (results.isNotEmpty || !_latinOnly.hasMatch(query)) return results;
+    final merged = <String, PilgrimageWork>{};
+    for (final title in await _aniListNativeTitles(query)) {
+      for (final work in await _searchBangumi(title, types: types)) {
+        merged.putIfAbsent(work.id, () => work);
+      }
+    }
+    return merged.values.toList(growable: false);
+  }
 
+  static final _latinOnly = RegExp(r"^[\x00-\u024f\u2018-\u201f]+$");
+
+  /// Japanese titles of the anime AniList finds for [query], best match
+  /// first. Empty when AniList can't be reached.
+  Future<List<String>> _aniListNativeTitles(String query) async {
+    try {
+      final response = await _httpClient
+          .post(
+            Uri.parse('https://graphql.anilist.co'),
+            headers: const {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+            },
+            body: jsonEncode({
+              'query':
+                  r'query($q:String){Page(perPage:3){media(search:$q,type:ANIME){title{native}}}}',
+              'variables': {'q': query},
+            }),
+          )
+          .timeout(searchTimeout);
+      if (response.statusCode != 200) return const [];
+      final media =
+          (((jsonDecode(utf8.decode(response.bodyBytes)) as Map)['data']
+                      as Map)['Page']
+                  as Map)['media']
+              as List;
+      return <String>{
+        for (final item in media)
+          if (((item as Map)['title'] as Map)['native'] case final String title
+              when title.trim().isNotEmpty)
+            title.trim(),
+      }.toList(growable: false);
+    } on Object {
+      return const [];
+    }
+  }
+
+  Future<List<PilgrimageWork>> _searchBangumi(
+    String query, {
+    required Set<BangumiSubjectType> types,
+  }) async {
     final uri = Uri.parse(
       '${BangumiConfig.apiBaseUrl}/v0/search/subjects',
     ).replace(queryParameters: const {'limit': '12'});
@@ -83,9 +137,7 @@ class BangumiApiClient {
     final response = await _httpClient
         .get(
           Uri.parse('${BangumiConfig.apiBaseUrl}/v0/subjects/$bangumiId'),
-          headers: {
-            if (!kIsWeb) 'User-Agent': BangumiConfig.userAgent,
-          },
+          headers: {if (!kIsWeb) 'User-Agent': BangumiConfig.userAgent},
         )
         .timeout(const Duration(seconds: 15));
     if (response.statusCode == 404) {

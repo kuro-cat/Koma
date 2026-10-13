@@ -927,6 +927,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addPointsSearchWorks => '搜索作品';
 
   @override
+  String addPointsBangumiNoResults(String query) {
+    return '没有找到“$query”。试试日文或中文标题，或检查作品类型。';
+  }
+
+  @override
   String get addPointsBangumiSearchFailed => 'Bangumi 搜索失败，请检查网络后重试。';
 
   @override

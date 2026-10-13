@@ -1013,6 +1013,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addPointsSearchWorks => 'Search works';
 
   @override
+  String addPointsBangumiNoResults(String query) {
+    return 'Nothing found for “$query”. Try the Japanese or Chinese title, or check the work types.';
+  }
+
+  @override
   String get addPointsBangumiSearchFailed =>
       'Bangumi search failed. Check your network and try again.';
 

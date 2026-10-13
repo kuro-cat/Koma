@@ -52,6 +52,7 @@ Koma may access third-party services or public data sources when you use related
 - Reference images may be loaded from Anitabi image hosts, including the default image host or an alternate image host selected in settings.
 - Anime pilgrimage point/reference data may be imported from user-selected or supported sources such as Anitabi.
 - Work metadata may be searched or imported from Bangumi-related APIs when you choose to use those features.
+- When a work search in Latin letters (for example "Tamayura") finds nothing on Bangumi, Koma sends the search text to AniList (`graphql.anilist.co`) to look up the Japanese title, then searches Bangumi again with it. Only the search text is sent.
 - In-app walking route previews and navigation use a Valhalla routing service, by default `https://valhalla1.openstreetmap.de`, or the service address you configure. Route requests send the start, destination, and intermediate stop coordinates. Rerouting can send your current position and the remaining stops. The connection-test button requests service status without sending route coordinates.
 - To keep the Anitabi service addresses current, Koma can read a small configuration file published in the upstream MiriaGo GitHub repository (the app Koma is based on), from `raw.githubusercontent.com` or the jsDelivr CDN (`cdn.jsdelivr.net`, `fastly.jsdelivr.net`). This happens when Anitabi requests fail (at most 3 counted checks a day; while no source is reachable, at most one attempt every 10 minutes) or when you choose "立即检查" in settings, and can be switched off there. The request contains no plan or location data.
 - "从链接导入" downloads the plan file from the link you enter. For GitHub release or repository links, Koma first asks the GitHub API (`api.github.com`) which files the release contains, then downloads the file you choose from GitHub. Downloads follow the redirects the server answers with (GitHub serves files from `*.githubusercontent.com`), but never to local network addresses. The desktop app performs this download through its own launcher. The link's server receives ordinary network information such as your IP address.
@@ -154,6 +155,7 @@ Koma 可能请求以下系统权限：
 - 参考图可能来自 Anitabi 图片服务，包括默认图片源或你在设置中选择的备用图片源。
 - 动漫巡礼点位和参考图数据可能来自你选择或应用支持的数据源，例如 Anitabi。
 - 作品元数据可能在你使用相关功能时通过 Bangumi 相关 API 搜索或导入。
+- 当用拉丁字母搜索作品（例如 "Tamayura"）在 Bangumi 上没有结果时，Koma 会把搜索文字发送到 AniList（`graphql.anilist.co`）查询日文标题，再用它重新搜索 Bangumi。只会发送搜索文字。
 - 应用内步行路线预览与导航使用 Valhalla 路线服务，默认地址为 `https://valhalla1.openstreetmap.de`，也可以使用你配置的服务地址。路线请求会发送起点、终点及途经点坐标；重新规划时可能发送当前位置及剩余站点。连接测试按钮仅请求服务状态，不发送路线坐标。
 - 为保持 Anitabi 服务地址可用，Koma 可能从上游 MiriaGo GitHub 仓库（Koma 基于的应用）读取一个小型配置文件，来源为 `raw.githubusercontent.com` 或 jsDelivr CDN（`cdn.jsdelivr.net`、`fastly.jsdelivr.net`）。这会在 Anitabi 请求失败时（每天最多计 3 次；所有来源都无法连接时，最多每 10 分钟尝试一次）或你在设置中点击“立即检查”时进行，并可在设置中关闭。该请求不包含计划或位置数据。
 - “从链接导入”会从你输入的链接下载计划文件。对于 GitHub 发布或仓库链接，Koma 会先向 GitHub API（`api.github.com`）查询该发布包含的文件，再从 GitHub 下载你选择的文件。下载会跟随服务器返回的跳转（GitHub 文件由 `*.githubusercontent.com` 提供），但不会跳转到局域网地址。桌面版通过其启动器完成下载。链接所在服务器可收到 IP 地址等常规网络信息。

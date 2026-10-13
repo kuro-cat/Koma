@@ -513,6 +513,14 @@
   "addPointsClearSearch": "清空搜索",
   "addPointsSearching": "搜索中",
   "addPointsSearchWorks": "搜索作品",
+  "addPointsBangumiNoResults": "没有找到“{query}”。试试日文或中文标题，或检查作品类型。",
+  "@addPointsBangumiNoResults": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
   "addPointsBangumiSearchFailed": "Bangumi 搜索失败，请检查网络后重试。",
   "addPointsFilterWorkTypes": "筛选作品类型",
   "addPointsSelectedTypeCount": "已选 {count} 项",

@@ -11,6 +11,60 @@ import 'package:miriago/plan/pilgrimage_models.dart';
 
 void main() {
   test(
+    'a romaji title Bangumi does not know is found by its Japanese title',
+    () async {
+      final bangumiKeywords = <String>[];
+      final client = BangumiApiClient(
+        httpClient: MockClient((request) async {
+          if (request.url.host == 'graphql.anilist.co') {
+            return http.Response.bytes(
+              utf8.encode(
+                jsonEncode({
+                  'data': {
+                    'Page': {
+                      'media': [
+                        {
+                          'title': {'native': 'たまゆら'},
+                        },
+                        {
+                          'title': {'native': 'たまゆら'},
+                        },
+                      ],
+                    },
+                  },
+                }),
+              ),
+              200,
+            );
+          }
+          final keyword =
+              (jsonDecode(request.body) as Map)['keyword'] as String;
+          bangumiKeywords.add(keyword);
+          return http.Response.bytes(
+            utf8.encode(
+              jsonEncode({
+                'data': [
+                  if (keyword == 'たまゆら')
+                    {'id': 7, 'type': 2, 'name': 'たまゆら', 'nsfw': false},
+                ],
+              }),
+            ),
+            200,
+          );
+        }),
+      );
+
+      final works = await client.searchSubjects(
+        'Tamayura',
+        types: const {BangumiSubjectType.anime},
+      );
+
+      expect(bangumiKeywords, ['Tamayura', 'たまゆら']);
+      expect(works.single.bangumiId, 7);
+    },
+  );
+
+  test(
     'uses small Bangumi cover and normalizes protocol-relative URL',
     () async {
       final client = _clientWithImages({

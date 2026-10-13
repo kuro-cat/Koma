@@ -281,6 +281,14 @@
   "addPointsClearSearch": "Clear search",
   "addPointsSearching": "Searching...",
   "addPointsSearchWorks": "Search works",
+  "addPointsBangumiNoResults": "Nothing found for “{query}”. Try the Japanese or Chinese title, or check the work types.",
+  "@addPointsBangumiNoResults": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
   "addPointsBangumiSearchFailed": "Bangumi search failed. Check your network and try again.",
   "addPointsFilterWorkTypes": "Filter work types",
   "addPointsSelectedTypeCount": "{count} selected",

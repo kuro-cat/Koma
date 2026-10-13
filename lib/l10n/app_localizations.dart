@@ -1788,6 +1788,12 @@ abstract class AppLocalizations {
   /// **'搜索作品'**
   String get addPointsSearchWorks;
 
+  /// No description provided for @addPointsBangumiNoResults.
+  ///
+  /// In zh, this message translates to:
+  /// **'没有找到“{query}”。试试日文或中文标题，或检查作品类型。'**
+  String addPointsBangumiNoResults(String query);
+
   /// No description provided for @addPointsBangumiSearchFailed.
   ///
   /// In zh, this message translates to:
