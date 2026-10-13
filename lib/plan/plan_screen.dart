@@ -847,6 +847,22 @@ class _PlanScreenState extends State<PlanScreen>
           setAreaAnchorChange(context, widget.repository, plan, group),
           l10n.planGroupManagerAnchorSaveFailed,
         );
+      case _AreaAction.walkingOrder when group != null:
+        final saved = await _savePlanChange(
+          () => sortAreaIntoWalkingOrder(
+            plan: plan,
+            groupId: group.id,
+            points: bucket.points,
+            repository: widget.repository,
+          ),
+          l10n.planAreaWalkingOrderFailed,
+        );
+        if (saved) {
+          _showSnackBar(
+            l10n.planAreaWalkingOrderDone,
+            kind: AppStatusBannerKind.success,
+          );
+        }
       case _AreaAction.order when group != null:
         await _savePlanChange(
           toggleAreaOrderChange(widget.repository, plan, group),
@@ -1319,7 +1335,17 @@ class _PlanActionDivider extends StatelessWidget {
   }
 }
 
-enum _AreaAction { rename, anchor, order, manage, delete, auto, nearest, box }
+enum _AreaAction {
+  rename,
+  anchor,
+  order,
+  walkingOrder,
+  manage,
+  delete,
+  auto,
+  nearest,
+  box,
+}
 
 PopupMenuItem<_AreaAction> _areaItem(
   _AreaAction action,
@@ -1495,6 +1521,11 @@ class _GroupSwitcher extends StatelessWidget {
                   _AreaAction.anchor,
                   LucideIcons.flag,
                   l10n.planGroupManagerSetAnchor,
+                ),
+                _areaItem(
+                  _AreaAction.walkingOrder,
+                  LucideIcons.footprints,
+                  l10n.planAreaWalkingOrder,
                 ),
                 _areaItem(
                   _AreaAction.order,

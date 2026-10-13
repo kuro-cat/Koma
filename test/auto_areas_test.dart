@@ -66,4 +66,41 @@ void main() {
       expect(tadanoumi.anchorPointId, 'b');
     },
   );
+
+  test('walking order visits spots along a street without doubling back', () {
+    final street = [
+      for (var i = 0; i < 8; i++) spot('s$i', 34.0 + i * 0.001, 132.0),
+    ];
+    final shuffled = [5, 0, 7, 2, 6, 1, 3, 4].map((i) => street[i]).toList();
+
+    final ids = walkingOrder(shuffled).map((s) => s.id).toList();
+
+    final forward = [for (var i = 0; i < 8; i++) 's$i'];
+    expect(ids, anyOf(equals(forward), equals(forward.reversed.toList())));
+  });
+
+  test('grouped areas come in walking order', () async {
+    final street = [
+      for (var i = 0; i < 6; i++) spot('s$i', 34.0 + i * 0.001, 132.0),
+    ];
+    final plan = samplePilgrimagePlan.copyWith(
+      groups: const [],
+      points: [4, 1, 5, 0, 3, 2].map((i) => street[i]).toList(),
+    );
+    final repository = SamplePilgrimageRepository(plans: [plan]);
+
+    final grouped = await autoGroupUngroupedSpots(
+      plan: plan,
+      repository: repository,
+      nameAt: (_) async => '竹原',
+    );
+
+    final ordered = [...grouped.points]
+      ..sort((a, b) => a.groupOrderIndex!.compareTo(b.groupOrderIndex!));
+    final forward = [for (var i = 0; i < 6; i++) 's$i'];
+    expect(
+      ordered.map((p) => p.id).toList(),
+      anyOf(equals(forward), equals(forward.reversed.toList())),
+    );
+  });
 }

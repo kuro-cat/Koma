@@ -79,6 +79,7 @@ Future<PilgrimagePlan> autoGroupUngroupedSpots({
             1;
   final now = DateTime.now();
   final groupIdsByPointId = <String, String?>{};
+  final ordersByGroupId = <String, List<String>>{};
   var current = plan;
   for (final (index, cluster) in clusters.indexed) {
     final anchor = centralSpot(cluster);
@@ -104,9 +105,98 @@ Future<PilgrimagePlan> autoGroupUngroupedSpots({
     for (final spot in cluster) {
       groupIdsByPointId[spot.id] = group.id;
     }
+    ordersByGroupId[group.id] = [
+      for (final spot in walkingOrder(cluster)) spot.id,
+    ];
   }
-  return repository.assignPointsToGroups(
+  current = await repository.assignPointsToGroups(
     planId: current.id,
     groupIdsByPointId: groupIdsByPointId,
   );
+  for (final MapEntry(key: groupId, value: pointIds)
+      in ordersByGroupId.entries) {
+    current = await repository.reorderGroupPoints(
+      planId: current.id,
+      groupId: groupId,
+      pointIds: pointIds,
+    );
+  }
+  return current;
+}
+
+/// Stores [points] of [groupId] in [walkingOrder]; spots without
+/// coordinates keep their order at the end.
+Future<PilgrimagePlan> sortAreaIntoWalkingOrder({
+  required PilgrimagePlan plan,
+  required String groupId,
+  required List<PilgrimagePoint> points,
+  required PilgrimageRepository repository,
+}) {
+  return repository.reorderGroupPoints(
+    planId: plan.id,
+    groupId: groupId,
+    pointIds: [
+      for (final spot in walkingOrder(
+        points.where((p) => p.hasCoordinate).toList(),
+      ))
+        spot.id,
+      for (final spot in points.where((p) => !p.hasCoordinate)) spot.id,
+    ],
+  );
+}
+
+/// [spots] in a short walking order: an open path (start and end differ)
+/// that avoids crossing back over itself. Straight-line distances; good
+/// enough to stop a walk zig-zagging across town.
+List<PilgrimagePoint> walkingOrder(List<PilgrimagePoint> spots) {
+  final n = spots.length;
+  if (n < 3) return List.of(spots);
+  const distance = Distance();
+  final d = [
+    for (final a in spots)
+      [for (final b in spots) distance(a.position, b.position)],
+  ];
+  double length(List<int> path) {
+    var total = 0.0;
+    for (var i = 1; i < path.length; i++) {
+      total += d[path[i - 1]][path[i]];
+    }
+    return total;
+  }
+
+  // ponytail: nearest neighbour from every start plus 2-opt is O(n³); fine
+  // for an area's few dozen spots.
+  List<int>? best;
+  for (var start = 0; start < n; start++) {
+    final path = [start];
+    final left = {for (var i = 0; i < n; i++) i}..remove(start);
+    while (left.isNotEmpty) {
+      final next = left.reduce(
+        (a, b) => d[path.last][a] <= d[path.last][b] ? a : b,
+      );
+      path.add(next);
+      left.remove(next);
+    }
+    if (best == null || length(path) < length(best)) best = path;
+  }
+  final path = best!;
+  for (var improved = true; improved;) {
+    improved = false;
+    for (var i = 0; i < n - 1; i++) {
+      for (var j = i + 1; j < n; j++) {
+        // Reverse path[i..j]; only the edges at either end change.
+        final before =
+            (i > 0 ? d[path[i - 1]][path[i]] : 0) +
+            (j < n - 1 ? d[path[j]][path[j + 1]] : 0);
+        final after =
+            (i > 0 ? d[path[i - 1]][path[j]] : 0) +
+            (j < n - 1 ? d[path[i]][path[j + 1]] : 0);
+        if (after < before - 0.01) {
+          path.setRange(i, j + 1, path.sublist(i, j + 1).reversed);
+          improved = true;
+        }
+      }
+    }
+  }
+  return [for (final i in path) spots[i]];
 }

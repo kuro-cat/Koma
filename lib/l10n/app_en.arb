@@ -698,6 +698,9 @@
   "anitabiMapImportOrganizeTitle": "Organize the spots you just imported",
   "anitabiMapImportOrganizeLead": "Imported ",
   "anitabiMapImportOrganizeTail": ". They stay ungrouped for now. Assign them to an area, or quickly assign each to the nearest anchor.",
+  "planAreaWalkingOrder": "Sort into walking order",
+  "planAreaWalkingOrderDone": "Sorted into a short walking order",
+  "planAreaWalkingOrderFailed": "Couldn't save the new order",
   "autoAreaFallbackName": "Area {number}",
   "@autoAreaFallbackName": {
     "placeholders": {

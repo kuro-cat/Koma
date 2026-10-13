@@ -4197,6 +4197,24 @@ abstract class AppLocalizations {
   /// **'，并暂时放在未分组。可以直接分配到片区，或按最近关键点快速分配。'**
   String get anitabiMapImportOrganizeTail;
 
+  /// No description provided for @planAreaWalkingOrder.
+  ///
+  /// In zh, this message translates to:
+  /// **'按步行顺序排序'**
+  String get planAreaWalkingOrder;
+
+  /// No description provided for @planAreaWalkingOrderDone.
+  ///
+  /// In zh, this message translates to:
+  /// **'已按较短的步行路线排序'**
+  String get planAreaWalkingOrderDone;
+
+  /// No description provided for @planAreaWalkingOrderFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'新顺序保存失败'**
+  String get planAreaWalkingOrderFailed;
+
   /// No description provided for @autoAreaFallbackName.
   ///
   /// In zh, this message translates to:

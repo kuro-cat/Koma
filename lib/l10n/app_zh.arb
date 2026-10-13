@@ -1299,6 +1299,9 @@
   "anitabiMapImportOrganizeTitle": "整理刚导入的点位",
   "anitabiMapImportOrganizeLead": "已导入 ",
   "anitabiMapImportOrganizeTail": "，并暂时放在未分组。可以直接分配到片区，或按最近关键点快速分配。",
+  "planAreaWalkingOrder": "按步行顺序排序",
+  "planAreaWalkingOrderDone": "已按较短的步行路线排序",
+  "planAreaWalkingOrderFailed": "新顺序保存失败",
   "autoAreaFallbackName": "片区 {number}",
   "@autoAreaFallbackName": {
     "placeholders": {

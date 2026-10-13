@@ -2252,6 +2252,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get anitabiMapImportOrganizeTail => '，并暂时放在未分组。可以直接分配到片区，或按最近关键点快速分配。';
 
   @override
+  String get planAreaWalkingOrder => '按步行顺序排序';
+
+  @override
+  String get planAreaWalkingOrderDone => '已按较短的步行路线排序';
+
+  @override
+  String get planAreaWalkingOrderFailed => '新顺序保存失败';
+
+  @override
   String autoAreaFallbackName(int number) {
     return '片区 $number';
   }

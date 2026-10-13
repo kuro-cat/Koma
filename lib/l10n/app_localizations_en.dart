@@ -2534,6 +2534,15 @@ class AppLocalizationsEn extends AppLocalizations {
       '. They stay ungrouped for now. Assign them to an area, or quickly assign each to the nearest anchor.';
 
   @override
+  String get planAreaWalkingOrder => 'Sort into walking order';
+
+  @override
+  String get planAreaWalkingOrderDone => 'Sorted into a short walking order';
+
+  @override
+  String get planAreaWalkingOrderFailed => 'Couldn\'t save the new order';
+
+  @override
   String autoAreaFallbackName(int number) {
     return 'Area $number';
   }
