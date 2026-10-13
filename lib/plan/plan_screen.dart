@@ -25,6 +25,7 @@ import 'nearest_group_assign_screen.dart';
 import 'plan_group_actions.dart';
 import 'plan_group_manager_screen.dart';
 import 'plan_group_picker_sheet.dart';
+import '../map/offline_map.dart';
 import 'auto_areas.dart';
 import 'plan_group_utils.dart';
 import 'plan_memo_screen.dart';
@@ -1089,7 +1090,8 @@ class _PlanScreenState extends State<PlanScreen>
     }
 
     final points = pointsNeedingFullReferenceCache(controller.points);
-    if (points.isEmpty) {
+    final withMap = canSaveMapOffline(settings);
+    if (points.isEmpty && !withMap) {
       _showSnackBar(
         l10n.planNoReferencesToCache,
         kind: AppStatusBannerKind.warning,
@@ -1097,15 +1099,18 @@ class _PlanScreenState extends State<PlanScreen>
       return;
     }
 
+    final images = l10n.planCacheFullImageCount(points.length);
     final confirmed = await showConfirmActionDialog(
       context,
       title: l10n.planCacheFullReferencesTitle,
-      message: l10n.planCacheFullReferencesMessage(
-        l10n.planCacheFullImageCount(points.length),
-      ),
+      message: points.isEmpty
+          ? l10n.planSaveOfflineMapOnlyMessage
+          : withMap
+          ? l10n.planSaveOfflineMessage(images)
+          : l10n.planCacheFullReferencesMessage(images),
       confirmLabel: l10n.planStartCaching,
       notice: l10n.planCacheWifiNotice,
-      emphasizedValues: [l10n.planCacheFullImageCount(points.length)],
+      emphasizedValues: [if (points.isNotEmpty) images],
     );
     if (!confirmed || !mounted) {
       return;
@@ -1120,6 +1125,7 @@ class _PlanScreenState extends State<PlanScreen>
     final repository = widget.repository;
     final imageSource = settings.anitabiImageSource;
     final maxConcurrent = settings.mapThumbnailConcurrentLoads;
+    final mapSettings = settings;
     await showReferenceCacheProgressDialog(
       context: context,
       task: task,
@@ -1139,6 +1145,14 @@ class _PlanScreenState extends State<PlanScreen>
           onProgress: onProgress,
           isCancelled: () => task.cancelled,
         );
+        if (canSaveMapOffline(mapSettings) && !task.cancelled) {
+          task.reportMapProgress(0);
+          task.mapSaved = await saveMapForOffline(
+            plan: plan,
+            settings: mapSettings,
+            onProgress: task.reportMapProgress,
+          );
+        }
       },
     );
   }

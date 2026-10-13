@@ -20,6 +20,7 @@ Koma may store the following data locally:
 - Visit records, including capture time, related point information, photo paths, reference modes, and color adjustment settings.
 - Photos you take or import in the app.
 - Reference images or cached thumbnails used for comparison.
+- Map data around a plan's spots, when you save the plan for offline use. It is downloaded from the map service in use (OpenFreeMap by default) for the area around the spots; no plan data is sent.
 - App settings such as theme and display preferences.
 - Imported or exported `.sjhplan` data packages and related resources when you choose to create, restore, or share them.
 
@@ -123,6 +124,7 @@ Koma 可能会在本地保存以下数据：
 - 巡礼记录，包括拍摄时间、关联点位、照片路径、参考模式和调色设置。
 - 你在应用内拍摄或导入的照片。
 - 用于对照的参考图或缩略图缓存。
+- 离线保存计划时，点位周边的地图数据。它从当前使用的地图服务（默认 OpenFreeMap）按点位周边范围下载，不会发送计划数据。
 - 主题、显示偏好等应用设置。
 - 你主动创建、恢复或分享的 `.sjhplan` 数据包及相关资源。
 

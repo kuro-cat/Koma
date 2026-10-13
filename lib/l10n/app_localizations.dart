@@ -3626,13 +3626,13 @@ abstract class AppLocalizations {
   /// No description provided for @planCacheFullReferencesTitle.
   ///
   /// In zh, this message translates to:
-  /// **'缓存完整参考图'**
+  /// **'离线保存计划'**
   String get planCacheFullReferencesTitle;
 
   /// No description provided for @planStartCaching.
   ///
   /// In zh, this message translates to:
-  /// **'开始缓存'**
+  /// **'开始保存'**
   String get planStartCaching;
 
   /// No description provided for @planCacheWifiNotice.
@@ -3668,7 +3668,7 @@ abstract class AppLocalizations {
   /// No description provided for @planCacheReferences.
   ///
   /// In zh, this message translates to:
-  /// **'缓存参考图'**
+  /// **'离线保存'**
   String get planCacheReferences;
 
   /// No description provided for @planActionMemo.
@@ -4814,6 +4814,48 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'后台缓存'**
   String get referenceCacheProgressBackground;
+
+  /// No description provided for @offlineSavedTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'已离线保存'**
+  String get offlineSavedTitle;
+
+  /// No description provided for @offlineMapSaving.
+  ///
+  /// In zh, this message translates to:
+  /// **'正在保存离线地图...'**
+  String get offlineMapSaving;
+
+  /// No description provided for @offlineMapLabel.
+  ///
+  /// In zh, this message translates to:
+  /// **'地图'**
+  String get offlineMapLabel;
+
+  /// No description provided for @offlineMapSaved.
+  ///
+  /// In zh, this message translates to:
+  /// **'计划点位周边的地图已保存，没有信号时也能查看。'**
+  String get offlineMapSaved;
+
+  /// No description provided for @offlineMapNotSaved.
+  ///
+  /// In zh, this message translates to:
+  /// **'地图保存失败，请联网后重试。'**
+  String get offlineMapNotSaved;
+
+  /// No description provided for @planSaveOfflineMessage.
+  ///
+  /// In zh, this message translates to:
+  /// **'将保存当前计划中 {images}完整参考图和点位周边的地图，没有信号时也能使用。可能需要较长时间和网络流量。'**
+  String planSaveOfflineMessage(String images);
+
+  /// No description provided for @planSaveOfflineMapOnlyMessage.
+  ///
+  /// In zh, this message translates to:
+  /// **'参考图都已保存。将保存计划点位周边的地图，没有信号时也能查看。'**
+  String get planSaveOfflineMapOnlyMessage;
 
   /// No description provided for @referenceCacheProgressRunning.
   ///

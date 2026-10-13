@@ -2146,10 +2146,10 @@ class AppLocalizationsEn extends AppLocalizations {
       'This plan has no reference images to cache';
 
   @override
-  String get planCacheFullReferencesTitle => 'Cache full reference images';
+  String get planCacheFullReferencesTitle => 'Save plan for offline use';
 
   @override
-  String get planStartCaching => 'Start caching';
+  String get planStartCaching => 'Start saving';
 
   @override
   String get planCacheWifiNotice => 'Wi-Fi is recommended for caching';
@@ -2167,7 +2167,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planSwitchPlan => 'All plans';
 
   @override
-  String get planCacheReferences => 'Cache images';
+  String get planCacheReferences => 'Save for offline';
 
   @override
   String get planActionMemo => 'Plan memo';
@@ -2917,6 +2917,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get referenceCacheProgressBackground => 'Run in background';
+
+  @override
+  String get offlineSavedTitle => 'Saved for offline use';
+
+  @override
+  String get offlineMapSaving => 'Saving the map for offline use...';
+
+  @override
+  String get offlineMapLabel => 'Map';
+
+  @override
+  String get offlineMapSaved =>
+      'The map around the plan\'s spots is saved for use without signal.';
+
+  @override
+  String get offlineMapNotSaved =>
+      'The map couldn\'t be saved. Try again with a connection.';
+
+  @override
+  String planSaveOfflineMessage(String images) {
+    return 'This saves $images and the map around the plan\'s spots, so they work without signal. It can take a while and use a lot of data.';
+  }
+
+  @override
+  String get planSaveOfflineMapOnlyMessage =>
+      'The reference images are already saved. This saves the map around the plan\'s spots so it works without signal.';
 
   @override
   String get referenceCacheProgressRunning => 'Caching reference images...';

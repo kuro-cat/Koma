@@ -1086,14 +1086,14 @@
   "planShowActions": "展开计划操作",
   "planCreateAreaFailed": "片区创建失败，请稍后重试。",
   "planNoReferencesToCache": "当前计划没有需要缓存的参考图",
-  "planCacheFullReferencesTitle": "缓存完整参考图",
-  "planStartCaching": "开始缓存",
+  "planCacheFullReferencesTitle": "离线保存计划",
+  "planStartCaching": "开始保存",
   "planCacheWifiNotice": "建议在 Wi-Fi 环境下进行缓存",
   "planNewArea": "新建片区",
   "planAreaName": "片区名称",
   "planCreate": "创建",
   "planSwitchPlan": "计划列表",
-  "planCacheReferences": "缓存参考图",
+  "planCacheReferences": "离线保存",
   "planActionMemo": "计划备忘录",
   "planActionImportExport": "导入导出",
   "planPreviousArea": "上一个片区",
@@ -1494,6 +1494,20 @@
   "referenceCacheProgressInterrupted": "缓存中断，请重试；已保存的图片不会删除。",
   "referenceCacheProgressTip": "缓存时请保持联网。可以锁屏或切换到其他应用，进度会显示在通知栏。",
   "referenceCacheProgressBackground": "后台缓存",
+  "offlineSavedTitle": "已离线保存",
+  "offlineMapSaving": "正在保存离线地图...",
+  "offlineMapLabel": "地图",
+  "offlineMapSaved": "计划点位周边的地图已保存，没有信号时也能查看。",
+  "offlineMapNotSaved": "地图保存失败，请联网后重试。",
+  "planSaveOfflineMessage": "将保存当前计划中 {images}完整参考图和点位周边的地图，没有信号时也能使用。可能需要较长时间和网络流量。",
+  "@planSaveOfflineMessage": {
+    "placeholders": {
+      "images": {
+        "type": "String"
+      }
+    }
+  },
+  "planSaveOfflineMapOnlyMessage": "参考图都已保存。将保存计划点位周边的地图，没有信号时也能查看。",
   "referenceCacheProgressRunning": "正在缓存参考图...",
   "referenceCacheProgressDone": "参考图缓存完成",
   "referenceCacheProgressFailedTitle": "参考图缓存失败",

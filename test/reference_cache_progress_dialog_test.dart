@@ -65,6 +65,37 @@ void main() {
     expect(find.text('重试全部'), findsNothing);
   });
 
+  testWidgets('a run that also saved the map says so', (tester) async {
+    final task = ReferenceCacheTask();
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: ReferenceCacheProgressDialog(
+            task: task,
+            run: (onProgress) async {
+              onProgress(
+                const ReferenceFullCacheProgress(
+                  total: 3,
+                  processed: 3,
+                  succeeded: 3,
+                  done: true,
+                ),
+              );
+              task.reportMapProgress(0.5);
+              task.mapSaved = true;
+            },
+          ),
+        ),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+
+    expect(find.text('已离线保存'), findsOneWidget);
+    expect(find.textContaining('3 / 3 张成功'), findsOneWidget);
+    expect(find.textContaining('地图已保存'), findsOneWidget);
+  });
+
   testWidgets('shows partial-success cache state with retry', (tester) async {
     await tester.pumpWidget(
       MaterialApp(

@@ -81,7 +81,8 @@ class ReferenceCacheService : Service() {
             )
         }
 
-        fun update(context: Context, processed: Int, total: Int) {
+        fun update(context: Context, processed: Int, total: Int, newTitle: String?) {
+            if (!newTitle.isNullOrEmpty()) title = newTitle
             notify(context, PROGRESS_ID, progressNotification(context, processed, total))
         }
 

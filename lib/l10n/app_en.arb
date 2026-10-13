@@ -593,14 +593,14 @@
   "planShowActions": "Show plan actions",
   "planCreateAreaFailed": "Couldn't create the area. Please try again later.",
   "planNoReferencesToCache": "This plan has no reference images to cache",
-  "planCacheFullReferencesTitle": "Cache full reference images",
-  "planStartCaching": "Start caching",
+  "planCacheFullReferencesTitle": "Save plan for offline use",
+  "planStartCaching": "Start saving",
   "planCacheWifiNotice": "Wi-Fi is recommended for caching",
   "planNewArea": "New area",
   "planAreaName": "Area name",
   "planCreate": "Create",
   "planSwitchPlan": "All plans",
-  "planCacheReferences": "Cache images",
+  "planCacheReferences": "Save for offline",
   "planActionMemo": "Plan memo",
   "planActionImportExport": "Import / export",
   "planPreviousArea": "Previous area",
@@ -818,6 +818,20 @@
   "referenceCacheProgressInterrupted": "Caching was interrupted. Please retry; saved images are kept.",
   "referenceCacheProgressTip": "Stay online while caching. You can lock the screen or use other apps; progress shows in the notifications.",
   "referenceCacheProgressBackground": "Run in background",
+  "offlineSavedTitle": "Saved for offline use",
+  "offlineMapSaving": "Saving the map for offline use...",
+  "offlineMapLabel": "Map",
+  "offlineMapSaved": "The map around the plan's spots is saved for use without signal.",
+  "offlineMapNotSaved": "The map couldn't be saved. Try again with a connection.",
+  "planSaveOfflineMessage": "This saves {images} and the map around the plan's spots, so they work without signal. It can take a while and use a lot of data.",
+  "@planSaveOfflineMessage": {
+    "placeholders": {
+      "images": {
+        "type": "String"
+      }
+    }
+  },
+  "planSaveOfflineMapOnlyMessage": "The reference images are already saved. This saves the map around the plan's spots so it works without signal.",
   "referenceCacheProgressRunning": "Caching reference images...",
   "referenceCacheProgressDone": "Reference images cached",
   "referenceCacheProgressFailedTitle": "Couldn't cache reference images",

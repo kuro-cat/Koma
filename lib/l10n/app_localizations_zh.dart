@@ -1929,10 +1929,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planNoReferencesToCache => '当前计划没有需要缓存的参考图';
 
   @override
-  String get planCacheFullReferencesTitle => '缓存完整参考图';
+  String get planCacheFullReferencesTitle => '离线保存计划';
 
   @override
-  String get planStartCaching => '开始缓存';
+  String get planStartCaching => '开始保存';
 
   @override
   String get planCacheWifiNotice => '建议在 Wi-Fi 环境下进行缓存';
@@ -1950,7 +1950,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planSwitchPlan => '计划列表';
 
   @override
-  String get planCacheReferences => '缓存参考图';
+  String get planCacheReferences => '离线保存';
 
   @override
   String get planActionMemo => '计划备忘录';
@@ -2585,6 +2585,29 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get referenceCacheProgressBackground => '后台缓存';
+
+  @override
+  String get offlineSavedTitle => '已离线保存';
+
+  @override
+  String get offlineMapSaving => '正在保存离线地图...';
+
+  @override
+  String get offlineMapLabel => '地图';
+
+  @override
+  String get offlineMapSaved => '计划点位周边的地图已保存，没有信号时也能查看。';
+
+  @override
+  String get offlineMapNotSaved => '地图保存失败，请联网后重试。';
+
+  @override
+  String planSaveOfflineMessage(String images) {
+    return '将保存当前计划中 $images完整参考图和点位周边的地图，没有信号时也能使用。可能需要较长时间和网络流量。';
+  }
+
+  @override
+  String get planSaveOfflineMapOnlyMessage => '参考图都已保存。将保存计划点位周边的地图，没有信号时也能查看。';
 
   @override
   String get referenceCacheProgressRunning => '正在缓存参考图...';

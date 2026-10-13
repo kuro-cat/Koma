@@ -31,6 +31,13 @@ class ReferenceCacheTask extends ChangeNotifier {
 
   /// Set by [cancel]; the run stops starting new downloads.
   bool cancelled = false;
+
+  /// Share of the offline map saved while it downloads, after the images;
+  /// null before that.
+  double? mapProgress;
+
+  /// Whether the offline map was saved; null when it wasn't attempted.
+  bool? mapSaved;
   Future<void> _finished = Future.value();
   Future<void> get finished => _finished;
 
@@ -41,6 +48,8 @@ class ReferenceCacheTask extends ChangeNotifier {
     isRunning = true;
     hasError = false;
     cancelled = false;
+    mapProgress = null;
+    mapSaved = null;
     updatedPlan = null;
     progress = ReferenceFullCacheProgress(total: progress?.total ?? 0);
     notifyListeners();
@@ -56,6 +65,39 @@ class ReferenceCacheTask extends ChangeNotifier {
     if (progress.failed == 0) return ReferenceCacheStatus.success;
     if (progress.succeeded == 0) return ReferenceCacheStatus.failed;
     return ReferenceCacheStatus.partial;
+  }
+
+  void reportMapProgress(double done) {
+    mapProgress = done;
+    _notification.updateMap(done);
+    notifyListeners();
+  }
+
+  /// Heading for the finished run.
+  String get title =>
+      mapSaved == true &&
+          (status == ReferenceCacheStatus.success ||
+              status == ReferenceCacheStatus.partial)
+      ? l10n.offlineSavedTitle
+      : _titleFor(status);
+
+  /// What the finished run did, for the dialog and the notification.
+  String get summary {
+    final progress = this.progress;
+    if (hasError || progress == null) {
+      return l10n.referenceCacheProgressInterrupted;
+    }
+    return [
+      if (progress.total > 0)
+        _subtitleFor(
+          status: status,
+          total: progress.total,
+          succeeded: progress.succeeded,
+          failed: progress.failed,
+        ),
+      if (mapSaved case final saved?)
+        saved ? l10n.offlineMapSaved : l10n.offlineMapNotSaved,
+    ].join('\n');
   }
 
   void cancel() {
@@ -130,21 +172,21 @@ class _CacheNotification {
     _send('update', {'processed': progress.processed, 'total': progress.total});
   }
 
+  void updateMap(double done) {
+    final percent = (done * 100).round();
+    // Image percents run 0 to 100 first; map percents are kept apart.
+    if (percent + 1000 == _lastPercent) return;
+    _lastPercent = percent + 1000;
+    _send('update', {
+      'processed': percent,
+      'total': 100,
+      'title': l10n.offlineMapSaving,
+    });
+  }
+
   void finish(ReferenceCacheTask task) {
     _running.remove(task);
-    final status = task.status;
-    final progress = task.progress;
-    _send('finish', {
-      'title': _titleFor(status),
-      'text': task.hasError || progress == null
-          ? l10n.referenceCacheProgressInterrupted
-          : _subtitleFor(
-              status: status,
-              total: progress.total,
-              succeeded: progress.succeeded,
-              failed: progress.failed,
-            ),
-    });
+    _send('finish', {'title': task.title, 'text': task.summary});
   }
 
   void _send(String method, Map<String, Object?> arguments) {
@@ -217,6 +259,9 @@ class _ReferenceCacheProgressDialogState
       final status = _task.status;
       return _CacheProgressCard(
         status: status,
+        mapProgress: _task.mapProgress,
+        title: _task.title,
+        summary: _task.summary,
         total: progress?.total ?? 0,
         processed: progress?.processed ?? 0,
         succeeded: progress?.succeeded ?? 0,
@@ -236,6 +281,9 @@ class _ReferenceCacheProgressDialogState
 class _CacheProgressCard extends StatelessWidget {
   const _CacheProgressCard({
     required this.status,
+    required this.mapProgress,
+    required this.title,
+    required this.summary,
     required this.total,
     required this.processed,
     required this.succeeded,
@@ -253,11 +301,19 @@ class _CacheProgressCard extends StatelessWidget {
   final VoidCallback onClose;
   final VoidCallback? onRetry;
   final bool interrupted;
+  final double? mapProgress;
+  final String title;
+  final String summary;
 
   @override
   Widget build(BuildContext context) {
     final running = status == ReferenceCacheStatus.running;
-    final fraction = total == 0 ? 0.0 : (processed / total).clamp(0.0, 1.0);
+    final mapProgress = this.mapProgress;
+    final fraction = mapProgress != null
+        ? mapProgress.clamp(0.0, 1.0)
+        : total == 0
+        ? 0.0
+        : (processed / total).clamp(0.0, 1.0);
     final secondaryStyle = TextStyle(
       color: AppColors.textSecondary,
       fontSize: 13,
@@ -291,7 +347,7 @@ class _CacheProgressCard extends StatelessWidget {
               ),
               const SizedBox(height: 16),
               Text(
-                _titleFor(status),
+                running && mapProgress != null ? l10n.offlineMapSaving : title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: status == ReferenceCacheStatus.failed
@@ -305,7 +361,9 @@ class _CacheProgressCard extends StatelessWidget {
               const SizedBox(height: 12),
               if (running) ...[
                 AppStatusBannerProgressLine(
-                  countLabel: '$processed / $total',
+                  countLabel: mapProgress != null
+                      ? l10n.offlineMapLabel
+                      : '$processed / $total',
                   percentLabel: '${(fraction * 100).round()}%',
                   value: fraction,
                   barKey: const ValueKey('reference-cache-progress-bar'),
@@ -314,14 +372,7 @@ class _CacheProgressCard extends StatelessWidget {
                 Text(l10n.referenceCacheProgressTip, style: secondaryStyle),
               ] else
                 Text(
-                  interrupted
-                      ? l10n.referenceCacheProgressInterrupted
-                      : _subtitleFor(
-                          status: status,
-                          total: total,
-                          succeeded: succeeded,
-                          failed: failed,
-                        ),
+                  summary,
                   textAlign: TextAlign.center,
                   style: secondaryStyle,
                 ),

@@ -224,7 +224,8 @@ class MainActivity : FlutterActivity() {
                 "update" -> ReferenceCacheService.update(
                     this,
                     call.argument<Int>("processed") ?: 0,
-                    call.argument<Int>("total") ?: 0
+                    call.argument<Int>("total") ?: 0,
+                    call.argument<String>("title")
                 )
                 "finish" -> ReferenceCacheService.finish(
                     this,
