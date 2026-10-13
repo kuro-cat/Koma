@@ -186,12 +186,9 @@
       }
     }
   },
-  "settingsPlanSummary": "{area} / {count} 个点位",
+  "settingsPlanSummary": "{count} 个点位",
   "@settingsPlanSummary": {
     "placeholders": {
-      "area": {
-        "type": "String"
-      },
       "count": {
         "type": "int"
       }
@@ -776,7 +773,6 @@
   },
   "planGroupPickerNewGroup": "新建片区",
   "planManagerSwitchFailed": "切换计划失败，请稍后重试。",
-  "planManagerAreaNotSet": "未设置区域",
   "planManagerDeletePlan": "删除计划",
   "planManagerCopyFailed": "复制计划失败，请稍后重试。",
   "planManagerSaveOrderFailed": "保存计划顺序失败，已恢复原来的顺序。",
@@ -788,7 +784,6 @@
   "planManagerAllPlans": "全部计划",
   "planManagerEditInfo": "编辑计划信息",
   "planManagerPlanName": "计划名称",
-  "planManagerAreaLabel": "地区 / 区域",
   "planManagerNewPlan": "新建计划",
   "planManagerPlanInfo": "计划信息",
   "planManagerNoWorks": "暂无作品",
@@ -830,29 +825,9 @@
       }
     }
   },
-  "planManagerPlanSummary": "{area}  /  {spotCount} 个点位  /  {workCount} 部作品",
+  "planManagerPlanSummary": "{spotCount} 个点位  /  {workCount} 部作品",
   "@planManagerPlanSummary": {
     "placeholders": {
-      "area": {
-        "type": "String"
-      },
-      "spotCount": {
-        "type": "int"
-      },
-      "workCount": {
-        "type": "int"
-      }
-    }
-  },
-  "planManagerPlanCopyText": "{name}\n{area}\n{spotCount} 个点位\n{workCount} 部作品",
-  "@planManagerPlanCopyText": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      },
-      "area": {
-        "type": "String"
-      },
       "spotCount": {
         "type": "int"
       },
@@ -1082,12 +1057,9 @@
       }
     }
   },
-  "planSummary": "{area} / {spotCount} 个点位 / {works}",
+  "planSummary": "{spotCount} 个点位 / {works}",
   "@planSummary": {
     "placeholders": {
-      "area": {
-        "type": "String"
-      },
       "spotCount": {
         "type": "int"
       },

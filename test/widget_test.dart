@@ -2176,13 +2176,12 @@ void main() {
       matching: find.byType(TextField),
     );
     expect(tester.widget<TextField>(fields.first).controller!.text, '新巡礼计划 2');
-    await tester.enterText(fields.at(1), '宇治');
     await tester.tap(find.text('保存'));
     await tester.pumpAndSettle();
 
     // The current plan is listed once, marked as current on the wash.
     expect(find.text('新巡礼计划 2'), findsOneWidget);
-    expect(find.textContaining('宇治  /  0 个点位  /  0 部作品'), findsOneWidget);
+    expect(find.text('0 个点位  /  0 部作品'), findsOneWidget);
     expect(find.byKey(const ValueKey('plan-status-current')), findsOneWidget);
     expect(find.text('暂无作品'), findsOneWidget);
     final planCards = find.byWidgetPredicate(

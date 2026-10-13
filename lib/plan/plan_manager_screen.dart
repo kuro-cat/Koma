@@ -13,6 +13,7 @@ import '../widgets/route_planner_skill_hint.dart';
 import '../widgets/snackbar_helper.dart';
 import '../widgets/app_back_button.dart';
 import 'pilgrimage_models.dart';
+import 'plan_order.dart';
 import '../widgets/menu_back_scope.dart';
 import '../widgets/rules.dart';
 
@@ -166,7 +167,6 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
       builder: (context) => _PlanInfoDialog(
         title: l10n.planManagerEditInfo,
         name: plan.name,
-        area: plan.area,
         memo: plan.memo,
       ),
     );
@@ -174,12 +174,11 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
       return;
     }
 
-    final area = result.area.isEmpty ? l10n.planManagerAreaNotSet : result.area;
-    if (result.name != plan.name || area != plan.area) {
+    if (result.name != plan.name) {
       await widget.repository.updatePlanInfo(
         planId: plan.id,
         name: result.name,
-        area: area,
+        area: plan.area,
       );
     }
     if (result.memo != plan.memo) {
@@ -404,7 +403,7 @@ Future<PilgrimagePlan?> createPlanFromInfoForm(
   }
   final plan = await repository.createPlan(
     name: result.name.isEmpty ? defaultName : result.name,
-    area: result.area.isEmpty ? l10n.planManagerAreaNotSet : result.area,
+    area: '',
   );
   if (result.memo.isEmpty) {
     return plan;
@@ -416,13 +415,11 @@ class _PlanInfoDialog extends StatefulWidget {
   const _PlanInfoDialog({
     required this.title,
     required this.name,
-    this.area = '',
     this.memo = '',
   });
 
   final String title;
   final String name;
-  final String area;
   final String memo;
 
   @override
@@ -431,13 +428,11 @@ class _PlanInfoDialog extends StatefulWidget {
 
 class _PlanInfoDialogState extends State<_PlanInfoDialog> {
   late final _nameController = TextEditingController(text: widget.name);
-  late final _areaController = TextEditingController(text: widget.area);
   late final _memoController = TextEditingController(text: widget.memo);
 
   @override
   void dispose() {
     _nameController.dispose();
-    _areaController.dispose();
     _memoController.dispose();
     super.dispose();
   }
@@ -446,7 +441,6 @@ class _PlanInfoDialogState extends State<_PlanInfoDialog> {
     Navigator.of(context).pop(
       _PlanInfoFormResult(
         name: _nameController.text.trim(),
-        area: _areaController.text.trim(),
         memo: _memoController.text,
       ),
     );
@@ -465,16 +459,6 @@ class _PlanInfoDialogState extends State<_PlanInfoDialog> {
               onTapOutside: dismissKeyboardOnTapOutside,
               controller: _nameController,
               autofocus: true,
-              decoration: appDialogInputDecoration(),
-              textInputAction: TextInputAction.next,
-            ),
-          ),
-          const SizedBox(height: 14),
-          AppDialogField(
-            label: l10n.planManagerAreaLabel,
-            child: TextField(
-              onTapOutside: dismissKeyboardOnTapOutside,
-              controller: _areaController,
               decoration: appDialogInputDecoration(),
               textInputAction: TextInputAction.next,
             ),
@@ -501,14 +485,9 @@ class _PlanInfoDialogState extends State<_PlanInfoDialog> {
 }
 
 class _PlanInfoFormResult {
-  const _PlanInfoFormResult({
-    required this.name,
-    required this.area,
-    required this.memo,
-  });
+  const _PlanInfoFormResult({required this.name, required this.memo});
 
   final String name;
-  final String area;
   final String memo;
 }
 
@@ -582,6 +561,11 @@ class _PlanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final works = _works(plan);
+    final areaNames = planAreaNames(plan);
+    final summary = l10n.planManagerPlanSummary(
+      plan.points.length,
+      works.length,
+    );
     final reduceMotion = MediaQuery.disableAnimationsOf(context);
 
     // The current plan sits on the accent wash, as Tsumiki's current row.
@@ -631,20 +615,33 @@ class _PlanCard extends StatelessWidget {
                     ],
                   ],
                 ),
+                if (areaNames.isNotEmpty) ...[
+                  const SizedBox(height: 5),
+                  CopyableText(
+                    key: ValueKey('plan-card-areas-${plan.id}'),
+                    text: areaNames,
+                    copyLabel: l10n.planManagerFactAreas,
+                    maxLines: expanded ? null : 1,
+                    overflow: expanded ? null : TextOverflow.ellipsis,
+                    onTap: onToggle,
+                    style: TextStyle(
+                      color: AppColors.textPrimary,
+                      fontSize: 14,
+                      height: 1.3,
+                      fontWeight: FontWeight.w500,
+                      letterSpacing: 0,
+                    ),
+                  ),
+                ],
                 const SizedBox(height: 5),
                 CopyableText(
                   key: ValueKey('plan-card-summary-${plan.id}'),
-                  text: l10n.planManagerPlanSummary(
-                    plan.area,
-                    plan.points.length,
-                    works.length,
-                  ),
-                  copyText: l10n.planManagerPlanCopyText(
+                  text: summary,
+                  copyText: [
                     plan.name,
-                    plan.area,
-                    plan.points.length,
-                    works.length,
-                  ),
+                    if (areaNames.isNotEmpty) areaNames,
+                    summary,
+                  ].join('\n'),
                   copyLabel: l10n.planManagerPlanInfo,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

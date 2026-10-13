@@ -274,7 +274,6 @@ class _AppShellState extends State<AppShell> {
                   title: Text(plan.name),
                   subtitle: Text(
                     l10n.planManagerPlanSummary(
-                      plan.area,
                       plan.points.length,
                       plan.works.length,
                     ),

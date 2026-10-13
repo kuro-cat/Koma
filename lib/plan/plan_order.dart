@@ -69,7 +69,9 @@ PilgrimagePoint? _pendingPointInGroupWalk({
   String? startGroupId,
   bool startAtFirstGroup = false,
 }) {
-  final groupIds = [for (final group in sortGroupsByPlanOrder(groups)) group.id];
+  final groupIds = [
+    for (final group in sortGroupsByPlanOrder(groups)) group.id,
+  ];
   final knownGroupIds = groupIds.toSet();
   // `null` is the ungrouped bucket; points of unknown groups also land there.
   final bucketIds = <String?>[...groupIds, null];
@@ -150,3 +152,7 @@ Map<String?, Set<String>> pointIdsByTargetGroup(
   }
   return result;
 }
+
+/// The plan's area names in plan order, e.g. `Uji · Kyoto`; empty without areas.
+String planAreaNames(PilgrimagePlan plan) =>
+    sortGroupsByPlanOrder(plan.groups).map((group) => group.name).join(' · ');

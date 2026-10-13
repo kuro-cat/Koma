@@ -194,12 +194,12 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String settingsPlanSummary(String area, int count) {
+  String settingsPlanSummary(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
       locale: localeName,
-      other: '$area / $count spots',
-      one: '$area / 1 spot',
+      other: '$count spots',
+      one: '1 spot',
     );
     return '$_temp0';
   }
@@ -1649,9 +1649,6 @@ class AppLocalizationsEn extends AppLocalizations {
       'Couldn\'t switch plans. Please try again later.';
 
   @override
-  String get planManagerAreaNotSet => 'Area not set';
-
-  @override
   String get planManagerDeletePlan => 'Delete plan';
 
   @override
@@ -1685,9 +1682,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planManagerPlanName => 'Plan name';
-
-  @override
-  String get planManagerAreaLabel => 'Region / area';
 
   @override
   String get planManagerNewPlan => 'New plan';
@@ -1737,7 +1731,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String planManagerPlanSummary(String area, int spotCount, int workCount) {
+  String planManagerPlanSummary(int spotCount, int workCount) {
     String _temp0 = intl.Intl.pluralLogic(
       spotCount,
       locale: localeName,
@@ -1750,29 +1744,7 @@ class AppLocalizationsEn extends AppLocalizations {
       other: '$workCount works',
       one: '1 work',
     );
-    return '$area  /  $_temp0  /  $_temp1';
-  }
-
-  @override
-  String planManagerPlanCopyText(
-    String name,
-    String area,
-    int spotCount,
-    int workCount,
-  ) {
-    String _temp0 = intl.Intl.pluralLogic(
-      spotCount,
-      locale: localeName,
-      other: '$spotCount spots',
-      one: '1 spot',
-    );
-    String _temp1 = intl.Intl.pluralLogic(
-      workCount,
-      locale: localeName,
-      other: '$workCount works',
-      one: '1 work',
-    );
-    return '$name\n$area\n$_temp0\n$_temp1';
+    return '$_temp0  /  $_temp1';
   }
 
   @override
@@ -2139,14 +2111,14 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String planSummary(String area, int spotCount, String works) {
+  String planSummary(int spotCount, String works) {
     String _temp0 = intl.Intl.pluralLogic(
       spotCount,
       locale: localeName,
       other: '$spotCount spots',
       one: '1 spot',
     );
-    return '$area / $_temp0 / $works';
+    return '$_temp0 / $works';
   }
 
   @override

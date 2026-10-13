@@ -2637,10 +2637,7 @@ class _CacheCleanupSettingsPageState extends State<_CacheCleanupSettingsPage> {
                         controlAffinity: ListTileControlAffinity.leading,
                         title: Text(plan.name, style: _titleTextStyle),
                         subtitle: Text(
-                          l10n.settingsPlanSummary(
-                            plan.area,
-                            plan.points.length,
-                          ),
+                          l10n.settingsPlanSummary(plan.points.length),
                           style: _secondaryTextStyle,
                         ),
                         value: _selectedPlanIds.contains(plan.id),

@@ -176,8 +176,8 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String settingsPlanSummary(String area, int count) {
-    return '$area / $count 个点位';
+  String settingsPlanSummary(int count) {
+    return '$count 个点位';
   }
 
   @override
@@ -1503,9 +1503,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planManagerSwitchFailed => '切换计划失败，请稍后重试。';
 
   @override
-  String get planManagerAreaNotSet => '未设置区域';
-
-  @override
   String get planManagerDeletePlan => '删除计划';
 
   @override
@@ -1537,9 +1534,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get planManagerPlanName => '计划名称';
-
-  @override
-  String get planManagerAreaLabel => '地区 / 区域';
 
   @override
   String get planManagerNewPlan => '新建计划';
@@ -1589,18 +1583,8 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String planManagerPlanSummary(String area, int spotCount, int workCount) {
-    return '$area  /  $spotCount 个点位  /  $workCount 部作品';
-  }
-
-  @override
-  String planManagerPlanCopyText(
-    String name,
-    String area,
-    int spotCount,
-    int workCount,
-  ) {
-    return '$name\n$area\n$spotCount 个点位\n$workCount 部作品';
+  String planManagerPlanSummary(int spotCount, int workCount) {
+    return '$spotCount 个点位  /  $workCount 部作品';
   }
 
   @override
@@ -1924,8 +1908,8 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String planSummary(String area, int spotCount, String works) {
-    return '$area / $spotCount 个点位 / $works';
+  String planSummary(int spotCount, String works) {
+    return '$spotCount 个点位 / $works';
   }
 
   @override

@@ -363,8 +363,8 @@ abstract class AppLocalizations {
   /// No description provided for @settingsPlanSummary.
   ///
   /// In zh, this message translates to:
-  /// **'{area} / {count} 个点位'**
-  String settingsPlanSummary(String area, int count);
+  /// **'{count} 个点位'**
+  String settingsPlanSummary(int count);
 
   /// No description provided for @settingsCleaningProgress.
   ///
@@ -2868,12 +2868,6 @@ abstract class AppLocalizations {
   /// **'切换计划失败，请稍后重试。'**
   String get planManagerSwitchFailed;
 
-  /// No description provided for @planManagerAreaNotSet.
-  ///
-  /// In zh, this message translates to:
-  /// **'未设置区域'**
-  String get planManagerAreaNotSet;
-
   /// No description provided for @planManagerDeletePlan.
   ///
   /// In zh, this message translates to:
@@ -2939,12 +2933,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'计划名称'**
   String get planManagerPlanName;
-
-  /// No description provided for @planManagerAreaLabel.
-  ///
-  /// In zh, this message translates to:
-  /// **'地区 / 区域'**
-  String get planManagerAreaLabel;
 
   /// No description provided for @planManagerNewPlan.
   ///
@@ -3027,19 +3015,8 @@ abstract class AppLocalizations {
   /// No description provided for @planManagerPlanSummary.
   ///
   /// In zh, this message translates to:
-  /// **'{area}  /  {spotCount} 个点位  /  {workCount} 部作品'**
-  String planManagerPlanSummary(String area, int spotCount, int workCount);
-
-  /// No description provided for @planManagerPlanCopyText.
-  ///
-  /// In zh, this message translates to:
-  /// **'{name}\n{area}\n{spotCount} 个点位\n{workCount} 部作品'**
-  String planManagerPlanCopyText(
-    String name,
-    String area,
-    int spotCount,
-    int workCount,
-  );
+  /// **'{spotCount} 个点位  /  {workCount} 部作品'**
+  String planManagerPlanSummary(int spotCount, int workCount);
 
   /// No description provided for @planMemoUnsavedChanges.
   ///
@@ -3619,8 +3596,8 @@ abstract class AppLocalizations {
   /// No description provided for @planSummary.
   ///
   /// In zh, this message translates to:
-  /// **'{area} / {spotCount} 个点位 / {works}'**
-  String planSummary(String area, int spotCount, String works);
+  /// **'{spotCount} 个点位 / {works}'**
+  String planSummary(int spotCount, String works);
 
   /// No description provided for @planWorkCount.
   ///

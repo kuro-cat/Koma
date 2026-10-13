@@ -2400,11 +2400,7 @@ class _WorkHeader extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  l10n.planSummary(
-                    plan.area,
-                    plan.points.length,
-                    _workCountText(plan),
-                  ),
+                  l10n.planSummary(plan.points.length, _workCountText(plan)),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
