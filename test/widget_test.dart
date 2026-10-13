@@ -3702,6 +3702,47 @@ void main() {
     );
   });
 
+  testWidgets('creating an area before importing keeps the anime on the map', (
+    tester,
+  ) async {
+    final repository = SamplePilgrimageRepository(plans: const []);
+    final plan = await repository.createPlan(name: '先建片区', area: '');
+    await tester.pumpWidget(
+      MaterialApp(
+        home: AnitabiMapImportScreen(
+          plan: plan,
+          repository: repository,
+          initialBangumiId: 12345,
+          anitabiClient: _FakeAnitabiClient(
+            pointsByBangumi: const {12345: _bulkImportPoints},
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('框选点位'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byKey(const ValueKey('import-box-area-button')));
+    await tester.pumpAndSettle();
+    await tester.tap(
+      find.byKey(const ValueKey('plan-point-group-create-entry')),
+    );
+    await tester.pumpAndSettle();
+    await tester.enterText(
+      find.byKey(const ValueKey('anitabi-import-group-name-field')),
+      '宇治',
+    );
+    await tester.tap(find.widgetWithText(FilledButton, '创建'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('还没有作品'), findsNothing);
+    expect(
+      find.byKey(const ValueKey('import-box-area-button')),
+      findsOneWidget,
+    );
+  });
+
   testWidgets(
     'post-import organization failure does not report import failure',
     (tester) async {

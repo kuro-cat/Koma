@@ -644,7 +644,8 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
         }
       }
     }
-    return plan.works.firstOrNull;
+    // Not imported yet: keep browsing it.
+    return selectedWork;
   }
 
   void _selectPoint(
