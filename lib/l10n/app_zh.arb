@@ -1299,6 +1299,18 @@
   "anitabiMapImportOrganizeTitle": "整理刚导入的点位",
   "anitabiMapImportOrganizeLead": "已导入 ",
   "anitabiMapImportOrganizeTail": "，并暂时放在未分组。可以直接分配到片区，或按最近关键点快速分配。",
+  "planAreaAddNote": "添加片区备注",
+  "planAreaEditNote": "编辑片区备注",
+  "planAreaNoteTitle": "{area} 的备注",
+  "@planAreaNoteTitle": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "planAreaNoteHint": "渡轮或巴士时刻、停车位置、推荐顺序……",
+  "planAreaNoteSaveFailed": "片区备注保存失败",
   "planAreaWalkingOrder": "按步行顺序排序",
   "planAreaWalkingOrderDone": "已按较短的步行路线排序",
   "planAreaWalkingOrderFailed": "新顺序保存失败",
@@ -1710,6 +1722,9 @@
   "pointDetailReferenceLabel": "参考",
   "pointDetailSourceLabel": "来源",
   "pointDetailLinkLabel": "链接",
+  "pointDetailAddNote": "添加备注",
+  "pointDetailNoteHint": "开放时间、拍摄位置、要带的东西……",
+  "pointDetailNoteSaveFailed": "备注保存失败",
   "pointDetailNoteLabel": "备注",
   "pointDetailManualSource": "手动录入 / {reference}",
   "@pointDetailManualSource": {

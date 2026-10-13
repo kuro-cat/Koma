@@ -38,6 +38,16 @@ Future<void> _pumpApp(WidgetTester tester) async {
   await tester.pumpAndSettle();
 }
 
+/// The sample plan with a memo written before notes moved to spots and
+/// areas; only then does the plan actions bar offer the memo.
+Future<void> _pumpAppWithMemo(WidgetTester tester) async {
+  final repository = SamplePilgrimageRepository();
+  final plan = await repository.loadActivePlan();
+  await repository.updatePlanMemo(planId: plan.id, memo: '旧的备忘');
+  await tester.pumpWidget(MiriaGoApp(repository: repository));
+  await tester.pumpAndSettle();
+}
+
 Future<void> _pumpAppWithEmptyPlan(WidgetTester tester) async {
   final repository = SamplePilgrimageRepository();
   await repository.createPlan(name: '新巡礼计划 2', area: '未设置区域');
@@ -198,7 +208,6 @@ void main() {
     await tester.tap(find.byKey(const ValueKey('plan-actions-toggle')));
     await tester.pumpAndSettle();
 
-    expect(find.byKey(const ValueKey('plan-action-memo')), findsOneWidget);
     expect(
       find.byKey(const ValueKey('plan-action-cache-references')),
       findsOneWidget,
@@ -206,7 +215,7 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets('plan actions expand inline and keep five actions', (
+  testWidgets('plan actions expand inline and keep their actions', (
     tester,
   ) async {
     await tester.binding.setSurfaceSize(const Size(360, 800));
@@ -229,11 +238,12 @@ void main() {
     for (final key in const [
       'plan-action-cache-references',
       'plan-action-switch-plan',
-      'plan-action-memo',
       'plan-action-import-export',
     ]) {
       expect(find.byKey(ValueKey(key)), findsOneWidget);
     }
+    // Notes live with spots and areas; the memo shows only once written.
+    expect(find.byKey(const ValueKey('plan-action-memo')), findsNothing);
 
     // Adding points is the app bar button now; it also folds the panel.
     await tester.tap(addPointsButton);
@@ -269,7 +279,7 @@ void main() {
 
     expect(find.byKey(const ValueKey('plan-actions-panel')), findsOneWidget);
     expect(find.text('计划列表'), findsOneWidget);
-    expect(find.text('计划备忘录'), findsOneWidget);
+    expect(find.text('计划备忘录'), findsNothing);
     expect(find.text('加入巡礼场景'), findsNothing);
     expect(find.text('整理片区点位'), findsNothing);
     expect(find.text('保存完整图片'), findsNothing);
@@ -288,7 +298,7 @@ void main() {
     expect(find.byKey(const ValueKey('plan-actions-panel')), findsOneWidget);
     expect(find.text('计划列表'), findsOneWidget);
     expect(find.text('加入巡礼场景'), findsNothing);
-    expect(find.text('计划备忘录'), findsOneWidget);
+    expect(find.text('计划备忘录'), findsNothing);
     expect(find.text('记录行程要点'), findsNothing);
 
     await tester.tap(find.byKey(const ValueKey('plan-action-switch-plan')));
@@ -1044,15 +1054,14 @@ void main() {
   });
 
   testWidgets('opens and edits plan memo from plan menu', (tester) async {
-    await _pumpApp(tester);
+    await _pumpAppWithMemo(tester);
 
     await _openPlanMenu(tester);
     await tester.tap(find.text('计划备忘录'));
     await tester.pumpAndSettle();
 
     expect(find.text('计划备忘录'), findsOneWidget);
-    expect(find.text('还没有计划备忘'), findsOneWidget);
-    expect(find.text('开始记录'), findsOneWidget);
+    expect(find.text('旧的备忘'), findsOneWidget);
 
     await tester.tap(find.byTooltip('编辑'));
     await tester.pumpAndSettle();
@@ -1070,13 +1079,15 @@ void main() {
   testWidgets('plan memo toolbar inserts markdown and preview renders it', (
     tester,
   ) async {
-    await _pumpApp(tester);
+    await _pumpAppWithMemo(tester);
 
     await _openPlanMenu(tester);
     await tester.tap(find.text('计划备忘录'));
     await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('编辑'));
     await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), '');
+    await tester.pump();
 
     expect(tester.testTextInput.isVisible, isTrue);
     await tester.tap(find.byTooltip('标题'));
@@ -1104,13 +1115,15 @@ void main() {
   testWidgets('plan memo quote renders and task checkbox toggles markdown', (
     tester,
   ) async {
-    await _pumpApp(tester);
+    await _pumpAppWithMemo(tester);
 
     await _openPlanMenu(tester);
     await tester.tap(find.text('计划备忘录'));
     await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('编辑'));
     await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), '');
+    await tester.pump();
     await tester.enterText(
       find.byType(TextField),
       '> 备用路线\n\n- [ ] 预约咖啡店\n- [x] 下载参考图',

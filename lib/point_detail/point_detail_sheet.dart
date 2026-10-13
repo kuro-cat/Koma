@@ -6,6 +6,7 @@ import '../app_theme.dart';
 import '../data/user_reference_image_stub.dart'
     if (dart.library.io) '../data/user_reference_image_io.dart';
 import '../map/navigation_route_confirm_screen.dart';
+import '../widgets/note_dialog.dart';
 import '../widgets/snackbar_helper.dart';
 import '../map/map_navigation_launcher.dart';
 import '../plan/area_suggestion.dart';
@@ -396,6 +397,13 @@ class PointDetailSheet extends StatelessWidget {
                     value: point.displayEpisodeLabel,
                   ),
                 ],
+                // Opening hours, the exact viewpoint, a ferry time: notes
+                // matter on site, so they come before the reference data.
+                if (planController != null ||
+                    point.note?.trim().isNotEmpty == true) ...[
+                  const SizedBox(height: 8),
+                  _NoteRow(point: point, planController: planController),
+                ],
                 const SizedBox(height: 8),
                 _InfoRow(
                   icon: LucideIcons.mapPin,
@@ -438,14 +446,6 @@ class PointDetailSheet extends StatelessWidget {
                     icon: LucideIcons.link,
                     label: l10n.pointDetailLinkLabel,
                     value: point.sourceUrl!,
-                  ),
-                ],
-                if (point.note?.trim().isNotEmpty == true) ...[
-                  const SizedBox(height: 8),
-                  _InfoRow(
-                    icon: LucideIcons.stickyNote,
-                    label: l10n.pointDetailNoteLabel,
-                    value: point.note!,
                   ),
                 ],
                 if (records.isNotEmpty) ...[
@@ -977,6 +977,70 @@ class _StatusBadge extends StatelessWidget {
           fontWeight: FontWeight.w600,
           letterSpacing: 0,
         ),
+      ),
+    );
+  }
+}
+
+/// The spot's note, editable in place when the plan can be saved.
+class _NoteRow extends StatefulWidget {
+  const _NoteRow({required this.point, required this.planController});
+
+  final PilgrimagePoint point;
+  final PilgrimagePlanController? planController;
+
+  @override
+  State<_NoteRow> createState() => _NoteRowState();
+}
+
+class _NoteRowState extends State<_NoteRow> {
+  late String _note = widget.point.note?.trim() ?? '';
+
+  Future<void> _edit() async {
+    final controller = widget.planController;
+    if (controller == null) return;
+    final edited = await showNoteDialog(
+      context,
+      title: l10n.pointDetailNoteLabel,
+      initial: _note,
+      hint: l10n.pointDetailNoteHint,
+    );
+    if (edited == null || edited == _note || !mounted) return;
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      await controller.updatePoint(
+        widget.point.copyWith(note: edited.isEmpty ? null : edited),
+      );
+      if (mounted) setState(() => _note = edited);
+    } catch (_) {
+      messenger.showStatusSnack(
+        kind: AppStatusBannerKind.error,
+        title: l10n.pointDetailNoteSaveFailed,
+      );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final editable = widget.planController != null;
+    if (_note.isEmpty) {
+      return Align(
+        alignment: AlignmentDirectional.centerStart,
+        child: TextButton.icon(
+          key: const ValueKey('point-detail-add-note'),
+          onPressed: editable ? _edit : null,
+          icon: const Icon(LucideIcons.stickyNote, size: 18),
+          label: Text(l10n.pointDetailAddNote),
+        ),
+      );
+    }
+    return InkWell(
+      key: const ValueKey('point-detail-note'),
+      onTap: editable ? _edit : null,
+      child: _InfoRow(
+        icon: LucideIcons.stickyNote,
+        label: l10n.pointDetailNoteLabel,
+        value: _note,
       ),
     );
   }

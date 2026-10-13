@@ -4197,6 +4197,36 @@ abstract class AppLocalizations {
   /// **'，并暂时放在未分组。可以直接分配到片区，或按最近关键点快速分配。'**
   String get anitabiMapImportOrganizeTail;
 
+  /// No description provided for @planAreaAddNote.
+  ///
+  /// In zh, this message translates to:
+  /// **'添加片区备注'**
+  String get planAreaAddNote;
+
+  /// No description provided for @planAreaEditNote.
+  ///
+  /// In zh, this message translates to:
+  /// **'编辑片区备注'**
+  String get planAreaEditNote;
+
+  /// No description provided for @planAreaNoteTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'{area} 的备注'**
+  String planAreaNoteTitle(String area);
+
+  /// No description provided for @planAreaNoteHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'渡轮或巴士时刻、停车位置、推荐顺序……'**
+  String get planAreaNoteHint;
+
+  /// No description provided for @planAreaNoteSaveFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'片区备注保存失败'**
+  String get planAreaNoteSaveFailed;
+
   /// No description provided for @planAreaWalkingOrder.
   ///
   /// In zh, this message translates to:
@@ -5360,6 +5390,24 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'链接'**
   String get pointDetailLinkLabel;
+
+  /// No description provided for @pointDetailAddNote.
+  ///
+  /// In zh, this message translates to:
+  /// **'添加备注'**
+  String get pointDetailAddNote;
+
+  /// No description provided for @pointDetailNoteHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'开放时间、拍摄位置、要带的东西……'**
+  String get pointDetailNoteHint;
+
+  /// No description provided for @pointDetailNoteSaveFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'备注保存失败'**
+  String get pointDetailNoteSaveFailed;
 
   /// No description provided for @pointDetailNoteLabel.
   ///

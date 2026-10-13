@@ -26,6 +26,7 @@ import 'plan_group_actions.dart';
 import 'plan_group_manager_screen.dart';
 import 'plan_group_picker_sheet.dart';
 import '../map/offline_map.dart';
+import '../widgets/note_dialog.dart';
 import 'auto_areas.dart';
 import 'plan_group_utils.dart';
 import 'plan_memo_screen.dart';
@@ -500,7 +501,9 @@ class _PlanScreenState extends State<PlanScreen>
                             onCacheReferences: _handleReferenceCachePressed,
                             onSwitchPlan: () =>
                                 _openPlanAction(widget.onOpenPlanManager),
-                            onOpenMemo: () => _openPlanAction(_openPlanMemo),
+                            onOpenMemo: controller.plan.memo.trim().isEmpty
+                                ? null
+                                : () => _openPlanAction(_openPlanMemo),
                             onImportExport: () =>
                                 _openPlanAction(widget.onOpenImportExport),
                           ),
@@ -522,7 +525,9 @@ class _PlanScreenState extends State<PlanScreen>
                       onCacheReferences: _handleReferenceCachePressed,
                       onSwitchPlan: () =>
                           _openPlanAction(widget.onOpenPlanManager),
-                      onOpenMemo: () => _openPlanAction(_openPlanMemo),
+                      onOpenMemo: controller.plan.memo.trim().isEmpty
+                          ? null
+                          : () => _openPlanAction(_openPlanMemo),
                       onImportExport: () =>
                           _openPlanAction(widget.onOpenImportExport),
                     ),
@@ -548,6 +553,13 @@ class _PlanScreenState extends State<PlanScreen>
                   onAreaAction: (action) =>
                       _handleAreaAction(action, selectedGroup),
                 ),
+                if (selectedGroup.group?.note?.trim() case final note?
+                    when note.isNotEmpty)
+                  _AreaNote(
+                    note: note,
+                    onEdit: () =>
+                        _handleAreaAction(_AreaAction.note, selectedGroup),
+                  ),
                 _PlanGroupControls(
                   locationError: _locationError,
                   group: selectedGroup,
@@ -847,6 +859,21 @@ class _PlanScreenState extends State<PlanScreen>
         await _runAreaChange(
           setAreaAnchorChange(context, widget.repository, plan, group),
           l10n.planGroupManagerAnchorSaveFailed,
+        );
+      case _AreaAction.note when group != null:
+        final edited = await showNoteDialog(
+          context,
+          title: l10n.planAreaNoteTitle(group.name),
+          initial: group.note,
+          hint: l10n.planAreaNoteHint,
+        );
+        if (edited == null || edited == (group.note?.trim() ?? '')) break;
+        await _savePlanChange(
+          () => widget.repository.updatePlanGroup(
+            planId: plan.id,
+            group: group.copyWith(note: edited.isEmpty ? null : edited),
+          ),
+          l10n.planAreaNoteSaveFailed,
         );
       case _AreaAction.walkingOrder when group != null:
         final saved = await _savePlanChange(
@@ -1198,14 +1225,14 @@ class _PlanActionsPanel extends StatelessWidget {
     required this.isCachingReferences,
     required this.onCacheReferences,
     required this.onSwitchPlan,
-    required this.onOpenMemo,
+    this.onOpenMemo,
     required this.onImportExport,
   });
 
   final bool isCachingReferences;
   final VoidCallback onCacheReferences;
   final VoidCallback onSwitchPlan;
-  final VoidCallback onOpenMemo;
+  final VoidCallback? onOpenMemo;
   final VoidCallback onImportExport;
 
   @override
@@ -1228,12 +1255,15 @@ class _PlanActionsPanel extends StatelessWidget {
         title: l10n.planCacheReferences,
         onTap: onCacheReferences,
       ),
-      _PlanActionItem(
-        key: const ValueKey('plan-action-memo'),
-        icon: const Icon(LucideIcons.stickyNote, size: 20),
-        title: l10n.planActionMemo,
-        onTap: onOpenMemo,
-      ),
+      // Notes now live with spots and areas; a memo written before stays
+      // reachable here.
+      if (onOpenMemo case final openMemo?)
+        _PlanActionItem(
+          key: const ValueKey('plan-action-memo'),
+          icon: const Icon(LucideIcons.stickyNote, size: 20),
+          title: l10n.planActionMemo,
+          onTap: openMemo,
+        ),
       _PlanActionItem(
         key: const ValueKey('plan-action-import-export'),
         icon: const Icon(LucideIcons.import, size: 20),
@@ -1350,6 +1380,7 @@ class _PlanActionDivider extends StatelessWidget {
 }
 
 enum _AreaAction {
+  note,
   rename,
   anchor,
   order,
@@ -1379,6 +1410,49 @@ PopupMenuItem<_AreaAction> _areaItem(
       ],
     ),
   );
+}
+
+/// An area's note, under the area switcher; tap to edit.
+class _AreaNote extends StatelessWidget {
+  const _AreaNote({required this.note, required this.onEdit});
+
+  final String note;
+  final VoidCallback onEdit;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      key: const ValueKey('plan-area-note'),
+      onTap: onEdit,
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 10),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              LucideIcons.stickyNote,
+              size: 16,
+              color: AppColors.textSecondary,
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                note,
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: AppColors.textSecondary,
+                  fontSize: 13,
+                  height: 1.4,
+                  letterSpacing: 0,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 /// Bulk actions for the selected spots, on an ink rule above the nav bar.
@@ -1526,6 +1600,13 @@ class _GroupSwitcher extends StatelessWidget {
                   l10n.pointManagerBoxAssign,
                 ),
               ] else ...[
+                _areaItem(
+                  _AreaAction.note,
+                  LucideIcons.stickyNote,
+                  group.group?.note?.trim().isNotEmpty == true
+                      ? l10n.planAreaEditNote
+                      : l10n.planAreaAddNote,
+                ),
                 _areaItem(
                   _AreaAction.rename,
                   LucideIcons.pencil,

@@ -698,6 +698,18 @@
   "anitabiMapImportOrganizeTitle": "Organize the spots you just imported",
   "anitabiMapImportOrganizeLead": "Imported ",
   "anitabiMapImportOrganizeTail": ". They stay ungrouped for now. Assign them to an area, or quickly assign each to the nearest anchor.",
+  "planAreaAddNote": "Add area note",
+  "planAreaEditNote": "Edit area note",
+  "planAreaNoteTitle": "Note for {area}",
+  "@planAreaNoteTitle": {
+    "placeholders": {
+      "area": {
+        "type": "String"
+      }
+    }
+  },
+  "planAreaNoteHint": "Ferry or bus times, where to park, the best order...",
+  "planAreaNoteSaveFailed": "Couldn't save the area note",
   "planAreaWalkingOrder": "Sort into walking order",
   "planAreaWalkingOrderDone": "Sorted into a short walking order",
   "planAreaWalkingOrderFailed": "Couldn't save the new order",
@@ -924,6 +936,9 @@
   "pointDetailReferenceLabel": "Ref",
   "pointDetailSourceLabel": "Source",
   "pointDetailLinkLabel": "Link",
+  "pointDetailAddNote": "Add a note",
+  "pointDetailNoteHint": "Opening hours, where to stand, what to bring...",
+  "pointDetailNoteSaveFailed": "Couldn't save the note",
   "pointDetailNoteLabel": "Note",
   "pointDetailManualSource": "Manual entry / {reference}",
   "pointDetailUndoCheckIn": "Undo check-in",

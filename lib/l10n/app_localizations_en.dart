@@ -2534,6 +2534,24 @@ class AppLocalizationsEn extends AppLocalizations {
       '. They stay ungrouped for now. Assign them to an area, or quickly assign each to the nearest anchor.';
 
   @override
+  String get planAreaAddNote => 'Add area note';
+
+  @override
+  String get planAreaEditNote => 'Edit area note';
+
+  @override
+  String planAreaNoteTitle(String area) {
+    return 'Note for $area';
+  }
+
+  @override
+  String get planAreaNoteHint =>
+      'Ferry or bus times, where to park, the best order...';
+
+  @override
+  String get planAreaNoteSaveFailed => 'Couldn\'t save the area note';
+
+  @override
   String get planAreaWalkingOrder => 'Sort into walking order';
 
   @override
@@ -3246,6 +3264,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pointDetailLinkLabel => 'Link';
+
+  @override
+  String get pointDetailAddNote => 'Add a note';
+
+  @override
+  String get pointDetailNoteHint =>
+      'Opening hours, where to stand, what to bring...';
+
+  @override
+  String get pointDetailNoteSaveFailed => 'Couldn\'t save the note';
 
   @override
   String get pointDetailNoteLabel => 'Note';

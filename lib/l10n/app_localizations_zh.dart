@@ -2252,6 +2252,23 @@ class AppLocalizationsZh extends AppLocalizations {
   String get anitabiMapImportOrganizeTail => '，并暂时放在未分组。可以直接分配到片区，或按最近关键点快速分配。';
 
   @override
+  String get planAreaAddNote => '添加片区备注';
+
+  @override
+  String get planAreaEditNote => '编辑片区备注';
+
+  @override
+  String planAreaNoteTitle(String area) {
+    return '$area 的备注';
+  }
+
+  @override
+  String get planAreaNoteHint => '渡轮或巴士时刻、停车位置、推荐顺序……';
+
+  @override
+  String get planAreaNoteSaveFailed => '片区备注保存失败';
+
+  @override
   String get planAreaWalkingOrder => '按步行顺序排序';
 
   @override
@@ -2890,6 +2907,15 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get pointDetailLinkLabel => '链接';
+
+  @override
+  String get pointDetailAddNote => '添加备注';
+
+  @override
+  String get pointDetailNoteHint => '开放时间、拍摄位置、要带的东西……';
+
+  @override
+  String get pointDetailNoteSaveFailed => '备注保存失败';
 
   @override
   String get pointDetailNoteLabel => '备注';
