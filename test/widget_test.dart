@@ -2167,7 +2167,13 @@ void main() {
       of: find.byType(Dialog),
       matching: find.byType(TextField),
     );
-    expect(tester.widget<TextField>(fields.first).controller!.text, '新巡礼计划 2');
+    final nameController = tester.widget<TextField>(fields.first).controller!;
+    expect(nameController.text, '新巡礼计划 2');
+    // Selected, so typing a name replaces the default.
+    expect(
+      nameController.selection,
+      const TextSelection(baseOffset: 0, extentOffset: 7),
+    );
     await tester.tap(find.text('保存'));
     await tester.pumpAndSettle();
 

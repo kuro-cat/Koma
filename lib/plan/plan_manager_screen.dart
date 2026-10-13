@@ -418,7 +418,10 @@ class _PlanInfoDialog extends StatefulWidget {
 }
 
 class _PlanInfoDialogState extends State<_PlanInfoDialog> {
-  late final _nameController = TextEditingController(text: widget.name);
+  // Selected, so typing a name replaces the suggested "New plan 1".
+  late final _nameController = TextEditingController(
+    text: widget.name,
+  )..selection = TextSelection(baseOffset: 0, extentOffset: widget.name.length);
   late final _memoController = TextEditingController(text: widget.memo);
 
   @override
