@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../app_theme.dart';
 import '../widgets/app_status_banner.dart';
@@ -43,18 +45,90 @@ class ReferenceCacheTask extends ChangeNotifier {
   }
 
   Future<void> _execute(ReferenceCacheRun run, Completer<void> done) async {
+    _notification.start();
     try {
       await run((value) {
         progress = value;
+        _notification.update(value);
         notifyListeners();
       });
     } catch (_) {
       hasError = true;
     } finally {
       isRunning = false;
+      _notification.finish(progress, interrupted: hasError);
       notifyListeners();
       done.complete();
     }
+  }
+
+  final _notification = _CacheNotification();
+}
+
+/// The Android foreground service that keeps caching alive with the screen
+/// locked, and its progress and result notifications.
+class _CacheNotification {
+  static const _channel = MethodChannel('seichi/reference_cache_service');
+  int? _lastPercent;
+
+  bool get _supported =>
+      !kIsWeb && defaultTargetPlatform == TargetPlatform.android;
+
+  void start() {
+    _lastPercent = null;
+    _send('start', {
+      'channelName': l10n.planCacheReferences,
+      'title': l10n.referenceCacheProgressRunning,
+    });
+  }
+
+  void update(ReferenceFullCacheProgress progress) {
+    // Android drops rapid notification updates, so send one per percent.
+    final percent = progress.total == 0
+        ? 0
+        : progress.processed * 100 ~/ progress.total;
+    if (percent == _lastPercent) return;
+    _lastPercent = percent;
+    _send('update', {
+      'title': l10n.referenceCacheProgressRunning,
+      'processed': progress.processed,
+      'total': progress.total,
+    });
+  }
+
+  void finish(
+    ReferenceFullCacheProgress? progress, {
+    required bool interrupted,
+  }) {
+    final failed =
+        interrupted ||
+        progress == null ||
+        (progress.failed > 0 && progress.succeeded == 0);
+    _send('finish', {
+      'title': failed
+          ? l10n.referenceCacheProgressFailedTitle
+          : l10n.referenceCacheProgressDone,
+      'text': interrupted || progress == null
+          ? l10n.referenceCacheProgressInterrupted
+          : progress.failed == 0
+          ? l10n.referenceCacheProgressSuccessSummary(
+              progress.succeeded,
+              progress.total,
+            )
+          : l10n.referenceCacheProgressPartialSummary(
+              progress.succeeded,
+              progress.total,
+              progress.failed,
+            ),
+    });
+  }
+
+  void _send(String method, Map<String, Object?> arguments) {
+    if (!_supported) return;
+    // Best effort: caching never depends on its notification.
+    unawaited(
+      _channel.invokeMethod<void>(method, arguments).catchError((Object _) {}),
+    );
   }
 }
 

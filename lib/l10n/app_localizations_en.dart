@@ -2879,7 +2879,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get referenceCacheProgressTip =>
-      'Stay online while caching. Locking the screen may pause it.';
+      'Stay online while caching. You can lock the screen or use other apps; progress shows in the notifications.';
 
   @override
   String get referenceCacheProgressBackground => 'Run in background';

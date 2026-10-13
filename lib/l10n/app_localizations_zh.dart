@@ -2547,7 +2547,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get referenceCacheProgressInterrupted => '缓存中断，请重试；已保存的图片不会删除。';
 
   @override
-  String get referenceCacheProgressTip => '缓存时请保持联网，锁屏可能会暂停缓存。';
+  String get referenceCacheProgressTip => '缓存时请保持联网。可以锁屏或切换到其他应用，进度会显示在通知栏。';
 
   @override
   String get referenceCacheProgressBackground => '后台缓存';

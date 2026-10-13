@@ -783,7 +783,7 @@
   "referenceCacheProgressRetryAll": "Retry all",
   "referenceCacheProgressRetryFailed": "Retry failed",
   "referenceCacheProgressInterrupted": "Caching was interrupted. Please retry; saved images are kept.",
-  "referenceCacheProgressTip": "Stay online while caching. Locking the screen may pause it.",
+  "referenceCacheProgressTip": "Stay online while caching. You can lock the screen or use other apps; progress shows in the notifications.",
   "referenceCacheProgressBackground": "Run in background",
   "referenceCacheProgressRunning": "Caching reference images...",
   "referenceCacheProgressDone": "Reference images cached",

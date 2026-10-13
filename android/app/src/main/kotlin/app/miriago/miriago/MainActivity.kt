@@ -33,6 +33,7 @@ import java.util.concurrent.RejectedExecutionException
 private const val MAX_INCOMING_PLAN_BYTES = 128L * 1024 * 1024
 private const val INCOMING_PLAN_DIRECTORY = "incoming_plans"
 private const val GALLERY_PERMISSION_REQUEST_CODE = 0x5E1C
+private const val NOTIFICATION_PERMISSION_REQUEST_CODE = 0x5E1F
 private const val GALLERY_RELATIVE_DIRECTORY = "SeichiJunrei"
 
 private class PlanFileTooLargeException : IOException("Plan file exceeds the import size limit.")
@@ -190,6 +191,49 @@ class MainActivity : FlutterActivity() {
                 return@setMethodCallHandler
             }
             result.success(openGoogleMapsWalking(latitude, longitude))
+        }
+
+        MethodChannel(
+            flutterEngine.dartExecutor.binaryMessenger,
+            "seichi/reference_cache_service"
+        ).setMethodCallHandler { call, result ->
+            val title = call.argument<String>("title").orEmpty()
+            when (call.method) {
+                "start" -> {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+                        checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) !=
+                        PackageManager.PERMISSION_GRANTED
+                    ) {
+                        // Caching starts either way; the answer only decides
+                        // whether its notification is visible.
+                        requestPermissions(
+                            arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                            NOTIFICATION_PERMISSION_REQUEST_CODE
+                        )
+                    }
+                    ReferenceCacheService.start(
+                        this,
+                        call.argument<String>("channelName").orEmpty(),
+                        title
+                    )
+                }
+                "update" -> ReferenceCacheService.update(
+                    this,
+                    title,
+                    call.argument<Int>("processed") ?: 0,
+                    call.argument<Int>("total") ?: 0
+                )
+                "finish" -> ReferenceCacheService.finish(
+                    this,
+                    title,
+                    call.argument<String>("text").orEmpty()
+                )
+                else -> {
+                    result.notImplemented()
+                    return@setMethodCallHandler
+                }
+            }
+            result.success(null)
         }
     }
 

@@ -4752,7 +4752,7 @@ abstract class AppLocalizations {
   /// No description provided for @referenceCacheProgressTip.
   ///
   /// In zh, this message translates to:
-  /// **'缓存时请保持联网，锁屏可能会暂停缓存。'**
+  /// **'缓存时请保持联网。可以锁屏或切换到其他应用，进度会显示在通知栏。'**
   String get referenceCacheProgressTip;
 
   /// No description provided for @referenceCacheProgressBackground.
