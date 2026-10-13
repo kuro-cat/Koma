@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:miriago/app_theme.dart';
@@ -91,6 +92,7 @@ void main() {
     expect(find.text('片区'), findsOneWidget);
     expect(find.text('宇治站附近'), findsOneWidget);
     expect(find.text('串联整个片区导航'), findsOneWidget);
+    expect(find.byType(PolylineLayer), findsOneWidget);
     expect(find.textContaining('点击即按顺序连接'), findsNothing);
     expect(find.text('仅导航到选中点'), findsOneWidget);
     expect(
@@ -245,6 +247,8 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('测试路径服务不可用'), findsOneWidget);
     expect(find.text('重试'), findsOneWidget);
+    // Without a route there is no line: straight lines would pass for one.
+    expect(find.byType(PolylineLayer), findsNothing);
     final externalButton = find.byKey(
       const ValueKey('navigation-route-external-fallback'),
     );

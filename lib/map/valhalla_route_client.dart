@@ -118,6 +118,28 @@ class ValhallaRouteClient {
     }
 
     final uri = Uri.parse('$normalizedBaseUrl/route');
+    // Public servers cap the stops per request (openstreetmap.de allows 10),
+    // so long routes are requested in overlapping parts and joined.
+    final parts = <NavigationRoute>[];
+    for (
+      var first = 0;
+      first < locations.length - 1;
+      first += maxLocationsPerRequest - 1
+    ) {
+      final end = (first + maxLocationsPerRequest).clamp(0, locations.length);
+      parts.add(await _requestRoute(uri, locations.sublist(first, end)));
+    }
+    final parsed = parts.length == 1 ? parts.single : joinRoutes(parts);
+    _cache[cacheKey] = _CachedRoute(parsed, DateTime.now());
+    _cache.removeWhere(
+      (_, entry) => DateTime.now().difference(entry.createdAt) >= cacheDuration,
+    );
+    return parsed;
+  }
+
+  static const maxLocationsPerRequest = 10;
+
+  Future<NavigationRoute> _requestRoute(Uri uri, List<LatLng> locations) async {
     late http.Response response;
     try {
       response = await _client
@@ -168,12 +190,7 @@ class ValhallaRouteClient {
       );
     }
 
-    final parsed = _parseRoute(response.body);
-    _cache[cacheKey] = _CachedRoute(parsed, DateTime.now());
-    _cache.removeWhere(
-      (_, entry) => DateTime.now().difference(entry.createdAt) >= cacheDuration,
-    );
-    return parsed;
+    return _parseRoute(response.body);
   }
 
   Future<void> testConnection(String baseUrl) async {
@@ -279,6 +296,57 @@ class ValhallaRouteClient {
       throw ValhallaRouteException(l10n.valhallaRouteClientBadResponse);
     }
   }
+}
+
+/// Joins routes where each one starts at the previous one's last stop, as if
+/// the whole trip had been requested at once.
+NavigationRoute joinRoutes(List<NavigationRoute> parts) {
+  final shape = <LatLng>[];
+  final maneuvers = <NavigationManeuver>[];
+  final legs = <NavigationLeg>[];
+  var distanceKm = 0.0;
+  var duration = Duration.zero;
+  for (final part in parts) {
+    final sharesFirstPoint =
+        shape.isNotEmpty &&
+        part.shape.isNotEmpty &&
+        shape.last == part.shape.first;
+    final offset = sharesFirstPoint ? shape.length - 1 : shape.length;
+    shape.addAll(sharesFirstPoint ? part.shape.skip(1) : part.shape);
+    final maneuverOffset = maneuvers.length;
+    for (final maneuver in part.maneuvers) {
+      maneuvers.add(
+        NavigationManeuver(
+          type: maneuver.type,
+          instruction: maneuver.instruction,
+          distanceKm: maneuver.distanceKm,
+          beginShapeIndex: maneuver.beginShapeIndex + offset,
+          endShapeIndex: maneuver.endShapeIndex + offset,
+        ),
+      );
+    }
+    for (final leg in part.legs) {
+      legs.add(
+        NavigationLeg(
+          startShapeIndex: leg.startShapeIndex + offset,
+          endShapeIndex: leg.endShapeIndex + offset,
+          firstManeuverIndex: leg.firstManeuverIndex + maneuverOffset,
+          maneuverCount: leg.maneuverCount,
+          distanceKm: leg.distanceKm,
+          duration: leg.duration,
+        ),
+      );
+    }
+    distanceKm += part.distanceKm;
+    duration += part.duration;
+  }
+  return NavigationRoute(
+    shape: List.unmodifiable(shape),
+    maneuvers: List.unmodifiable(maneuvers),
+    distanceKm: distanceKm,
+    duration: duration,
+    legs: List.unmodifiable(legs),
+  );
 }
 
 List<String> _stringList(Object? value) => value is List

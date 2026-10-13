@@ -228,6 +228,63 @@ void main() {
     expect(route.legs[1].duration, const Duration(seconds: 160));
     expect(route.maneuvers[3].beginShapeIndex, 2);
   });
+
+  test('routes more stops than the server allows by joining parts', () async {
+    final requests = <List<LatLng>>[];
+    final client = MockClient((request) async {
+      final locations = [
+        for (final raw
+            in (jsonDecode(request.body) as Map)['locations'] as List)
+          LatLng((raw as Map)['lat'] as double, raw['lon'] as double),
+      ];
+      requests.add(locations);
+      // Like valhalla1.openstreetmap.de.
+      if (locations.length > 10) {
+        return http.Response(
+          jsonEncode({
+            'error_code': 150,
+            'error': 'Exceeded max locations: 10',
+          }),
+          400,
+        );
+      }
+      return http.Response(
+        jsonEncode({
+          'trip': {
+            'summary': {'length': locations.length - 1.0, 'time': 60},
+            'legs': [
+              for (var i = 0; i < locations.length - 1; i++)
+                {
+                  'shape': _encodePolyline6([locations[i], locations[i + 1]]),
+                  'summary': {'length': 1.0, 'time': 60},
+                  'maneuvers': [
+                    {'type': 1, 'begin_shape_index': 0, 'end_shape_index': 1},
+                  ],
+                },
+            ],
+          },
+        }),
+        200,
+      );
+    });
+    final stops = [for (var i = 0; i < 12; i++) LatLng(35, 139 + i / 1000)];
+
+    final route = await ValhallaRouteClient(
+      client: client,
+    ).route(baseUrl: 'https://route.example', locations: stops);
+
+    expect(requests.map((r) => r.length), [10, 3]);
+    expect(requests[1].first, stops[9]);
+    expect(route.shape, stops);
+    expect(route.legs, hasLength(11));
+    for (var i = 0; i < 11; i++) {
+      expect(route.legs[i].startShapeIndex, i);
+      expect(route.legs[i].endShapeIndex, i + 1);
+      expect(route.legs[i].firstManeuverIndex, i);
+      expect(route.maneuvers[i].beginShapeIndex, i);
+    }
+    expect(route.distanceKm, 11);
+  });
 }
 
 Map<String, dynamic> _routeResponse(List<LatLng> points) => {

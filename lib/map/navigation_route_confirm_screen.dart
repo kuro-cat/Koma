@@ -230,6 +230,7 @@ class _NavigationRouteConfirmScreenState
               settings: widget.settings,
               dark: brightness == Brightness.dark,
               routePoints: routePoints,
+              routed: _route != null,
               stops: remainingStops,
             ),
           ),
@@ -528,12 +529,18 @@ class _RoutePreviewMap extends StatefulWidget {
     required this.settings,
     required this.dark,
     required this.routePoints,
+    required this.routed,
     required this.stops,
   });
 
   final AppSettings settings;
   final bool dark;
   final List<LatLng> routePoints;
+
+  /// Whether [routePoints] is a walking route. Until one loads (or when it
+  /// fails) they are only the stops, used to frame the map, and no line is
+  /// drawn: straight lines between stops would pass for a route.
+  final bool routed;
   final List<PilgrimagePoint> stops;
 
   @override
@@ -603,23 +610,24 @@ class _RoutePreviewMapState extends State<_RoutePreviewMap> {
       ),
       children: [
         configuredNavigationMapTileLayer(settings, dark: dark),
-        PolylineLayer(
-          polylines: [
-            Polyline(
-              points: routePoints,
-              color: configuredMapRouteColor(
-                settings,
-                dark: dark,
-              ).withValues(alpha: 0.28),
-              strokeWidth: 12,
-            ),
-            Polyline(
-              points: routePoints,
-              color: configuredMapRouteColor(settings, dark: dark),
-              strokeWidth: 6,
-            ),
-          ],
-        ),
+        if (widget.routed)
+          PolylineLayer(
+            polylines: [
+              Polyline(
+                points: routePoints,
+                color: configuredMapRouteColor(
+                  settings,
+                  dark: dark,
+                ).withValues(alpha: 0.28),
+                strokeWidth: 12,
+              ),
+              Polyline(
+                points: routePoints,
+                color: configuredMapRouteColor(settings, dark: dark),
+                strokeWidth: 6,
+              ),
+            ],
+          ),
         MarkerLayer(
           markers: [
             for (var i = 0; i < stops.length; i++)
