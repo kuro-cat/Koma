@@ -127,10 +127,7 @@ class _CacheNotification {
         : progress.processed * 100 ~/ progress.total;
     if (percent == _lastPercent) return;
     _lastPercent = percent;
-    _send('update', {
-      'processed': progress.processed,
-      'total': progress.total,
-    });
+    _send('update', {'processed': progress.processed, 'total': progress.total});
   }
 
   void finish(ReferenceCacheTask task) {
