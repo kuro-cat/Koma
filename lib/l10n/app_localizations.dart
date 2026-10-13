@@ -4794,8 +4794,14 @@ abstract class AppLocalizations {
   /// No description provided for @referenceCacheProgressTip.
   ///
   /// In zh, this message translates to:
-  /// **'提示：缓存过程中请保持网络连接，避免切换页面或锁屏。'**
+  /// **'缓存时请保持联网，锁屏可能会暂停缓存。'**
   String get referenceCacheProgressTip;
+
+  /// No description provided for @referenceCacheProgressBackground.
+  ///
+  /// In zh, this message translates to:
+  /// **'后台缓存'**
+  String get referenceCacheProgressBackground;
 
   /// No description provided for @referenceCacheProgressRunning.
   ///

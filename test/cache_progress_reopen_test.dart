@@ -120,7 +120,10 @@ void main() {
         await tester.pump();
         await tester.pump(const Duration(milliseconds: 220));
         expect(find.text('2 / 10'), findsOneWidget);
-        await tester.pump(const Duration(seconds: 3));
+        await tester.tap(
+          find.byKey(const ValueKey('reference-cache-background')),
+        );
+        await tester.pump();
         await tester.pump(const Duration(milliseconds: 220));
         expect(
           find.byKey(const ValueKey('reference-cache-progress-dialog')),
@@ -180,30 +183,29 @@ void main() {
   );
 
   for (final dark in [false, true]) {
-    testWidgets(
-      'export cache switch can be switched on ($dark)',
-      (tester) async {
-        final repository = SamplePilgrimageRepository();
-        final plan = await repository.loadActivePlan();
-        await tester.pumpWidget(
-          MaterialApp(
-            theme: dark ? AppTheme.dark() : AppTheme.light(),
-            home: ImportExportScreen(plan: plan, repository: repository),
-          ),
-        );
-        await tester.pump();
-        final finder = find.byKey(
-          const ValueKey('export-include-reference-cache'),
-        );
-        var toggle = tester.widget<SwitchListTile>(finder);
-        expect(toggle.value, isFalse);
-        expect(toggle.onChanged, isNotNull);
-        toggle.onChanged!(true);
-        await tester.pump();
-        toggle = tester.widget<SwitchListTile>(finder);
-        expect(toggle.value, isTrue);
-        await tester.pumpWidget(const SizedBox());
-      },
-    );
+    testWidgets('export cache switch can be switched on ($dark)', (
+      tester,
+    ) async {
+      final repository = SamplePilgrimageRepository();
+      final plan = await repository.loadActivePlan();
+      await tester.pumpWidget(
+        MaterialApp(
+          theme: dark ? AppTheme.dark() : AppTheme.light(),
+          home: ImportExportScreen(plan: plan, repository: repository),
+        ),
+      );
+      await tester.pump();
+      final finder = find.byKey(
+        const ValueKey('export-include-reference-cache'),
+      );
+      var toggle = tester.widget<SwitchListTile>(finder);
+      expect(toggle.value, isFalse);
+      expect(toggle.onChanged, isNotNull);
+      toggle.onChanged!(true);
+      await tester.pump();
+      toggle = tester.widget<SwitchListTile>(finder);
+      expect(toggle.value, isTrue);
+      await tester.pumpWidget(const SizedBox());
+    });
   }
 }

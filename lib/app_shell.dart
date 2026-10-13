@@ -28,6 +28,7 @@ import 'plan_transfer/plan_export_spool_sweep_stub.dart'
     if (dart.library.io) 'plan_transfer/plan_export_spool_sweep_io.dart';
 import 'plan_transfer/plan_import_preview_screen.dart';
 import 'plan_transfer/plan_import_package.dart';
+import 'widgets/koma_mascot.dart';
 import 'widgets/snackbar_helper.dart';
 import 'records/comparison_export_temp_stub.dart'
     if (dart.library.io) 'records/comparison_export_temp_io.dart';
@@ -789,19 +790,6 @@ class _PlanLoadStateState extends State<_PlanLoadState> {
   Widget build(BuildContext context) {
     final error = widget.error;
     final hasError = error != null;
-    final still = hasError || MediaQuery.disableAnimationsOf(context);
-    // The art is drawn on white: the screen is white in light mode, matching
-    // the system splash, and the art sits on a white panel in dark mode.
-    final mascot = Image.asset(
-      still
-          ? 'assets/mascot/koma_still.webp'
-          : 'assets/mascot/koma_loading.webp',
-      key: const ValueKey('koma-loading-mascot'),
-      height: 260,
-      gaplessPlayback: true,
-      filterQuality: FilterQuality.medium,
-    );
-
     return Scaffold(
       backgroundColor: AppColors.isDark ? AppColors.background : Colors.white,
       body: Center(
@@ -810,16 +798,11 @@ class _PlanLoadStateState extends State<_PlanLoadState> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (AppColors.isDark)
-                ColoredBox(
-                  color: Colors.white,
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: mascot,
-                  ),
-                )
-              else
-                mascot,
+              KomaMascot(
+                key: const ValueKey('koma-loading-mascot'),
+                height: 260,
+                still: hasError,
+              ),
               const SizedBox(height: 20),
               if (hasError) ...[
                 Text(

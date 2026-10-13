@@ -34,7 +34,6 @@ void main() {
     expect(find.text('正在缓存参考图...'), findsOneWidget);
     expect(find.text('8 / 18'), findsOneWidget);
     expect(find.text('44%'), findsOneWidget);
-    expect(find.text('提示：缓存过程中请保持网络连接，避免切换页面或锁屏。'), findsOneWidget);
     expect(find.text('重试失败'), findsNothing);
   });
 
@@ -121,7 +120,9 @@ void main() {
     expect(find.text('重试全部'), findsOneWidget);
   });
 
-  testWidgets('tapping outside closes the cache banner', (tester) async {
+  testWidgets('cache dialog stays up until sent to the background', (
+    tester,
+  ) async {
     final started = Completer<void>();
     final hold = Completer<void>();
     addTearDown(() {
@@ -174,69 +175,16 @@ void main() {
       findsOneWidget,
     );
 
+    // Neither a tap outside nor time closes it while caching runs.
     await tester.tapAt(const Offset(24, 24));
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 400));
-    expect(
-      find.byKey(const ValueKey('reference-cache-progress-dialog')),
-      findsNothing,
-    );
-  });
-
-  testWidgets('cache banner auto-closes after 3 seconds', (tester) async {
-    final started = Completer<void>();
-    final hold = Completer<void>();
-    addTearDown(() {
-      if (!hold.isCompleted) {
-        hold.complete();
-      }
-    });
-
-    await tester.binding.setSurfaceSize(const Size(390, 844));
-    addTearDown(() => tester.binding.setSurfaceSize(null));
-    await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: Builder(
-            builder: (context) {
-              return Center(
-                child: FilledButton(
-                  onPressed: () {
-                    showReferenceCacheProgressDialog(
-                      context: context,
-                      run: (onProgress) async {
-                        onProgress(
-                          const ReferenceFullCacheProgress(
-                            total: 18,
-                            processed: 8,
-                            succeeded: 8,
-                          ),
-                        );
-                        started.complete();
-                        await hold.future;
-                      },
-                    );
-                  },
-                  child: const Text('start-cache'),
-                ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-
-    await tester.tap(find.text('start-cache'));
-    await tester.pump();
-    await started.future;
-    await tester.pump();
-    await tester.pump(const Duration(milliseconds: 400));
+    await tester.pump(const Duration(seconds: 4));
     expect(
       find.byKey(const ValueKey('reference-cache-progress-dialog')),
       findsOneWidget,
     );
 
-    await tester.pump(const Duration(seconds: 3));
+    await tester.tap(find.byKey(const ValueKey('reference-cache-background')));
+    await tester.pump();
     await tester.pump(const Duration(milliseconds: 400));
     expect(
       find.byKey(const ValueKey('reference-cache-progress-dialog')),
@@ -282,7 +230,7 @@ void main() {
     await tester.pump();
     expect(find.text('重试失败'), findsOneWidget);
 
-    await tester.tap(find.byKey(const ValueKey('reference-cache-retry')));
+    await tester.tap(find.text('重试失败'));
     await tester.pump();
     await tester.pump();
 
