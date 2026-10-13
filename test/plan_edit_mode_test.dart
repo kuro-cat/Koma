@@ -34,7 +34,7 @@ void main() {
           settings: const AppSettings(),
           onOpenMap: () {},
           onOpenPlanManager: () {},
-          onOpenAddPoints: () {},
+          onOpenAddPoints: () async {},
           onOpenImportExport: () {},
         ),
       ),

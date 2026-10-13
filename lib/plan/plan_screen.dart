@@ -56,7 +56,7 @@ class PlanScreen extends StatefulWidget {
   final PilgrimageRepository repository;
   final VoidCallback onOpenMap;
   final VoidCallback onOpenPlanManager;
-  final VoidCallback onOpenAddPoints;
+  final Future<void> Function() onOpenAddPoints;
   final VoidCallback onOpenImportExport;
 
   /// Opens the plan list from the title; the title is plain text without it.
@@ -174,6 +174,9 @@ class _PlanScreenState extends State<PlanScreen>
       _selectedGroupIndex = selectedIndex;
       _selectedGroupId = groupId;
     });
+    if (_pointListController.hasClients) {
+      _pointListController.jumpTo(0);
+    }
     syncLocationActivity();
     controller.setCurrentGroup(groupId);
   }
@@ -211,18 +214,21 @@ class _PlanScreenState extends State<PlanScreen>
     _scrollPointTileIntoView(point.id);
   }
 
-  void _scrollPointTileIntoView(String pointId) {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+  Future<void> _scrollPointTileIntoView(String pointId) async {
+    // Rows vary in height and are built lazily, so jump by the list's own
+    // measured extent until the row exists, then let ensureVisible finish.
+    for (var attempt = 0; attempt < 6; attempt++) {
+      await WidgetsBinding.instance.endOfFrame;
       if (!mounted) {
         return;
       }
-      final context = _pointTileKeys[pointId]?.currentContext;
-      if (context != null) {
-        Scrollable.ensureVisible(
-          context,
+      final tileContext = _pointTileKeys[pointId]?.currentContext;
+      if (tileContext != null && tileContext.mounted) {
+        await Scrollable.ensureVisible(
+          tileContext,
           duration: const Duration(milliseconds: 260),
           curve: Curves.easeOutCubic,
-          alignment: 0.35,
+          alignment: 0,
         );
         return;
       }
@@ -245,31 +251,14 @@ class _PlanScreenState extends State<PlanScreen>
         return;
       }
 
-      final estimatedOffset = (index * 86.0).clamp(
-        0.0,
-        _pointListController.position.maxScrollExtent,
+      final position = _pointListController.position;
+      final rowExtent =
+          (position.maxScrollExtent + position.viewportDimension) /
+          displayPoints.length;
+      _pointListController.jumpTo(
+        (index * rowExtent).clamp(0.0, position.maxScrollExtent),
       );
-      _pointListController.animateTo(
-        estimatedOffset,
-        duration: const Duration(milliseconds: 260),
-        curve: Curves.easeOutCubic,
-      );
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (!mounted) {
-          return;
-        }
-        final nextContext = _pointTileKeys[pointId]?.currentContext;
-        if (nextContext == null) {
-          return;
-        }
-        Scrollable.ensureVisible(
-          nextContext,
-          duration: const Duration(milliseconds: 160),
-          curve: Curves.easeOutCubic,
-          alignment: 0.35,
-        );
-      });
-    });
+    }
   }
 
   GlobalKey _pointTileKey(String pointId) {
@@ -301,6 +290,27 @@ class _PlanScreenState extends State<PlanScreen>
     setState(() {
       _showPlanActions = false;
     });
+  }
+
+  Future<void> _openAddPoints() async {
+    final before = {for (final point in controller.points) point.id};
+    await widget.onOpenAddPoints();
+    // The shell hands over the reloaded plan on its next frame.
+    await WidgetsBinding.instance.endOfFrame;
+    if (!mounted) {
+      return;
+    }
+    final added = controller.points
+        .where((point) => !before.contains(point.id))
+        .firstOrNull;
+    if (added == null) {
+      return;
+    }
+    _selectPoint(
+      added,
+      planGroupBuckets(controller.plan, controller.completedPointIds),
+    );
+    _scrollPointTileIntoView(added.id);
   }
 
   void _openPlanAction(VoidCallback action) {
@@ -449,7 +459,7 @@ class _PlanScreenState extends State<PlanScreen>
                   IconButton(
                     key: const ValueKey('plan-add-points-button'),
                     tooltip: l10n.planAddSpots,
-                    onPressed: () => _openPlanAction(widget.onOpenAddPoints),
+                    onPressed: () => _openPlanAction(_openAddPoints),
                     icon: const Icon(LucideIcons.mapPinPlus),
                   ),
                   IconButton(
@@ -493,7 +503,7 @@ class _PlanScreenState extends State<PlanScreen>
                         ),
                       ),
                       const SizedBox(height: 16),
-                      _EmptyPlanCard(onAddPoints: widget.onOpenAddPoints),
+                      _EmptyPlanCard(onAddPoints: _openAddPoints),
                     ],
                   ),
                 )
@@ -1811,6 +1821,12 @@ class _PlanInlineMapState extends State<_PlanInlineMap> {
 
     if (widget.group.id != oldWidget.group.id) {
       _showGroup();
+    } else if (widget.selectedPointId != oldWidget.selectedPointId) {
+      final point = _selectedPoint;
+      if (point != null &&
+          !_mapController.camera.visibleBounds.contains(point.position)) {
+        _mapController.move(point.position, _mapController.camera.zoom);
+      }
     }
   }
 

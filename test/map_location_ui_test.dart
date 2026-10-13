@@ -100,7 +100,7 @@ void main() {
                   locationTracker: tracker,
                   onOpenMap: () {},
                   onOpenPlanManager: () {},
-                  onOpenAddPoints: () {},
+                  onOpenAddPoints: () async {},
                   onOpenImportExport: () {},
                 )
               : PilgrimageMapScreen(
