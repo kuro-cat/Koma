@@ -8299,11 +8299,11 @@ abstract class AppLocalizations {
   /// **'路径规划服务响应超时，请稍后重试'**
   String get valhallaRouteClientTimeout;
 
-  /// No description provided for @valhallaRouteClientConnectionFailed.
+  /// No description provided for @valhallaRouteClientNoConnection.
   ///
   /// In zh, this message translates to:
-  /// **'无法连接路径规划服务：{error}'**
-  String valhallaRouteClientConnectionFailed(String error);
+  /// **'无法连接路线服务。步行路线需要联网；已离线保存的地图和点位仍可使用。'**
+  String get valhallaRouteClientNoConnection;
 
   /// No description provided for @valhallaRouteClientRateLimited.
   ///

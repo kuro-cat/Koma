@@ -1411,7 +1411,7 @@
   "mapMarkerClusteringNext": "Next overlapping spot",
   "valhallaRouteClientNeedsTwoStops": "A route needs at least a start and a destination",
   "valhallaRouteClientTimeout": "The routing service timed out. Try again later",
-  "valhallaRouteClientConnectionFailed": "Can't connect to the routing service: {error}",
+  "valhallaRouteClientNoConnection": "Can't reach the routing service. Walking routes need a connection; the map and spots you saved still work offline.",
   "valhallaRouteClientRateLimited": "Too many requests to the routing service. Try again later",
   "valhallaRouteClientServiceUnavailable": "The routing service is temporarily unavailable ({status})",
   "valhallaRouteClientRouteFailed": "Can't plan this walking route ({status})",

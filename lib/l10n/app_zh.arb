@@ -2714,14 +2714,7 @@
   "mapMarkerClusteringNext": "下一个重合点位",
   "valhallaRouteClientNeedsTwoStops": "路线至少需要起点和终点",
   "valhallaRouteClientTimeout": "路径规划服务响应超时，请稍后重试",
-  "valhallaRouteClientConnectionFailed": "无法连接路径规划服务：{error}",
-  "@valhallaRouteClientConnectionFailed": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
-  },
+  "valhallaRouteClientNoConnection": "无法连接路线服务。步行路线需要联网；已离线保存的地图和点位仍可使用。",
   "valhallaRouteClientRateLimited": "路径规划服务请求过于频繁，请稍后重试",
   "valhallaRouteClientServiceUnavailable": "路径规划服务暂时不可用（{status}）",
   "@valhallaRouteClientServiceUnavailable": {

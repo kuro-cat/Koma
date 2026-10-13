@@ -76,6 +76,25 @@ void main() {
     );
   });
 
+  test('no connection gives a plain message, not the socket error', () {
+    final client = MockClient(
+      (_) async => throw http.ClientException('Failed host lookup: errno = 7'),
+    );
+    expect(
+      () => ValhallaRouteClient(client: client).route(
+        baseUrl: 'https://route.example',
+        locations: const [LatLng(1, 2), LatLng(1.1, 2.1)],
+      ),
+      throwsA(
+        isA<ValhallaRouteException>().having(
+          (error) => error.message,
+          'message',
+          allOf(contains('离线'), isNot(contains('errno'))),
+        ),
+      ),
+    );
+  });
+
   test('polyline6 decoder rejects truncated data', () {
     expect(() => decodePolyline6('_'), throwsFormatException);
   });

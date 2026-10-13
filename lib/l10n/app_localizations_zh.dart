@@ -4530,9 +4530,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get valhallaRouteClientTimeout => '路径规划服务响应超时，请稍后重试';
 
   @override
-  String valhallaRouteClientConnectionFailed(String error) {
-    return '无法连接路径规划服务：$error';
-  }
+  String get valhallaRouteClientNoConnection =>
+      '无法连接路线服务。步行路线需要联网；已离线保存的地图和点位仍可使用。';
 
   @override
   String get valhallaRouteClientRateLimited => '路径规划服务请求过于频繁，请稍后重试';

@@ -169,10 +169,9 @@ class ValhallaRouteClient {
           .timeout(timeout);
     } on TimeoutException {
       throw ValhallaRouteException(l10n.valhallaRouteClientTimeout);
-    } on Object catch (error) {
-      throw ValhallaRouteException(
-        l10n.valhallaRouteClientConnectionFailed('$error'),
-      );
+    } on Object {
+      // Usually no signal; the raw socket error means nothing to a walker.
+      throw ValhallaRouteException(l10n.valhallaRouteClientNoConnection);
     }
 
     if (response.statusCode == 429) {

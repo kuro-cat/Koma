@@ -5141,9 +5141,8 @@ class AppLocalizationsEn extends AppLocalizations {
       'The routing service timed out. Try again later';
 
   @override
-  String valhallaRouteClientConnectionFailed(String error) {
-    return 'Can\'t connect to the routing service: $error';
-  }
+  String get valhallaRouteClientNoConnection =>
+      'Can\'t reach the routing service. Walking routes need a connection; the map and spots you saved still work offline.';
 
   @override
   String get valhallaRouteClientRateLimited =>
