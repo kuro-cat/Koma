@@ -34,6 +34,7 @@ Koma may request the following system permissions:
 - Location: used to show your current position on the pilgrimage map and help you navigate or record locations.
 - Microphone: Koma does not record sound. The system requires a microphone description because the camera component also supports video recording; Koma only takes photos.
 - Files / Documents: used when you import or export Koma plan packages, CSV files, or related resources.
+- Notifications (Android): used to show progress while Koma caches a plan's reference images in the background, and the result when it finishes. Caching works without this permission; you just don't see the notification.
 
 You can manage these permissions in your device settings.
 
@@ -135,6 +136,7 @@ Koma 可能请求以下系统权限：
 - 定位：用于在巡礼地图中显示当前位置，并辅助导航或记录地点。
 - 麦克风：Koma 拍摄巡礼照片时不会录制声音。此说明仅因相机组件包含录像能力而必须提供，Koma 只拍摄照片。
 - 文件/文档：用于导入或导出 Koma 计划包、CSV 文件和相关资源。
+- 通知（Android）：Koma 在后台缓存计划参考图时显示进度，完成后显示结果。没有此权限也能缓存，只是看不到通知。
 
 你可以在设备系统设置中管理这些权限。
 
