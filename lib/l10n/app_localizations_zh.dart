@@ -2252,6 +2252,26 @@ class AppLocalizationsZh extends AppLocalizations {
   String get anitabiMapImportOrganizeTail => '，并暂时放在未分组。可以直接分配到片区，或按最近关键点快速分配。';
 
   @override
+  String autoAreaFallbackName(int number) {
+    return '片区 $number';
+  }
+
+  @override
+  String get anitabiMapImportAutoGroup => '按距离分组';
+
+  @override
+  String get anitabiMapImportOrganizeNoAreasTail =>
+      '。按距离分成片区：步行不远的点位归入同一片区，并以所在街区命名。';
+
+  @override
+  String autoAreaGrouped(int spots, int areas) {
+    return '已将 $spots 个点位分成 $areas 个片区';
+  }
+
+  @override
+  String get autoAreaFailed => '分组失败，请重试。';
+
+  @override
   String get anitabiMapImportNearestAssign => '最近分配';
 
   @override

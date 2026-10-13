@@ -2534,6 +2534,26 @@ class AppLocalizationsEn extends AppLocalizations {
       '. They stay ungrouped for now. Assign them to an area, or quickly assign each to the nearest anchor.';
 
   @override
+  String autoAreaFallbackName(int number) {
+    return 'Area $number';
+  }
+
+  @override
+  String get anitabiMapImportAutoGroup => 'Group by distance';
+
+  @override
+  String get anitabiMapImportOrganizeNoAreasTail =>
+      '. Group them into areas by distance: spots within a short walk of each other share an area, named after its district.';
+
+  @override
+  String autoAreaGrouped(int spots, int areas) {
+    return 'Grouped $spots spots into $areas areas';
+  }
+
+  @override
+  String get autoAreaFailed => 'Couldn\'t group the spots. Try again.';
+
+  @override
   String get anitabiMapImportNearestAssign => 'Assign to nearest';
 
   @override

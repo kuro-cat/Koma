@@ -5,12 +5,20 @@ import 'package:latlong2/latlong.dart';
 
 import '../l10n/l10n.dart';
 
-/// Lookups so far, by rounded position and language.
-final _cityCache = <String, String?>{};
+/// Lookups so far, by rounded position, language and detail.
+final _nameCache = <String, String?>{};
 
 /// The city (or ward) at [position] from the phone's geocoder, in the app's
 /// language. Null off Android/iOS, offline, or when nothing is found.
-Future<String?> cityNameAt(LatLng position) async {
+Future<String?> cityNameAt(LatLng position) =>
+    _placeNameAt(position, district: false);
+
+/// The district (or, failing that, the city) at [position], e.g. 忠海 rather
+/// than 竹原市, so areas within one town get different names.
+Future<String?> districtNameAt(LatLng position) =>
+    _placeNameAt(position, district: true);
+
+Future<String?> _placeNameAt(LatLng position, {required bool district}) async {
   final mobile =
       !kIsWeb &&
       (defaultTargetPlatform == TargetPlatform.android ||
@@ -19,8 +27,8 @@ Future<String?> cityNameAt(LatLng position) async {
   final language = l10n.localeName;
   final key =
       '${position.latitude.toStringAsFixed(3)},'
-      '${position.longitude.toStringAsFixed(3)},$language';
-  if (_cityCache.containsKey(key)) return _cityCache[key];
+      '${position.longitude.toStringAsFixed(3)},$language,$district';
+  if (_nameCache.containsKey(key)) return _nameCache[key];
   String? city;
   try {
     final places = await Geocoding(
@@ -28,6 +36,7 @@ Future<String?> cityNameAt(LatLng position) async {
     ).placemarkFromCoordinates(position.latitude, position.longitude);
     final place = places.firstOrNull;
     city = [
+      if (district) place?.subLocality,
       place?.locality,
       place?.subAdministrativeArea,
       place?.administrativeArea,
@@ -35,7 +44,7 @@ Future<String?> cityNameAt(LatLng position) async {
   } catch (_) {
     return null; // Offline or no geocoder: try again next time.
   }
-  return _cityCache[key] = city;
+  return _nameCache[key] = city;
 }
 
 /// The cities of [positions], the one with the most positions first.

@@ -1,0 +1,69 @@
+import 'package:flutter_test/flutter_test.dart';
+import 'package:latlong2/latlong.dart';
+import 'package:miriago/data/sample_pilgrimage_repository.dart';
+import 'package:miriago/plan/auto_areas.dart';
+import 'package:miriago/plan/pilgrimage_models.dart';
+
+void main() {
+  // 0.001° latitude is about 111 m.
+  PilgrimagePoint spot(String id, double lat, double lon) =>
+      samplePilgrimagePlan.points.first.copyWith(
+        id: id,
+        name: id,
+        position: LatLng(lat, lon),
+        groupId: null,
+      );
+
+  test('spots a short walk apart share an area, even through a chain', () {
+    final clusters = clusterSpotsByDistance([
+      spot('a', 34.000, 132.0),
+      spot('b', 34.005, 132.0), // 555 m from a
+      spot('c', 34.010, 132.0), // 555 m from b, 1.1 km from a
+      spot('far', 34.100, 132.0),
+    ]);
+
+    expect(clusters.map((c) => c.map((s) => s.id).toSet()), [
+      {'a', 'b', 'c'},
+      {'far'},
+    ]);
+  });
+
+  test(
+    'grouping names areas by district and anchors them; repeats name their central spot',
+    () async {
+      final plan = samplePilgrimagePlan.copyWith(
+        groups: const [],
+        points: [
+          spot('a', 34.000, 132.0),
+          spot('b', 34.002, 132.0),
+          spot('c', 34.004, 132.0),
+          spot('far', 34.100, 132.0),
+          spot('far2', 34.200, 132.0),
+        ],
+      );
+      final repository = SamplePilgrimageRepository(plans: [plan]);
+
+      final grouped = await autoGroupUngroupedSpots(
+        plan: plan,
+        repository: repository,
+        nameAt: (position) async => position.latitude < 34.05 ? '忠海' : '竹原',
+      );
+
+      expect(grouped.points.every((p) => p.groupId != null), isTrue);
+      final names = {
+        for (final group in grouped.groups)
+          group.name: grouped.points
+              .where((p) => p.groupId == group.id)
+              .map((p) => p.id)
+              .toSet(),
+      };
+      expect(names, {
+        '忠海': {'a', 'b', 'c'},
+        '竹原': {'far'},
+        '竹原 · far2': {'far2'},
+      });
+      final tadanoumi = grouped.groups.firstWhere((g) => g.name == '忠海');
+      expect(tadanoumi.anchorPointId, 'b');
+    },
+  );
+}

@@ -698,6 +698,28 @@
   "anitabiMapImportOrganizeTitle": "Organize the spots you just imported",
   "anitabiMapImportOrganizeLead": "Imported ",
   "anitabiMapImportOrganizeTail": ". They stay ungrouped for now. Assign them to an area, or quickly assign each to the nearest anchor.",
+  "autoAreaFallbackName": "Area {number}",
+  "@autoAreaFallbackName": {
+    "placeholders": {
+      "number": {
+        "type": "int"
+      }
+    }
+  },
+  "anitabiMapImportAutoGroup": "Group by distance",
+  "anitabiMapImportOrganizeNoAreasTail": ". Group them into areas by distance: spots within a short walk of each other share an area, named after its district.",
+  "autoAreaGrouped": "Grouped {spots} spots into {areas} areas",
+  "@autoAreaGrouped": {
+    "placeholders": {
+      "spots": {
+        "type": "int"
+      },
+      "areas": {
+        "type": "int"
+      }
+    }
+  },
+  "autoAreaFailed": "Couldn't group the spots. Try again.",
   "anitabiMapImportNearestAssign": "Assign to nearest",
   "anitabiMapImportLater": "Later",
   "anitabiMapImportImportedSpot": "Imported spot",

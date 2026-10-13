@@ -43,6 +43,7 @@ import 'add_points_screen.dart';
 import 'nearest_group_assign_screen.dart';
 import 'pilgrimage_models.dart';
 import 'area_name_dialog.dart';
+import 'auto_areas.dart';
 import '../data/place_names.dart';
 import 'pilgrimage_work_dropdown.dart';
 import 'plan_group_picker_sheet.dart';
@@ -1269,6 +1270,10 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
       context: context,
       builder: (context) => _ImportOrganizeDialog(
         importedCount: importedPoints.length,
+        // Without areas there is no anchor to assign to: offer to make them.
+        hasAreas: _importedPlan.groups.isNotEmpty,
+        onAutoGroup: () =>
+            Navigator.of(context).pop(_ImportOrganizeAction.autoGroup),
         onNearestAssign: () =>
             Navigator.of(context).pop(_ImportOrganizeAction.nearestAssign),
         onAssignToGroup: () =>
@@ -1287,8 +1292,46 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
         );
       case _ImportOrganizeAction.nearestAssign:
         await _openNearestAssign();
+      case _ImportOrganizeAction.autoGroup:
+        await _autoGroup();
       case _ImportOrganizeAction.later:
         break;
+    }
+  }
+
+  Future<void> _autoGroup() async {
+    final messenger = ScaffoldMessenger.of(context);
+    try {
+      final before = await widget.repository.loadActivePlan();
+      final after = await autoGroupUngroupedSpots(
+        plan: before,
+        repository: widget.repository,
+      );
+      if (!mounted) return;
+      setState(() {
+        _replaceImportedPlan(after);
+        _didUpdatePlan = true;
+      });
+      final grouped = before.points
+          .where((point) => point.groupId == null)
+          .where(
+            (point) =>
+                after.points.any((p) => p.id == point.id && p.groupId != null),
+          )
+          .length;
+      messenger.showStatusSnack(
+        kind: AppStatusBannerKind.success,
+        title: l10n.autoAreaGrouped(
+          grouped,
+          after.groups.length - before.groups.length,
+        ),
+      );
+    } catch (error) {
+      debugPrint('Auto grouping failed: $error');
+      messenger.showStatusSnack(
+        kind: AppStatusBannerKind.error,
+        title: l10n.autoAreaFailed,
+      );
     }
   }
 
@@ -2199,12 +2242,16 @@ class _ImportProgress {
 class _ImportOrganizeDialog extends StatelessWidget {
   const _ImportOrganizeDialog({
     required this.importedCount,
+    required this.hasAreas,
+    required this.onAutoGroup,
     required this.onNearestAssign,
     required this.onAssignToGroup,
     required this.onLater,
   });
 
   final int importedCount;
+  final bool hasAreas;
+  final VoidCallback onAutoGroup;
   final VoidCallback onNearestAssign;
   final VoidCallback onAssignToGroup;
   final VoidCallback onLater;
@@ -2244,7 +2291,11 @@ class _ImportOrganizeDialog extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-                    TextSpan(text: l10n.anitabiMapImportOrganizeTail),
+                    TextSpan(
+                      text: hasAreas
+                          ? l10n.anitabiMapImportOrganizeTail
+                          : l10n.anitabiMapImportOrganizeNoAreasTail,
+                    ),
                   ],
                 ),
                 style: TextStyle(
@@ -2256,8 +2307,15 @@ class _ImportOrganizeDialog extends StatelessWidget {
               ),
               const SizedBox(height: 18),
               FilledButton(
-                onPressed: onNearestAssign,
-                child: Text(l10n.anitabiMapImportNearestAssign),
+                key: ValueKey(
+                  hasAreas ? 'import-organize-nearest' : 'import-organize-auto',
+                ),
+                onPressed: hasAreas ? onNearestAssign : onAutoGroup,
+                child: Text(
+                  hasAreas
+                      ? l10n.anitabiMapImportNearestAssign
+                      : l10n.anitabiMapImportAutoGroup,
+                ),
               ),
               const SizedBox(height: 8),
               OutlinedButton(
@@ -2277,7 +2335,7 @@ class _ImportOrganizeDialog extends StatelessWidget {
   }
 }
 
-enum _ImportOrganizeAction { later, assignToGroup, nearestAssign }
+enum _ImportOrganizeAction { later, assignToGroup, nearestAssign, autoGroup }
 
 class _ThumbnailCacheResult {
   const _ThumbnailCacheResult._({

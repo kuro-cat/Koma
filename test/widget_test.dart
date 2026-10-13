@@ -3641,11 +3641,56 @@ void main() {
     );
   });
 
+  testWidgets('a plan without areas groups imported spots by distance', (
+    tester,
+  ) async {
+    final repository = SamplePilgrimageRepository(plans: const []);
+    final plan = await repository.createPlan(name: '分组测试', area: '京都');
+    await tester.pumpWidget(
+      MaterialApp(
+        home: AnitabiMapImportScreen(
+          plan: plan,
+          repository: repository,
+          initialBangumiId: 12345,
+          anitabiClient: _FakeAnitabiClient(
+            pointsByBangumi: const {12345: _bulkImportPoints},
+          ),
+        ),
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('添加所有点位'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('添加全部'));
+    await tester.pumpAndSettle();
+    expect(find.text('最近分配'), findsNothing);
+    await tester.tap(find.text('按距离分组'));
+    await tester.pumpAndSettle();
+
+    final grouped = await repository.loadActivePlan();
+    expect(grouped.groups, hasLength(1));
+    expect(
+      grouped.points.map((p) => p.groupId),
+      everyElement(grouped.groups.single.id),
+    );
+  });
+
   testWidgets(
     'post-import organization failure does not report import failure',
     (tester) async {
       final repository = _FailingSettingsOnDemandRepository(plans: const []);
-      final plan = await repository.createPlan(name: '整理失败测试', area: '京都');
+      var plan = await repository.createPlan(name: '整理失败测试', area: '京都');
+      // With an area, the guide offers assigning to the nearest one.
+      plan = await repository.createPlanGroup(
+        planId: plan.id,
+        group: PilgrimagePlanGroup(
+          id: 'kyoto',
+          name: '京都',
+          orderIndex: 0,
+          createdAt: DateTime(2026),
+        ),
+      );
       final anitabiClient = _FakeAnitabiClient(
         pointsByBangumi: const {12345: _bulkImportPoints},
       );

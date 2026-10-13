@@ -4197,6 +4197,36 @@ abstract class AppLocalizations {
   /// **'，并暂时放在未分组。可以直接分配到片区，或按最近关键点快速分配。'**
   String get anitabiMapImportOrganizeTail;
 
+  /// No description provided for @autoAreaFallbackName.
+  ///
+  /// In zh, this message translates to:
+  /// **'片区 {number}'**
+  String autoAreaFallbackName(int number);
+
+  /// No description provided for @anitabiMapImportAutoGroup.
+  ///
+  /// In zh, this message translates to:
+  /// **'按距离分组'**
+  String get anitabiMapImportAutoGroup;
+
+  /// No description provided for @anitabiMapImportOrganizeNoAreasTail.
+  ///
+  /// In zh, this message translates to:
+  /// **'。按距离分成片区：步行不远的点位归入同一片区，并以所在街区命名。'**
+  String get anitabiMapImportOrganizeNoAreasTail;
+
+  /// No description provided for @autoAreaGrouped.
+  ///
+  /// In zh, this message translates to:
+  /// **'已将 {spots} 个点位分成 {areas} 个片区'**
+  String autoAreaGrouped(int spots, int areas);
+
+  /// No description provided for @autoAreaFailed.
+  ///
+  /// In zh, this message translates to:
+  /// **'分组失败，请重试。'**
+  String get autoAreaFailed;
+
   /// No description provided for @anitabiMapImportNearestAssign.
   ///
   /// In zh, this message translates to:

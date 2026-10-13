@@ -25,6 +25,7 @@ import 'nearest_group_assign_screen.dart';
 import 'plan_group_actions.dart';
 import 'plan_group_manager_screen.dart';
 import 'plan_group_picker_sheet.dart';
+import 'auto_areas.dart';
 import 'plan_group_utils.dart';
 import 'plan_memo_screen.dart';
 import 'pilgrimage_models.dart';
@@ -869,6 +870,26 @@ class _PlanScreenState extends State<PlanScreen>
         if (pickedId != null && mounted) {
           setState(() => _selectedGroupId = pickedId);
         }
+      case _AreaAction.auto:
+        final before = plan.groups.length;
+        await _savePlanChange(
+          () => autoGroupUngroupedSpots(
+            plan: plan,
+            repository: widget.repository,
+          ),
+          l10n.autoAreaFailed,
+        );
+        final added = controller.plan.groups.length - before;
+        if (mounted && added > 0) {
+          final firstNew = sortGroupsByPlanOrder(
+            controller.plan.groups,
+          ).skip(before).first;
+          setState(() => _selectedGroupId = firstNew.id);
+          _showSnackBar(
+            l10n.autoAreaGrouped(bucket.points.length, added),
+            kind: AppStatusBannerKind.success,
+          );
+        }
       case _AreaAction.nearest:
         await Navigator.of(context).push<bool>(
           MaterialPageRoute(
@@ -1298,7 +1319,7 @@ class _PlanActionDivider extends StatelessWidget {
   }
 }
 
-enum _AreaAction { rename, anchor, order, manage, delete, nearest, box }
+enum _AreaAction { rename, anchor, order, manage, delete, auto, nearest, box }
 
 PopupMenuItem<_AreaAction> _areaItem(
   _AreaAction action,
@@ -1449,6 +1470,11 @@ class _GroupSwitcher extends StatelessWidget {
             onSelected: onAreaAction,
             itemBuilder: (context) => [
               if (group.isUngrouped) ...[
+                _areaItem(
+                  _AreaAction.auto,
+                  LucideIcons.wandSparkles,
+                  l10n.anitabiMapImportAutoGroup,
+                ),
                 _areaItem(
                   _AreaAction.nearest,
                   LucideIcons.locateFixed,
