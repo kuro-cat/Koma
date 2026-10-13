@@ -1728,12 +1728,6 @@ abstract class AppLocalizations {
   /// **'添加内容'**
   String get addPointsTitle;
 
-  /// No description provided for @addPointsRoutePlannerLead.
-  ///
-  /// In zh, this message translates to:
-  /// **'点位很多、懒得逐个整理？'**
-  String get addPointsRoutePlannerLead;
-
   /// No description provided for @addPointsManualEntryReference.
   ///
   /// In zh, this message translates to:
@@ -2915,12 +2909,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'计划排序'**
   String get planManagerSortPlans;
-
-  /// No description provided for @planManagerSkillLead.
-  ///
-  /// In zh, this message translates to:
-  /// **'不想手动整理点位？'**
-  String get planManagerSkillLead;
 
   /// No description provided for @planManagerAllPlans.
   ///
@@ -7876,48 +7864,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'暂无参考图'**
   String get referenceImagePlaceholderEmpty;
-
-  /// No description provided for @routePlannerSkillHintTitle.
-  ///
-  /// In zh, this message translates to:
-  /// **'用 AI 一键规划巡礼行程'**
-  String get routePlannerSkillHintTitle;
-
-  /// No description provided for @routePlannerSkillHintDescription.
-  ///
-  /// In zh, this message translates to:
-  /// **'让 ChatGPT、Claude Code、Codex 等 AI 助手调用 MiriaGo 路线规划 Skill。\n它会从 Anitabi、Google My Maps 等来源收集作品点位，自动划分区域、规划路线并生成行程备注；关键步骤会先向你确认，最终导出可直接使用的 .sjhplan 计划包。'**
-  String get routePlannerSkillHintDescription;
-
-  /// No description provided for @routePlannerSkillHintOpenFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'无法打开链接'**
-  String get routePlannerSkillHintOpenFailed;
-
-  /// No description provided for @routePlannerSkillHintViewGuide.
-  ///
-  /// In zh, this message translates to:
-  /// **'查看使用说明'**
-  String get routePlannerSkillHintViewGuide;
-
-  /// No description provided for @routePlannerSkillHintDismissFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'关闭提示失败，请重试。'**
-  String get routePlannerSkillHintDismissFailed;
-
-  /// No description provided for @routePlannerSkillHintTapForGuide.
-  ///
-  /// In zh, this message translates to:
-  /// **'点击查看使用说明'**
-  String get routePlannerSkillHintTapForGuide;
-
-  /// No description provided for @routePlannerSkillHintLinkText.
-  ///
-  /// In zh, this message translates to:
-  /// **'用 AI 一键规划行程并生成计划包'**
-  String get routePlannerSkillHintLinkText;
 
   /// No description provided for @currentLocationResolverServiceDisabled.
   ///

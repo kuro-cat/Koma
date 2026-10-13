@@ -20,7 +20,6 @@ import 'package:miriago/plan/anitabi_map_import_screen.dart';
 import 'package:miriago/plan/nearest_group_assign_screen.dart';
 import 'package:miriago/plan/plan_group_manager_screen.dart';
 import 'package:miriago/plan/plan_manager_screen.dart';
-import 'package:miriago/plan_transfer/import_export_screen.dart';
 import 'package:miriago/plan/work_manager_screen.dart';
 import 'package:miriago/plan/pilgrimage_models.dart';
 import 'package:miriago/plan/pilgrimage_plan_controller.dart';
@@ -29,7 +28,6 @@ import 'package:miriago/records/comparison_export_config.dart';
 import 'package:miriago/widgets/constrained_menu_anchor.dart';
 import 'package:miriago/widgets/confirm_action_dialog.dart';
 import 'package:miriago/widgets/input_dialog.dart';
-import 'package:miriago/widgets/route_planner_skill_hint.dart';
 import 'package:miriago/widgets/reference_image_placeholder.dart';
 import 'package:miriago/widgets/responsive_button.dart';
 
@@ -60,17 +58,6 @@ Future<void> _openPlanMenu(WidgetTester tester) async {
 
 Future<void> _openAddPointsFromEmptyPlan(WidgetTester tester) async {
   _invokeKeyedAction(tester, 'plan-add-points');
-  await tester.pumpAndSettle();
-  await _dismissRoutePlannerSkillIntro(tester);
-}
-
-/// The skill introduction shows the first time the add points page opens.
-Future<void> _dismissRoutePlannerSkillIntro(WidgetTester tester) async {
-  final intro = find.text(routePlannerSkillTitle);
-  if (intro.evaluate().isEmpty) {
-    return;
-  }
-  await tester.tap(find.text('知道了'));
   await tester.pumpAndSettle();
 }
 
@@ -250,16 +237,6 @@ void main() {
     await tester.tap(addPointsButton);
     await tester.pumpAndSettle();
     expect(find.byType(AddPointsScreen), findsOneWidget);
-    // First visit introduces the route planner skill once.
-    expect(find.text(routePlannerSkillTitle), findsOneWidget);
-    expect(find.text('查看使用说明'), findsOneWidget);
-    await tester.tap(find.text('知道了'));
-    await tester.pumpAndSettle();
-    expect(find.text(routePlannerSkillTitle), findsNothing);
-    expect(
-      find.byKey(const ValueKey('route-planner-skill-link')),
-      findsOneWidget,
-    );
     Navigator.of(tester.element(find.byType(AddPointsScreen))).pop();
     await tester.pumpAndSettle();
 
@@ -2531,117 +2508,6 @@ void main() {
 
     expect(find.text('原创短片'), findsOneWidget);
     expect(find.text('已加入 0 点位'), findsOneWidget);
-  });
-
-  testWidgets('route planner skill is introduced once and linked', (
-    tester,
-  ) async {
-    final repository = SamplePilgrimageRepository();
-    await repository.createPlan(name: '新巡礼计划 2', area: '未设置区域');
-    await tester.pumpWidget(MiriaGoApp(repository: repository));
-    await tester.pumpAndSettle();
-
-    _invokeKeyedAction(tester, 'plan-add-points');
-    await tester.pumpAndSettle();
-    expect(find.text(routePlannerSkillTitle), findsOneWidget);
-    expect(
-      (await repository.loadAppSettings()).routePlannerSkillTipShown,
-      isTrue,
-    );
-    await tester.tap(find.text('知道了'));
-    await tester.pumpAndSettle();
-    await tester.scrollUntilVisible(
-      find.byKey(const ValueKey('route-planner-skill-link')),
-      200,
-      scrollable: find.byType(Scrollable).last,
-    );
-    expect(
-      find.byKey(const ValueKey('route-planner-skill-link')),
-      findsOneWidget,
-    );
-    await tester.ensureVisible(
-      find.byKey(const ValueKey('route-planner-skill-link-dismiss')),
-    );
-    await tester.pumpAndSettle();
-    await tester.tap(
-      find.byKey(const ValueKey('route-planner-skill-link-dismiss')),
-    );
-    await tester.pumpAndSettle();
-    expect(
-      find.byKey(const ValueKey('route-planner-skill-link')),
-      findsNothing,
-    );
-    expect(
-      (await repository.loadAppSettings()).routePlannerSkillPromotionDismissed,
-      isTrue,
-    );
-    Navigator.of(tester.element(find.byType(AddPointsScreen))).pop();
-    await tester.pumpAndSettle();
-
-    _invokeKeyedAction(tester, 'plan-add-points');
-    await tester.pumpAndSettle();
-    expect(find.byType(AddPointsScreen), findsOneWidget);
-    expect(find.text(routePlannerSkillTitle), findsNothing);
-    Navigator.of(tester.element(find.byType(AddPointsScreen))).pop();
-    await tester.pumpAndSettle();
-
-    final plan = (await repository.loadPlans()).first;
-    await tester.pumpWidget(
-      MaterialApp(
-        home: ImportExportScreen(plan: plan, repository: repository),
-      ),
-    );
-    await tester.pumpAndSettle();
-    expect(
-      find.byKey(const ValueKey('route-planner-skill-card')),
-      findsNothing,
-    );
-    expect(find.text(routePlannerSkillTitle), findsNothing);
-
-    await tester.pumpWidget(
-      MaterialApp(home: PlanManagerScreen(repository: repository)),
-    );
-    await tester.pumpAndSettle();
-    expect(
-      find.byKey(const ValueKey('route-planner-skill-link')),
-      findsNothing,
-    );
-  });
-
-  testWidgets('route planner skill card dismissal survives reopening', (
-    tester,
-  ) async {
-    final repository = SamplePilgrimageRepository();
-    final plan = await repository.loadActivePlan();
-    await tester.pumpWidget(
-      MaterialApp(
-        home: ImportExportScreen(plan: plan, repository: repository),
-      ),
-    );
-    await tester.pumpAndSettle();
-    expect(
-      find.byKey(const ValueKey('route-planner-skill-card')),
-      findsOneWidget,
-    );
-    expect(find.text('点击查看使用说明'), findsOneWidget);
-
-    await tester.tap(find.byKey(const ValueKey('route-planner-skill-dismiss')));
-    await tester.pumpAndSettle();
-    expect(
-      (await repository.loadAppSettings()).routePlannerSkillPromotionDismissed,
-      isTrue,
-    );
-    await tester.pumpWidget(const SizedBox.shrink());
-    await tester.pumpWidget(
-      MaterialApp(
-        home: ImportExportScreen(plan: plan, repository: repository),
-      ),
-    );
-    await tester.pumpAndSettle();
-    expect(
-      find.byKey(const ValueKey('route-planner-skill-card')),
-      findsNothing,
-    );
   });
 
   testWidgets('adds a manual point to an empty plan', (tester) async {

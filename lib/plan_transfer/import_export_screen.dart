@@ -10,7 +10,6 @@ import '../platform/platform_flags_stub.dart'
 import '../plan/pilgrimage_models.dart';
 import '../widgets/rules.dart';
 import '../widgets/confirm_action_dialog.dart';
-import '../widgets/route_planner_skill_hint.dart';
 import '../widgets/snackbar_helper.dart';
 import '../widgets/app_back_button.dart';
 import 'my_maps_csv_export.dart';
@@ -124,7 +123,6 @@ class _ImportExportScreenState extends State<ImportExportScreen> {
               enabled: !_exporting && !_importing,
               onTap: _importFromLink,
             ),
-            RoutePlannerSkillCard(repository: widget.repository),
             const SizedBox(height: 20),
             _SectionTitle(
               icon: LucideIcons.package,

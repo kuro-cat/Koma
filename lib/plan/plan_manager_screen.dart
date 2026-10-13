@@ -9,7 +9,6 @@ import '../plan_transfer/import_export_screen.dart';
 import '../widgets/confirm_action_dialog.dart';
 import '../widgets/input_dialog.dart';
 import '../widgets/copyable_text.dart';
-import '../widgets/route_planner_skill_hint.dart';
 import '../widgets/snackbar_helper.dart';
 import '../widgets/app_back_button.dart';
 import 'pilgrimage_models.dart';
@@ -326,15 +325,7 @@ class _PlanManagerScreenState extends State<PlanManagerScreen> {
                   onPressed: _sorting || _savingOrder ? null : _createEmptyPlan,
                 ),
               ),
-              const SizedBox(height: 4),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: RoutePlannerSkillLink(
-                  lead: l10n.planManagerSkillLead,
-                  repository: widget.repository,
-                ),
-              ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 14),
               if (plans.isNotEmpty) ...[
                 _PlanSectionLabel(
                   key: ValueKey('all-plans-section'),

@@ -979,9 +979,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get addPointsTitle => 'Add content';
 
   @override
-  String get addPointsRoutePlannerLead => 'Too many spots to sort one by one? ';
-
-  @override
   String get addPointsManualEntryReference => 'Manual entry';
 
   @override
@@ -1673,9 +1670,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get planManagerSortPlans => 'Sort plans';
-
-  @override
-  String get planManagerSkillLead => 'Don\'t want to organize spots by hand? ';
 
   @override
   String get planManagerAllPlans => 'All plans';
@@ -4851,30 +4845,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get referenceImagePlaceholderEmpty => 'No reference image';
-
-  @override
-  String get routePlannerSkillHintTitle => 'Plan your pilgrimage with AI';
-
-  @override
-  String get routePlannerSkillHintDescription =>
-      'Let an AI assistant such as ChatGPT, Claude Code or Codex use the MiriaGo route planner Skill.\nIt collects spots for a work from sources like Anitabi and Google My Maps, splits them into areas, plans routes and writes trip notes. It checks with you at key steps, then exports a ready-to-use .sjhplan plan file.';
-
-  @override
-  String get routePlannerSkillHintOpenFailed => 'Couldn\'t open the link';
-
-  @override
-  String get routePlannerSkillHintViewGuide => 'View guide';
-
-  @override
-  String get routePlannerSkillHintDismissFailed =>
-      'Couldn\'t dismiss the tip. Try again.';
-
-  @override
-  String get routePlannerSkillHintTapForGuide => 'Tap to view the guide';
-
-  @override
-  String get routePlannerSkillHintLinkText =>
-      'Plan the trip with AI and get a plan file';
 
   @override
   String get currentLocationResolverServiceDisabled =>

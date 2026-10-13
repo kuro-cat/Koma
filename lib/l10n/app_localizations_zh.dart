@@ -895,9 +895,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addPointsTitle => '添加内容';
 
   @override
-  String get addPointsRoutePlannerLead => '点位很多、懒得逐个整理？';
-
-  @override
   String get addPointsManualEntryReference => '手动录入';
 
   @override
@@ -1525,9 +1522,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get planManagerSortPlans => '计划排序';
-
-  @override
-  String get planManagerSkillLead => '不想手动整理点位？';
 
   @override
   String get planManagerAllPlans => '全部计划';
@@ -4277,28 +4271,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get referenceImagePlaceholderEmpty => '暂无参考图';
-
-  @override
-  String get routePlannerSkillHintTitle => '用 AI 一键规划巡礼行程';
-
-  @override
-  String get routePlannerSkillHintDescription =>
-      '让 ChatGPT、Claude Code、Codex 等 AI 助手调用 MiriaGo 路线规划 Skill。\n它会从 Anitabi、Google My Maps 等来源收集作品点位，自动划分区域、规划路线并生成行程备注；关键步骤会先向你确认，最终导出可直接使用的 .sjhplan 计划包。';
-
-  @override
-  String get routePlannerSkillHintOpenFailed => '无法打开链接';
-
-  @override
-  String get routePlannerSkillHintViewGuide => '查看使用说明';
-
-  @override
-  String get routePlannerSkillHintDismissFailed => '关闭提示失败，请重试。';
-
-  @override
-  String get routePlannerSkillHintTapForGuide => '点击查看使用说明';
-
-  @override
-  String get routePlannerSkillHintLinkText => '用 AI 一键规划行程并生成计划包';
 
   @override
   String get currentLocationResolverServiceDisabled => '定位服务未开启。';

@@ -27,7 +27,6 @@ import '../widgets/image_viewer_screen.dart';
 import '../widgets/app_scaled_route.dart';
 import '../widgets/app_back_button.dart';
 import '../widgets/responsive_button.dart';
-import '../widgets/route_planner_skill_hint.dart';
 import 'anitabi_map_import_screen.dart';
 import 'coordinate_parser.dart';
 import 'pending_reference_lifecycle.dart';
@@ -36,7 +35,6 @@ import 'pilgrimage_models.dart';
 import 'pilgrimage_work_cover.dart';
 import 'reference_image_status.dart';
 import 'work_manager_screen.dart';
-import '../settings/app_settings_updater.dart';
 import '../l10n/l10n.dart';
 
 InputDecoration stableInputDecoration({
@@ -154,16 +152,6 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
   var _didUpdate = false;
 
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        unawaited(_introduceRoutePlannerSkill());
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     final currentPlan = _plan;
 
@@ -216,42 +204,10 @@ class _AddPointsScreenState extends State<AddPointsScreen> {
                   ? null
                   : () => _openManualWorkForm(context, currentPlan),
             ),
-            const SizedBox(height: 8),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: RoutePlannerSkillLink(
-                lead: l10n.addPointsRoutePlannerLead,
-                repository: widget.repository,
-              ),
-            ),
           ],
         ),
       ),
     );
-  }
-
-  Future<void> _introduceRoutePlannerSkill() async {
-    final current = AppSettingsUpdater.latest(widget.settings);
-    if (current.routePlannerSkillTipShown ||
-        current.routePlannerSkillPromotionDismissed) {
-      return;
-    }
-    // Mark it first so the introduction never repeats, whatever happens
-    // while it is open.
-    var alreadyShown = false;
-    final saved = await AppSettingsUpdater.update(widget.repository, (latest) {
-      alreadyShown =
-          latest.routePlannerSkillTipShown ||
-          latest.routePlannerSkillPromotionDismissed;
-      return latest.copyWith(routePlannerSkillTipShown: true);
-    });
-    if (!saved || alreadyShown) {
-      return;
-    }
-    if (!mounted) {
-      return;
-    }
-    await showRoutePlannerSkillIntroDialog(context);
   }
 
   Future<void> _openWorkManager(
