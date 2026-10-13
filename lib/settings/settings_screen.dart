@@ -2886,7 +2886,7 @@ class _AboutSettingsPage extends StatelessWidget {
             _AboutInfoTile(
               icon: LucideIcons.code,
               label: l10n.settingsSourceRepository,
-              value: 'github.com/kuro-cat/Koma',
+              value: 'github.com/kuro-cat/koma',
             ),
             _AboutInfoTile(
               icon: LucideIcons.gitFork,

@@ -23,7 +23,7 @@ Koma (コマ, one frame of film or anime) is a fork of [MiriaGo](https://github.
 
 The UI is in English and Chinese and follows the phone's language.
 
-Website: **[kuro-cat.github.io/Koma](https://kuro-cat.github.io/Koma/)**
+Website: **[kuro-cat.github.io/koma](https://kuro-cat.github.io/koma/)**
 
 <p align="center">
   <img src="site/screenshots/01-plan.webp" alt="Plan tab with anime frames" width="200">
@@ -72,7 +72,7 @@ Koma installs as its own app (`io.github.kurocat.koma`), next to MiriaGo if you 
 
 ## Install
 
-Download the latest `Koma-<version>.apk` from [Releases](https://github.com/kuro-cat/Koma/releases) and open it on your phone. Android will ask you to allow installs from your browser or file manager the first time. Koma needs Android 7.0 or later.
+Download the latest `Koma-<version>.apk` from [Releases](https://github.com/kuro-cat/koma/releases) and open it on your phone. Android will ask you to allow installs from your browser or file manager the first time. Koma needs Android 7.0 or later.
 
 Updates install over the previous version and keep your data. Every release is signed with the same key, so an APK from anywhere else won't install over it.
 

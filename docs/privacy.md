@@ -95,7 +95,7 @@ Exported files that you saved or shared outside the app must be deleted from tho
 
 For privacy questions or requests, please use the GitHub repository issue page:
 
-https://github.com/kuro-cat/Koma/issues
+https://github.com/kuro-cat/koma/issues
 
 ---
 
@@ -196,4 +196,4 @@ Koma 不以主动收集儿童个人信息为目的。由于 Koma 主要在本地
 
 如有隐私相关问题或请求，请使用 GitHub 仓库 issue 页面：
 
-https://github.com/kuro-cat/Koma/issues
+https://github.com/kuro-cat/koma/issues
