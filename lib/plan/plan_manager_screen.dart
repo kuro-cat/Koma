@@ -683,6 +683,7 @@ class _PlanCard extends StatelessWidget {
           if (onExport != null && onDuplicate != null && onDelete != null)
             _PlanMoreButton(
               plan: plan,
+              onEdit: onEdit,
               onExport: onExport!,
               onDuplicate: onDuplicate!,
               onDelete: onDelete!,
@@ -902,12 +903,14 @@ class _PlanFact extends StatelessWidget {
 class _PlanMoreButton extends StatefulWidget {
   const _PlanMoreButton({
     required this.plan,
+    required this.onEdit,
     required this.onExport,
     required this.onDuplicate,
     required this.onDelete,
   });
 
   final PilgrimagePlan plan;
+  final VoidCallback onEdit;
   final VoidCallback onExport;
   final VoidCallback onDuplicate;
   final VoidCallback onDelete;
@@ -936,6 +939,7 @@ class _PlanMoreButtonState extends State<_PlanMoreButton> {
       builder: closesOnBack((context, controller, child) => child!),
       menuChildren: [
         _PlanActionsMenuPanel(
+          onEdit: widget.onEdit,
           onExport: widget.onExport,
           onDuplicate: widget.onDuplicate,
           onDelete: widget.onDelete,
@@ -961,10 +965,12 @@ class _PlanMoreButtonState extends State<_PlanMoreButton> {
 /// The plan's ⋯ menu; the theme's menu style draws its 1px ink frame.
 class _PlanActionsMenuPanel extends StatelessWidget {
   const _PlanActionsMenuPanel({
+    required this.onEdit,
     required this.onExport,
     required this.onDuplicate,
     required this.onDelete,
   });
+  final VoidCallback onEdit;
   final VoidCallback onExport;
   final VoidCallback onDuplicate;
   final VoidCallback onDelete;
@@ -977,6 +983,12 @@ class _PlanActionsMenuPanel extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          _PlanMenuActionItem(
+            actionKey: const ValueKey('plan-menu-action-edit'),
+            label: l10n.planManagerEditInfo,
+            icon: LucideIcons.pencil,
+            onPressed: onEdit,
+          ),
           _PlanMenuActionItem(
             actionKey: const ValueKey('plan-menu-action-transfer'),
             label: l10n.planManagerImportExport,
