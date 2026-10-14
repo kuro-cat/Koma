@@ -16,8 +16,8 @@
 
 Koma (コマ, one frame of film or anime) is a fork of [MiriaGo](https://github.com/BilyHurington/MiriaGo) by BilyHurington. It turns an anime's known locations (seichi) into a walkable plan and helps recreate each frame as a photo:
 
-- **Find spots:** search an anime on Bangumi or paste an Anitabi link, then pick spots on the map. Each spot comes with its actual anime frame.
-- **Plan:** group spots into areas, set the next stop, and cache frames before a trip so the camera works with poor signal.
+- **Find spots:** search an anime by its English, Japanese or Chinese title, or paste an Anitabi link, then pick spots on the map. Each spot comes with its actual anime frame.
+- **Plan:** group spots into areas by city, sort each area into a walking order from where you'll start, and save the plan for offline use (frames and the map) before a trip.
 - **Shoot:** the camera overlays the frame on the live view (with adjustable opacity) or stacks the two, so you can match the composition.
 - **Afterwards:** line each photo up with its frame, crop to it, colour-match it, and export a side-by-side comparison image.
 
@@ -42,14 +42,19 @@ I maintain Koma for my own Android phone. Upstream MiriaGo also targets iOS and 
 
 **Finding and organising spots**
 - One screen to find spots: search Bangumi or paste an Anitabi link from inside the import map, with no setup screens in between.
+- Searching by an English or romaji title works ("Tamayura", "Your Name"). Bangumi only lists Japanese and Chinese titles, so when it finds nothing Koma looks up the Japanese title on AniList and searches again. If there is still nothing, the screen says so.
+- **Group by city:** after an import, one tap puts the spots into one area per city, named after the city. Spots in a city that already has an area join it.
+- **Walking order:** choose where an area's walk starts (a spot, any point on the map, or your location) and Koma orders the spots from there, each one the closest to the last. The start is saved with the area, and the area map numbers each spot in that order with a flag at the start, so you can see the rough route without the route planner.
+- **Notes on spots and areas:** a spot's note (opening hours, where to stand) sits near the top of its sheet and can be added there; an area's note shows above its list. Notes that come with Anitabi spots show the same way.
 - Box-select on the import map puts the boxed spots straight into an area. You can pick an existing area or create one right there, and it works for spots already in the plan too, so you can regroup them later.
 - The separate "Manage plan" screen is gone. Its work moved onto the Plan tab:
   - **Edit** (or a long press) selects spots to move, mark visited or delete;
   - spots in manual-order areas can be dragged into order;
-  - the area bar has a menu to rename, set an anchor, change the order mode, delete, assign ungrouped spots, or open Manage areas.
+  - the area bar has a menu to add a note, rename, sort into walking order, change the order mode, delete, group or box-select ungrouped spots, or open Manage areas.
 - The plan name in the header is a picker for switching plans.
 - You can start with no plans at all; the empty screen walks you through creating the first one.
-- All plans: tapping a plan shows its spots, areas, dates and notes, with Edit details (including the plan memo) and Open plan.
+- All plans: tapping a plan shows its spots, areas, dates and details, with Edit details and Open plan.
+- Upstream's area anchors and "Assign to nearest" are gone; grouping by city and the walk start replace them.
 - The inline map stays open when you switch areas and frames the new area's spots.
 
 **Photos**
@@ -65,7 +70,13 @@ I maintain Koma for my own Android phone. Upstream MiriaGo also targets iOS and 
 - Five theme colours (Fjord by default, Spruce, Moss, Lake and Ink), plus a custom colour held to the same muted blues, greens and earth tones. The current tab in the nav bar takes on the chosen colour.
 - Light and dark themes, both tuned so text stays readable in sunlight and at night.
 
+**Offline**
+- **Save for offline** stores a plan's full anime frames and the map around its spots, so the map, the spots and the camera overlay all work with no signal.
+- Saving runs in the background with a progress notification, keeps going with the screen locked, and can be cancelled from the notification.
+
 **Navigation**
+- Walking routes through a whole area follow the streets. Upstream's default routing server takes at most 10 stops per request, so bigger areas failed and showed straight lines; Koma requests long routes in parts and joins them.
+- Without signal, the route screen says that routes need a connection instead of showing a raw network error.
 - Back on the Map, Records or Settings tab returns to Plan instead of closing the app, and Back closes an open dropdown first.
 
 Koma installs as its own app (`io.github.kurocat.koma`), next to MiriaGo if you have it. To bring your plans over, export them from MiriaGo as `.sjhplan` packages and import them in Koma.
@@ -108,9 +119,9 @@ The iOS, macOS, Windows and Linux builds from upstream (Xcode, and Tauri via `np
 The code is MIT licensed, but the data the app shows belongs to others:
 
 - **Spots and frames** come from [Anitabi](https://anitabi.cn). Spots, screenshots, images and their metadata belong to the original platforms, contributors or rights holders. The app only fetches them and caches them on your device; the repository does not distribute them.
-- **Work search** uses the [Bangumi](https://bgm.tv) API.
-- **Maps** default to OpenFreeMap with MapLibre. OpenStreetMap or a custom XYZ or MapLibre style URL can be set in Settings. Keep the attribution each map service requires.
-- **Walking routes** use Valhalla. Navigation itself is handed to an external maps app.
+- **Work search** uses the [Bangumi](https://bgm.tv) API, and [AniList](https://anilist.co) to find the Japanese title when a search in Latin letters finds nothing.
+- **Maps** default to OpenFreeMap with MapLibre. OpenStreetMap or a custom XYZ or MapLibre style URL can be set in Settings. Saving a plan for offline use downloads the map around its spots from the same service. Keep the attribution each map service requires.
+- **Walking routes** and in-app navigation use Valhalla. A spot can also be opened in an external maps app.
 
 Plans move between devices as `.sjhplan` data packages.
 
