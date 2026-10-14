@@ -116,60 +116,57 @@ void main() {
     expect(tester.takeException(), isNull);
   });
 
-  testWidgets(
-    'coordinate dialog paste fills fields',
-    (tester) async {
+  testWidgets('coordinate dialog paste fills fields', (tester) async {
+    tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
+      SystemChannels.platform,
+      (call) async {
+        if (call.method == 'Clipboard.getData') {
+          return <String, dynamic>{'text': '35.712576, 139.722166'};
+        }
+        return null;
+      },
+    );
+    addTearDown(() {
       tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
         SystemChannels.platform,
-        (call) async {
-          if (call.method == 'Clipboard.getData') {
-            return <String, dynamic>{'text': '35.712576, 139.722166'};
-          }
-          return null;
-        },
+        null,
       );
-      addTearDown(() {
-        tester.binding.defaultBinaryMessenger.setMockMethodCallHandler(
-          SystemChannels.platform,
-          null,
-        );
-      });
+    });
 
-      await tester.pumpWidget(
-        MaterialApp(
-          home: Scaffold(
-            body: Builder(
-              builder: (context) {
-                return TextButton(
-                  onPressed: () {
-                    showCoordinateInputDialog(
-                      context: context,
-                      current: const LatLng(34, 135),
-                    );
-                  },
-                  child: const Text('open'),
-                );
-              },
-            ),
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: Builder(
+            builder: (context) {
+              return TextButton(
+                onPressed: () {
+                  showCoordinateInputDialog(
+                    context: context,
+                    current: const LatLng(34, 135),
+                  );
+                },
+                child: const Text('open'),
+              );
+            },
           ),
         ),
-      );
-      await tester.tap(find.text('open'));
-      await tester.pumpAndSettle();
+      ),
+    );
+    await tester.tap(find.text('open'));
+    await tester.pumpAndSettle();
 
-      final paste = find.byKey(const ValueKey('dialog-paste-button'));
-      expect(paste, findsOneWidget);
+    final paste = find.byKey(const ValueKey('dialog-paste-button'));
+    expect(paste, findsOneWidget);
 
-      await tester.tap(paste);
-      await tester.pumpAndSettle();
+    await tester.tap(paste);
+    await tester.pumpAndSettle();
 
-      final fields = tester
-          .widgetList<TextField>(find.byType(TextField))
-          .toList();
-      expect(fields[0].controller?.text, '35.712576');
-      expect(fields[1].controller?.text, '139.722166');
-    },
-  );
+    final fields = tester
+        .widgetList<TextField>(find.byType(TextField))
+        .toList();
+    expect(fields[0].controller?.text, '35.712576');
+    expect(fields[1].controller?.text, '139.722166');
+  });
 
   testWidgets('coordinate input dialog rejects NaN and accepts full width', (
     tester,

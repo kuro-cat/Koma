@@ -142,28 +142,25 @@ void main() {
     );
   }
 
-  test(
-    'bundled style has portable sources and attribution',
-    () {
-      final style =
-          jsonDecode(File(readableDarkMapStyleAsset).readAsStringSync())
-              as Map<String, dynamic>;
-      expect(style['version'], 8);
-      final layers = (style['layers'] as List).cast<Map<String, dynamic>>();
-      expect(layers.map((l) => l['id']).toSet().length, layers.length);
-      for (final key in ['sprite', 'glyphs']) {
-        expect(style[key], startsWith('https://'));
-      }
-      expect(
-        style['sources']['openmaptiles']['url'],
-        'https://tiles.openfreemap.org/planet',
-      );
-      expect(
-        File('assets/maps/LICENSE.txt').readAsStringSync(),
-        contains('CartoDB'),
-      );
-    },
-  );
+  test('bundled style has portable sources and attribution', () {
+    final style =
+        jsonDecode(File(readableDarkMapStyleAsset).readAsStringSync())
+            as Map<String, dynamic>;
+    expect(style['version'], 8);
+    final layers = (style['layers'] as List).cast<Map<String, dynamic>>();
+    expect(layers.map((l) => l['id']).toSet().length, layers.length);
+    for (final key in ['sprite', 'glyphs']) {
+      expect(style[key], startsWith('https://'));
+    }
+    expect(
+      style['sources']['openmaptiles']['url'],
+      'https://tiles.openfreemap.org/planet',
+    );
+    expect(
+      File('assets/maps/LICENSE.txt').readAsStringSync(),
+      contains('CartoDB'),
+    );
+  });
 }
 
 Object? _expressionShape(Object? value) {

@@ -9,7 +9,10 @@ import 'package:miriago/data/work_cover_backfill.dart';
 /// explicitly. Tests assert on the Chinese strings, so they run in zh.
 Future<void> testExecutable(FutureOr<void> Function() testMain) async {
   WorkCoverBackfill.automaticEnabled = false;
-  TestWidgetsFlutterBinding.ensureInitialized().platformDispatcher
-      .localesTestValue = const [Locale('zh')];
+  TestWidgetsFlutterBinding.ensureInitialized()
+      .platformDispatcher
+      .localesTestValue = const [
+    Locale('zh'),
+  ];
   await testMain();
 }

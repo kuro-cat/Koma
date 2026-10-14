@@ -219,14 +219,14 @@ void main() {
     );
     expect(storage.calls, ['plan', 'plan']);
     final saved = await repository.loadActivePlan();
+    expect(saved.points.take(2).map((point) => point.groupId), ['a', 'b']);
     expect(
-      saved.points.take(2).map((point) => point.groupId),
-      ['a', 'b'],
+      {for (final group in saved.groups) group.id: group.orderIndex},
+      {
+        for (var index = 0; index < reversedGroupIds.length; index++)
+          reversedGroupIds[index]: index,
+      },
     );
-    expect({for (final group in saved.groups) group.id: group.orderIndex}, {
-      for (var index = 0; index < reversedGroupIds.length; index++)
-        reversedGroupIds[index]: index,
-    });
   });
 
   test('failed import does not publish the plan or its records', () async {

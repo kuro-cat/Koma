@@ -188,9 +188,7 @@ void main() {
     );
   }
 
-  testWidgets('renders light-mode navigation chrome', (
-    tester,
-  ) async {
+  testWidgets('renders light-mode navigation chrome', (tester) async {
     await pumpScreen(tester);
 
     expect(
