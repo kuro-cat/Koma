@@ -177,24 +177,29 @@ class _SyncedMapLibreLayerState extends State<SyncedMapLibreLayer> {
       _scheduleSync();
     }
 
-    return MapLibreMap(
-      options: MapOptions(
-        initCenter: Geographic(
-          lon: camera.center.longitude,
-          lat: camera.center.latitude,
+    // The native map only draws; flutter_map above it handles every touch.
+    // Without this the platform view joins the gesture arena and wins plain
+    // taps, so flutter_map's onTap (e.g. picking a point) never fired.
+    return IgnorePointer(
+      child: MapLibreMap(
+        options: MapOptions(
+          initCenter: Geographic(
+            lon: camera.center.longitude,
+            lat: camera.center.latitude,
+          ),
+          initBearing: -camera.rotation,
+          initZoom: camera.zoom - 1,
+          initStyle: widget.initStyle,
+          maxPitch: 0,
+          gestures: const MapGestures.none(),
         ),
-        initBearing: -camera.rotation,
-        initZoom: camera.zoom - 1,
-        initStyle: widget.initStyle,
-        maxPitch: 0,
-        gestures: const MapGestures.none(),
+        gestureRecognizers: const {},
+        onMapCreated: (controller) {
+          _controller = controller;
+          _syncNow(force: true);
+        },
+        onStyleLoaded: (_) => _syncNow(force: true),
       ),
-      gestureRecognizers: const {},
-      onMapCreated: (controller) {
-        _controller = controller;
-        _syncNow(force: true);
-      },
-      onStyleLoaded: (_) => _syncNow(force: true),
     );
   }
 }
