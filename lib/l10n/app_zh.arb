@@ -751,7 +751,6 @@
     }
   },
   "pointManagerBatchDeleteFailed": "批量删除失败",
-  "pointManagerNearestAssign": "最近分配",
   "pointManagerBoxAssign": "框选分配",
   "pointManagerSelectAll": "全选",
   "pointManagerMove": "移动",
@@ -766,9 +765,8 @@
   "planGroupUtilsOrderManual": "手动",
   "planGroupUtilsOrderUnordered": "无序",
   "planGroupUtilsAwaitingGroup": "等待分入片区",
-  "planGroupUtilsAnchorUnset": "未设置关键点",
-  "planGroupUtilsAnchor": "关键点：{name}",
-  "@planGroupUtilsAnchor": {
+  "planGroupUtilsStart": "起点：{name}",
+  "@planGroupUtilsStart": {
     "placeholders": {
       "name": {
         "type": "String"
@@ -912,27 +910,8 @@
       }
     }
   },
-  "nearestGroupAssignConfirmMessage": "将把 {spots}分配到最近的片区关键点，最大距离为 {distance}。",
-  "@nearestGroupAssignConfirmMessage": {
-    "placeholders": {
-      "spots": {
-        "type": "String"
-      },
-      "distance": {
-        "type": "String"
-      }
-    }
-  },
   "nearestGroupAssignDone": "已分配 {count} 个点位",
   "@nearestGroupAssignDone": {
-    "placeholders": {
-      "count": {
-        "type": "int"
-      }
-    }
-  },
-  "nearestGroupAssignDoneDistanceUnsaved": "已分配 {count} 个点位，距离设置未保存",
-  "@nearestGroupAssignDoneDistanceUnsaved": {
     "placeholders": {
       "count": {
         "type": "int"
@@ -969,33 +948,6 @@
       }
     }
   },
-  "nearestGroupAssignMaxDistance": "最大距离 {distance}",
-  "@nearestGroupAssignMaxDistance": {
-    "placeholders": {
-      "distance": {
-        "type": "String"
-      }
-    }
-  },
-  "nearestGroupAssignAssignableCount": "可分配 {assignable}/{ungrouped}",
-  "@nearestGroupAssignAssignableCount": {
-    "placeholders": {
-      "assignable": {
-        "type": "int"
-      },
-      "ungrouped": {
-        "type": "int"
-      }
-    }
-  },
-  "nearestGroupAssignCurrentDistance": "当前 {distance}",
-  "@nearestGroupAssignCurrentDistance": {
-    "placeholders": {
-      "distance": {
-        "type": "String"
-      }
-    }
-  },
   "nearestGroupAssignInRange": "在最大距离范围内",
   "nearestGroupAssignOutOfRange": "超出最大距离",
   "nearestGroupAssignUngroupedHint": "未分组 {count} 个 · 点击地图点位查看详情",
@@ -1006,11 +958,6 @@
       }
     }
   },
-  "nearestGroupAssignTitle": "最近分配",
-  "nearestGroupAssignNoneInRange": "当前距离内没有可分配点位",
-  "nearestGroupAssignConfirmTitle": "确认最近分配",
-  "nearestGroupAssignStart": "开始分配",
-  "nearestGroupAssignFailed": "最近分配失败",
   "nearestGroupAssignFinishFirst": "请先完成片区分配",
   "nearestGroupAssignBoxTitle": "框选分配",
   "nearestGroupAssignBoxSelected": "已框选",
@@ -1031,7 +978,6 @@
   "nearestGroupAssignAssigning": "分配中",
   "nearestGroupAssignAssigningSpots": "正在分配",
   "nearestGroupAssignAssignSelected": "分配选中点位",
-  "nearestGroupAssignExplain": "未分组点位会分配到距离最近、且在最大距离范围内的片区关键点。",
   "nearestGroupAssignNoAnchor": "没有可用片区关键点",
   "nearestGroupAssignSetAnchorFirst": "请先在片区管理中设置关键点",
   "nearestGroupAssignAssignableSpot": "可分配点位",
@@ -1052,12 +998,9 @@
       }
     }
   },
-  "planAreaProgress": "{anchor} · {completed}/{total} 完成 · {order}",
+  "planAreaProgress": "{completed}/{total} 完成 · {order}",
   "@planAreaProgress": {
     "placeholders": {
-      "anchor": {
-        "type": "String"
-      },
       "completed": {
         "type": "int"
       },
@@ -1305,7 +1248,6 @@
   "anitabiMapImportDetailGeneric": "请检查网络后重试，或稍后再重新加载。",
   "anitabiMapImportOrganizeTitle": "整理刚导入的点位",
   "anitabiMapImportOrganizeLead": "已导入 ",
-  "anitabiMapImportOrganizeTail": "，并暂时放在未分组。可以直接分配到片区，或按最近关键点快速分配。",
   "planAreaAddNote": "添加片区备注",
   "planAreaEditNote": "编辑片区备注",
   "planAreaNoteTitle": "{area} 的备注",
@@ -1343,7 +1285,6 @@
     }
   },
   "autoAreaFailed": "分组失败，请重试。",
-  "anitabiMapImportNearestAssign": "最近分配",
   "anitabiMapImportLater": "稍后",
   "anitabiMapImportImportedSpot": "已导入点位",
   "anitabiMapImportImportableSpot": "可导入点位",
@@ -1374,7 +1315,6 @@
   "planGroupManagerRenameTitle": "重命名片区",
   "planGroupManagerRenameFailed": "片区改名失败",
   "planGroupManagerOrderModeSaveFailed": "排序方式保存失败",
-  "planGroupManagerAnchorSaveFailed": "关键点保存失败",
   "planGroupManagerDeleteArea": "删除片区",
   "planGroupManagerDeleteMessage": "将删除「{name}」，其中 {count} 个点位会移入未分配点位。",
   "@planGroupManagerDeleteMessage": {
@@ -1407,18 +1347,8 @@
   "planGroupManagerManualOrder": "手动排序",
   "planGroupManagerUnordered": "无序",
   "planGroupManagerEmpty": "空",
-  "planGroupManagerAnchorLabel": "关键点 · {name}",
-  "@planGroupManagerAnchorLabel": {
-    "placeholders": {
-      "name": {
-        "type": "String"
-      }
-    }
-  },
-  "planGroupManagerNoAnchor": "未设置关键点",
   "planGroupManagerAreaActions": "片区操作",
   "planGroupManagerRename": "重命名",
-  "planGroupManagerSetAnchor": "设置关键点",
   "planGroupManagerSwitchToUnordered": "切换为无序",
   "planGroupManagerSwitchToManualOrder": "切换为手动排序",
   "planGroupManagerUngroupedWaiting": "{count} 个点位等待整理",
@@ -1744,7 +1674,6 @@
   "pointDetailUndoCheckIn": "撤回打卡",
   "pointDetailMarkDone": "标记完成",
   "pointDetailUnknownArea": "未知片区",
-  "pointDetailNoAnchor": "未设置关键点",
   "pointDetailDeleteSpot": "删除点位",
   "pointDetailDeleteSpotMessage": "将从计划中删除“{name}”。已有巡礼记录及照片将保留。",
   "@pointDetailDeleteSpotMessage": {
@@ -1767,7 +1696,6 @@
   "pointDetailEditSpot": "编辑点位",
   "pointDetailReplace": "替换",
   "pointDetailArea": "片区",
-  "pointDetailAreaAnchor": "片区关键点",
   "pointDetailChange": "更改",
   "pointDetailStatusCurrent": "当前目标",
   "pointDetailStatusCompleted": "已完成",
@@ -2453,7 +2381,6 @@
   "recordsOrphanSubtitle": "对应点位已不在当前计划中",
   "recordsNoCoordinates": "坐标待补充",
   "recordsUnknownArea": "未知片区",
-  "recordsNoAnchor": "未设置关键点",
   "recordsScopeFilterTooltip": "按作品和片区筛选",
   "recordsWorks": "作品",
   "recordsAreas": "片区",

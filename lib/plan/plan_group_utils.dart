@@ -82,15 +82,14 @@ class PlanGroupBucket {
         : l10n.planGroupUtilsOrderUnordered;
   }
 
-  String get anchorLabel {
+  /// "Start: 竹原駅" for an area whose walk start is set, else empty.
+  String get startLabel {
     if (isUngrouped) {
       return l10n.planGroupUtilsAwaitingGroup;
     }
-    final anchorName = group?.anchorName;
-    if (anchorName == null || anchorName.trim().isEmpty) {
-      return l10n.planGroupUtilsAnchorUnset;
-    }
-    return l10n.planGroupUtilsAnchor(anchorName);
+    final startName = group?.startName?.trim();
+    if (startName == null || startName.isEmpty) return '';
+    return l10n.planGroupUtilsStart(startName);
   }
 }
 
@@ -170,44 +169,11 @@ List<PilgrimagePoint> displayPointsForGroup(
   return points;
 }
 
-/// A group's key-point position. A linked anchor point wins over the stored
-/// copy, which may be stale if the point moved; stored coordinates are the
-/// fallback for manual anchors or when the linked point is gone.
-LatLng? resolvedGroupAnchorPosition(
-  PilgrimagePlanGroup group,
-  Iterable<PilgrimagePoint> points,
-) {
-  final anchorPointId = group.anchorPointId;
-  if (anchorPointId != null) {
-    for (final point in points) {
-      if (point.id == anchorPointId && point.hasCoordinate) {
-        return point.position;
-      }
-    }
-  }
-  final latitude = group.anchorLatitude;
-  final longitude = group.anchorLongitude;
-  if (latitude == null || longitude == null) {
-    return null;
-  }
-  return LatLng(latitude, longitude);
-}
-
-/// Whether [group] has an anchor or a spot with coordinates to center on.
+/// Whether [group] has a spot with coordinates to center on.
 bool groupHasPosition(PlanGroupBucket group) =>
-    (group.group != null &&
-        resolvedGroupAnchorPosition(group.group!, group.points) != null) ||
     group.points.any((point) => point.hasCoordinate);
 
 LatLng groupMapCenter(PlanGroupBucket group) {
-  // Prefer the anchor point's current position over a stored copy that may
-  // predate edits to that point.
-  if (group.group case final planGroup?) {
-    if (resolvedGroupAnchorPosition(planGroup, group.points)
-        case final anchor?) {
-      return anchor;
-    }
-  }
   final positionedPoints = group.points
       .where((point) => point.hasCoordinate)
       .toList(growable: false);

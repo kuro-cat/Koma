@@ -318,7 +318,7 @@ class _RecordsScreenState extends State<RecordsScreen> {
         _RecordGroup(
           id: group.id,
           title: group.name,
-          subtitle: _groupAnchorLabel(group),
+          subtitle: '',
           icon: LucideIcons.folder,
           entries: _sortEntries(entries),
         ),
@@ -448,14 +448,6 @@ class _RecordsScreenState extends State<RecordsScreen> {
             .firstOrNull
             ?.name ??
         l10n.recordsUnknownArea;
-  }
-
-  String _groupAnchorLabel(PilgrimagePlanGroup group) {
-    final anchorName = group.anchorName;
-    if (anchorName == null || anchorName.trim().isEmpty) {
-      return l10n.recordsNoAnchor;
-    }
-    return anchorName;
   }
 }
 
@@ -1534,18 +1526,20 @@ class _RecordGroupHeaderState extends State<_RecordGroupHeader> {
                                   letterSpacing: 0,
                                 ),
                               ),
-                              const SizedBox(height: 2),
-                              Text(
-                                section.subtitle,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: AppColors.textSecondary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  letterSpacing: 0,
+                              if (section.subtitle.isNotEmpty) ...[
+                                const SizedBox(height: 2),
+                                Text(
+                                  section.subtitle,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    color: AppColors.textSecondary,
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    letterSpacing: 0,
+                                  ),
                                 ),
-                              ),
+                              ],
                             ],
                           ),
                         ),

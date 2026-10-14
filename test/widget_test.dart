@@ -539,8 +539,8 @@ void main() {
       find.byKey(const ValueKey('plan-group-picker-option-宇治站附近')),
       findsOneWidget,
     );
-    expect(find.textContaining('关键点：'), findsWidgets);
-    expect(find.textContaining('关键点：关键点：'), findsNothing);
+    // Areas no longer show an anchor; a start shows only once one is set.
+    expect(find.textContaining('关键点'), findsNothing);
   });
 
   testWidgets('box assign uses the integrated region picker', (tester) async {
@@ -643,39 +643,6 @@ void main() {
     expect(find.text('超出最大距离'), findsNothing);
     expect(find.text('在最大距离范围内'), findsNothing);
   });
-
-  testWidgets(
-    'nearest assign keeps distance status and puts assign beside slider',
-    (tester) async {
-      final repository = SamplePilgrimageRepository();
-      final plan = await repository.loadActivePlan();
-      await tester.pumpWidget(
-        MaterialApp(
-          theme: AppTheme.light(),
-          home: NearestGroupAssignScreen(
-            plan: plan,
-            repository: repository,
-            settings: const AppSettings(),
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-
-      tester
-          .widget<IconButton>(
-            find.widgetWithIcon(IconButton, LucideIcons.mapPin),
-          )
-          .onPressed!();
-      await tester.pumpAndSettle();
-      expect(find.text('未框选'), findsNothing);
-      expect(find.text('已框选'), findsNothing);
-      expect(
-        find.text('超出最大距离').evaluate().isNotEmpty ||
-            find.text('在最大距离范围内').evaluate().isNotEmpty,
-        isTrue,
-      );
-    },
-  );
 
   testWidgets('shows records dashboard header and summary', (tester) async {
     await _pumpApp(tester);
@@ -1667,14 +1634,13 @@ void main() {
 
     expect(find.text('片区名不能为空'), findsNothing);
     expect(find.text('新片区'), findsOneWidget);
-    expect(find.text('未设置关键点'), findsOneWidget);
     expect(find.text('空'), findsOneWidget);
     expect(find.text('无序'), findsOneWidget);
 
     await tester.tap(find.byTooltip('片区操作'));
     await tester.pumpAndSettle();
     expect(find.text('重命名'), findsOneWidget);
-    expect(find.text('设置关键点'), findsOneWidget);
+    expect(find.text('设置关键点'), findsNothing);
     expect(find.text('切换为手动排序'), findsOneWidget);
     expect(find.text('删除片区'), findsOneWidget);
   });
@@ -3694,52 +3660,6 @@ void main() {
       everyElement(grouped.groups.single.id),
     );
   });
-
-  testWidgets(
-    'post-import organization failure does not report import failure',
-    (tester) async {
-      final repository = _FailingSettingsOnDemandRepository(plans: const []);
-      var plan = await repository.createPlan(name: '整理失败测试', area: '京都');
-      // With an area, the guide offers assigning to the nearest one.
-      plan = await repository.createPlanGroup(
-        planId: plan.id,
-        group: PilgrimagePlanGroup(
-          id: 'kyoto',
-          name: '京都',
-          orderIndex: 0,
-          createdAt: DateTime(2026),
-        ),
-      );
-      final anitabiClient = _FakeAnitabiClient(
-        pointsByBangumi: const {12345: _bulkImportPoints},
-      );
-
-      await tester.pumpWidget(
-        MaterialApp(
-          home: AnitabiMapImportScreen(
-            plan: plan,
-            repository: repository,
-            initialBangumiId: 12345,
-            anitabiClient: anitabiClient,
-          ),
-        ),
-      );
-      await tester.pumpAndSettle();
-      repository.failNextSettingsLoad = true;
-
-      await tester.tap(find.byTooltip('添加所有点位'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('添加全部'));
-      await tester.pumpAndSettle();
-      await tester.tap(find.text('最近分配'));
-      await tester.pumpAndSettle();
-
-      final updatedPlan = await repository.loadActivePlan();
-      expect(updatedPlan.points, hasLength(2));
-      expect(find.textContaining('点位已导入，但整理流程打开失败'), findsOneWidget);
-      expect(find.textContaining('批量导入失败'), findsNothing);
-    },
-  );
 }
 
 const _bulkImportPoints = [

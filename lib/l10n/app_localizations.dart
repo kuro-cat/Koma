@@ -2778,12 +2778,6 @@ abstract class AppLocalizations {
   /// **'批量删除失败'**
   String get pointManagerBatchDeleteFailed;
 
-  /// No description provided for @pointManagerNearestAssign.
-  ///
-  /// In zh, this message translates to:
-  /// **'最近分配'**
-  String get pointManagerNearestAssign;
-
   /// No description provided for @pointManagerBoxAssign.
   ///
   /// In zh, this message translates to:
@@ -2868,17 +2862,11 @@ abstract class AppLocalizations {
   /// **'等待分入片区'**
   String get planGroupUtilsAwaitingGroup;
 
-  /// No description provided for @planGroupUtilsAnchorUnset.
+  /// No description provided for @planGroupUtilsStart.
   ///
   /// In zh, this message translates to:
-  /// **'未设置关键点'**
-  String get planGroupUtilsAnchorUnset;
-
-  /// No description provided for @planGroupUtilsAnchor.
-  ///
-  /// In zh, this message translates to:
-  /// **'关键点：{name}'**
-  String planGroupUtilsAnchor(String name);
+  /// **'起点：{name}'**
+  String planGroupUtilsStart(String name);
 
   /// No description provided for @planGroupUtilsUngrouped.
   ///
@@ -3348,23 +3336,11 @@ abstract class AppLocalizations {
   /// **'{count} 个未分组点位'**
   String nearestGroupAssignUngroupedSpots(int count);
 
-  /// No description provided for @nearestGroupAssignConfirmMessage.
-  ///
-  /// In zh, this message translates to:
-  /// **'将把 {spots}分配到最近的片区关键点，最大距离为 {distance}。'**
-  String nearestGroupAssignConfirmMessage(String spots, String distance);
-
   /// No description provided for @nearestGroupAssignDone.
   ///
   /// In zh, this message translates to:
   /// **'已分配 {count} 个点位'**
   String nearestGroupAssignDone(int count);
-
-  /// No description provided for @nearestGroupAssignDoneDistanceUnsaved.
-  ///
-  /// In zh, this message translates to:
-  /// **'已分配 {count} 个点位，距离设置未保存'**
-  String nearestGroupAssignDoneDistanceUnsaved(int count);
 
   /// No description provided for @nearestGroupAssignBoxConfirmMessage.
   ///
@@ -3384,24 +3360,6 @@ abstract class AppLocalizations {
   /// **'已框选 {selected} / 待分配 {ungrouped}'**
   String nearestGroupAssignBoxStatus(int selected, int ungrouped);
 
-  /// No description provided for @nearestGroupAssignMaxDistance.
-  ///
-  /// In zh, this message translates to:
-  /// **'最大距离 {distance}'**
-  String nearestGroupAssignMaxDistance(String distance);
-
-  /// No description provided for @nearestGroupAssignAssignableCount.
-  ///
-  /// In zh, this message translates to:
-  /// **'可分配 {assignable}/{ungrouped}'**
-  String nearestGroupAssignAssignableCount(int assignable, int ungrouped);
-
-  /// No description provided for @nearestGroupAssignCurrentDistance.
-  ///
-  /// In zh, this message translates to:
-  /// **'当前 {distance}'**
-  String nearestGroupAssignCurrentDistance(String distance);
-
   /// No description provided for @nearestGroupAssignInRange.
   ///
   /// In zh, this message translates to:
@@ -3419,36 +3377,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'未分组 {count} 个 · 点击地图点位查看详情'**
   String nearestGroupAssignUngroupedHint(int count);
-
-  /// No description provided for @nearestGroupAssignTitle.
-  ///
-  /// In zh, this message translates to:
-  /// **'最近分配'**
-  String get nearestGroupAssignTitle;
-
-  /// No description provided for @nearestGroupAssignNoneInRange.
-  ///
-  /// In zh, this message translates to:
-  /// **'当前距离内没有可分配点位'**
-  String get nearestGroupAssignNoneInRange;
-
-  /// No description provided for @nearestGroupAssignConfirmTitle.
-  ///
-  /// In zh, this message translates to:
-  /// **'确认最近分配'**
-  String get nearestGroupAssignConfirmTitle;
-
-  /// No description provided for @nearestGroupAssignStart.
-  ///
-  /// In zh, this message translates to:
-  /// **'开始分配'**
-  String get nearestGroupAssignStart;
-
-  /// No description provided for @nearestGroupAssignFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'最近分配失败'**
-  String get nearestGroupAssignFailed;
 
   /// No description provided for @nearestGroupAssignFinishFirst.
   ///
@@ -3570,12 +3498,6 @@ abstract class AppLocalizations {
   /// **'分配选中点位'**
   String get nearestGroupAssignAssignSelected;
 
-  /// No description provided for @nearestGroupAssignExplain.
-  ///
-  /// In zh, this message translates to:
-  /// **'未分组点位会分配到距离最近、且在最大距离范围内的片区关键点。'**
-  String get nearestGroupAssignExplain;
-
   /// No description provided for @nearestGroupAssignNoAnchor.
   ///
   /// In zh, this message translates to:
@@ -3615,13 +3537,8 @@ abstract class AppLocalizations {
   /// No description provided for @planAreaProgress.
   ///
   /// In zh, this message translates to:
-  /// **'{anchor} · {completed}/{total} 完成 · {order}'**
-  String planAreaProgress(
-    String anchor,
-    int completed,
-    int total,
-    String order,
-  );
+  /// **'{completed}/{total} 完成 · {order}'**
+  String planAreaProgress(int completed, int total, String order);
 
   /// No description provided for @planSummary.
   ///
@@ -4233,12 +4150,6 @@ abstract class AppLocalizations {
   /// **'已导入 '**
   String get anitabiMapImportOrganizeLead;
 
-  /// No description provided for @anitabiMapImportOrganizeTail.
-  ///
-  /// In zh, this message translates to:
-  /// **'，并暂时放在未分组。可以直接分配到片区，或按最近关键点快速分配。'**
-  String get anitabiMapImportOrganizeTail;
-
   /// No description provided for @planAreaAddNote.
   ///
   /// In zh, this message translates to:
@@ -4316,12 +4227,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'分组失败，请重试。'**
   String get autoAreaFailed;
-
-  /// No description provided for @anitabiMapImportNearestAssign.
-  ///
-  /// In zh, this message translates to:
-  /// **'最近分配'**
-  String get anitabiMapImportNearestAssign;
 
   /// No description provided for @anitabiMapImportLater.
   ///
@@ -4503,12 +4408,6 @@ abstract class AppLocalizations {
   /// **'排序方式保存失败'**
   String get planGroupManagerOrderModeSaveFailed;
 
-  /// No description provided for @planGroupManagerAnchorSaveFailed.
-  ///
-  /// In zh, this message translates to:
-  /// **'关键点保存失败'**
-  String get planGroupManagerAnchorSaveFailed;
-
   /// No description provided for @planGroupManagerDeleteArea.
   ///
   /// In zh, this message translates to:
@@ -4581,18 +4480,6 @@ abstract class AppLocalizations {
   /// **'空'**
   String get planGroupManagerEmpty;
 
-  /// No description provided for @planGroupManagerAnchorLabel.
-  ///
-  /// In zh, this message translates to:
-  /// **'关键点 · {name}'**
-  String planGroupManagerAnchorLabel(String name);
-
-  /// No description provided for @planGroupManagerNoAnchor.
-  ///
-  /// In zh, this message translates to:
-  /// **'未设置关键点'**
-  String get planGroupManagerNoAnchor;
-
   /// No description provided for @planGroupManagerAreaActions.
   ///
   /// In zh, this message translates to:
@@ -4604,12 +4491,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'重命名'**
   String get planGroupManagerRename;
-
-  /// No description provided for @planGroupManagerSetAnchor.
-  ///
-  /// In zh, this message translates to:
-  /// **'设置关键点'**
-  String get planGroupManagerSetAnchor;
 
   /// No description provided for @planGroupManagerSwitchToUnordered.
   ///
@@ -5481,12 +5362,6 @@ abstract class AppLocalizations {
   /// **'未知片区'**
   String get pointDetailUnknownArea;
 
-  /// No description provided for @pointDetailNoAnchor.
-  ///
-  /// In zh, this message translates to:
-  /// **'未设置关键点'**
-  String get pointDetailNoAnchor;
-
   /// No description provided for @pointDetailDeleteSpot.
   ///
   /// In zh, this message translates to:
@@ -5576,12 +5451,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'片区'**
   String get pointDetailArea;
-
-  /// No description provided for @pointDetailAreaAnchor.
-  ///
-  /// In zh, this message translates to:
-  /// **'片区关键点'**
-  String get pointDetailAreaAnchor;
 
   /// No description provided for @pointDetailChange.
   ///
@@ -7642,12 +7511,6 @@ abstract class AppLocalizations {
   /// In zh, this message translates to:
   /// **'未知片区'**
   String get recordsUnknownArea;
-
-  /// No description provided for @recordsNoAnchor.
-  ///
-  /// In zh, this message translates to:
-  /// **'未设置关键点'**
-  String get recordsNoAnchor;
 
   /// No description provided for @recordsScopeFilterTooltip.
   ///

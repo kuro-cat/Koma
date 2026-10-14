@@ -1456,9 +1456,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get pointManagerBatchDeleteFailed => '批量删除失败';
 
   @override
-  String get pointManagerNearestAssign => '最近分配';
-
-  @override
   String get pointManagerBoxAssign => '框选分配';
 
   @override
@@ -1501,11 +1498,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planGroupUtilsAwaitingGroup => '等待分入片区';
 
   @override
-  String get planGroupUtilsAnchorUnset => '未设置关键点';
-
-  @override
-  String planGroupUtilsAnchor(String name) {
-    return '关键点：$name';
+  String planGroupUtilsStart(String name) {
+    return '起点：$name';
   }
 
   @override
@@ -1759,18 +1753,8 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String nearestGroupAssignConfirmMessage(String spots, String distance) {
-    return '将把 $spots分配到最近的片区关键点，最大距离为 $distance。';
-  }
-
-  @override
   String nearestGroupAssignDone(int count) {
     return '已分配 $count 个点位';
-  }
-
-  @override
-  String nearestGroupAssignDoneDistanceUnsaved(int count) {
-    return '已分配 $count 个点位，距离设置未保存';
   }
 
   @override
@@ -1789,21 +1773,6 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String nearestGroupAssignMaxDistance(String distance) {
-    return '最大距离 $distance';
-  }
-
-  @override
-  String nearestGroupAssignAssignableCount(int assignable, int ungrouped) {
-    return '可分配 $assignable/$ungrouped';
-  }
-
-  @override
-  String nearestGroupAssignCurrentDistance(String distance) {
-    return '当前 $distance';
-  }
-
-  @override
   String get nearestGroupAssignInRange => '在最大距离范围内';
 
   @override
@@ -1813,21 +1782,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String nearestGroupAssignUngroupedHint(int count) {
     return '未分组 $count 个 · 点击地图点位查看详情';
   }
-
-  @override
-  String get nearestGroupAssignTitle => '最近分配';
-
-  @override
-  String get nearestGroupAssignNoneInRange => '当前距离内没有可分配点位';
-
-  @override
-  String get nearestGroupAssignConfirmTitle => '确认最近分配';
-
-  @override
-  String get nearestGroupAssignStart => '开始分配';
-
-  @override
-  String get nearestGroupAssignFailed => '最近分配失败';
 
   @override
   String get nearestGroupAssignFinishFirst => '请先完成片区分配';
@@ -1890,9 +1844,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get nearestGroupAssignAssignSelected => '分配选中点位';
 
   @override
-  String get nearestGroupAssignExplain => '未分组点位会分配到距离最近、且在最大距离范围内的片区关键点。';
-
-  @override
   String get nearestGroupAssignNoAnchor => '没有可用片区关键点';
 
   @override
@@ -1915,13 +1866,8 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String planAreaProgress(
-    String anchor,
-    int completed,
-    int total,
-    String order,
-  ) {
-    return '$anchor · $completed/$total 完成 · $order';
+  String planAreaProgress(int completed, int total, String order) {
+    return '$completed/$total 完成 · $order';
   }
 
   @override
@@ -2270,9 +2216,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get anitabiMapImportOrganizeLead => '已导入 ';
 
   @override
-  String get anitabiMapImportOrganizeTail => '，并暂时放在未分组。可以直接分配到片区，或按最近关键点快速分配。';
-
-  @override
   String get planAreaAddNote => '添加片区备注';
 
   @override
@@ -2316,9 +2259,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get autoAreaFailed => '分组失败，请重试。';
-
-  @override
-  String get anitabiMapImportNearestAssign => '最近分配';
 
   @override
   String get anitabiMapImportLater => '稍后';
@@ -2412,9 +2352,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planGroupManagerOrderModeSaveFailed => '排序方式保存失败';
 
   @override
-  String get planGroupManagerAnchorSaveFailed => '关键点保存失败';
-
-  @override
   String get planGroupManagerDeleteArea => '删除片区';
 
   @override
@@ -2455,21 +2392,10 @@ class AppLocalizationsZh extends AppLocalizations {
   String get planGroupManagerEmpty => '空';
 
   @override
-  String planGroupManagerAnchorLabel(String name) {
-    return '关键点 · $name';
-  }
-
-  @override
-  String get planGroupManagerNoAnchor => '未设置关键点';
-
-  @override
   String get planGroupManagerAreaActions => '片区操作';
 
   @override
   String get planGroupManagerRename => '重命名';
-
-  @override
-  String get planGroupManagerSetAnchor => '设置关键点';
 
   @override
   String get planGroupManagerSwitchToUnordered => '切换为无序';
@@ -2955,9 +2881,6 @@ class AppLocalizationsZh extends AppLocalizations {
   String get pointDetailUnknownArea => '未知片区';
 
   @override
-  String get pointDetailNoAnchor => '未设置关键点';
-
-  @override
   String get pointDetailDeleteSpot => '删除点位';
 
   @override
@@ -3003,9 +2926,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get pointDetailArea => '片区';
-
-  @override
-  String get pointDetailAreaAnchor => '片区关键点';
 
   @override
   String get pointDetailChange => '更改';
@@ -4149,9 +4069,6 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get recordsUnknownArea => '未知片区';
-
-  @override
-  String get recordsNoAnchor => '未设置关键点';
 
   @override
   String get recordsScopeFilterTooltip => '按作品和片区筛选';

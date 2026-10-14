@@ -375,8 +375,21 @@ class _PilgrimageMapScreenState extends State<PilgrimageMapScreen>
       _selectedGroupIndex = nextIndex;
       _overlapPointBrowser = null;
     });
-    if (group.points.any((point) => point.hasCoordinate)) {
-      _mapController.move(groupMapCenter(group), 15);
+    final positions = [
+      for (final point in group.points)
+        if (point.hasCoordinate) point.position,
+    ];
+    if (positions.length == 1) {
+      _mapController.move(positions.single, 15);
+    } else if (positions.length > 1) {
+      // A whole city can be an area: show all of it.
+      _mapController.fitCamera(
+        CameraFit.coordinates(
+          coordinates: positions,
+          padding: const EdgeInsets.fromLTRB(48, 120, 48, 220),
+          maxZoom: 16,
+        ),
+      );
     }
   }
 

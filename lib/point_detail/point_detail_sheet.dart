@@ -415,7 +415,6 @@ class PointDetailSheet extends StatelessWidget {
                 const SizedBox(height: 8),
                 _GroupInfoRow(
                   groupName: _groupName,
-                  anchorLabel: _groupAnchorLabel,
                   onMove: onMoveToGroup == null
                       ? null
                       : () => _showMoveGroupSheet(context),
@@ -550,19 +549,6 @@ class PointDetailSheet extends StatelessWidget {
           ),
         )
         .name;
-  }
-
-  String get _groupAnchorLabel {
-    final groupId = point.groupId;
-    if (groupId == null) {
-      return l10n.pointDetailNoAnchor;
-    }
-    final group = groups.where((group) => group.id == groupId).firstOrNull;
-    final anchorName = group?.anchorName;
-    if (anchorName == null || anchorName.trim().isEmpty) {
-      return l10n.pointDetailNoAnchor;
-    }
-    return anchorName;
   }
 }
 
@@ -871,14 +857,9 @@ class _ReferenceColumn extends StatelessWidget {
 }
 
 class _GroupInfoRow extends StatelessWidget {
-  const _GroupInfoRow({
-    required this.groupName,
-    required this.anchorLabel,
-    required this.onMove,
-  });
+  const _GroupInfoRow({required this.groupName, required this.onMove});
 
   final String groupName;
-  final String anchorLabel;
   final VoidCallback? onMove;
 
   @override
@@ -911,16 +892,6 @@ class _GroupInfoRow extends StatelessWidget {
                 style: TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 13,
-                  letterSpacing: 0,
-                ),
-              ),
-              const SizedBox(height: 2),
-              CopyableText(
-                text: anchorLabel,
-                copyLabel: l10n.pointDetailAreaAnchor,
-                style: TextStyle(
-                  color: AppColors.textSecondary,
-                  fontSize: 12,
                   letterSpacing: 0,
                 ),
               ),

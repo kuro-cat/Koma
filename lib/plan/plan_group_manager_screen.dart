@@ -129,15 +129,6 @@ class _PlanGroupManagerScreenState extends State<PlanGroupManagerScreen> {
                       ),
                       l10n.planGroupManagerRenameFailed,
                     ),
-                    onSetAnchor: () => _run(
-                      setAreaAnchorChange(
-                        context,
-                        widget.repository,
-                        _plan,
-                        group,
-                      ),
-                      l10n.planGroupManagerAnchorSaveFailed,
-                    ),
                     onToggleOrderMode: () => _run(
                       Future.value(
                         toggleAreaOrderChange(widget.repository, _plan, group),
@@ -350,7 +341,6 @@ class _PlanGroupCard extends StatelessWidget {
     required this.isBusy,
     required this.onOpen,
     required this.onRename,
-    required this.onSetAnchor,
     required this.onToggleOrderMode,
     required this.onDelete,
   });
@@ -361,7 +351,6 @@ class _PlanGroupCard extends StatelessWidget {
   final bool isBusy;
   final VoidCallback? onOpen;
   final VoidCallback onRename;
-  final VoidCallback onSetAnchor;
   final VoidCallback onToggleOrderMode;
   final VoidCallback onDelete;
 
@@ -371,8 +360,7 @@ class _PlanGroupCard extends StatelessWidget {
     final orderLabel = group.orderMode == PlanGroupOrderMode.manual
         ? l10n.planGroupManagerManualOrder
         : l10n.planGroupManagerUnordered;
-    final hasAnchor =
-        group.anchorName != null && group.anchorName!.trim().isNotEmpty;
+    final startName = group.startName?.trim() ?? '';
     return Material(
       type: MaterialType.transparency,
       shape: Border(bottom: rowDividerSide),
@@ -425,11 +413,9 @@ class _PlanGroupCard extends StatelessWidget {
                       children: [
                         Expanded(
                           child: Text(
-                            hasAnchor
-                                ? l10n.planGroupManagerAnchorLabel(
-                                    group.anchorName!,
-                                  )
-                                : l10n.planGroupManagerNoAnchor,
+                            startName.isEmpty
+                                ? ''
+                                : l10n.planGroupUtilsStart(startName),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
@@ -458,8 +444,6 @@ class _PlanGroupCard extends StatelessWidget {
                   switch (value) {
                     case 'rename':
                       onRename();
-                    case 'anchor':
-                      onSetAnchor();
                     case 'order':
                       onToggleOrderMode();
                     case 'delete':
@@ -474,15 +458,6 @@ class _PlanGroupCard extends StatelessWidget {
                     child: _GroupActionRow(
                       icon: LucideIcons.edit,
                       label: l10n.planGroupManagerRename,
-                    ),
-                  ),
-                  PopupMenuItem(
-                    value: 'anchor',
-                    height: 48,
-                    padding: EdgeInsets.symmetric(horizontal: 8),
-                    child: _GroupActionRow(
-                      icon: LucideIcons.flag,
-                      label: l10n.planGroupManagerSetAnchor,
                     ),
                   ),
                   PopupMenuItem(

@@ -52,8 +52,7 @@ PilgrimagePlanGroup? matchAreaForSpots(
           point.hasCoordinate &&
           !spotIds.contains(point.id),
     );
-    final anchor = resolvedGroupAnchorPosition(group, plan.points);
-    for (final position in [?anchor, ...members.map((p) => p.position)]) {
+    for (final position in members.map((p) => p.position)) {
       final meters = distance(center, position);
       if (meters <= nearestMeters) {
         nearest = group;

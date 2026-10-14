@@ -67,17 +67,11 @@ void main() {
     await tester.pumpWidget(
       MaterialApp(
         theme: AppTheme.light(),
-        home: box
-            ? BoxGroupAssignScreen(
-                plan: plan,
-                settings: settings,
-                repository: repository,
-              )
-            : NearestGroupAssignScreen(
-                plan: plan,
-                settings: settings,
-                repository: repository,
-              ),
+        home: BoxGroupAssignScreen(
+          plan: plan,
+          settings: settings,
+          repository: repository,
+        ),
       ),
     );
     await tester.pumpAndSettle();
@@ -88,7 +82,7 @@ void main() {
     return repository;
   }
 
-  for (final box in [false, true]) {
+  for (final box in [true]) {
     for (final source in [
       AnitabiImageSource.official,
       AnitabiImageSource.mirror,

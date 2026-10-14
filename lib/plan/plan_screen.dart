@@ -856,11 +856,6 @@ class _PlanScreenState extends State<PlanScreen>
           renameAreaChange(context, widget.repository, plan, group),
           l10n.planGroupManagerRenameFailed,
         );
-      case _AreaAction.anchor when group != null:
-        await _runAreaChange(
-          setAreaAnchorChange(context, widget.repository, plan, group),
-          l10n.planGroupManagerAnchorSaveFailed,
-        );
       case _AreaAction.note when group != null:
         final edited = await showNoteDialog(
           context,
@@ -961,17 +956,6 @@ class _PlanScreenState extends State<PlanScreen>
             kind: AppStatusBannerKind.success,
           );
         }
-      case _AreaAction.nearest:
-        await Navigator.of(context).push<bool>(
-          MaterialPageRoute(
-            builder: (_) => NearestGroupAssignScreen(
-              plan: plan,
-              settings: settings,
-              repository: widget.repository,
-            ),
-          ),
-        );
-        await _reloadPlan();
       case _AreaAction.box:
         await Navigator.of(context).push<bool>(
           MaterialPageRoute(
@@ -1409,13 +1393,11 @@ class _PlanActionDivider extends StatelessWidget {
 enum _AreaAction {
   note,
   rename,
-  anchor,
   order,
   walkingOrder,
   manage,
   delete,
   auto,
-  nearest,
   box,
 }
 
@@ -1617,11 +1599,6 @@ class _GroupSwitcher extends StatelessWidget {
                   l10n.anitabiMapImportAutoGroup,
                 ),
                 _areaItem(
-                  _AreaAction.nearest,
-                  LucideIcons.locateFixed,
-                  l10n.pointManagerNearestAssign,
-                ),
-                _areaItem(
                   _AreaAction.box,
                   LucideIcons.scan,
                   l10n.pointManagerBoxAssign,
@@ -1638,11 +1615,6 @@ class _GroupSwitcher extends StatelessWidget {
                   _AreaAction.rename,
                   LucideIcons.pencil,
                   l10n.planGroupManagerRename,
-                ),
-                _areaItem(
-                  _AreaAction.anchor,
-                  LucideIcons.flag,
-                  l10n.planGroupManagerSetAnchor,
                 ),
                 _areaItem(
                   _AreaAction.walkingOrder,
@@ -2210,12 +2182,14 @@ class _MapCompactSummary extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         child: Text(
-          l10n.planAreaProgress(
-            group.anchorLabel,
-            group.completedCount,
-            group.points.length,
-            group.orderModeLabel,
-          ),
+          [
+            group.startLabel,
+            l10n.planAreaProgress(
+              group.completedCount,
+              group.points.length,
+              group.orderModeLabel,
+            ),
+          ].where((part) => part.isNotEmpty).join(' · '),
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
           style: TextStyle(

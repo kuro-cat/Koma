@@ -63,7 +63,7 @@ PilgrimagePoint centralSpot(List<PilgrimagePoint> cluster) {
 /// border stays together, and the city is looked up once per cluster. A city
 /// that already has an area (by name) gets the spots added to it; clusters
 /// whose city can't be found (e.g. offline) get an area each. New areas are
-/// anchored on their central spot and sorted into walking order.
+/// sorted into walking order.
 /// Returns the plan as stored.
 Future<PilgrimagePlan> autoGroupUngroupedSpots({
   required PilgrimagePlan plan,
@@ -106,7 +106,6 @@ Future<PilgrimagePlan> autoGroupUngroupedSpots({
     if (existing != null) {
       groupId = existing.id;
     } else {
-      final anchor = centralSpot(spots);
       groupId = 'group-${now.microsecondsSinceEpoch}-$index';
       current = await repository.createPlanGroup(
         planId: plan.id,
@@ -114,10 +113,6 @@ Future<PilgrimagePlan> autoGroupUngroupedSpots({
           id: groupId,
           name: name,
           orderIndex: orderIndex++,
-          anchorPointId: anchor.id,
-          anchorName: anchor.name,
-          anchorLatitude: anchor.position.latitude,
-          anchorLongitude: anchor.position.longitude,
           createdAt: now,
         ),
       );

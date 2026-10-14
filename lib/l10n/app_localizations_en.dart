@@ -1593,9 +1593,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pointManagerBatchDeleteFailed => 'Couldn\'t delete the spots';
 
   @override
-  String get pointManagerNearestAssign => 'Assign nearest';
-
-  @override
   String get pointManagerBoxAssign => 'Box assign';
 
   @override
@@ -1640,11 +1637,8 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planGroupUtilsAwaitingGroup => 'Not in an area yet';
 
   @override
-  String get planGroupUtilsAnchorUnset => 'No anchor set';
-
-  @override
-  String planGroupUtilsAnchor(String name) {
-    return 'Anchor: $name';
+  String planGroupUtilsStart(String name) {
+    return 'Start: $name';
   }
 
   @override
@@ -1933,11 +1927,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String nearestGroupAssignConfirmMessage(String spots, String distance) {
-    return '$spots will be assigned to the nearest area anchor, up to $distance away.';
-  }
-
-  @override
   String nearestGroupAssignDone(int count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,
@@ -1946,17 +1935,6 @@ class AppLocalizationsEn extends AppLocalizations {
       one: '1 spot',
     );
     return 'Assigned $_temp0';
-  }
-
-  @override
-  String nearestGroupAssignDoneDistanceUnsaved(int count) {
-    String _temp0 = intl.Intl.pluralLogic(
-      count,
-      locale: localeName,
-      other: '$count spots',
-      one: '1 spot',
-    );
-    return 'Assigned $_temp0. The distance setting wasn\'t saved';
   }
 
   @override
@@ -1981,21 +1959,6 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String nearestGroupAssignMaxDistance(String distance) {
-    return 'Max distance $distance';
-  }
-
-  @override
-  String nearestGroupAssignAssignableCount(int assignable, int ungrouped) {
-    return 'Assignable $assignable/$ungrouped';
-  }
-
-  @override
-  String nearestGroupAssignCurrentDistance(String distance) {
-    return 'Current $distance';
-  }
-
-  @override
   String get nearestGroupAssignInRange => 'Within max distance';
 
   @override
@@ -2005,22 +1968,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String nearestGroupAssignUngroupedHint(int count) {
     return '$count ungrouped · tap a spot on the map for details';
   }
-
-  @override
-  String get nearestGroupAssignTitle => 'Assign to nearest';
-
-  @override
-  String get nearestGroupAssignNoneInRange =>
-      'No spots to assign within this distance';
-
-  @override
-  String get nearestGroupAssignConfirmTitle => 'Assign to nearest?';
-
-  @override
-  String get nearestGroupAssignStart => 'Start assigning';
-
-  @override
-  String get nearestGroupAssignFailed => 'Couldn\'t assign to nearest';
 
   @override
   String get nearestGroupAssignFinishFirst => 'Finish assigning areas first';
@@ -2085,10 +2032,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get nearestGroupAssignAssignSelected => 'Assign selected spots';
 
   @override
-  String get nearestGroupAssignExplain =>
-      'Ungrouped spots go to the nearest area anchor within the max distance.';
-
-  @override
   String get nearestGroupAssignNoAnchor => 'No area anchor available';
 
   @override
@@ -2118,13 +2061,8 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String planAreaProgress(
-    String anchor,
-    int completed,
-    int total,
-    String order,
-  ) {
-    return '$anchor · $completed/$total done · $order';
+  String planAreaProgress(int completed, int total, String order) {
+    return '$completed/$total done · $order';
   }
 
   @override
@@ -2551,10 +2489,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get anitabiMapImportOrganizeLead => 'Imported ';
 
   @override
-  String get anitabiMapImportOrganizeTail =>
-      '. They stay ungrouped for now. Assign them to an area, or quickly assign each to the nearest anchor.';
-
-  @override
   String get planAreaAddNote => 'Add area note';
 
   @override
@@ -2600,9 +2534,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get autoAreaFailed => 'Couldn\'t group the spots. Try again.';
-
-  @override
-  String get anitabiMapImportNearestAssign => 'Assign to nearest';
 
   @override
   String get anitabiMapImportLater => 'Later';
@@ -2698,9 +2629,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planGroupManagerOrderModeSaveFailed => 'Couldn\'t save sort mode';
 
   @override
-  String get planGroupManagerAnchorSaveFailed => 'Couldn\'t save anchor';
-
-  @override
   String get planGroupManagerDeleteArea => 'Delete area';
 
   @override
@@ -2759,21 +2687,10 @@ class AppLocalizationsEn extends AppLocalizations {
   String get planGroupManagerEmpty => 'Empty';
 
   @override
-  String planGroupManagerAnchorLabel(String name) {
-    return 'Anchor · $name';
-  }
-
-  @override
-  String get planGroupManagerNoAnchor => 'No anchor set';
-
-  @override
   String get planGroupManagerAreaActions => 'Area actions';
 
   @override
   String get planGroupManagerRename => 'Rename';
-
-  @override
-  String get planGroupManagerSetAnchor => 'Set anchor';
 
   @override
   String get planGroupManagerSwitchToUnordered => 'Switch to unordered';
@@ -3314,9 +3231,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pointDetailUnknownArea => 'Unknown area';
 
   @override
-  String get pointDetailNoAnchor => 'No anchor set';
-
-  @override
   String get pointDetailDeleteSpot => 'Delete spot';
 
   @override
@@ -3363,9 +3277,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get pointDetailArea => 'Area';
-
-  @override
-  String get pointDetailAreaAnchor => 'Area anchor';
 
   @override
   String get pointDetailChange => 'Change';
@@ -4701,9 +4612,6 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get recordsUnknownArea => 'Unknown area';
-
-  @override
-  String get recordsNoAnchor => 'No anchor set';
 
   @override
   String get recordsScopeFilterTooltip => 'Filter by work and area';

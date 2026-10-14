@@ -279,17 +279,19 @@ class _PlanGroupPickerTile extends StatelessWidget {
                                 letterSpacing: 0,
                               ),
                             ),
-                            const SizedBox(height: 3),
-                            Text(
-                              group.anchorLabel,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: AppColors.textSecondary,
-                                fontSize: 12,
-                                letterSpacing: 0,
+                            if (group.startLabel.isNotEmpty) ...[
+                              const SizedBox(height: 3),
+                              Text(
+                                group.startLabel,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: AppColors.textSecondary,
+                                  fontSize: 12,
+                                  letterSpacing: 0,
+                                ),
                               ),
-                            ),
+                            ],
                           ],
                         ),
                       ),

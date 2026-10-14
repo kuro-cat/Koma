@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../data/pilgrimage_repository.dart';
-import '../widgets/app_scaled_route.dart';
 import '../widgets/confirm_action_dialog.dart';
 import '../widgets/input_dialog.dart';
 import '../widgets/keyboard_dismiss_on_tap.dart';
-import 'group_anchor_picker_screen.dart';
 import 'pilgrimage_models.dart';
 import '../l10n/l10n.dart';
 
@@ -51,43 +49,7 @@ PlanChange toggleAreaOrderChange(
       : PlanGroupOrderMode.manual;
   return () => repository.updatePlanGroup(
     planId: plan.id,
-    group: _copyGroup(group, orderMode: nextMode),
-  );
-}
-
-Future<PlanChange?> setAreaAnchorChange(
-  BuildContext context,
-  PilgrimageRepository repository,
-  PilgrimagePlan plan,
-  PilgrimagePlanGroup group,
-) async {
-  final settings = await repository.loadAppSettings();
-  if (!context.mounted) {
-    return null;
-  }
-  final selection = await Navigator.of(context).push<GroupAnchorSelection>(
-    appScaledMaterialPageRoute<GroupAnchorSelection>(
-      settings: settings,
-      builder: (_) => GroupAnchorPickerScreen(
-        group: group,
-        points: plan.points,
-        groupNameForPoint: (point) => _groupNameForPoint(plan, point),
-        settings: settings,
-      ),
-    ),
-  );
-  if (selection == null) {
-    return null;
-  }
-  return () => repository.updatePlanGroup(
-    planId: plan.id,
-    group: _copyGroup(
-      group,
-      anchorName: selection.name,
-      anchorLatitude: selection.position?.latitude,
-      anchorLongitude: selection.position?.longitude,
-      anchorPointId: selection.pointId,
-    ),
+    group: group.copyWith(orderMode: nextMode),
   );
 }
 
@@ -112,41 +74,6 @@ Future<PlanChange?> deleteAreaChange(
     return null;
   }
   return () => repository.deletePlanGroup(planId: plan.id, groupId: group.id);
-}
-
-const Object _unset = Object();
-
-PilgrimagePlanGroup _copyGroup(
-  PilgrimagePlanGroup group, {
-  PlanGroupOrderMode? orderMode,
-  Object? anchorName = _unset,
-  Object? anchorLatitude = _unset,
-  Object? anchorLongitude = _unset,
-  Object? anchorPointId = _unset,
-}) {
-  // Through copyWith, so fields added to areas later are kept.
-  return group.copyWith(
-    orderMode: orderMode,
-    anchorName: anchorName == _unset ? group.anchorName : anchorName,
-    anchorLatitude: anchorLatitude == _unset
-        ? group.anchorLatitude
-        : anchorLatitude,
-    anchorLongitude: anchorLongitude == _unset
-        ? group.anchorLongitude
-        : anchorLongitude,
-    anchorPointId: anchorPointId == _unset
-        ? group.anchorPointId
-        : anchorPointId,
-  );
-}
-
-String _groupNameForPoint(PilgrimagePlan plan, PilgrimagePoint point) {
-  final groupId = point.groupId;
-  if (groupId == null) {
-    return l10n.planGroupManagerUngroupedSpots;
-  }
-  return plan.groups.where((group) => group.id == groupId).firstOrNull?.name ??
-      l10n.planGroupManagerUnknownArea;
 }
 
 class AreaNameDialog extends StatefulWidget {
