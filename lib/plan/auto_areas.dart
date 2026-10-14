@@ -168,11 +168,11 @@ Future<PilgrimagePlan> sortAreaIntoWalkingOrder({
   );
 }
 
-/// [spots] in a short walking order: an open path that avoids crossing back
-/// over itself. With [start] (where the walk begins, e.g. the station) the
-/// path begins at the spot that suits a walk from there; without it, it
-/// starts at whichever end makes the walk shortest. Straight-line distances;
-/// good enough to stop a walk zig-zagging across town.
+/// [spots] in a walking order. With [start] (where the walk begins, e.g. the
+/// station): the spot closest to it, then the spot closest to that, and so
+/// on. Without it: a short open path that avoids crossing back over itself,
+/// starting at whichever end makes the walk shortest. Straight-line
+/// distances; good enough to stop a walk zig-zagging across town.
 List<PilgrimagePoint> walkingOrder(
   List<PilgrimagePoint> spots, {
   LatLng? start,
@@ -212,7 +212,9 @@ List<PilgrimagePoint> walkingOrder(
     if (best == null || length(path) < length(best)) best = path;
   }
   final path = best!;
-  for (var improved = true; improved;) {
+  // From a chosen start, closest-next is the order asked for: don't trade it
+  // for a shorter total that leaves nearby spots for later.
+  for (var improved = start == null; improved;) {
     improved = false;
     for (var i = first; i < n - 1; i++) {
       for (var j = i + 1; j < n; j++) {

@@ -120,6 +120,24 @@ void main() {
     expect(ids, [for (var i = 7; i >= 0; i--) 's$i']);
   });
 
+  test('from a chosen start, each next spot is the closest one left', () {
+    // On a line, 1 unit = 0.001°. Start at 0; spots at 1, 3 and -1.5.
+    // Closest-next: 1, then 3 (2 away, -1.5 is 2.5), then -1.5, though
+    // -1.5, 1, 3 would be a shorter walk.
+    final spots = [
+      spot('minus', 34.0, 132.0 - 0.0015),
+      spot('one', 34.0, 132.001),
+      spot('three', 34.0, 132.003),
+    ];
+
+    final ids = walkingOrder(
+      spots,
+      start: const LatLng(34.0, 132.0),
+    ).map((s) => s.id).toList();
+
+    expect(ids, ['one', 'three', 'minus']);
+  });
+
   test('grouped areas come in walking order', () async {
     final street = [
       for (var i = 0; i < 6; i++) spot('s$i', 34.0 + i * 0.001, 132.0),
