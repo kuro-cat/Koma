@@ -29,7 +29,7 @@ void main() {
   });
 
   test(
-    'grouping names areas by district and anchors them; repeats name their central spot',
+    'grouping names areas by city and anchors them; repeats name their central spot',
     () async {
       final plan = samplePilgrimagePlan.copyWith(
         groups: const [],

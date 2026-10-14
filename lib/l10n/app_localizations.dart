@@ -4260,7 +4260,7 @@ abstract class AppLocalizations {
   /// No description provided for @anitabiMapImportOrganizeNoAreasTail.
   ///
   /// In zh, this message translates to:
-  /// **'。按距离分成片区：步行不远的点位归入同一片区，并以所在街区命名。'**
+  /// **'。按距离分成片区：步行不远的点位归入同一片区，并以所在城市命名。'**
   String get anitabiMapImportOrganizeNoAreasTail;
 
   /// No description provided for @autoAreaGrouped.

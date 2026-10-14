@@ -59,12 +59,12 @@ PilgrimagePoint centralSpot(List<PilgrimagePoint> cluster) {
 }
 
 /// Puts every ungrouped spot with coordinates into a new area per walkable
-/// cluster, named after the district at its central spot (which also
+/// cluster, named after the city at its central spot (which also
 /// becomes its anchor). Returns the plan as stored.
 Future<PilgrimagePlan> autoGroupUngroupedSpots({
   required PilgrimagePlan plan,
   required PilgrimageRepository repository,
-  Future<String?> Function(LatLng position) nameAt = districtNameAt,
+  Future<String?> Function(LatLng position) nameAt = cityNameAt,
 }) async {
   final ungrouped = plan.points
       .where((point) => point.groupId == null && point.hasCoordinate)
@@ -85,7 +85,7 @@ Future<PilgrimagePlan> autoGroupUngroupedSpots({
     final anchor = centralSpot(cluster);
     final base =
         await nameAt(anchor.position) ?? l10n.autoAreaFallbackName(index + 1);
-    // A second area in the same district is told apart by its central spot.
+    // A second area in the same city is told apart by its central spot.
     var name = usedNames.contains(base) ? '$base · ${anchor.name}' : base;
     for (var n = 2; usedNames.contains(name); n++) {
       name = '$base $n';

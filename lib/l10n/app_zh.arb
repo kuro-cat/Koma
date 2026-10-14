@@ -1323,7 +1323,7 @@
     }
   },
   "anitabiMapImportAutoGroup": "按距离分组",
-  "anitabiMapImportOrganizeNoAreasTail": "。按距离分成片区：步行不远的点位归入同一片区，并以所在街区命名。",
+  "anitabiMapImportOrganizeNoAreasTail": "。按距离分成片区：步行不远的点位归入同一片区，并以所在城市命名。",
   "autoAreaGrouped": "已将 {spots} 个点位分成 {areas} 个片区",
   "@autoAreaGrouped": {
     "placeholders": {

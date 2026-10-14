@@ -722,7 +722,7 @@
     }
   },
   "anitabiMapImportAutoGroup": "Group by distance",
-  "anitabiMapImportOrganizeNoAreasTail": ". Group them into areas by distance: spots within a short walk of each other share an area, named after its district.",
+  "anitabiMapImportOrganizeNoAreasTail": ". Group them into areas by distance: spots within a short walk of each other share an area, named after its city.",
   "autoAreaGrouped": "Grouped {spots} spots into {areas} areas",
   "@autoAreaGrouped": {
     "placeholders": {

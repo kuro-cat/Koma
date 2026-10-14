@@ -10,15 +10,7 @@ final _nameCache = <String, String?>{};
 
 /// The city (or ward) at [position] from the phone's geocoder, in the app's
 /// language. Null off Android/iOS, offline, or when nothing is found.
-Future<String?> cityNameAt(LatLng position) =>
-    _placeNameAt(position, district: false);
-
-/// The district (or, failing that, the city) at [position], e.g. 忠海 rather
-/// than 竹原市, so areas within one town get different names.
-Future<String?> districtNameAt(LatLng position) =>
-    _placeNameAt(position, district: true);
-
-Future<String?> _placeNameAt(LatLng position, {required bool district}) async {
+Future<String?> cityNameAt(LatLng position) async {
   final mobile =
       !kIsWeb &&
       (defaultTargetPlatform == TargetPlatform.android ||
@@ -27,7 +19,7 @@ Future<String?> _placeNameAt(LatLng position, {required bool district}) async {
   final language = l10n.localeName;
   final key =
       '${position.latitude.toStringAsFixed(3)},'
-      '${position.longitude.toStringAsFixed(3)},$language,$district';
+      '${position.longitude.toStringAsFixed(3)},$language';
   if (_nameCache.containsKey(key)) return _nameCache[key];
   String? city;
   try {
@@ -35,12 +27,15 @@ Future<String?> _placeNameAt(LatLng position, {required bool district}) async {
       locale: Locale(language),
     ).placemarkFromCoordinates(position.latitude, position.longitude);
     final place = places.firstOrNull;
-    city = [
-      if (district) place?.subLocality,
-      place?.locality,
-      place?.subAdministrativeArea,
-      place?.administrativeArea,
-    ].map((name) => name?.trim() ?? '').where((name) => name.isNotEmpty).firstOrNull;
+    city =
+        [
+              place?.locality,
+              place?.subAdministrativeArea,
+              place?.administrativeArea,
+            ]
+            .map((name) => name?.trim() ?? '')
+            .where((name) => name.isNotEmpty)
+            .firstOrNull;
   } catch (_) {
     return null; // Offline or no geocoder: try again next time.
   }
