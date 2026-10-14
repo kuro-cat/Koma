@@ -2051,6 +2051,29 @@ class _PlanInlineMapState extends State<_PlanInlineMap> {
                   configuredMapTileLayer(widget.settings),
                   MarkerLayer(
                     markers: [
+                      if (start != null)
+                        Marker(
+                          point: start,
+                          // Above the point and under the spots, so a spot
+                          // chosen as the start still shows its number.
+                          alignment: Alignment.topCenter,
+                          width: scaledMapMarkerDimension(
+                            30,
+                            widget.settings.mapMarkerScale,
+                          ),
+                          height: scaledMapMarkerDimension(
+                            30,
+                            widget.settings.mapMarkerScale,
+                          ),
+                          child: ScaledMapMarker(
+                            scale: widget.settings.mapMarkerScale,
+                            baseWidth: 30,
+                            baseHeight: 30,
+                            child: const _WalkStartMarker(
+                              key: ValueKey('plan-map-start'),
+                            ),
+                          ),
+                        ),
                       for (final point in mapPoints)
                         Marker(
                           point: point.position,
@@ -2080,26 +2103,6 @@ class _PlanInlineMapState extends State<_PlanInlineMap> {
                                   point.id,
                                 ),
                               ),
-                            ),
-                          ),
-                        ),
-                      if (start != null)
-                        Marker(
-                          point: start,
-                          width: scaledMapMarkerDimension(
-                            30,
-                            widget.settings.mapMarkerScale,
-                          ),
-                          height: scaledMapMarkerDimension(
-                            30,
-                            widget.settings.mapMarkerScale,
-                          ),
-                          child: ScaledMapMarker(
-                            scale: widget.settings.mapMarkerScale,
-                            baseWidth: 30,
-                            baseHeight: 30,
-                            child: const _WalkStartMarker(
-                              key: ValueKey('plan-map-start'),
                             ),
                           ),
                         ),
