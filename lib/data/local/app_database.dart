@@ -30,6 +30,9 @@ class PlanGroups extends Table {
   RealColumn get anchorLatitude => real().nullable()();
   RealColumn get anchorLongitude => real().nullable()();
   TextColumn get anchorPointId => text().nullable()();
+  TextColumn get startName => text().nullable()();
+  RealColumn get startLatitude => real().nullable()();
+  RealColumn get startLongitude => real().nullable()();
   TextColumn get note => text().nullable()();
   DateTimeColumn get createdAt => dateTime()();
 
@@ -223,7 +226,7 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   @override
-  int get schemaVersion => 50;
+  int get schemaVersion => 51;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -773,6 +776,11 @@ class AppDatabase extends _$AppDatabase {
       if (from < 50) {
         await addColumnIfMissing(visitRecords, visitRecords.alignedPhotoPath);
         await addColumnIfMissing(visitRecords, visitRecords.alignmentJson);
+      }
+      if (from < 51) {
+        await addColumnIfMissing(planGroups, planGroups.startName);
+        await addColumnIfMissing(planGroups, planGroups.startLatitude);
+        await addColumnIfMissing(planGroups, planGroups.startLongitude);
       }
     }),
   );

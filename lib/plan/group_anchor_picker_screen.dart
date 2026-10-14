@@ -66,6 +66,10 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
 
   /// Whether [_manualPosition] is the phone's location.
   var _isMyLocation = false;
+
+  /// The saved name of the starting [_manualPosition] (e.g. "My location"),
+  /// shown until another point is picked.
+  String? _savedManualName;
   var _locating = false;
 
   @override
@@ -84,6 +88,7 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
         widget.group.anchorLatitude!,
         widget.group.anchorLongitude!,
       );
+      _savedManualName = widget.group.anchorName;
     }
   }
 
@@ -140,6 +145,7 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
                   _selectedPoint = null;
                   _manualPosition = latLng;
                   _isMyLocation = false;
+                  _savedManualName = null;
                 });
               },
             ),
@@ -240,6 +246,7 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
               manualPickMode: _manualPickMode,
               forWalkStart: widget.forWalkStart,
               isMyLocation: _isMyLocation,
+              savedManualName: _savedManualName,
               // A walk can also be sorted without a start.
               onSave: selectedPosition == null && !widget.forWalkStart
                   ? null
@@ -291,6 +298,7 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
       _manualPosition = null;
       _manualPickMode = false;
       _isMyLocation = false;
+      _savedManualName = null;
     });
   }
 
@@ -305,6 +313,7 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
         _manualPosition = here;
         _manualPickMode = false;
         _isMyLocation = true;
+        _savedManualName = null;
       });
       _mapController.move(here, 16);
     } on CurrentLocationException catch (error) {
@@ -325,6 +334,7 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
       _manualPosition = null;
       _manualPickMode = false;
       _isMyLocation = false;
+      _savedManualName = null;
     });
     _mapController.move(point.position, 16);
   }
@@ -344,6 +354,7 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
       _manualPosition = result;
       _manualPickMode = false;
       _isMyLocation = false;
+      _savedManualName = null;
     });
     _mapController.move(result, 16);
   }
@@ -369,11 +380,13 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
     }
     Navigator.of(context).pop(
       GroupAnchorSelection(
-        name: widget.forWalkStart
-            ? (_isMyLocation
-                  ? l10n.walkStartPickerMyLocation
-                  : l10n.walkStartPickerPoint)
-            : l10n.groupAnchorPickerManualAnchor,
+        name:
+            _savedManualName ??
+            (widget.forWalkStart
+                ? (_isMyLocation
+                      ? l10n.walkStartPickerMyLocation
+                      : l10n.walkStartPickerPoint)
+                : l10n.groupAnchorPickerManualAnchor),
         position: manualPosition,
         pointId: null,
       ),
@@ -459,8 +472,11 @@ class _AnchorSelectionCard extends StatelessWidget {
     required this.manualPickMode,
     required this.forWalkStart,
     required this.isMyLocation,
+    required this.savedManualName,
     required this.onSave,
   });
+
+  final String? savedManualName;
 
   final bool forWalkStart;
   final bool isMyLocation;
@@ -477,6 +493,7 @@ class _AnchorSelectionCard extends StatelessWidget {
     final position = point?.position ?? manualPosition;
     final title =
         point?.name ??
+        (position != null ? savedManualName : null) ??
         (forWalkStart
             ? (position == null
                   ? l10n.walkStartPickerNone

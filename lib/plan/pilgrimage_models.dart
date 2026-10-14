@@ -854,6 +854,9 @@ class PilgrimagePlanGroup {
     this.anchorLatitude,
     this.anchorLongitude,
     this.anchorPointId,
+    this.startName,
+    this.startLatitude,
+    this.startLongitude,
     this.note,
     required this.createdAt,
   });
@@ -866,7 +869,17 @@ class PilgrimagePlanGroup {
   final double? anchorLatitude;
   final double? anchorLongitude;
   final String? anchorPointId;
+
+  /// Where the area's walk starts (a spot's name or "Point on the map"),
+  /// saved when its spots are sorted into walking order.
+  final String? startName;
+  final double? startLatitude;
+  final double? startLongitude;
   final String? note;
+
+  LatLng? get startPosition => startLatitude == null || startLongitude == null
+      ? null
+      : LatLng(startLatitude!, startLongitude!);
   final DateTime createdAt;
 
   PilgrimagePlanGroup copyWith({
@@ -877,6 +890,9 @@ class PilgrimagePlanGroup {
     Object? anchorLatitude = _unset,
     Object? anchorLongitude = _unset,
     Object? anchorPointId = _unset,
+    Object? startName = _unset,
+    Object? startLatitude = _unset,
+    Object? startLongitude = _unset,
     Object? note = _unset,
   }) {
     return PilgrimagePlanGroup(
@@ -896,6 +912,13 @@ class PilgrimagePlanGroup {
       anchorPointId: anchorPointId == _unset
           ? this.anchorPointId
           : anchorPointId as String?,
+      startName: startName == _unset ? this.startName : startName as String?,
+      startLatitude: startLatitude == _unset
+          ? this.startLatitude
+          : startLatitude as double?,
+      startLongitude: startLongitude == _unset
+          ? this.startLongitude
+          : startLongitude as double?,
       note: note == _unset ? this.note : note as String?,
       createdAt: createdAt,
     );

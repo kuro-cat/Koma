@@ -877,13 +877,19 @@ class _PlanScreenState extends State<PlanScreen>
           l10n.planAreaNoteSaveFailed,
         );
       case _AreaAction.walkingOrder when group != null:
+        // The picker shows the saved start: as its spot when it is one.
+        final savedStart = group.startPosition;
+        final startSpot = savedStart == null
+            ? null
+            : bucket.points.where((p) => p.position == savedStart).firstOrNull;
         final start = await Navigator.of(context).push<GroupAnchorSelection>(
           MaterialPageRoute(
             builder: (_) => GroupAnchorPickerScreen(
               group: group.copyWith(
-                anchorPointId: null,
-                anchorLatitude: null,
-                anchorLongitude: null,
+                anchorName: group.startName,
+                anchorPointId: startSpot?.id,
+                anchorLatitude: savedStart?.latitude,
+                anchorLongitude: savedStart?.longitude,
               ),
               points: bucket.points,
               groupNameForPoint: (_) => group.name,
@@ -893,16 +899,23 @@ class _PlanScreenState extends State<PlanScreen>
           ),
         );
         if (start == null || !mounted) break;
-        final saved = await _savePlanChange(
-          () => sortAreaIntoWalkingOrder(
-            plan: plan,
+        final saved = await _savePlanChange(() async {
+          final withStart = await widget.repository.updatePlanGroup(
+            planId: plan.id,
+            group: group.copyWith(
+              startName: start.name,
+              startLatitude: start.position?.latitude,
+              startLongitude: start.position?.longitude,
+            ),
+          );
+          return sortAreaIntoWalkingOrder(
+            plan: withStart,
             groupId: group.id,
             points: bucket.points,
             repository: widget.repository,
             start: start.position,
-          ),
-          l10n.planAreaWalkingOrderFailed,
-        );
+          );
+        }, l10n.planAreaWalkingOrderFailed);
         if (saved) {
           _showSnackBar(
             l10n.planAreaWalkingOrderDone,
@@ -2029,6 +2042,13 @@ class _PlanInlineMapState extends State<_PlanInlineMap> {
       widget.group.points.where((point) => point.hasCoordinate),
       isSelected: (point) => point.id == widget.selectedPointId,
     );
+    // Markers show each spot's place in the area's order, so the order
+    // reads as a rough route from the start flag.
+    final orderNumbers = {
+      for (final (index, point) in widget.group.points.indexed)
+        point.id: index + 1,
+    };
+    final start = widget.group.group?.startPosition;
 
     return SizedBox(
       height: widget.height,
@@ -2082,11 +2102,32 @@ class _PlanInlineMapState extends State<_PlanInlineMap> {
                               onTap: () => widget.onSelectPoint(point),
                               child: _MapPointMarker(
                                 key: ValueKey('plan-map-marker-${point.id}'),
+                                number: orderNumbers[point.id],
                                 selected: point.id == widget.selectedPointId,
                                 completed: widget.completedPointIds.contains(
                                   point.id,
                                 ),
                               ),
+                            ),
+                          ),
+                        ),
+                      if (start != null)
+                        Marker(
+                          point: start,
+                          width: scaledMapMarkerDimension(
+                            30,
+                            widget.settings.mapMarkerScale,
+                          ),
+                          height: scaledMapMarkerDimension(
+                            30,
+                            widget.settings.mapMarkerScale,
+                          ),
+                          child: ScaledMapMarker(
+                            scale: widget.settings.mapMarkerScale,
+                            baseWidth: 30,
+                            baseHeight: 30,
+                            child: const _WalkStartMarker(
+                              key: ValueKey('plan-map-start'),
                             ),
                           ),
                         ),
@@ -2239,11 +2280,15 @@ class _MapPointMarker extends StatelessWidget {
   const _MapPointMarker({
     required this.selected,
     required this.completed,
+    this.number,
     super.key,
   });
 
   final bool selected;
   final bool completed;
+
+  /// The spot's place in the area's order.
+  final int? number;
 
   @override
   Widget build(BuildContext context) {
@@ -2258,11 +2303,46 @@ class _MapPointMarker extends StatelessWidget {
         shape: BoxShape.circle,
         border: Border.all(color: Colors.white, width: selected ? 2.5 : 2),
       ),
-      child: Icon(
-        completed ? LucideIcons.check : LucideIcons.mapPin,
-        size: selected ? 19 : 15,
-        color: AppColors.isDark ? MapColors.onAccent : Colors.white,
+      child: !completed && number != null
+          ? Center(
+              child: FittedBox(
+                child: Padding(
+                  padding: const EdgeInsets.all(3),
+                  child: Text(
+                    '$number',
+                    style: TextStyle(
+                      color: AppColors.isDark
+                          ? MapColors.onAccent
+                          : Colors.white,
+                      fontSize: selected ? 15 : 12,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 0,
+                    ),
+                  ),
+                ),
+              ),
+            )
+          : Icon(
+              completed ? LucideIcons.check : LucideIcons.mapPin,
+              size: selected ? 19 : 15,
+              color: AppColors.isDark ? MapColors.onAccent : Colors.white,
+            ),
+    );
+  }
+}
+
+/// Where the area's walk starts.
+class _WalkStartMarker extends StatelessWidget {
+  const _WalkStartMarker({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: AppColors.ink,
+        border: Border.all(color: Colors.white, width: 2),
       ),
+      child: Icon(LucideIcons.flag, size: 16, color: AppColors.background),
     );
   }
 }

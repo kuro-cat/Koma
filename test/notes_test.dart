@@ -74,4 +74,35 @@ void main() {
     expect(find.byKey(const ValueKey('plan-area-note')), findsOneWidget);
     expect(find.text('渡轮 9:10 出发'), findsOneWidget);
   });
+
+  testWidgets('the area map numbers spots in order and flags the start', (
+    tester,
+  ) async {
+    final repository = SamplePilgrimageRepository();
+    final plan = await repository.loadActivePlan();
+    final area = plan.groups.first;
+    final spots = plan.points.where((p) => p.groupId == area.id).toList()
+      ..sort((a, b) => a.groupOrderIndex!.compareTo(b.groupOrderIndex!));
+    await repository.updatePlanGroup(
+      planId: plan.id,
+      group: area.copyWith(
+        startName: 'Station',
+        startLatitude: spots.first.position.latitude,
+        startLongitude: spots.first.position.longitude,
+      ),
+    );
+    await repository.setCurrentGroup(planId: plan.id, groupId: area.id);
+    await tester.pumpWidget(MiriaGoApp(repository: repository));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.widgetWithText(OutlinedButton, '地图'));
+    await tester.pumpAndSettle();
+
+    expect(find.byKey(const ValueKey('plan-map-start')), findsOneWidget);
+    final second = find.byKey(ValueKey('plan-map-marker-${spots[1].id}'));
+    expect(
+      find.descendant(of: second, matching: find.text('2')),
+      findsOneWidget,
+    );
+  });
 }

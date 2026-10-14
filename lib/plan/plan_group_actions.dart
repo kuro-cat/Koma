@@ -124,23 +124,19 @@ PilgrimagePlanGroup _copyGroup(
   Object? anchorLongitude = _unset,
   Object? anchorPointId = _unset,
 }) {
-  return PilgrimagePlanGroup(
-    id: group.id,
-    name: group.name,
-    orderIndex: group.orderIndex,
-    orderMode: orderMode ?? group.orderMode,
-    anchorName: anchorName == _unset ? group.anchorName : anchorName as String?,
+  // Through copyWith, so fields added to areas later are kept.
+  return group.copyWith(
+    orderMode: orderMode,
+    anchorName: anchorName == _unset ? group.anchorName : anchorName,
     anchorLatitude: anchorLatitude == _unset
         ? group.anchorLatitude
-        : anchorLatitude as double?,
+        : anchorLatitude,
     anchorLongitude: anchorLongitude == _unset
         ? group.anchorLongitude
-        : anchorLongitude as double?,
+        : anchorLongitude,
     anchorPointId: anchorPointId == _unset
         ? group.anchorPointId
-        : anchorPointId as String?,
-    note: group.note,
-    createdAt: group.createdAt,
+        : anchorPointId,
   );
 }
 

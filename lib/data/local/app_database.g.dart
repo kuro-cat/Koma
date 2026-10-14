@@ -665,6 +665,39 @@ class $PlanGroupsTable extends PlanGroups
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _startNameMeta = const VerificationMeta(
+    'startName',
+  );
+  @override
+  late final GeneratedColumn<String> startName = GeneratedColumn<String>(
+    'start_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _startLatitudeMeta = const VerificationMeta(
+    'startLatitude',
+  );
+  @override
+  late final GeneratedColumn<double> startLatitude = GeneratedColumn<double>(
+    'start_latitude',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _startLongitudeMeta = const VerificationMeta(
+    'startLongitude',
+  );
+  @override
+  late final GeneratedColumn<double> startLongitude = GeneratedColumn<double>(
+    'start_longitude',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _noteMeta = const VerificationMeta('note');
   @override
   late final GeneratedColumn<String> note = GeneratedColumn<String>(
@@ -696,6 +729,9 @@ class $PlanGroupsTable extends PlanGroups
     anchorLatitude,
     anchorLongitude,
     anchorPointId,
+    startName,
+    startLatitude,
+    startLongitude,
     note,
     createdAt,
   ];
@@ -777,6 +813,30 @@ class $PlanGroupsTable extends PlanGroups
         ),
       );
     }
+    if (data.containsKey('start_name')) {
+      context.handle(
+        _startNameMeta,
+        startName.isAcceptableOrUnknown(data['start_name']!, _startNameMeta),
+      );
+    }
+    if (data.containsKey('start_latitude')) {
+      context.handle(
+        _startLatitudeMeta,
+        startLatitude.isAcceptableOrUnknown(
+          data['start_latitude']!,
+          _startLatitudeMeta,
+        ),
+      );
+    }
+    if (data.containsKey('start_longitude')) {
+      context.handle(
+        _startLongitudeMeta,
+        startLongitude.isAcceptableOrUnknown(
+          data['start_longitude']!,
+          _startLongitudeMeta,
+        ),
+      );
+    }
     if (data.containsKey('note')) {
       context.handle(
         _noteMeta,
@@ -836,6 +896,18 @@ class $PlanGroupsTable extends PlanGroups
         DriftSqlType.string,
         data['${effectivePrefix}anchor_point_id'],
       ),
+      startName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}start_name'],
+      ),
+      startLatitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}start_latitude'],
+      ),
+      startLongitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}start_longitude'],
+      ),
       note: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}note'],
@@ -863,6 +935,9 @@ class PlanGroup extends DataClass implements Insertable<PlanGroup> {
   final double? anchorLatitude;
   final double? anchorLongitude;
   final String? anchorPointId;
+  final String? startName;
+  final double? startLatitude;
+  final double? startLongitude;
   final String? note;
   final DateTime createdAt;
   const PlanGroup({
@@ -875,6 +950,9 @@ class PlanGroup extends DataClass implements Insertable<PlanGroup> {
     this.anchorLatitude,
     this.anchorLongitude,
     this.anchorPointId,
+    this.startName,
+    this.startLatitude,
+    this.startLongitude,
     this.note,
     required this.createdAt,
   });
@@ -897,6 +975,15 @@ class PlanGroup extends DataClass implements Insertable<PlanGroup> {
     }
     if (!nullToAbsent || anchorPointId != null) {
       map['anchor_point_id'] = Variable<String>(anchorPointId);
+    }
+    if (!nullToAbsent || startName != null) {
+      map['start_name'] = Variable<String>(startName);
+    }
+    if (!nullToAbsent || startLatitude != null) {
+      map['start_latitude'] = Variable<double>(startLatitude);
+    }
+    if (!nullToAbsent || startLongitude != null) {
+      map['start_longitude'] = Variable<double>(startLongitude);
     }
     if (!nullToAbsent || note != null) {
       map['note'] = Variable<String>(note);
@@ -924,6 +1011,15 @@ class PlanGroup extends DataClass implements Insertable<PlanGroup> {
       anchorPointId: anchorPointId == null && nullToAbsent
           ? const Value.absent()
           : Value(anchorPointId),
+      startName: startName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(startName),
+      startLatitude: startLatitude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(startLatitude),
+      startLongitude: startLongitude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(startLongitude),
       note: note == null && nullToAbsent ? const Value.absent() : Value(note),
       createdAt: Value(createdAt),
     );
@@ -944,6 +1040,9 @@ class PlanGroup extends DataClass implements Insertable<PlanGroup> {
       anchorLatitude: serializer.fromJson<double?>(json['anchorLatitude']),
       anchorLongitude: serializer.fromJson<double?>(json['anchorLongitude']),
       anchorPointId: serializer.fromJson<String?>(json['anchorPointId']),
+      startName: serializer.fromJson<String?>(json['startName']),
+      startLatitude: serializer.fromJson<double?>(json['startLatitude']),
+      startLongitude: serializer.fromJson<double?>(json['startLongitude']),
       note: serializer.fromJson<String?>(json['note']),
       createdAt: serializer.fromJson<DateTime>(json['createdAt']),
     );
@@ -961,6 +1060,9 @@ class PlanGroup extends DataClass implements Insertable<PlanGroup> {
       'anchorLatitude': serializer.toJson<double?>(anchorLatitude),
       'anchorLongitude': serializer.toJson<double?>(anchorLongitude),
       'anchorPointId': serializer.toJson<String?>(anchorPointId),
+      'startName': serializer.toJson<String?>(startName),
+      'startLatitude': serializer.toJson<double?>(startLatitude),
+      'startLongitude': serializer.toJson<double?>(startLongitude),
       'note': serializer.toJson<String?>(note),
       'createdAt': serializer.toJson<DateTime>(createdAt),
     };
@@ -976,6 +1078,9 @@ class PlanGroup extends DataClass implements Insertable<PlanGroup> {
     Value<double?> anchorLatitude = const Value.absent(),
     Value<double?> anchorLongitude = const Value.absent(),
     Value<String?> anchorPointId = const Value.absent(),
+    Value<String?> startName = const Value.absent(),
+    Value<double?> startLatitude = const Value.absent(),
+    Value<double?> startLongitude = const Value.absent(),
     Value<String?> note = const Value.absent(),
     DateTime? createdAt,
   }) => PlanGroup(
@@ -994,6 +1099,13 @@ class PlanGroup extends DataClass implements Insertable<PlanGroup> {
     anchorPointId: anchorPointId.present
         ? anchorPointId.value
         : this.anchorPointId,
+    startName: startName.present ? startName.value : this.startName,
+    startLatitude: startLatitude.present
+        ? startLatitude.value
+        : this.startLatitude,
+    startLongitude: startLongitude.present
+        ? startLongitude.value
+        : this.startLongitude,
     note: note.present ? note.value : this.note,
     createdAt: createdAt ?? this.createdAt,
   );
@@ -1018,6 +1130,13 @@ class PlanGroup extends DataClass implements Insertable<PlanGroup> {
       anchorPointId: data.anchorPointId.present
           ? data.anchorPointId.value
           : this.anchorPointId,
+      startName: data.startName.present ? data.startName.value : this.startName,
+      startLatitude: data.startLatitude.present
+          ? data.startLatitude.value
+          : this.startLatitude,
+      startLongitude: data.startLongitude.present
+          ? data.startLongitude.value
+          : this.startLongitude,
       note: data.note.present ? data.note.value : this.note,
       createdAt: data.createdAt.present ? data.createdAt.value : this.createdAt,
     );
@@ -1035,6 +1154,9 @@ class PlanGroup extends DataClass implements Insertable<PlanGroup> {
           ..write('anchorLatitude: $anchorLatitude, ')
           ..write('anchorLongitude: $anchorLongitude, ')
           ..write('anchorPointId: $anchorPointId, ')
+          ..write('startName: $startName, ')
+          ..write('startLatitude: $startLatitude, ')
+          ..write('startLongitude: $startLongitude, ')
           ..write('note: $note, ')
           ..write('createdAt: $createdAt')
           ..write(')'))
@@ -1052,6 +1174,9 @@ class PlanGroup extends DataClass implements Insertable<PlanGroup> {
     anchorLatitude,
     anchorLongitude,
     anchorPointId,
+    startName,
+    startLatitude,
+    startLongitude,
     note,
     createdAt,
   );
@@ -1068,6 +1193,9 @@ class PlanGroup extends DataClass implements Insertable<PlanGroup> {
           other.anchorLatitude == this.anchorLatitude &&
           other.anchorLongitude == this.anchorLongitude &&
           other.anchorPointId == this.anchorPointId &&
+          other.startName == this.startName &&
+          other.startLatitude == this.startLatitude &&
+          other.startLongitude == this.startLongitude &&
           other.note == this.note &&
           other.createdAt == this.createdAt);
 }
@@ -1082,6 +1210,9 @@ class PlanGroupsCompanion extends UpdateCompanion<PlanGroup> {
   final Value<double?> anchorLatitude;
   final Value<double?> anchorLongitude;
   final Value<String?> anchorPointId;
+  final Value<String?> startName;
+  final Value<double?> startLatitude;
+  final Value<double?> startLongitude;
   final Value<String?> note;
   final Value<DateTime> createdAt;
   final Value<int> rowid;
@@ -1095,6 +1226,9 @@ class PlanGroupsCompanion extends UpdateCompanion<PlanGroup> {
     this.anchorLatitude = const Value.absent(),
     this.anchorLongitude = const Value.absent(),
     this.anchorPointId = const Value.absent(),
+    this.startName = const Value.absent(),
+    this.startLatitude = const Value.absent(),
+    this.startLongitude = const Value.absent(),
     this.note = const Value.absent(),
     this.createdAt = const Value.absent(),
     this.rowid = const Value.absent(),
@@ -1109,6 +1243,9 @@ class PlanGroupsCompanion extends UpdateCompanion<PlanGroup> {
     this.anchorLatitude = const Value.absent(),
     this.anchorLongitude = const Value.absent(),
     this.anchorPointId = const Value.absent(),
+    this.startName = const Value.absent(),
+    this.startLatitude = const Value.absent(),
+    this.startLongitude = const Value.absent(),
     this.note = const Value.absent(),
     required DateTime createdAt,
     this.rowid = const Value.absent(),
@@ -1126,6 +1263,9 @@ class PlanGroupsCompanion extends UpdateCompanion<PlanGroup> {
     Expression<double>? anchorLatitude,
     Expression<double>? anchorLongitude,
     Expression<String>? anchorPointId,
+    Expression<String>? startName,
+    Expression<double>? startLatitude,
+    Expression<double>? startLongitude,
     Expression<String>? note,
     Expression<DateTime>? createdAt,
     Expression<int>? rowid,
@@ -1140,6 +1280,9 @@ class PlanGroupsCompanion extends UpdateCompanion<PlanGroup> {
       if (anchorLatitude != null) 'anchor_latitude': anchorLatitude,
       if (anchorLongitude != null) 'anchor_longitude': anchorLongitude,
       if (anchorPointId != null) 'anchor_point_id': anchorPointId,
+      if (startName != null) 'start_name': startName,
+      if (startLatitude != null) 'start_latitude': startLatitude,
+      if (startLongitude != null) 'start_longitude': startLongitude,
       if (note != null) 'note': note,
       if (createdAt != null) 'created_at': createdAt,
       if (rowid != null) 'rowid': rowid,
@@ -1156,6 +1299,9 @@ class PlanGroupsCompanion extends UpdateCompanion<PlanGroup> {
     Value<double?>? anchorLatitude,
     Value<double?>? anchorLongitude,
     Value<String?>? anchorPointId,
+    Value<String?>? startName,
+    Value<double?>? startLatitude,
+    Value<double?>? startLongitude,
     Value<String?>? note,
     Value<DateTime>? createdAt,
     Value<int>? rowid,
@@ -1170,6 +1316,9 @@ class PlanGroupsCompanion extends UpdateCompanion<PlanGroup> {
       anchorLatitude: anchorLatitude ?? this.anchorLatitude,
       anchorLongitude: anchorLongitude ?? this.anchorLongitude,
       anchorPointId: anchorPointId ?? this.anchorPointId,
+      startName: startName ?? this.startName,
+      startLatitude: startLatitude ?? this.startLatitude,
+      startLongitude: startLongitude ?? this.startLongitude,
       note: note ?? this.note,
       createdAt: createdAt ?? this.createdAt,
       rowid: rowid ?? this.rowid,
@@ -1206,6 +1355,15 @@ class PlanGroupsCompanion extends UpdateCompanion<PlanGroup> {
     if (anchorPointId.present) {
       map['anchor_point_id'] = Variable<String>(anchorPointId.value);
     }
+    if (startName.present) {
+      map['start_name'] = Variable<String>(startName.value);
+    }
+    if (startLatitude.present) {
+      map['start_latitude'] = Variable<double>(startLatitude.value);
+    }
+    if (startLongitude.present) {
+      map['start_longitude'] = Variable<double>(startLongitude.value);
+    }
     if (note.present) {
       map['note'] = Variable<String>(note.value);
     }
@@ -1230,6 +1388,9 @@ class PlanGroupsCompanion extends UpdateCompanion<PlanGroup> {
           ..write('anchorLatitude: $anchorLatitude, ')
           ..write('anchorLongitude: $anchorLongitude, ')
           ..write('anchorPointId: $anchorPointId, ')
+          ..write('startName: $startName, ')
+          ..write('startLatitude: $startLatitude, ')
+          ..write('startLongitude: $startLongitude, ')
           ..write('note: $note, ')
           ..write('createdAt: $createdAt, ')
           ..write('rowid: $rowid')
@@ -8285,6 +8446,9 @@ typedef $$PlanGroupsTableCreateCompanionBuilder =
       Value<double?> anchorLatitude,
       Value<double?> anchorLongitude,
       Value<String?> anchorPointId,
+      Value<String?> startName,
+      Value<double?> startLatitude,
+      Value<double?> startLongitude,
       Value<String?> note,
       required DateTime createdAt,
       Value<int> rowid,
@@ -8300,6 +8464,9 @@ typedef $$PlanGroupsTableUpdateCompanionBuilder =
       Value<double?> anchorLatitude,
       Value<double?> anchorLongitude,
       Value<String?> anchorPointId,
+      Value<String?> startName,
+      Value<double?> startLatitude,
+      Value<double?> startLongitude,
       Value<String?> note,
       Value<DateTime> createdAt,
       Value<int> rowid,
@@ -8393,6 +8560,21 @@ class $$PlanGroupsTableFilterComposer
 
   ColumnFilters<String> get anchorPointId => $composableBuilder(
     column: $table.anchorPointId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get startName => $composableBuilder(
+    column: $table.startName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get startLatitude => $composableBuilder(
+    column: $table.startLatitude,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get startLongitude => $composableBuilder(
+    column: $table.startLongitude,
     builder: (column) => ColumnFilters(column),
   );
 
@@ -8504,6 +8686,21 @@ class $$PlanGroupsTableOrderingComposer
     builder: (column) => ColumnOrderings(column),
   );
 
+  ColumnOrderings<String> get startName => $composableBuilder(
+    column: $table.startName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get startLatitude => $composableBuilder(
+    column: $table.startLatitude,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get startLongitude => $composableBuilder(
+    column: $table.startLongitude,
+    builder: (column) => ColumnOrderings(column),
+  );
+
   ColumnOrderings<String> get note => $composableBuilder(
     column: $table.note,
     builder: (column) => ColumnOrderings(column),
@@ -8578,6 +8775,19 @@ class $$PlanGroupsTableAnnotationComposer
 
   GeneratedColumn<String> get anchorPointId => $composableBuilder(
     column: $table.anchorPointId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get startName =>
+      $composableBuilder(column: $table.startName, builder: (column) => column);
+
+  GeneratedColumn<double> get startLatitude => $composableBuilder(
+    column: $table.startLatitude,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<double> get startLongitude => $composableBuilder(
+    column: $table.startLongitude,
     builder: (column) => column,
   );
 
@@ -8673,6 +8883,9 @@ class $$PlanGroupsTableTableManager
                 Value<double?> anchorLatitude = const Value.absent(),
                 Value<double?> anchorLongitude = const Value.absent(),
                 Value<String?> anchorPointId = const Value.absent(),
+                Value<String?> startName = const Value.absent(),
+                Value<double?> startLatitude = const Value.absent(),
+                Value<double?> startLongitude = const Value.absent(),
                 Value<String?> note = const Value.absent(),
                 Value<DateTime> createdAt = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
@@ -8686,6 +8899,9 @@ class $$PlanGroupsTableTableManager
                 anchorLatitude: anchorLatitude,
                 anchorLongitude: anchorLongitude,
                 anchorPointId: anchorPointId,
+                startName: startName,
+                startLatitude: startLatitude,
+                startLongitude: startLongitude,
                 note: note,
                 createdAt: createdAt,
                 rowid: rowid,
@@ -8701,6 +8917,9 @@ class $$PlanGroupsTableTableManager
                 Value<double?> anchorLatitude = const Value.absent(),
                 Value<double?> anchorLongitude = const Value.absent(),
                 Value<String?> anchorPointId = const Value.absent(),
+                Value<String?> startName = const Value.absent(),
+                Value<double?> startLatitude = const Value.absent(),
+                Value<double?> startLongitude = const Value.absent(),
                 Value<String?> note = const Value.absent(),
                 required DateTime createdAt,
                 Value<int> rowid = const Value.absent(),
@@ -8714,6 +8933,9 @@ class $$PlanGroupsTableTableManager
                 anchorLatitude: anchorLatitude,
                 anchorLongitude: anchorLongitude,
                 anchorPointId: anchorPointId,
+                startName: startName,
+                startLatitude: startLatitude,
+                startLongitude: startLongitude,
                 note: note,
                 createdAt: createdAt,
                 rowid: rowid,

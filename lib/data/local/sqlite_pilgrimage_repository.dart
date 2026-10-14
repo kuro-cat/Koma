@@ -688,6 +688,9 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
                   ? null
                   : _storageId(planId, group.anchorPointId!),
             ),
+            startName: Value(group.startName),
+            startLatitude: Value(group.startLatitude),
+            startLongitude: Value(group.startLongitude),
             note: Value(group.note),
           ),
         );
@@ -1901,6 +1904,9 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
                   ? null
                   : _storageId(planId, group.anchorPointId!),
             ),
+            startName: Value(group.startName),
+            startLatitude: Value(group.startLatitude),
+            startLongitude: Value(group.startLongitude),
             note: Value(group.note),
             createdAt: group.createdAt,
           ),
@@ -1995,6 +2001,9 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
           anchorPointId: group.anchorPointId == null
               ? null
               : pointIdMap[group.anchorPointId] ?? group.anchorPointId,
+          startName: group.startName,
+          startLatitude: group.startLatitude,
+          startLongitude: group.startLongitude,
           note: group.note,
           createdAt: group.createdAt,
         ),
@@ -2141,6 +2150,9 @@ class SqlitePilgrimageRepository implements PilgrimageRepository {
       anchorPointId: row.anchorPointId == null
           ? null
           : _modelId(planId, row.anchorPointId!),
+      startName: row.startName,
+      startLatitude: row.startLatitude,
+      startLongitude: row.startLongitude,
       note: row.note,
       createdAt: row.createdAt,
     );

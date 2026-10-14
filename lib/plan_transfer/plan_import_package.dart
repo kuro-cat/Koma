@@ -1193,6 +1193,10 @@ PilgrimagePlanGroup _groupFromV2Json(Map<String, Object?> json) {
     json['anchorLatitude'],
     json['anchorLongitude'],
   );
+  final start = importedCoordinate(
+    json['startLatitude'],
+    json['startLongitude'],
+  );
   return PilgrimagePlanGroup(
     id: _stringValue(json['id'], fallback: 'group-${json.hashCode}'),
     name: _stringValue(
@@ -1207,6 +1211,9 @@ PilgrimagePlanGroup _groupFromV2Json(Map<String, Object?> json) {
     anchorLatitude: anchor?.latitude,
     anchorLongitude: anchor?.longitude,
     anchorPointId: json['anchorPointId'] as String?,
+    startName: start == null ? null : json['startName'] as String?,
+    startLatitude: start?.latitude,
+    startLongitude: start?.longitude,
     note: json['note'] as String?,
     createdAt: _dateValue(json['createdAt']),
   );

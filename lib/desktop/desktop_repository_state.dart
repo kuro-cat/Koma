@@ -357,6 +357,9 @@ Map<String, Object?> _groupJson(PilgrimagePlanGroup group) {
     'anchorLatitude': group.anchorLatitude,
     'anchorLongitude': group.anchorLongitude,
     'anchorPointId': group.anchorPointId,
+    'startName': group.startName,
+    'startLatitude': group.startLatitude,
+    'startLongitude': group.startLongitude,
     'note': group.note,
     'createdAt': group.createdAt.toIso8601String(),
   };
@@ -377,6 +380,9 @@ PilgrimagePlanGroup _groupFromJson(Map<String, Object?> json) {
     anchorLatitude: _doubleValue(json['anchorLatitude']),
     anchorLongitude: _doubleValue(json['anchorLongitude']),
     anchorPointId: json['anchorPointId'] as String?,
+    startName: json['startName'] as String?,
+    startLatitude: _doubleValue(json['startLatitude']),
+    startLongitude: _doubleValue(json['startLongitude']),
     note: json['note'] as String?,
     createdAt: _dateValue(json['createdAt']) ?? DateTime.now(),
   );

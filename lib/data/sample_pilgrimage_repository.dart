@@ -402,6 +402,9 @@ class SamplePilgrimageRepository implements PilgrimageRepository {
                   anchorLatitude: group.anchorLatitude,
                   anchorLongitude: group.anchorLongitude,
                   anchorPointId: group.anchorPointId,
+                  startName: group.startName,
+                  startLatitude: group.startLatitude,
+                  startLongitude: group.startLongitude,
                   note: group.note,
                   createdAt: group.createdAt,
                 )

@@ -97,27 +97,30 @@ void main() {
     final create = entry.value;
 
     group('$name repository', () {
-      test('stale embedded work copies never clobber the shared work', () async {
-        final repository = create();
-        var plan = await repository.createPlan(name: 'Works', area: 'Area');
-        await repository.addWorkToPlan(planId: plan.id, work: _fullWork);
-        await repository.addPointsToPlan(
-          planId: plan.id,
-          points: [_point('p1', work: _staleWork)],
-        );
-        plan = await repository.updatePointInPlan(
-          planId: plan.id,
-          point: _point('p1', work: _staleWork).copyWith(name: 'Edited'),
-        );
+      test(
+        'stale embedded work copies never clobber the shared work',
+        () async {
+          final repository = create();
+          var plan = await repository.createPlan(name: 'Works', area: 'Area');
+          await repository.addWorkToPlan(planId: plan.id, work: _fullWork);
+          await repository.addPointsToPlan(
+            planId: plan.id,
+            points: [_point('p1', work: _staleWork)],
+          );
+          plan = await repository.updatePointInPlan(
+            planId: plan.id,
+            point: _point('p1', work: _staleWork).copyWith(name: 'Edited'),
+          );
 
-        _expectFullWork(plan.works.single);
-        _expectFullWork(_find(plan, 'p1').work);
-        expect(_find(plan, 'p1').name, 'Edited');
-        final reloaded = (await repository.loadPlans()).singleWhere(
-          (candidate) => candidate.id == plan.id,
-        );
-        _expectFullWork(reloaded.works.single);
-      });
+          _expectFullWork(plan.works.single);
+          _expectFullWork(_find(plan, 'p1').work);
+          expect(_find(plan, 'p1').name, 'Edited');
+          final reloaded = (await repository.loadPlans()).singleWhere(
+            (candidate) => candidate.id == plan.id,
+          );
+          _expectFullWork(reloaded.works.single);
+        },
+      );
 
       test('a later richer work copy fills only missing fields', () async {
         final repository = create();
@@ -126,10 +129,7 @@ void main() {
           planId: plan.id,
           points: [_point('p1', work: _staleWork)],
         );
-        plan = await repository.addWorkToPlan(
-          planId: plan.id,
-          work: _fullWork,
-        );
+        plan = await repository.addWorkToPlan(planId: plan.id, work: _fullWork);
 
         final work = plan.works.single;
         expect(work.title, _staleWork.title);
@@ -189,9 +189,7 @@ void main() {
         );
         plan = await repository.updatePointInPlan(
           planId: plan.id,
-          point: _point(
-            'anchor',
-          ).copyWith(position: const LatLng(34.5, 135.5)),
+          point: _point('anchor').copyWith(position: const LatLng(34.5, 135.5)),
         );
 
         final group = plan.groups.single;
@@ -200,35 +198,68 @@ void main() {
         expect(group.anchorLongitude, 135.5);
       });
 
-      test('visit records are newest first with a stable id tie-break', () async {
+      test('an area keeps its walk start after saving and reloading', () async {
         final repository = create();
-        final plan = await repository.addPointsToPlan(
-          planId: (await repository.createPlan(name: 'Records', area: 'A')).id,
-          points: [_point('p')],
+        final plan = await repository.createPlan(name: 'Start', area: 'Area');
+        final area = PilgrimagePlanGroup(
+          id: 'g',
+          name: 'g',
+          orderIndex: 0,
+          createdAt: DateTime(2026),
         );
-        Future<PilgrimageVisitRecord> record(DateTime capturedAt) =>
-            repository.createVisitRecord(
-              planId: plan.id,
-              pointId: 'p',
-              workId: 'work',
-              photoPath: 'photo.jpg',
-              referenceMode: 'overlay',
-              capturedAt: capturedAt,
-            );
-        final oldest = await record(DateTime(2026, 1, 1, 9));
-        final newest = await record(DateTime(2026, 1, 1, 11));
-        final tiedFirst = await record(DateTime(2026, 1, 1, 10));
-        final tiedSecond = await record(DateTime(2026, 1, 1, 10));
-        expect(tiedSecond.id.compareTo(tiedFirst.id), greaterThan(0));
+        await repository.createPlanGroup(planId: plan.id, group: area);
+        await repository.updatePlanGroup(
+          planId: plan.id,
+          group: area.copyWith(
+            startName: 'Station',
+            startLatitude: 34.3427,
+            startLongitude: 132.9076,
+          ),
+        );
 
-        final records = await repository.loadVisitRecords(plan.id);
-        expect(records.map((record) => record.id), [
-          newest.id,
-          tiedSecond.id,
-          tiedFirst.id,
-          oldest.id,
-        ]);
+        final reloaded = (await repository.loadPlans())
+            .firstWhere((p) => p.id == plan.id)
+            .groups
+            .single;
+        expect(reloaded.startName, 'Station');
+        expect(reloaded.startPosition, const LatLng(34.3427, 132.9076));
       });
+
+      test(
+        'visit records are newest first with a stable id tie-break',
+        () async {
+          final repository = create();
+          final plan = await repository.addPointsToPlan(
+            planId: (await repository.createPlan(
+              name: 'Records',
+              area: 'A',
+            )).id,
+            points: [_point('p')],
+          );
+          Future<PilgrimageVisitRecord> record(DateTime capturedAt) =>
+              repository.createVisitRecord(
+                planId: plan.id,
+                pointId: 'p',
+                workId: 'work',
+                photoPath: 'photo.jpg',
+                referenceMode: 'overlay',
+                capturedAt: capturedAt,
+              );
+          final oldest = await record(DateTime(2026, 1, 1, 9));
+          final newest = await record(DateTime(2026, 1, 1, 11));
+          final tiedFirst = await record(DateTime(2026, 1, 1, 10));
+          final tiedSecond = await record(DateTime(2026, 1, 1, 10));
+          expect(tiedSecond.id.compareTo(tiedFirst.id), greaterThan(0));
+
+          final records = await repository.loadVisitRecords(plan.id);
+          expect(records.map((record) => record.id), [
+            newest.id,
+            tiedSecond.id,
+            tiedFirst.id,
+            oldest.id,
+          ]);
+        },
+      );
 
       test('bulk completion and deletion continue in group order', () async {
         final repository = create();

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:archive/archive.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:miriago/data/sample_pilgrimage_repository.dart';
 import 'package:miriago/plan/pilgrimage_models.dart';
 import 'package:miriago/plan_transfer/plan_export_v2.dart';
@@ -9,6 +10,31 @@ import 'package:miriago/plan_transfer/plan_import_package.dart';
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+
+  test('an area\'s walk start survives export and import', () async {
+    final plan = await SamplePilgrimageRepository().loadActivePlan();
+    final area = plan.groups.first.copyWith(
+      startName: '竹原駅',
+      startLatitude: 34.3427,
+      startLongitude: 132.9076,
+    );
+    final package = await buildPlanExportV2Package(
+      plan: plan.copyWith(groups: [area, ...plan.groups.skip(1)]),
+      visitRecords: const [],
+      options: const PlanExportV2Options(
+        mode: PlanExportV2Mode.planOnly,
+        includeFullReferenceCache: false,
+      ),
+    );
+
+    final imported = readPlanImportPackageFromBytes(
+      package.bytes,
+      sourceName: package.fileName,
+    ).package.plan.groups.firstWhere((g) => g.id == area.id);
+
+    expect(imported.startName, '竹原駅');
+    expect(imported.startPosition, const LatLng(34.3427, 132.9076));
+  });
 
   test('reads v2 package asset entries and asset references', () async {
     final repository = SamplePilgrimageRepository();
