@@ -3719,21 +3719,6 @@ class _FailingPlanOrderRepository extends SamplePilgrimageRepository {
   }
 }
 
-class _FailingSettingsOnDemandRepository extends SamplePilgrimageRepository {
-  _FailingSettingsOnDemandRepository({super.plans});
-
-  var failNextSettingsLoad = false;
-
-  @override
-  Future<AppSettings> loadAppSettings() {
-    if (failNextSettingsLoad) {
-      failNextSettingsLoad = false;
-      throw StateError('simulated settings failure');
-    }
-    return super.loadAppSettings();
-  }
-}
-
 class _FakeAnitabiClient extends AnitabiClient {
   _FakeAnitabiClient({
     this.pointDelays = const {},

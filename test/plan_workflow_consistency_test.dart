@@ -9,7 +9,6 @@ import 'package:miriago/app_theme.dart';
 import 'package:miriago/data/local/app_database.dart';
 import 'package:miriago/data/local/sqlite_pilgrimage_repository.dart';
 import 'package:miriago/data/sample_pilgrimage_repository.dart';
-import 'package:miriago/plan/nearest_group_assign_screen.dart';
 import 'package:miriago/plan/pilgrimage_models.dart';
 import 'package:miriago/plan/pilgrimage_plan_controller.dart';
 import 'package:miriago/plan/plan_group_manager_screen.dart';
@@ -56,32 +55,6 @@ class _GatedRecordsRepository extends SamplePilgrimageRepository {
   Future<List<PilgrimageVisitRecord>> loadVisitRecords(String planId) async {
     await gate.future;
     return super.loadVisitRecords(planId);
-  }
-}
-
-class _AssignRepository extends SamplePilgrimageRepository {
-  _AssignRepository(PilgrimagePlan plan, {this.failAssign = false})
-    : super(plans: [plan], visitRecords: const []);
-  final bool failAssign;
-  final calls = <String>[];
-
-  @override
-  Future<PilgrimagePlan> assignPointsToGroups({
-    required String planId,
-    required Map<String, String?> groupIdsByPointId,
-  }) async {
-    calls.add('assign');
-    if (failAssign) throw StateError('disk full');
-    return super.assignPointsToGroups(
-      planId: planId,
-      groupIdsByPointId: groupIdsByPointId,
-    );
-  }
-
-  @override
-  Future<void> saveAppSettings(AppSettings settings) async {
-    calls.add('settings');
-    return super.saveAppSettings(settings);
   }
 }
 
