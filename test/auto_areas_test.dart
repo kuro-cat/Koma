@@ -29,7 +29,7 @@ void main() {
   });
 
   test(
-    'grouping names areas by city and anchors them; repeats name their central spot',
+    'grouping makes one area per city, anchored on its central spot',
     () async {
       final plan = samplePilgrimagePlan.copyWith(
         groups: const [],
@@ -59,13 +59,39 @@ void main() {
       };
       expect(names, {
         '忠海': {'a', 'b', 'c'},
-        '竹原': {'far'},
-        '竹原 · far2': {'far2'},
+        // Two clusters far apart, but both in 竹原: one area.
+        '竹原': {'far', 'far2'},
       });
       final tadanoumi = grouped.groups.firstWhere((g) => g.name == '忠海');
       expect(tadanoumi.anchorPointId, 'b');
     },
   );
+
+  test('spots in a city that already has an area join it', () async {
+    final takehara = PilgrimagePlanGroup(
+      id: 'takehara',
+      name: '竹原',
+      orderIndex: 0,
+      createdAt: DateTime(2026),
+    );
+    final plan = samplePilgrimagePlan.copyWith(
+      groups: [takehara],
+      points: [spot('a', 34.0, 132.0), spot('b', 34.001, 132.0)],
+    );
+    final repository = SamplePilgrimageRepository(plans: [plan]);
+
+    final grouped = await autoGroupUngroupedSpots(
+      plan: plan,
+      repository: repository,
+      nameAt: (_) async => '竹原',
+    );
+
+    expect(grouped.groups.map((g) => g.id), ['takehara']);
+    expect(grouped.points.map((p) => p.groupId), everyElement('takehara'));
+    final result = groupedResult(plan, grouped);
+    expect(result.spots, 2);
+    expect(result.areaIds, ['takehara']);
+  });
 
   test('walking order visits spots along a street without doubling back', () {
     final street = [

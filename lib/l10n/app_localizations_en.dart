@@ -2566,11 +2566,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get anitabiMapImportAutoGroup => 'Group by distance';
+  String get anitabiMapImportAutoGroup => 'Group by city';
 
   @override
   String get anitabiMapImportOrganizeNoAreasTail =>
-      '. Group them into areas by distance: spots within a short walk of each other share an area, named after its city.';
+      '. Group them into one area per city, each sorted into a walking order.';
 
   @override
   String autoAreaGrouped(int spots, int areas) {

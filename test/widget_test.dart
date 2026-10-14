@@ -3660,7 +3660,7 @@ void main() {
     );
   });
 
-  testWidgets('a plan without areas groups imported spots by distance', (
+  testWidgets('a plan without areas groups imported spots by city', (
     tester,
   ) async {
     final repository = SamplePilgrimageRepository(plans: const []);
@@ -3684,7 +3684,7 @@ void main() {
     await tester.tap(find.text('添加全部'));
     await tester.pumpAndSettle();
     expect(find.text('最近分配'), findsNothing);
-    await tester.tap(find.text('按距离分组'));
+    await tester.tap(find.text('按城市分组'));
     await tester.pumpAndSettle();
 
     final grouped = await repository.loadActivePlan();

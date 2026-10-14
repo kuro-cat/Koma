@@ -4254,13 +4254,13 @@ abstract class AppLocalizations {
   /// No description provided for @anitabiMapImportAutoGroup.
   ///
   /// In zh, this message translates to:
-  /// **'按距离分组'**
+  /// **'按城市分组'**
   String get anitabiMapImportAutoGroup;
 
   /// No description provided for @anitabiMapImportOrganizeNoAreasTail.
   ///
   /// In zh, this message translates to:
-  /// **'。按距离分成片区：步行不远的点位归入同一片区，并以所在城市命名。'**
+  /// **'。按城市分成片区，每个片区按步行顺序排列。'**
   String get anitabiMapImportOrganizeNoAreasTail;
 
   /// No description provided for @autoAreaGrouped.

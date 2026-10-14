@@ -1312,19 +1312,10 @@ class _AnitabiMapImportScreenState extends State<AnitabiMapImportScreen> {
         _replaceImportedPlan(after);
         _didUpdatePlan = true;
       });
-      final grouped = before.points
-          .where((point) => point.groupId == null)
-          .where(
-            (point) =>
-                after.points.any((p) => p.id == point.id && p.groupId != null),
-          )
-          .length;
+      final result = groupedResult(before, after);
       messenger.showStatusSnack(
         kind: AppStatusBannerKind.success,
-        title: l10n.autoAreaGrouped(
-          grouped,
-          after.groups.length - before.groups.length,
-        ),
+        title: l10n.autoAreaGrouped(result.spots, result.areaIds.length),
       );
     } catch (error) {
       debugPrint('Auto grouping failed: $error');

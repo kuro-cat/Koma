@@ -58,9 +58,13 @@ PilgrimagePoint centralSpot(List<PilgrimagePoint> cluster) {
   return best!;
 }
 
-/// Puts every ungrouped spot with coordinates into a new area per walkable
-/// cluster, named after the city at its central spot (which also
-/// becomes its anchor). Returns the plan as stored.
+/// Puts every ungrouped spot with coordinates into an area per city, named
+/// after the city. Spots go in walkable clusters, so a cluster on a city
+/// border stays together, and the city is looked up once per cluster. A city
+/// that already has an area (by name) gets the spots added to it; clusters
+/// whose city can't be found (e.g. offline) get an area each. New areas are
+/// anchored on their central spot and sorted into walking order.
+/// Returns the plan as stored.
 Future<PilgrimagePlan> autoGroupUngroupedSpots({
   required PilgrimagePlan plan,
   required PilgrimageRepository repository,
@@ -72,7 +76,20 @@ Future<PilgrimagePlan> autoGroupUngroupedSpots({
   final clusters = clusterSpotsByDistance(ungrouped);
   if (clusters.isEmpty) return plan;
 
-  final usedNames = {for (final group in plan.groups) group.name};
+  // City name (or a fallback per unnamed cluster) -> its spots.
+  final spotsByName = <String, List<PilgrimagePoint>>{};
+  var unnamed = 0;
+  for (final cluster in clusters) {
+    final city = (await nameAt(centralSpot(cluster).position))?.trim();
+    final name = city == null || city.isEmpty
+        ? l10n.autoAreaFallbackName(++unnamed)
+        : city;
+    (spotsByName[name] ??= []).addAll(cluster);
+  }
+
+  final existingByName = {
+    for (final group in plan.groups) group.name.trim().toLowerCase(): group,
+  };
   var orderIndex = plan.groups.isEmpty
       ? 0
       : plan.groups.map((g) => g.orderIndex).reduce((a, b) => a > b ? a : b) +
@@ -81,33 +98,37 @@ Future<PilgrimagePlan> autoGroupUngroupedSpots({
   final groupIdsByPointId = <String, String?>{};
   final ordersByGroupId = <String, List<String>>{};
   var current = plan;
-  for (final (index, cluster) in clusters.indexed) {
-    final anchor = centralSpot(cluster);
-    final base =
-        await nameAt(anchor.position) ?? l10n.autoAreaFallbackName(index + 1);
-    // A second area in the same city is told apart by its central spot.
-    var name = usedNames.contains(base) ? '$base · ${anchor.name}' : base;
-    for (var n = 2; usedNames.contains(name); n++) {
-      name = '$base $n';
+  final byCount = spotsByName.entries.toList()
+    ..sort((a, b) => b.value.length - a.value.length);
+  for (final (index, MapEntry(key: name, value: spots)) in byCount.indexed) {
+    final existing = existingByName[name.trim().toLowerCase()];
+    final String groupId;
+    if (existing != null) {
+      groupId = existing.id;
+    } else {
+      final anchor = centralSpot(spots);
+      groupId = 'group-${now.microsecondsSinceEpoch}-$index';
+      current = await repository.createPlanGroup(
+        planId: plan.id,
+        group: PilgrimagePlanGroup(
+          id: groupId,
+          name: name,
+          orderIndex: orderIndex++,
+          anchorPointId: anchor.id,
+          anchorName: anchor.name,
+          anchorLatitude: anchor.position.latitude,
+          anchorLongitude: anchor.position.longitude,
+          createdAt: now,
+        ),
+      );
+      // An existing area keeps its own order; new spots join at the end.
+      ordersByGroupId[groupId] = [
+        for (final spot in walkingOrder(spots)) spot.id,
+      ];
     }
-    usedNames.add(name);
-    final group = PilgrimagePlanGroup(
-      id: 'group-${now.microsecondsSinceEpoch}-$index',
-      name: name,
-      orderIndex: orderIndex++,
-      anchorPointId: anchor.id,
-      anchorName: anchor.name,
-      anchorLatitude: anchor.position.latitude,
-      anchorLongitude: anchor.position.longitude,
-      createdAt: now,
-    );
-    current = await repository.createPlanGroup(planId: plan.id, group: group);
-    for (final spot in cluster) {
-      groupIdsByPointId[spot.id] = group.id;
+    for (final spot in spots) {
+      groupIdsByPointId[spot.id] = groupId;
     }
-    ordersByGroupId[group.id] = [
-      for (final spot in walkingOrder(cluster)) spot.id,
-    ];
   }
   current = await repository.assignPointsToGroups(
     planId: current.id,
@@ -199,4 +220,32 @@ List<PilgrimagePoint> walkingOrder(List<PilgrimagePoint> spots) {
     }
   }
   return [for (final i in path) spots[i]];
+}
+
+/// How many ungrouped spots of [before] are in an area in [after], the
+/// areas they went into (in plan order), for the message after grouping.
+({int spots, List<String> areaIds}) groupedResult(
+  PilgrimagePlan before,
+  PilgrimagePlan after,
+) {
+  final wasUngrouped = {
+    for (final point in before.points)
+      if (point.groupId == null) point.id,
+  };
+  final areaIds = <String>{};
+  var spots = 0;
+  for (final point in after.points) {
+    if (wasUngrouped.contains(point.id) && point.groupId != null) {
+      spots++;
+      areaIds.add(point.groupId!);
+    }
+  }
+  final order = {
+    for (final (i, group) in after.groups.indexed)
+      group.id: group.orderIndex * 100000 + i,
+  };
+  return (
+    spots: spots,
+    areaIds: areaIds.toList()..sort((a, b) => order[a]!.compareTo(order[b]!)),
+  );
 }

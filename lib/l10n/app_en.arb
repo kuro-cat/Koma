@@ -721,8 +721,8 @@
       }
     }
   },
-  "anitabiMapImportAutoGroup": "Group by distance",
-  "anitabiMapImportOrganizeNoAreasTail": ". Group them into areas by distance: spots within a short walk of each other share an area, named after its city.",
+  "anitabiMapImportAutoGroup": "Group by city",
+  "anitabiMapImportOrganizeNoAreasTail": ". Group them into one area per city, each sorted into a walking order.",
   "autoAreaGrouped": "Grouped {spots} spots into {areas} areas",
   "@autoAreaGrouped": {
     "placeholders": {

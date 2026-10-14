@@ -2283,11 +2283,10 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
-  String get anitabiMapImportAutoGroup => '按距离分组';
+  String get anitabiMapImportAutoGroup => '按城市分组';
 
   @override
-  String get anitabiMapImportOrganizeNoAreasTail =>
-      '。按距离分成片区：步行不远的点位归入同一片区，并以所在城市命名。';
+  String get anitabiMapImportOrganizeNoAreasTail => '。按城市分成片区，每个片区按步行顺序排列。';
 
   @override
   String autoAreaGrouped(int spots, int areas) {

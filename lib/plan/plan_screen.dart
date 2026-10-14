@@ -915,22 +915,18 @@ class _PlanScreenState extends State<PlanScreen>
           setState(() => _selectedGroupId = pickedId);
         }
       case _AreaAction.auto:
-        final before = plan.groups.length;
-        await _savePlanChange(
+        final saved = await _savePlanChange(
           () => autoGroupUngroupedSpots(
             plan: plan,
             repository: widget.repository,
           ),
           l10n.autoAreaFailed,
         );
-        final added = controller.plan.groups.length - before;
-        if (mounted && added > 0) {
-          final firstNew = sortGroupsByPlanOrder(
-            controller.plan.groups,
-          ).skip(before).first;
-          setState(() => _selectedGroupId = firstNew.id);
+        final result = groupedResult(plan, controller.plan);
+        if (mounted && saved && result.areaIds.isNotEmpty) {
+          setState(() => _selectedGroupId = result.areaIds.first);
           _showSnackBar(
-            l10n.autoAreaGrouped(bucket.points.length, added),
+            l10n.autoAreaGrouped(result.spots, result.areaIds.length),
             kind: AppStatusBannerKind.success,
           );
         }
