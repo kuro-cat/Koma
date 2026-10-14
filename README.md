@@ -28,7 +28,7 @@ Website: **[kuro-cat.github.io/koma](https://kuro-cat.github.io/koma/)**
 <p align="center">
   <img src="site/screenshots/01-plan.webp" alt="Plan tab with anime frames" width="200">
   <img src="site/screenshots/05-import.webp" alt="Import map with frames on the map" width="200">
-  <img src="site/screenshots/02-plan-map.webp" alt="Plan tab with the area map" width="200">
+  <img src="site/screenshots/02-plan-map.webp" alt="An area map with spots numbered in walking order from the start" width="200">
   <img src="site/screenshots/03-spot.webp" alt="Spot sheet" width="200">
 </p>
 
