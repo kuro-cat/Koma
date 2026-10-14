@@ -105,6 +105,21 @@ void main() {
     expect(ids, anyOf(equals(forward), equals(forward.reversed.toList())));
   });
 
+  test('a walk from a chosen start begins at the nearby end', () {
+    final street = [
+      for (var i = 0; i < 8; i++) spot('s$i', 34.0 + i * 0.001, 132.0),
+    ];
+    final shuffled = [5, 0, 7, 2, 6, 1, 3, 4].map((i) => street[i]).toList();
+
+    // The station is just past s7.
+    final ids = walkingOrder(
+      shuffled,
+      start: const LatLng(34.0085, 132.0),
+    ).map((s) => s.id).toList();
+
+    expect(ids, [for (var i = 7; i >= 0; i--) 's$i']);
+  });
+
   test('grouped areas come in walking order', () async {
     final street = [
       for (var i = 0; i < 6; i++) spot('s$i', 34.0 + i * 0.001, 132.0),

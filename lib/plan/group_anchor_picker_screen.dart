@@ -11,6 +11,8 @@ import '../widgets/confirm_action_dialog.dart';
 import '../map/map_tile_config.dart';
 import '../map/map_marker_scale.dart';
 import '../utils/selected_item_order.dart';
+import '../map/current_location_resolver.dart';
+import '../widgets/snackbar_helper.dart';
 import 'coordinate_input_dialog.dart';
 import 'pilgrimage_models.dart';
 import '../l10n/l10n.dart';
@@ -38,8 +40,13 @@ class GroupAnchorPickerScreen extends StatefulWidget {
     required this.points,
     required this.groupNameForPoint,
     required this.settings,
+    this.forWalkStart = false,
     super.key,
   });
+
+  /// Picks where an area's walk starts instead of its anchor: adds "My
+  /// location", allows sorting with no start, and words things for that.
+  final bool forWalkStart;
 
   final PilgrimagePlanGroup group;
   final List<PilgrimagePoint> points;
@@ -56,6 +63,10 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
   PilgrimagePoint? _selectedPoint;
   LatLng? _manualPosition;
   var _manualPickMode = false;
+
+  /// Whether [_manualPosition] is the phone's location.
+  var _isMyLocation = false;
+  var _locating = false;
 
   @override
   void initState() {
@@ -87,7 +98,11 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
     return Scaffold(
       appBar: AppBar(
         leading: appBackButtonIfCanPop(context),
-        title: Text(l10n.groupAnchorPickerTitle),
+        title: Text(
+          widget.forWalkStart
+              ? l10n.walkStartPickerTitle
+              : l10n.groupAnchorPickerTitle,
+        ),
         actions: [
           ClearAnchorSelectionButton(
             onPressed: _selectedPoint == null && _manualPosition == null
@@ -103,6 +118,15 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
             options: MapOptions(
               initialCenter: selectedPosition ?? _pointsCenter,
               initialZoom: 15,
+              // With nothing chosen yet, show all the spots to choose from.
+              initialCameraFit:
+                  selectedPosition == null && _positioned.length > 1
+                  ? CameraFit.coordinates(
+                      coordinates: _positioned,
+                      padding: const EdgeInsets.fromLTRB(48, 48, 80, 140),
+                      maxZoom: 16,
+                    )
+                  : null,
               minZoom: 4,
               maxZoom: widget.settings.mapMaxZoom.toDouble(),
               interactionOptions: const InteractionOptions(
@@ -115,6 +139,7 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
                 setState(() {
                   _selectedPoint = null;
                   _manualPosition = latLng;
+                  _isMyLocation = false;
                 });
               },
             ),
@@ -192,6 +217,16 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
                     onTap: _showCoordinateInput,
                     icon: LucideIcons.mapPinPen,
                   ),
+                  if (widget.forWalkStart) ...[
+                    const SizedBox(height: 8),
+                    _MapToolButton(
+                      key: const ValueKey('walk-start-my-location'),
+                      tooltip: l10n.walkStartPickerUseLocation,
+                      selected: _isMyLocation,
+                      onTap: _locating ? () {} : _useMyLocation,
+                      icon: LucideIcons.locateFixed,
+                    ),
+                  ],
                 ],
               ),
             ),
@@ -203,13 +238,23 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
               manualPosition: _manualPosition,
               groupNameForPoint: widget.groupNameForPoint,
               manualPickMode: _manualPickMode,
-              onSave: selectedPosition == null ? null : _saveSelection,
+              forWalkStart: widget.forWalkStart,
+              isMyLocation: _isMyLocation,
+              // A walk can also be sorted without a start.
+              onSave: selectedPosition == null && !widget.forWalkStart
+                  ? null
+                  : _saveSelection,
             ),
           ),
         ],
       ),
     );
   }
+
+  late final _positioned = [
+    for (final point in widget.points)
+      if (point.hasCoordinate) point.position,
+  ];
 
   LatLng get _pointsCenter {
     final positionedPoints = widget.points
@@ -245,7 +290,33 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
       _selectedPoint = null;
       _manualPosition = null;
       _manualPickMode = false;
+      _isMyLocation = false;
     });
+  }
+
+  Future<void> _useMyLocation() async {
+    setState(() => _locating = true);
+    try {
+      final position = await resolveCurrentLocation();
+      if (!mounted) return;
+      final here = LatLng(position.latitude, position.longitude);
+      setState(() {
+        _selectedPoint = null;
+        _manualPosition = here;
+        _manualPickMode = false;
+        _isMyLocation = true;
+      });
+      _mapController.move(here, 16);
+    } on CurrentLocationException catch (error) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showStatusSnack(
+          kind: AppStatusBannerKind.error,
+          title: currentLocationFailureMessage(error),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _locating = false);
+    }
   }
 
   void _selectPoint(PilgrimagePoint point) {
@@ -253,6 +324,7 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
       _selectedPoint = point;
       _manualPosition = null;
       _manualPickMode = false;
+      _isMyLocation = false;
     });
     _mapController.move(point.position, 16);
   }
@@ -271,6 +343,7 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
       _selectedPoint = null;
       _manualPosition = result;
       _manualPickMode = false;
+      _isMyLocation = false;
     });
     _mapController.move(result, 16);
   }
@@ -289,11 +362,18 @@ class _GroupAnchorPickerScreenState extends State<GroupAnchorPickerScreen> {
     }
     final manualPosition = _manualPosition;
     if (manualPosition == null) {
+      if (widget.forWalkStart) {
+        Navigator.of(context).pop(const GroupAnchorSelection.clear());
+      }
       return;
     }
     Navigator.of(context).pop(
       GroupAnchorSelection(
-        name: l10n.groupAnchorPickerManualAnchor,
+        name: widget.forWalkStart
+            ? (_isMyLocation
+                  ? l10n.walkStartPickerMyLocation
+                  : l10n.walkStartPickerPoint)
+            : l10n.groupAnchorPickerManualAnchor,
         position: manualPosition,
         pointId: null,
       ),
@@ -344,6 +424,7 @@ class _ManualAnchorMarker extends StatelessWidget {
 class _MapToolButton extends StatelessWidget {
   const _MapToolButton({
     required this.tooltip,
+    super.key,
     required this.selected,
     required this.onTap,
     required this.icon,
@@ -376,9 +457,13 @@ class _AnchorSelectionCard extends StatelessWidget {
     required this.manualPosition,
     required this.groupNameForPoint,
     required this.manualPickMode,
+    required this.forWalkStart,
+    required this.isMyLocation,
     required this.onSave,
   });
 
+  final bool forWalkStart;
+  final bool isMyLocation;
   final PilgrimagePoint? selectedPoint;
   final LatLng? manualPosition;
   final String Function(PilgrimagePoint point) groupNameForPoint;
@@ -392,12 +477,20 @@ class _AnchorSelectionCard extends StatelessWidget {
     final position = point?.position ?? manualPosition;
     final title =
         point?.name ??
-        (position == null
+        (forWalkStart
+            ? (position == null
+                  ? l10n.walkStartPickerNone
+                  : isMyLocation
+                  ? l10n.walkStartPickerMyLocation
+                  : l10n.walkStartPickerPoint)
+            : position == null
             ? l10n.groupAnchorPickerNoneSelected
             : l10n.groupAnchorPickerManualAnchor);
     final subtitle = point == null
         ? (manualPickMode
-              ? l10n.groupAnchorPickerMapPickHint
+              ? (forWalkStart
+                    ? l10n.walkStartPickerMapHint
+                    : l10n.groupAnchorPickerMapPickHint)
               : l10n.groupAnchorPickerIdleHint)
         : joinLabels([groupNameForPoint(point), point.displaySubtitle]);
 
@@ -444,7 +537,13 @@ class _AnchorSelectionCard extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 8),
-          FilledButton(onPressed: onSave, child: Text(l10n.commonSave)),
+          FilledButton(
+            key: const ValueKey('anchor-picker-save'),
+            onPressed: onSave,
+            child: Text(
+              forWalkStart ? l10n.walkStartPickerSort : l10n.commonSave,
+            ),
+          ),
         ],
       ),
     );

@@ -1489,6 +1489,27 @@ class AppLocalizationsEn extends AppLocalizations {
       'Enter spot details by hand, one at a time';
 
   @override
+  String get walkStartPickerTitle => 'Start the walk from';
+
+  @override
+  String get walkStartPickerNone => 'No start chosen';
+
+  @override
+  String get walkStartPickerPoint => 'Point on the map';
+
+  @override
+  String get walkStartPickerMyLocation => 'My location';
+
+  @override
+  String get walkStartPickerMapHint => 'Tap anywhere on the map to start there';
+
+  @override
+  String get walkStartPickerUseLocation => 'Start from my location';
+
+  @override
+  String get walkStartPickerSort => 'Sort';
+
+  @override
   String get groupAnchorPickerTitle => 'Choose anchor';
 
   @override

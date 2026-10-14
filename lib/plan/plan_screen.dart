@@ -28,6 +28,7 @@ import 'plan_group_picker_sheet.dart';
 import '../map/offline_map.dart';
 import '../widgets/note_dialog.dart';
 import 'auto_areas.dart';
+import 'group_anchor_picker_screen.dart';
 import 'plan_group_utils.dart';
 import 'plan_memo_screen.dart';
 import 'pilgrimage_models.dart';
@@ -876,12 +877,29 @@ class _PlanScreenState extends State<PlanScreen>
           l10n.planAreaNoteSaveFailed,
         );
       case _AreaAction.walkingOrder when group != null:
+        final start = await Navigator.of(context).push<GroupAnchorSelection>(
+          MaterialPageRoute(
+            builder: (_) => GroupAnchorPickerScreen(
+              group: group.copyWith(
+                anchorPointId: null,
+                anchorLatitude: null,
+                anchorLongitude: null,
+              ),
+              points: bucket.points,
+              groupNameForPoint: (_) => group.name,
+              settings: settings,
+              forWalkStart: true,
+            ),
+          ),
+        );
+        if (start == null || !mounted) break;
         final saved = await _savePlanChange(
           () => sortAreaIntoWalkingOrder(
             plan: plan,
             groupId: group.id,
             points: bucket.points,
             repository: widget.repository,
+            start: start.position,
           ),
           l10n.planAreaWalkingOrderFailed,
         );

@@ -1363,6 +1363,27 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addPointsManualAddPointSubtitle => '手动输入点位信息，逐个添加';
 
   @override
+  String get walkStartPickerTitle => '选择步行起点';
+
+  @override
+  String get walkStartPickerNone => '未选择起点';
+
+  @override
+  String get walkStartPickerPoint => '地图上的位置';
+
+  @override
+  String get walkStartPickerMyLocation => '我的位置';
+
+  @override
+  String get walkStartPickerMapHint => '点击地图任意位置作为起点';
+
+  @override
+  String get walkStartPickerUseLocation => '从我的位置出发';
+
+  @override
+  String get walkStartPickerSort => '排序';
+
+  @override
   String get groupAnchorPickerTitle => '选择关键点';
 
   @override

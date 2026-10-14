@@ -152,6 +152,7 @@ Future<PilgrimagePlan> sortAreaIntoWalkingOrder({
   required String groupId,
   required List<PilgrimagePoint> points,
   required PilgrimageRepository repository,
+  LatLng? start,
 }) {
   return repository.reorderGroupPoints(
     planId: plan.id,
@@ -159,6 +160,7 @@ Future<PilgrimagePlan> sortAreaIntoWalkingOrder({
     pointIds: [
       for (final spot in walkingOrder(
         points.where((p) => p.hasCoordinate).toList(),
+        start: start,
       ))
         spot.id,
       for (final spot in points.where((p) => !p.hasCoordinate)) spot.id,
@@ -166,16 +168,25 @@ Future<PilgrimagePlan> sortAreaIntoWalkingOrder({
   );
 }
 
-/// [spots] in a short walking order: an open path (start and end differ)
-/// that avoids crossing back over itself. Straight-line distances; good
-/// enough to stop a walk zig-zagging across town.
-List<PilgrimagePoint> walkingOrder(List<PilgrimagePoint> spots) {
-  final n = spots.length;
-  if (n < 3) return List.of(spots);
+/// [spots] in a short walking order: an open path that avoids crossing back
+/// over itself. With [start] (where the walk begins, e.g. the station) the
+/// path begins at the spot that suits a walk from there; without it, it
+/// starts at whichever end makes the walk shortest. Straight-line distances;
+/// good enough to stop a walk zig-zagging across town.
+List<PilgrimagePoint> walkingOrder(
+  List<PilgrimagePoint> spots, {
+  LatLng? start,
+}) {
+  if (spots.length < 2 || (start == null && spots.length < 3)) {
+    return List.of(spots);
+  }
+  // With a start, it is node 0, fixed at the front, and dropped at the end.
+  final positions = [?start, for (final spot in spots) spot.position];
+  final first = start == null ? 0 : 1;
+  final n = positions.length;
   const distance = Distance();
   final d = [
-    for (final a in spots)
-      [for (final b in spots) distance(a.position, b.position)],
+    for (final a in positions) [for (final b in positions) distance(a, b)],
   ];
   double length(List<int> path) {
     var total = 0.0;
@@ -188,9 +199,9 @@ List<PilgrimagePoint> walkingOrder(List<PilgrimagePoint> spots) {
   // ponytail: nearest neighbour from every start plus 2-opt is O(n³); fine
   // for an area's few dozen spots.
   List<int>? best;
-  for (var start = 0; start < n; start++) {
-    final path = [start];
-    final left = {for (var i = 0; i < n; i++) i}..remove(start);
+  for (final origin in start == null ? List.generate(n, (i) => i) : [0]) {
+    final path = [origin];
+    final left = {for (var i = 0; i < n; i++) i}..remove(origin);
     while (left.isNotEmpty) {
       final next = left.reduce(
         (a, b) => d[path.last][a] <= d[path.last][b] ? a : b,
@@ -203,7 +214,7 @@ List<PilgrimagePoint> walkingOrder(List<PilgrimagePoint> spots) {
   final path = best!;
   for (var improved = true; improved;) {
     improved = false;
-    for (var i = 0; i < n - 1; i++) {
+    for (var i = first; i < n - 1; i++) {
       for (var j = i + 1; j < n; j++) {
         // Reverse path[i..j]; only the edges at either end change.
         final before =
@@ -219,7 +230,7 @@ List<PilgrimagePoint> walkingOrder(List<PilgrimagePoint> spots) {
       }
     }
   }
-  return [for (final i in path) spots[i]];
+  return [for (final i in path.skip(first)) spots[i - first]];
 }
 
 /// How many ungrouped spots of [before] are in an area in [after], the

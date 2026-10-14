@@ -2604,6 +2604,48 @@ abstract class AppLocalizations {
   /// **'手动输入点位信息，逐个添加'**
   String get addPointsManualAddPointSubtitle;
 
+  /// No description provided for @walkStartPickerTitle.
+  ///
+  /// In zh, this message translates to:
+  /// **'选择步行起点'**
+  String get walkStartPickerTitle;
+
+  /// No description provided for @walkStartPickerNone.
+  ///
+  /// In zh, this message translates to:
+  /// **'未选择起点'**
+  String get walkStartPickerNone;
+
+  /// No description provided for @walkStartPickerPoint.
+  ///
+  /// In zh, this message translates to:
+  /// **'地图上的位置'**
+  String get walkStartPickerPoint;
+
+  /// No description provided for @walkStartPickerMyLocation.
+  ///
+  /// In zh, this message translates to:
+  /// **'我的位置'**
+  String get walkStartPickerMyLocation;
+
+  /// No description provided for @walkStartPickerMapHint.
+  ///
+  /// In zh, this message translates to:
+  /// **'点击地图任意位置作为起点'**
+  String get walkStartPickerMapHint;
+
+  /// No description provided for @walkStartPickerUseLocation.
+  ///
+  /// In zh, this message translates to:
+  /// **'从我的位置出发'**
+  String get walkStartPickerUseLocation;
+
+  /// No description provided for @walkStartPickerSort.
+  ///
+  /// In zh, this message translates to:
+  /// **'排序'**
+  String get walkStartPickerSort;
+
   /// No description provided for @groupAnchorPickerTitle.
   ///
   /// In zh, this message translates to:
